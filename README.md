@@ -30,7 +30,9 @@ module, and an unknown type degrades to a placeholder instead of taking the scre
 - **forms that stay client-side** — validation, visibility conditions and cross-field rules run
   locally, and only a server-relevant change asks the backend for a patch;
 - **live updates** — a screen can name its own update channel, so updates stay per-user rather than
-  broadcast to everyone on the same page;
+  broadcast to everyone on the same page, and the same channel works across several server instances;
+- **multi-step flows as pure functions** — a wizard graph is `(session, transition, draft) -> session`,
+  so branching is covered by unit tests with no HTTP, no database and no UI in sight;
 - **it degrades rather than breaks** — an unknown component, an unknown action or a malformed theme
   token costs a widget or some styling, never the screen.
 
@@ -46,11 +48,26 @@ module, and an unknown type degrades to a placeholder instead of taking the scre
 | `kompot-theme` | server-driven theming, no UI toolkit | core |
 | `kompot-ktor` | Ktor helpers for polymorphic roots, ETags, experiment headers | core, experiments-core |
 | `kompot-realtime` | the live-update channel contract | core |
+| `kompot-realtime-server` | delivery to one instance's subscribers plus the bus contract between instances | kompot-realtime |
+| `kompot-realtime-redis` | the Redis pub/sub bus, for more than one instance | kompot-realtime-server |
+| `kompot-images` | an image by URL, as a component plug-in | core |
+| `kompot-auth` | the one action that hands the client a new session | core |
+| `kompot-navigation` | the navigation graph of plain, code-free screens | — |
+| `wizard-core` | the step machine of a multi-step flow, as a pure function | — |
+| `kompot-wizard` | the wire side of that flow: step screen, transitions, resume request | core, form-core, wizard-core |
 | `form-core` | form state: validation, visibility, cross-field rules, patches | — |
 | `experiments-core` | deterministic A/B assignment plus its header codec | — |
 
-`form-core` and `experiments-core` are usable on their own and know nothing about Kompot components:
-one manages form state, the other assigns variants. They keep their names for that reason.
+`form-core`, `experiments-core` and `wizard-core` are usable on their own and know nothing about
+Kompot components: one manages form state, one assigns variants, one walks a graph of steps. They
+keep their names for that reason.
+
+The realtime pair is worth separating in your head from `kompot-realtime`, which is only the frame
+contract. `kompot-realtime-server` delivers to the subscribers of one process and defines the bus
+between processes; its default bus is in-memory, so a single-instance application needs no
+infrastructure. `kompot-realtime-redis` is the bus for the multi-instance case, and it is pub/sub
+without delivery guarantees on purpose: a component update is a thing you can afford to lose, since
+the client gets current state with its next screen request anyway.
 
 ### 🔌 Installation
 

@@ -16,9 +16,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(projects.kompotCore)
-                implementation(libs.kotlinx.serialization.json)
-                implementation(libs.kotlinx.coroutines.core)
+                api(projects.kompotCore)
+                api(libs.kotlinx.serialization.json)
+                api(libs.kotlinx.coroutines.core)
             }
         }
         commonTest {

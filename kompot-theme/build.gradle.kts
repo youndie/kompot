@@ -15,8 +15,8 @@ kotlin {
             dependencies {
                 // Only for typed ColorToken/TypographyToken in the DSL and the accessors; on the wire
                 // the keys are plain strings anyway, being JSON object keys. See KompotTheme.kt.
-                implementation(projects.kompotCore)
-                implementation(libs.kotlinx.serialization.json)
+                api(projects.kompotCore)
+                api(libs.kotlinx.serialization.json)
             }
         }
         commonTest {

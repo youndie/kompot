@@ -42,6 +42,14 @@ include(":kompot-registry-processor")
 include(":kompot-standard")
 include(":kompot-forms")
 
+// An image by URL, as a component plug-in of its own. Fetching and caching are the client's
+// business; nothing here knows about an image library.
+include(":kompot-images")
+
+// The one action that touches authentication: the server hands the client a new session. It
+// describes the wire and nothing else — no token storage, no refresh logic.
+include(":kompot-auth")
+
 // Server-driven theming: the values a client resolves design-system tokens into. Deliberately free
 // of any UI toolkit, because the server that serves a theme has no business depending on Compose.
 include(":kompot-theme")
@@ -53,6 +61,12 @@ include(":kompot-ktor")
 // The live-update channel contract. The transport is the application's to implement.
 include(":kompot-realtime")
 
+// The server side of that channel: delivery to the subscribers of one instance, plus the bus
+// contract between instances. The in-memory bus is the default, so a single-instance application
+// needs no infrastructure at all; :kompot-realtime-redis is the multi-instance backend.
+include(":kompot-realtime-server")
+include(":kompot-realtime-redis")
+
 // Form state: validation, visibility conditions, cross-field rules and server patches. Usable
 // without any of the Kompot components — it knows nothing about them.
 include(":form-core")
@@ -60,3 +74,13 @@ include(":form-core")
 // Deterministic A/B assignment from (experiment, subject) with no assignment storage, plus the
 // header codec that carries the result beside a response.
 include(":experiments-core")
+
+// Multi-step flows. wizard-core is the step machine — a pure function of (session, transition,
+// draft), with no HTTP, no storage and no idea what a component is — and kompot-wizard is its wire
+// side: the step screen, the three transition actions and the resume request.
+include(":wizard-core")
+include(":kompot-wizard")
+
+// The navigation graph: which deeplink a plain screen answers to and where its tree is fetched
+// from. Only for screens that need no client code of their own.
+include(":kompot-navigation")

@@ -13,18 +13,20 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(projects.kompotCore)
+                // Every function here is an extension on ApplicationCall taking or returning a
+                // KompotComponent, so both are part of this module's own API rather than an internal detail.
+                api(projects.kompotCore)
                 // Only the header format (ExperimentHeaderCodec). This module neither assigns
                 // variants nor decides what to show; it transports a decision the application has
                 // already made. See ExperimentHeaders.kt.
                 implementation(projects.experimentsCore)
-                implementation(libs.ktor.serverCore)
+                api(libs.ktor.serverCore)
                 implementation(libs.ktor.serverContentNegotiation)
                 implementation(libs.ktor.serializationJson)
                 implementation(libs.ktor.serverStatusPages)
 
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
+                api(libs.kotlinx.serialization.json)
+                implementation(libs.kotlinx.coroutines.core)
             }
         }
         commonTest {

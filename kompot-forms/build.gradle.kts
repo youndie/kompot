@@ -17,11 +17,11 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(projects.kompotCore)
+                api(projects.kompotCore)
                 // Needed for KompotFormResponse: the form schema and the render tree as one DTO.
-                implementation(projects.formCore)
+                api(projects.formCore)
                 implementation(projects.kompotRegistryAnnotations)
-                implementation(libs.kotlinx.serialization.json)
+                api(libs.kotlinx.serialization.json)
             }
         }
         commonTest {
