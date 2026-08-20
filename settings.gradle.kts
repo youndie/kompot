@@ -75,6 +75,12 @@ include(":form-core")
 // header codec that carries the result beside a response.
 include(":experiments-core")
 
+// The wire specification: the JSON Schema generator, the validator for the subset it prints, and
+// the spec-module definitions of every module above. An application assembles its own spec from
+// these plus its own modules — the closed list of types is a property of a build, not of the
+// toolkit.
+include(":kompot-spec")
+
 // Multi-step flows. wizard-core is the step machine — a pure function of (session, transition,
 // draft), with no HTTP, no storage and no idea what a component is — and kompot-wizard is its wire
 // side: the step screen, the three transition actions and the resume request.

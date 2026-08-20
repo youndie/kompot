@@ -57,6 +57,7 @@ module, and an unknown type degrades to a placeholder instead of taking the scre
 | `kompot-wizard` | the wire side of that flow: step screen, transitions, resume request | core, form-core, wizard-core |
 | `form-core` | form state: validation, visibility, cross-field rules, patches | — |
 | `experiments-core` | deterministic A/B assignment plus its header codec | — |
+| `kompot-spec` | the wire specification: schema generator, validator, and the spec module of every module above | all of them |
 
 `form-core`, `experiments-core` and `wizard-core` are usable on their own and know nothing about
 Kompot components: one manages form state, one assigns variants, one walks a graph of steps. They
@@ -68,6 +69,24 @@ between processes; its default bus is in-memory, so a single-instance applicatio
 infrastructure. `kompot-realtime-redis` is the bus for the multi-instance case, and it is pub/sub
 without delivery guarantees on purpose: a component update is a thing you can afford to lose, since
 the client gets current state with its next screen request anyway.
+
+### 📐 The wire specification
+
+`kompot-spec` generates a JSON Schema for every protocol module out of the very SerialDescriptors
+kotlinx.serialization encodes a response with, so a schema cannot fall quietly behind the types. The
+generated files are committed in [`kompot-spec/schema`](kompot-spec/schema) and the rules a schema
+cannot express — degradation, the two kinds of extensibility, form connectivity, pagination,
+transport — are written out in [`kompot-spec/SPEC.md`](kompot-spec/SPEC.md), addressed to somebody
+implementing a server on another stack.
+
+The closed list of types is a property of a **build**, not of the toolkit: an application assembles
+its own spec from these modules plus its own, and gets its own profile. The ten toolkit files come
+out byte-identical either way.
+
+```kotlin
+val schemas = KompotSpec.generateAll(KompotToolkitSpec.modules + myComponentsSpecModule())
+val profile = KompotSpec.profile(schemas)
+```
 
 ### 🔌 Installation
 
