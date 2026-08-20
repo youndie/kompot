@@ -328,7 +328,7 @@ class KompotSchemaGenerator(
 // defaultDeserializer are ignored deliberately: UnknownComponent/UnknownAction are a client-side
 // fallback, never a server's answer, and therefore not part of the wire schema.
 @OptIn(ExperimentalSerializationApi::class)
-internal class PolymorphicDump : SerializersModuleCollector {
+class PolymorphicDump : SerializersModuleCollector {
     data class Entry(
         val hierarchy: String,
         val wireName: String,
