@@ -12,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -107,18 +108,20 @@ class TextRenderer : KompotComponentRenderer<TextComponent> {
         formController: FormController,
     ) {
         val designSystem = LocalKompotDesignSystem.current
+            // A null style means the server did not name one: the standard text component
+            // deliberately has no "default" typography token, so the local default lives here, in
+            // a concrete Material3 implementation.
+        val style = component.style?.let { designSystem.resolveTypography(it) } ?: MaterialTheme.typography.bodyMedium
         Text(
             text = component.text,
-                // A null style means the server did not name one: the standard text component
-                // deliberately has no "default" typography token, so the local default lives here, in
-                // a concrete Material3 implementation.
-            style = component.style?.let { designSystem.resolveTypography(it) } ?: MaterialTheme.typography.bodyMedium,
-            color =
-                component.modifiers
-                    .filterIsInstance<KompotModifierNode.Background>()
-                    .firstOrNull()
-                    ?.let { designSystem.resolveColor(it.color) }
-                    ?: MaterialTheme.colorScheme.onSurface,
+            style = style,
+                // An explicit `color` argument OVERRIDES the one inside the style, so passing anything
+                // here throws away what the design system said — a token resolving to a red TextStyle
+                // rendered in the ordinary colour, with nothing unknown and so nothing logged. Since
+                // KompotComponentText carries no colour of its own and a ColorToken only paints a
+                // background, a typography token is the only place a text colour can come from
+                // (SPEC.md §6); Unspecified is what lets it through.
+            color = if (style.color == Color.Unspecified) MaterialTheme.colorScheme.onSurface else Color.Unspecified,
             modifier = component.modifiers.toComposeModifier(),
         )
     }
