@@ -1,6 +1,7 @@
 package io.github.youndie.kompot.tck
 
 import io.github.youndie.kompot.spec.JsonSchemaValidator
+import io.github.youndie.kompot.navigation.ScreenRouteKind
 import io.github.youndie.kompot.spec.KompotProtocol
 import io.github.youndie.kompot.spec.collectJsonObjects
 import kotlinx.serialization.json.Json
@@ -322,18 +323,41 @@ class TckRunner(
 
             routes.flatMap { route ->
                 val target = (route.jsonObject["endpoint"] as? JsonPrimitive)?.content ?: return@flatMap emptyList()
-                val response = transport.request("GET", target, authHeaders())
+                // A route without `kind` is a screen — the default in ScreenRoute, and what every graph
+                // written before the field existed means.
+                val routeKind = (route.jsonObject["kind"] as? JsonPrimitive)?.content ?: ScreenRouteKind.SCREEN
+                val declared = endpoints.firstOrNull { it.path == target && it.method == "GET" }
+                val findings = mutableListOf<TckFinding>()
 
-                if (response.status != 200) {
-                    listOf(TckFinding("navigation", target, "a route of the graph answers ${response.status}"))
-                } else {
-                    val element = parse(response.body)
-                    if (element == null) {
-                        listOf(TckFinding("navigation", target, "the body is not valid JSON"))
-                    } else {
-                        validator
-                            .validate(element, "${KompotProtocol.PROFILE_FILE_NAME}#/\$defs/KompotComponent")
-                            .map { TckFinding("navigation", target, it) }
+                // The route says what a client will parse the body as; the HTTP description says what
+                // the server will send. Nothing else compares the two, and a disagreement is invisible
+                // until a client hits the route: it decodes the wrong envelope and shows nothing.
+                if (declared != null && declared.kind != routeKind) {
+                    findings +=
+                        TckFinding(
+                            "navigation",
+                            target,
+                            "the route declares kind \"$routeKind\" while the endpoint is declared \"${declared.kind}\"",
+                        )
+                }
+
+                val response = transport.request("GET", target, authHeaders(declared))
+
+                when {
+                    response.status != 200 -> findings + TckFinding("navigation", target, "a route of the graph answers ${response.status}")
+
+                    else -> {
+                        val element = parse(response.body)
+                        // The schema to check against follows the KIND, not a hardcoded assumption that
+                        // every route yields a component tree — which is what made a form route
+                        // unreportable except as a false finding against it.
+                        val schema = declared?.successSchema ?: SCREEN_SCHEMA.takeIf { routeKind == ScreenRouteKind.SCREEN }
+
+                        when {
+                            element == null -> findings + TckFinding("navigation", target, "the body is not valid JSON")
+                            schema == null -> findings
+                            else -> findings + validator.validate(element, schema).map { TckFinding("navigation", target, it) }
+                        }
                     }
                 }
             }
@@ -415,5 +439,8 @@ class TckRunner(
     private companion object {
         const val MAX_PAGES = 50
         const val IDEMPOTENCY_HEADER = "Idempotency-Key"
+
+        // The fallback for a route whose endpoint the HTTP description does not declare at all.
+        const val SCREEN_SCHEMA = "${KompotProtocol.PROFILE_FILE_NAME}#/\$defs/KompotComponent"
     }
 }
