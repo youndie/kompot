@@ -32,11 +32,19 @@ sealed interface KompotModifierNode {
         val colors: List<ColorToken>,
     ) : KompotModifierNode
 
+    // Two ways to state an extent, and they are not redundant: SizeType is symbolic and resolved
+    // against the parent (Fill takes what is offered, Wrap takes what the content needs), while the
+    // dp fields are absolute. A symbolic value and a number on the same axis contradict each other,
+    // so the number wins and the symbol is ignored — see toComposeModifier. Both fields are optional
+    // and default to null, which is what keeps this addition compatible under SPEC.md §15: a client
+    // built before them reads the node it already understood and drops the keys it does not.
     @Serializable
     @SerialName("size")
     data class Size(
         val width: SizeType? = null,
         val height: SizeType? = null,
+        val widthDp: Int? = null,
+        val heightDp: Int? = null,
     ) : KompotModifierNode
 
     // A scope modifier: meaningful only inside a RowScope/ColumnScope parent, so the general mapper

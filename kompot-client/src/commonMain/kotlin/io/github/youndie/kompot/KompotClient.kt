@@ -3,7 +3,9 @@ package io.github.youndie.kompot
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -65,8 +67,19 @@ fun List<KompotModifierNode>.toComposeModifier(): Modifier {
         when (node) {
             is KompotModifierNode.Size -> {
                 var mod = currentModifier
-                if (node.width == SizeType.Fill) mod = mod.fillMaxWidth()
-                if (node.height == SizeType.Fill) mod = mod.fillMaxHeight()
+                // An absolute extent and a symbolic one contradict each other on the same axis, so
+                // the number wins and Fill is not applied there. Wrap needs no call at all: it is
+                // what Compose already does without a size modifier.
+                val widthDp = node.widthDp
+                val heightDp = node.heightDp
+                when {
+                    widthDp != null -> mod = mod.width(widthDp.dp)
+                    node.width == SizeType.Fill -> mod = mod.fillMaxWidth()
+                }
+                when {
+                    heightDp != null -> mod = mod.height(heightDp.dp)
+                    node.height == SizeType.Fill -> mod = mod.fillMaxHeight()
+                }
                 mod
             }
 
