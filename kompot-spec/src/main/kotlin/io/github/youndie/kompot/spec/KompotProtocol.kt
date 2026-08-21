@@ -38,10 +38,21 @@ object KompotProtocol {
     // The identifier of an APPLICATION SCREEN: a URI with the application's own scheme — "app://home",
     // "myapp://checkout?tariff=premium". Neither the scheme nor the set of values is fixed by the
     // protocol: both belong to the application rather than to the toolkit (see SPEC.md §12.2). The one
-    // thing that really is a rule of the protocol is fixed here: a deeplink is NOT a web address. Hence
-    // the negative lookahead on http/https — without it a server could take the client to an external
-    // page through an ordinary navigate.
-    const val DEEPLINK_PATTERN = "^(?!https?:)[a-z][a-z0-9+.-]*://[^\\s]*${'$'}"
+    // thing that really is a rule of the protocol is fixed here: a deeplink is NOT a web address.
+    //
+    // No lookaround, deliberately. JSON Schema specifies `pattern` in the ECMA-262 dialect, which has
+    // lookaround, so `^(?!https?:)...` was valid — and uncompilable by RE2, the engine Go's standard
+    // library ships. RE2 does not degrade: it refuses the whole schema file, so a Go implementation
+    // could not validate ANY response, not merely a deeplink. The negative half moved to
+    // DEEPLINK_FORBIDDEN_PATTERN and travels as a `not` keyword beside this one.
+    //
+    // The rule for anything added here later: patterns stay inside the RE2 subset — no lookahead, no
+    // lookbehind, no backreferences. What regex cannot say without them, schema keywords can.
+    const val DEEPLINK_PATTERN = "^[a-z][a-z0-9+.-]*://[^\\s]*${'$'}"
+
+    // The half that used to be the lookahead: a deeplink is NOT a web address. Without it a server
+    // could take the client to an external page through an ordinary navigate.
+    const val DEEPLINK_FORBIDDEN_PATTERN = "^https?:"
 
     // An address on the same host as the rest of the API — always relative.
     const val ENDPOINT_PATTERN = "^/[^\\s#]*${'$'}"

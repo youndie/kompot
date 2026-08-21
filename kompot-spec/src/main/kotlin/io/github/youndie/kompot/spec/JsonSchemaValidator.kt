@@ -11,8 +11,8 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.longOrNull
 
 // A validator for exactly the subset of JSON Schema 2020-12 that KompotSchemaGenerator prints:
-// $ref (across files too), type, const, enum, properties, required, items, additionalProperties,
-// oneOf/anyOf and discriminator.
+// $ref (across files too), type, const, enum, pattern, not, properties, required, items,
+// additionalProperties, oneOf/anyOf and discriminator.
 //
 // An implementation of our own rather than a library, deliberately: the subset is small and entirely
 // under our control, and pulling a JSON Schema validator into a toolkit for the sake of tests costs
@@ -127,6 +127,18 @@ class JsonSchemaValidator(
             val text = (value as? JsonPrimitive)?.takeIf { it.isString }?.content
             if (text != null && !Regex(pattern.content).containsMatchIn(text)) {
                 errors += "$path: \"$text\" does not match the format ${pattern.content}"
+            }
+        }
+
+        // `not` carries exactly one rule today, and it is here rather than inside `pattern` for a reason
+        // worth keeping written down: "a deeplink is not a web address" used to be a negative lookahead,
+        // which RE2 engines — Go's standard regexp among them — refuse to compile rather than degrade.
+        // Expressed as a schema keyword instead of as regex syntax, the same rule compiles everywhere.
+        (schema["not"] as? JsonObject)?.let { forbidden ->
+            val ifItMatched = mutableListOf<String>()
+            check(value, forbidden, file, path, ifItMatched)
+            if (ifItMatched.isEmpty()) {
+                errors += "$path: $value matches a schema it is forbidden to match ($forbidden)"
             }
         }
 

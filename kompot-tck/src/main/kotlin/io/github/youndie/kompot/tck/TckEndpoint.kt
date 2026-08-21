@@ -1,5 +1,6 @@
 package io.github.youndie.kompot.tck
 
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
@@ -31,6 +32,7 @@ data class TckEndpoint(
 object TckEndpoints {
     fun fromOpenApi(document: JsonObject): List<TckEndpoint> {
         val paths = document["paths"] as? JsonObject ?: error("The OpenAPI document has no paths")
+        val documentSecurity = document["security"] as? JsonArray
 
         return paths.flatMap { (path, operations) ->
             operations.jsonObject.map { (method, operation) ->
@@ -43,7 +45,7 @@ object TckEndpoints {
                     method = method.uppercase(),
                     path = path,
                     kind = (json["x-kompot-endpoint-kind"] as? JsonPrimitive)?.content ?: "unknown",
-                    secured = "security" in json,
+                    secured = securedBy(json["security"] as? JsonArray ?: documentSecurity),
                     successStatus = success,
                     successSchema = successSchema(responses.getValue(success.toString()).jsonObject),
                     successContentType = successContentType(responses.getValue(success.toString()).jsonObject),
@@ -53,6 +55,14 @@ object TckEndpoints {
             }
         }
     }
+
+    // Whether an endpoint needs a token. The presence of the `security` key is NOT the question, and
+    // reading it that way had the answer backwards in both directions: an operation WITHOUT the key
+    // inherits the document's requirement, and `security: []` — the standard way to declare one
+    // operation public under a secured document — was read as "secured" precisely because the key was
+    // there. A login form is necessarily public, so the kit demanded a 401 from the one screen that
+    // must answer 200, and no server could be conformant with a public screen at all.
+    private fun securedBy(security: JsonArray?): Boolean = security != null && security.isNotEmpty()
 
     private fun successContentType(response: JsonObject): String? = (response["content"] as? JsonObject)?.keys?.firstOrNull()
 
