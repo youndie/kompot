@@ -7,14 +7,6 @@ plugins {
     alias(libs.plugins.composeCompiler)
     id("kompot.publishing")
 }
-//
-// kotlin {
-//    android {
-//        namespace = "ru.workinprogress.banqfunkie.bdui"
-//        compileSdk { version = release(37) }
-//    }
-// }
-
 kotlin {
     jvm("desktop")
 
