@@ -6,6 +6,7 @@ pluginManagement {
     repositories {
         mavenCentral()
         gradlePluginPortal()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 
@@ -21,7 +22,23 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
 
     repositories {
+        // Compose Multiplatform resolves a long tail of androidx artifacts that live here and
+        // nowhere else. Filtered by group, like every third-party repository should be: an
+        // unfiltered one takes part in resolving EVERY dependency, and when it goes unreachable
+        // Gradle disables it and fails artifacts it never served.
+        google {
+            mavenContent {
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
+            }
+        }
         mavenCentral()
+        // The screenshot tester lives in a repository of its own (github.com/youndie/viddik) and is
+        // published to the same Reposilite this toolkit publishes to. /snapshots reads anonymously.
+        maven("https://reposilite.kotlin.website/snapshots") {
+            mavenContent { includeGroup("ru.workinprogress") }
+        }
     }
 }
 
@@ -95,6 +112,22 @@ include(":experiments-core")
 // these plus its own modules — the closed list of types is a property of a build, not of the
 // toolkit.
 include(":kompot-spec")
+
+// The Compose client. The toolkit ships renderers after all: a registry keyed by wire type, the
+// renderers of the standard and form components, the Compose side of a server-driven theme, and the
+// Material3 design system they resolve tokens through. What an application still writes is its own
+// components and their renderers — the registry is open, the same way the wire types are.
+include(":kompot-analytics")
+include(":kompot-client")
+include(":kompot-forms-client")
+include(":kompot-wizard-client")
+include(":kompot-theme-client")
+include(":kompot-images-client-coil")
+include(":kompot-ds-material-compose")
+
+// Offline-first screen cache: the store contract plus a cache-first provider with ETag
+// revalidation. The concrete storage backend is the application's.
+include(":kompot-client-cache")
 
 // The conformance kit: the portable half of it. It walks a server over HTTP and checks the rules a
 // schema cannot express — unique ids, form connectivity, ETag revalidation, terminating pagination,

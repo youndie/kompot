@@ -6,6 +6,10 @@ kotlinpoet = "2.3.0"
 kotlinx-coroutines = "1.11.0"
 kotlinxSerializationJson = "1.11.0"
 lettuce = "7.6.0.RELEASE"
+compose-multiplatform = "1.11.1"
+compose-material3 = "1.11.0-alpha07"
+coil3 = "3.5.0"
+viddik = "0.1.1.8"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -24,6 +28,24 @@ ktor-clientCio = { module = "io.ktor:ktor-client-cio-jvm", version.ref = "ktor" 
 
 lettuce = { group = "io.lettuce", name = "lettuce-core", version.ref = "lettuce" }
 
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-multiplatform" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-multiplatform" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-material3" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-multiplatform" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
+compose-components-ui-tooling-preview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "compose-multiplatform" }
+ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "compose-multiplatform" }
+
+coil3-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
+coil3-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil3" }
+coil3-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil3" }
+
+# The screenshot tester, published from its own repository (github.com/youndie/viddik) to the same
+# Reposilite the toolkit publishes to — see the repository list in settings.gradle.kts.
+viddik-annotations = { module = "ru.workinprogress:viddik-annotations", version.ref = "viddik" }
+viddik-testing-core = { module = "ru.workinprogress:viddik-testing-core", version.ref = "viddik" }
+viddik-processor = { module = "ru.workinprogress:viddik-processor", version.ref = "viddik" }
+
 ksp-symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
@@ -33,3 +55,5 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

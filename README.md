@@ -63,6 +63,11 @@ module, and an unknown type degrades to a placeholder instead of taking the scre
 | `kompot-spec` | the wire specification: schema generator, validator, and the spec module of every module above | all of them |
 | `kompot-tck` | the conformance kit: walks a running server over HTTP and checks the rules a schema cannot express | kompot-spec |
 | `kompot-swift-interop` | the Swift bridge: what the Kotlin/Native ObjC export drops — reified calls, suspend contracts, value-class tokens | core, standard, forms, wizard |
+| `kompot-client` | the Compose client: a registry keyed by wire type, the core renderers, live updates, impression tracking | core, standard, forms |
+| `kompot-forms-client`, `kompot-wizard-client`, `kompot-images-client-coil` | the renderers of the form, wizard and image plug-ins | kompot-client |
+| `kompot-theme-client`, `kompot-ds-material-compose` | the Compose side of a server-driven theme, and the Material3 design system tokens resolve through | kompot-client, kompot-theme |
+| `kompot-client-cache` | offline-first screen cache: the store contract and a cache-first provider with ETag revalidation | core |
+| `kompot-analytics` | tracking contracts for screens, actions and form outcomes | — |
 
 `form-core`, `experiments-core` and `wizard-core` are usable on their own and know nothing about
 Kompot components: one manages form state, one assigns variants, one walks a graph of steps. They
@@ -175,10 +180,12 @@ bug so easy to miss.
 
 ### 🚫 What it does not do
 
-- **it does not ship renderers** — the toolkit defines contracts and generates registrations; the
-  Compose or SwiftUI side is the application's. `kompot-swift-interop` is not a renderer: it is the
-  handful of non-generic functions Swift needs because the Kotlin/Native ObjC export drops reified
-  calls, suspend contracts and value classes;
+- **it does not ship YOUR renderers** — the Compose renderers of the standard, form, wizard and image
+  components are here, and so is a Material3 design system; what stays yours is the renderer of a
+  component you invented. The registry is open exactly the way the wire types are. The SwiftUI side is
+  yours too: `kompot-swift-interop` is not a renderer but the handful of non-generic functions Swift
+  needs because the Kotlin/Native ObjC export drops reified calls, suspend contracts and value
+  classes;
 - **it does not choose a transport** — the live-update contract is here, the SSE or WebSocket
   implementation is yours;
 - **it does not validate your business rules** — `form-core` covers what a form can decide locally;
