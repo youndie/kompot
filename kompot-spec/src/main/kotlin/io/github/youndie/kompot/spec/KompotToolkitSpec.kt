@@ -324,7 +324,21 @@ object KompotToolkitSpec {
                                     "Matches the string a server puts into navigate.deeplink",
                                     forbid = KompotProtocol.DEEPLINK_FORBIDDEN_PATTERN,
                                 ),
-                            "endpoint" to KompotSpec.constrained(KompotProtocol.ENDPOINT_PATTERN, "The relative address the screen tree is fetched from"),
+                            "endpoint" to
+                                KompotSpec.constrained(
+                                    KompotProtocol.ENDPOINT_PATTERN,
+                                    "The relative address the screen is fetched from. Its endpoint kind MUST equal this route's kind",
+                                ),
+                            "kind" to
+                                KompotSpec.constrained(
+                                    pattern = null,
+                                    description =
+                                        "What stands behind the endpoint, in the vocabulary of x-kompot-endpoint-kind: " +
+                                            "\"screen\" yields a KompotComponent, \"form\" a KompotFormResponse. Absent means " +
+                                            "\"screen\". An open string rather than an enum on purpose: a client MUST ignore a " +
+                                            "route whose kind it does not recognise, and an unknown enum constant would fail the " +
+                                            "parse of the whole graph before one route could be skipped",
+                                ),
                         ),
                 ),
         )
