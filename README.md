@@ -59,6 +59,7 @@ module, and an unknown type degrades to a placeholder instead of taking the scre
 | `experiments-core` | deterministic A/B assignment plus its header codec | — |
 | `kompot-spec` | the wire specification: schema generator, validator, and the spec module of every module above | all of them |
 | `kompot-tck` | the conformance kit: walks a running server over HTTP and checks the rules a schema cannot express | kompot-spec |
+| `kompot-swift-interop` | the Swift bridge: what the Kotlin/Native ObjC export drops — reified calls, suspend contracts, value-class tokens | core, standard, forms, wizard |
 
 `form-core`, `experiments-core` and `wizard-core` are usable on their own and know nothing about
 Kompot components: one manages form state, one assigns variants, one walks a graph of steps. They
@@ -172,7 +173,9 @@ bug so easy to miss.
 ### 🚫 What it does not do
 
 - **it does not ship renderers** — the toolkit defines contracts and generates registrations; the
-  Compose or SwiftUI side is the application's;
+  Compose or SwiftUI side is the application's. `kompot-swift-interop` is not a renderer: it is the
+  handful of non-generic functions Swift needs because the Kotlin/Native ObjC export drops reified
+  calls, suspend contracts and value classes;
 - **it does not choose a transport** — the live-update contract is here, the SSE or WebSocket
   implementation is yours;
 - **it does not validate your business rules** — `form-core` covers what a form can decide locally;

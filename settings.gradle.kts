@@ -87,6 +87,11 @@ include(":kompot-spec")
 // description, and the only one that runs against an implementation on any stack.
 include(":kompot-tck")
 
+// The Swift bridge: non-generic wrappers over the reified and suspend calls that the Kotlin/Native
+// ObjC export does not publish, plus the unwrapping of value-class tokens that erode at that
+// boundary. It builds no Json of its own — which types an application speaks is the application's.
+include(":kompot-swift-interop")
+
 // Multi-step flows. wizard-core is the step machine — a pure function of (session, transition,
 // draft), with no HTTP, no storage and no idea what a component is — and kompot-wizard is its wire
 // side: the step screen, the three transition actions and the resume request.
