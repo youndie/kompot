@@ -6,7 +6,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.ColumnRenderer
 import io.github.youndie.kompot.KompotDesignSystem
@@ -28,13 +27,18 @@ private class ColouredTypographyDesignSystem : KompotDesignSystem {
     @Composable
     override fun resolveColor(token: ColorToken): Color = Material3DesignSystem().resolveColor(token)
 
+    // Every style is a COPY of one from MaterialTheme, never a bare TextStyle(...), and that is a
+    // portability requirement rather than brevity. A TextStyle built from nothing carries no font
+    // family, so Compose falls back to the platform's — SF on macOS, DejaVu or Noto on Linux — and the
+    // golden stops travelling. The bundled font arrives through viddikTypography() into MaterialTheme,
+    // and copy() is what keeps it.
     @Composable
     override fun resolveTypography(token: TypographyToken): TextStyle =
         when (token.key) {
-            "error" -> TextStyle(fontSize = 16.sp, color = Color(0xFFB3261E))
-            "meta" -> TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Medium, color = Color(0xFF6750A4))
-            "body" -> TextStyle(fontSize = 16.sp, color = Color(0xFF1D1B20))
-            else -> TextStyle(fontSize = 16.sp)
+            "error" -> MaterialTheme.typography.bodyLarge.copy(color = Color(0xFFB3261E))
+            "meta" -> MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium, color = Color(0xFF6750A4))
+            "body" -> MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1D1B20))
+            else -> MaterialTheme.typography.bodyLarge
         }
 }
 
