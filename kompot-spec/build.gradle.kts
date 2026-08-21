@@ -16,6 +16,7 @@ dependencies {
     implementation(projects.kompotStandard)
     implementation(projects.kompotForms)
     implementation(projects.formCore)
+    implementation(projects.formStandard)
     implementation(projects.kompotImages)
     implementation(projects.kompotRealtime)
     implementation(projects.wizardCore)
@@ -23,6 +24,7 @@ dependencies {
     implementation(projects.kompotNavigation)
     implementation(projects.kompotAuth)
     implementation(projects.kompotCommands)
+    implementation(projects.kompotTheme)
     api(libs.kotlinx.serialization.json)
 
     testImplementation(kotlin("test"))

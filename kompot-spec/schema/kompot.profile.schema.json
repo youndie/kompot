@@ -7,6 +7,7 @@
   "x-kompot-modules": [
     "kompot-core",
     "form-core",
+    "form-standard",
     "wizard-core",
     "kompot-standard",
     "kompot-forms",
@@ -15,9 +16,87 @@
     "kompot-wizard",
     "kompot-navigation",
     "kompot-auth",
-    "kompot-commands"
+    "kompot-commands",
+    "kompot-theme"
   ],
   "$defs": {
+    "FieldValue": {
+      "x-kompot-kind": "hierarchy",
+      "x-kompot-open": false,
+      "oneOf": [
+        {
+          "$ref": "form-standard.schema.json#/$defs/FieldValueAmountValue"
+        },
+        {
+          "$ref": "form-standard.schema.json#/$defs/FieldValueBooleanValue"
+        },
+        {
+          "$ref": "form-standard.schema.json#/$defs/FieldValueEntityValue"
+        },
+        {
+          "$ref": "form-standard.schema.json#/$defs/FieldValueTextValue"
+        }
+      ],
+      "discriminator": {
+        "propertyName": "type",
+        "mapping": {
+          "amount_value": "form-standard.schema.json#/$defs/FieldValueAmountValue",
+          "boolean_value": "form-standard.schema.json#/$defs/FieldValueBooleanValue",
+          "entity_value": "form-standard.schema.json#/$defs/FieldValueEntityValue",
+          "text_value": "form-standard.schema.json#/$defs/FieldValueTextValue"
+        }
+      }
+    },
+    "FormCondition": {
+      "x-kompot-kind": "hierarchy",
+      "x-kompot-open": false,
+      "oneOf": [
+        {
+          "$ref": "form-standard.schema.json#/$defs/FormConditionEquals"
+        },
+        {
+          "$ref": "form-standard.schema.json#/$defs/FormConditionNotEquals"
+        }
+      ],
+      "discriminator": {
+        "propertyName": "type",
+        "mapping": {
+          "equals": "form-standard.schema.json#/$defs/FormConditionEquals",
+          "not_equals": "form-standard.schema.json#/$defs/FormConditionNotEquals"
+        }
+      }
+    },
+    "FormFieldDefinition": {
+      "x-kompot-kind": "hierarchy",
+      "x-kompot-open": false,
+      "oneOf": [
+        {
+          "$ref": "form-standard.schema.json#/$defs/FormFieldDefinitionAmountField"
+        },
+        {
+          "$ref": "form-standard.schema.json#/$defs/FormFieldDefinitionAutocompleteField"
+        },
+        {
+          "$ref": "form-standard.schema.json#/$defs/FormFieldDefinitionCheckboxField"
+        },
+        {
+          "$ref": "form-standard.schema.json#/$defs/FormFieldDefinitionSelectionField"
+        },
+        {
+          "$ref": "form-standard.schema.json#/$defs/FormFieldDefinitionTextField"
+        }
+      ],
+      "discriminator": {
+        "propertyName": "type",
+        "mapping": {
+          "amount_field": "form-standard.schema.json#/$defs/FormFieldDefinitionAmountField",
+          "autocomplete_field": "form-standard.schema.json#/$defs/FormFieldDefinitionAutocompleteField",
+          "checkbox_field": "form-standard.schema.json#/$defs/FormFieldDefinitionCheckboxField",
+          "selection_field": "form-standard.schema.json#/$defs/FormFieldDefinitionSelectionField",
+          "text_field": "form-standard.schema.json#/$defs/FormFieldDefinitionTextField"
+        }
+      }
+    },
     "KompotAction": {
       "x-kompot-kind": "hierarchy",
       "x-kompot-open": false,
@@ -141,6 +220,33 @@
           "text": "kompot-standard.schema.json#/$defs/KompotComponentText",
           "text_input": "kompot-forms.schema.json#/$defs/KompotComponentTextInput",
           "wizard_screen": "kompot-wizard.schema.json#/$defs/KompotComponentWizardScreen"
+        }
+      }
+    },
+    "ValidationRule": {
+      "x-kompot-kind": "hierarchy",
+      "x-kompot-open": false,
+      "oneOf": [
+        {
+          "$ref": "form-standard.schema.json#/$defs/ValidationRuleMaxAmountFromField"
+        },
+        {
+          "$ref": "form-standard.schema.json#/$defs/ValidationRuleRegex"
+        },
+        {
+          "$ref": "form-standard.schema.json#/$defs/ValidationRuleRequired"
+        },
+        {
+          "$ref": "form-standard.schema.json#/$defs/ValidationRuleRequiredIf"
+        }
+      ],
+      "discriminator": {
+        "propertyName": "type",
+        "mapping": {
+          "max_amount_from_field": "form-standard.schema.json#/$defs/ValidationRuleMaxAmountFromField",
+          "regex": "form-standard.schema.json#/$defs/ValidationRuleRegex",
+          "required": "form-standard.schema.json#/$defs/ValidationRuleRequired",
+          "required_if": "form-standard.schema.json#/$defs/ValidationRuleRequiredIf"
         }
       }
     }

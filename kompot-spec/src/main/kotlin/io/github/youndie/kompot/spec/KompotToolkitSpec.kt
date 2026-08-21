@@ -23,6 +23,8 @@ import io.github.youndie.kompot.navigation.NavigationGraph
 import io.github.youndie.kompot.realtime.UpdateComponentMessage
 import io.github.youndie.kompot.standard.KompotPageResponse
 import io.github.youndie.kompot.commands.kompotCommandsSerializersModule
+import io.github.youndie.kompot.form.standard.formStandardSerializersModule
+import io.github.youndie.kompot.theme.KompotTheme
 import io.github.youndie.kompot.standard.kompotStandardSerializersModule
 import io.github.youndie.kompot.wizard.WizardResumeRequest
 import io.github.youndie.kompot.wizard.kompotWizardSerializersModule
@@ -42,6 +44,7 @@ object KompotToolkitSpec {
         listOf(
             core(),
             formCore(),
+            formStandard(),
             wizardCore(),
             standard(),
             forms(),
@@ -51,6 +54,7 @@ object KompotToolkitSpec {
             navigation(),
             auth(),
             commands(),
+            theme(),
         )
 
     fun core() =
@@ -245,6 +249,34 @@ object KompotToolkitSpec {
 
     // The only wire type of wizard-core is the transition itself. Everything else — the session, the
     // engine, the step resolvers — lives on the server and never travels.
+    // The concrete fields, rules, values and conditions. It belongs to the toolkit's own list and not
+    // to each consumer's, even though it is a plug-in: the annotations below are protocol knowledge —
+    // §9.7 reserves the metadata keys and calls the default part of the protocol — and knowledge every
+    // consumer copies word for word was living in the wrong place. Two independent implementations had
+    // already reproduced this declaration verbatim (issue #2).
+    //
+    // Right after formCore(), whose four open bases it fills in.
+    fun formStandard() =
+        KompotSpecModule(
+            name = "form-standard",
+            description = "The standard form fields, rules, values and conditions over form-core",
+            serializersModule = formStandardSerializersModule,
+            annotations =
+                mapOf(
+                    "FieldValueEntityValue" to mapOf("rawMetadata" to KompotSpec.reservedMetadata()),
+                    "ValidationRuleMaxAmountFromField" to
+                        mapOf(
+                            "balanceMetadataKey" to
+                                KompotSpec.constrained(
+                                    pattern = null,
+                                    description =
+                                        "The key in the chosen entity_value's rawMetadata the remaining amount is read " +
+                                            "from. Defaults to \"${KompotProtocol.METADATA_KEY_BALANCE}\"",
+                                ),
+                        ),
+                ),
+        )
+
     fun wizardCore() =
         KompotSpecModule(
             name = "wizard-core",
@@ -329,6 +361,50 @@ object KompotToolkitSpec {
                                             "parameters. The keys are the application's, the values are the same " +
                                             "FieldValue vocabulary a form submit sends. Two buttons on two items of " +
                                             "one list differ in this and nothing else",
+                                ),
+                        ),
+                ),
+        )
+
+    // A theme is served, so it is protocol — and it was outside the declared profile, which is what
+    // made the omission worth a report rather than a shrug: an implementation reading the published
+    // contract had no description of a document its server is expected to answer with.
+    //
+    // No serializersModule: nothing here joins a polymorphic hierarchy. KompotTheme is a root of its
+    // own, the way NavigationGraph and UpdateComponentMessage are.
+    fun theme() =
+        KompotSpecModule(
+            name = "kompot-theme",
+            description = "A server-driven theme: what a client resolves its design-system tokens into",
+            roots = listOf(KompotTheme.serializer().descriptor),
+            annotations =
+                mapOf(
+                    "KompotPalette" to
+                        mapOf(
+                            "colors" to
+                                KompotSpec.constrained(
+                                    pattern = null,
+                                    description =
+                                        "ColorToken key -> colour. The value is a hex string (#RGB, #RRGGBB or " +
+                                            "#AARRGGBB, with or without the hash); alpha defaults to opaque. A malformed " +
+                                            "value is treated as an absent one — the client keeps its built-in colour",
+                                ),
+                        ),
+                    "KompotTheme" to
+                        mapOf(
+                            "dark" to
+                                KompotSpec.constrained(
+                                    pattern = null,
+                                    description =
+                                        "Absent means the brand described no dark theme. A client MUST then stay entirely " +
+                                            "on its built-in dark palette rather than substituting the light one",
+                                ),
+                            "typography" to
+                                KompotSpec.constrained(
+                                    pattern = null,
+                                    description =
+                                        "TypographyToken key -> style. One set for both themes. Every property of a style " +
+                                            "is optional: what is absent keeps the client's built-in value",
                                 ),
                         ),
                 ),
