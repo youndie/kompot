@@ -114,15 +114,18 @@ silently, and that is the commonest way to end up with a conformance kit that pr
 
 ### 🔌 Installation
 
+Every module is published under one version, so the numbers below move together. The badges at the top
+show what the latest one is.
+
 ```kotlin
 repositories {
     maven("https://reposilite.kotlin.website/snapshots")
 }
 
 dependencies {
-    implementation("io.github.youndie:kompot-core:0.1.0")
-    implementation("io.github.youndie:kompot-standard:0.1.0")
-    implementation("io.github.youndie:kompot-ktor:0.1.0")
+    implementation("io.github.youndie:kompot-core:0.8.0.13")
+    implementation("io.github.youndie:kompot-standard:0.8.0.13")
+    implementation("io.github.youndie:kompot-ktor:0.8.0.13")
 }
 ```
 
@@ -133,8 +136,8 @@ unique to that module:
 plugins { id("com.google.devtools.ksp") }
 
 dependencies {
-    implementation("io.github.youndie:kompot-registry-annotations:0.1.0")
-    ksp("io.github.youndie:kompot-registry-processor:0.1.0")
+    implementation("io.github.youndie:kompot-registry-annotations:0.8.0.13")
+    ksp("io.github.youndie:kompot-registry-processor:0.8.0.13")
 }
 
 ksp { arg("kompotModuleTag", "Catalogue") }
@@ -198,6 +201,15 @@ bug so easy to miss.
 
 ```bash
 ./gradlew build
+```
+
+On CI (Linux) that is the whole story: Kotlin/Native cross-compiles the Apple klibs there, and the
+simulator test tasks do not exist. On a Mac without an iOS simulator runtime installed the same
+command fails with "Xcode does not support simulator tests for ios_simulator_arm64" — the failure is
+the missing runtime, not the code. Either install one through Xcode, or skip those tasks:
+
+```bash
+./gradlew build -x iosSimulatorArm64Test -x iosX64Test
 ```
 
 Java 25 for every module at once — not tidiness but a Gradle requirement: it tags variants with the
