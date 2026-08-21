@@ -123,9 +123,9 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.youndie:kompot-core:0.8.0.13")
-    implementation("io.github.youndie:kompot-standard:0.8.0.13")
-    implementation("io.github.youndie:kompot-ktor:0.8.0.13")
+    implementation("io.github.youndie:kompot-core:0.9.0.15")
+    implementation("io.github.youndie:kompot-standard:0.9.0.15")
+    implementation("io.github.youndie:kompot-ktor:0.9.0.15")
 }
 ```
 
@@ -136,8 +136,8 @@ unique to that module:
 plugins { id("com.google.devtools.ksp") }
 
 dependencies {
-    implementation("io.github.youndie:kompot-registry-annotations:0.8.0.13")
-    ksp("io.github.youndie:kompot-registry-processor:0.8.0.13")
+    implementation("io.github.youndie:kompot-registry-annotations:0.9.0.15")
+    ksp("io.github.youndie:kompot-registry-processor:0.9.0.15")
 }
 
 ksp { arg("kompotModuleTag", "Catalogue") }
