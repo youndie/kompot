@@ -22,6 +22,7 @@ import io.github.youndie.kompot.generated.generatedWizardSerializersModule
 import io.github.youndie.kompot.navigation.NavigationGraph
 import io.github.youndie.kompot.realtime.UpdateComponentMessage
 import io.github.youndie.kompot.standard.KompotPageResponse
+import io.github.youndie.kompot.commands.kompotCommandsSerializersModule
 import io.github.youndie.kompot.standard.kompotStandardSerializersModule
 import io.github.youndie.kompot.wizard.WizardResumeRequest
 import io.github.youndie.kompot.wizard.kompotWizardSerializersModule
@@ -49,6 +50,7 @@ object KompotToolkitSpec {
             wizard(),
             navigation(),
             auth(),
+            commands(),
         )
 
     fun core() =
@@ -298,5 +300,37 @@ object KompotToolkitSpec {
             name = "kompot-auth",
             description = "The action that updates the session after a login",
             serializersModule = kompotAuthSerializersModule,
+        )
+
+    // After formCore() in the list, and it has to be: the payload's values are FieldValue, and the
+    // first module to mention a definition owns it. Ahead of form-core this would move the whole value
+    // hierarchy into a file about buttons.
+    fun commands() =
+        KompotSpecModule(
+            name = "kompot-commands",
+            description = "The action that performs an operation on one item of a list, with no form around it",
+            serializersModule = kompotCommandsSerializersModule,
+            annotations =
+                mapOf(
+                    "KompotActionPerform" to
+                        mapOf(
+                            "url" to
+                                KompotSpec.constrained(
+                                    KompotProtocol.ENDPOINT_PATTERN,
+                                    "The relative address of an endpoint of kind `submit`: it answers a KompotAction, " +
+                                        "which the client runs through the same handler chain as any other intent. " +
+                                        "Being state-changing, it requires an Idempotency-Key (§16.5)",
+                                ),
+                            "payload" to
+                                KompotSpec.constrained(
+                                    pattern = null,
+                                    description =
+                                        "What the operation acts on and with: the identity of the item, plus any " +
+                                            "parameters. The keys are the application's, the values are the same " +
+                                            "FieldValue vocabulary a form submit sends. Two buttons on two items of " +
+                                            "one list differ in this and nothing else",
+                                ),
+                        ),
+                ),
         )
 }

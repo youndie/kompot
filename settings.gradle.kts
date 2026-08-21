@@ -149,3 +149,8 @@ include(":kompot-wizard")
 // The navigation graph: which deeplink a plain screen answers to and where its tree is fetched
 // from. Only for screens that need no client code of their own.
 include(":kompot-navigation")
+
+// Acting on one item of a list without a form around it. One action, and it is here rather than in
+// :kompot-standard so that a profile of "core + standard" keeps its promise of needing no form
+// vocabulary at all.
+include(":kompot-commands")

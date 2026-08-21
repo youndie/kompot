@@ -99,6 +99,7 @@ class TckRunner(
         findings += etagRevalidation()
         findings += paginationTerminates()
         findings += navigationGraphResolves()
+        findings += performTargetsAreSubmitEndpoints()
         findings += idempotencyContract()
 
         return TckReport(findings, exercised.toMap(), config.extensionTypes)
@@ -233,6 +234,37 @@ class TckRunner(
             (referenced - declared).map { TckFinding("form-fields", endpoint.path, "a component refers to undeclared field \"$it\"") } +
                 (declared - referenced).map { TckFinding("form-fields", endpoint.path, "field \"$it\" is declared but never rendered") } +
                 (crossReferences - declared).map { TckFinding("form-fields", endpoint.path, "a cross-reference points at non-existent field \"$it\"") }
+        }
+
+    // A perform action names the address it posts to, and SPEC.md §16.4 requires that address to be an
+    // endpoint of kind `submit` — that is what makes it answer a KompotAction the client can feed back
+    // into its chain. No schema can check this: the url is a string, and only the application's own
+    // HTTP description knows what lives behind it. Static, so unlike the idempotency check it needs no
+    // permission to change state.
+    private suspend fun performTargetsAreSubmitEndpoints(): List<TckFinding> =
+        probeable().exercising("perform").flatMap { endpoint ->
+            val element = parse(get(endpoint).body) ?: return@flatMap emptyList()
+
+            collectJsonObjects(element)
+                .filter { (it[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content == KompotProtocol.ACTION_PERFORM }
+                .mapNotNull { (it["url"] as? JsonPrimitive)?.takeIf { url -> url.isString }?.content }
+                .distinct()
+                .mapNotNull { url ->
+                    val target = endpoints.firstOrNull { it.path == url && it.method == "POST" }
+                    when {
+                        target == null ->
+                            TckFinding("perform", endpoint.path, "a perform action posts to \"$url\", which the HTTP description does not declare")
+
+                        target.kind != "submit" ->
+                            TckFinding(
+                                "perform",
+                                endpoint.path,
+                                "a perform action posts to \"$url\", declared as kind \"${target.kind}\" rather than \"submit\"",
+                            )
+
+                        else -> null
+                    }
+                }
         }
 
     // Conditional delivery: a repeat with the same ETag must answer 304 with no body (SPEC.md §16.2).
