@@ -210,6 +210,7 @@ object KompotToolkitSpec {
                                     "The identifier of an application screen: a URI with its own scheme, not a web " +
                                         "address. Both the scheme and the set of values are the application's (see " +
                                         "NavigationGraph in :kompot-navigation); a client must ignore an unknown deeplink",
+                                    forbid = KompotProtocol.DEEPLINK_FORBIDDEN_PATTERN,
                                 ),
                         ),
                     "LoadPage" to mapOf("url" to KompotSpec.constrained(KompotProtocol.ENDPOINT_PATTERN, "The relative address of the next page")),
@@ -321,6 +322,7 @@ object KompotToolkitSpec {
                                 KompotSpec.constrained(
                                     KompotProtocol.DEEPLINK_PATTERN,
                                     "Matches the string a server puts into navigate.deeplink",
+                                    forbid = KompotProtocol.DEEPLINK_FORBIDDEN_PATTERN,
                                 ),
                             "endpoint" to KompotSpec.constrained(KompotProtocol.ENDPOINT_PATTERN, "The relative address the screen tree is fetched from"),
                         ),

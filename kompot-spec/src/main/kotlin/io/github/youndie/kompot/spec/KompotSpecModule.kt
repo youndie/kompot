@@ -87,12 +87,20 @@ object KompotSpec {
 
     // ---- helpers for describing a module -----------------------------------------------------
 
+    // `forbid` is the negative half of a format rule, and it exists because the positive half cannot
+    // always carry it: a negative lookahead makes the pattern uncompilable for RE2 engines, and those
+    // refuse the whole schema file rather than the one keyword. Expressed as `not`, the same rule
+    // reaches every implementation (see KompotProtocol.DEEPLINK_FORBIDDEN_PATTERN).
     fun constrained(
         pattern: String?,
         description: String,
+        forbid: String? = null,
     ): JsonObject =
         buildJsonObject {
             if (pattern != null) put("pattern", pattern)
+            if (forbid != null) {
+                putJsonObject("not") { put("pattern", forbid) }
+            }
             put("description", description)
         }
 
