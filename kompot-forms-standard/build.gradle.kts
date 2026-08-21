@@ -4,7 +4,6 @@ plugins {
     id("kompot.publishing")
 }
 
-group = "io.github.youndie"
 
 // JVM only, as it was: this DSL builds a form on the server, and nothing in the iOS framework exports
 // it. Widening the target set is a decision for whoever needs it, not a side effect of a move.

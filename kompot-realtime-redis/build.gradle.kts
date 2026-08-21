@@ -3,7 +3,6 @@ plugins {
     id("kompot.publishing")
 }
 
-group = "io.github.youndie"
 
 // A plain kotlin("jvm") rather than multiplatform + jvm(): Lettuce is a JVM library, and there is
 // nothing to gain from wrapping a single JVM target in multiplatform scaffolding.

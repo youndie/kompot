@@ -4,7 +4,6 @@ plugins {
     id("kompot.publishing")
 }
 
-group = "io.github.youndie"
 
 dependencies {
     // api rather than implementation: a consumer configures the runner with its own schemas and its

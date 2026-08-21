@@ -2,6 +2,11 @@ plugins {
     `maven-publish`
 }
 
+// The group belongs to the convention, not to each module. Six modules of the Compose client arrived
+// without one and were published under a group derived from the root project name — the failure
+// surfaced only at upload time, as a PUT to the wrong path, after everything had compiled and tested.
+group = "io.github.youndie"
+
 // The default version comes from gradle.properties so that a local build and publishToMavenLocal
 // work without extra parameters. CI overrides it through -PVERSION (see afterEvaluate below),
 // appending the run number.

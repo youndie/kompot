@@ -4,7 +4,6 @@ plugins {
     id("kompot.publishing")
 }
 
-group = "io.github.youndie"
 
 
 kotlin {

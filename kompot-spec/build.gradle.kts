@@ -4,7 +4,6 @@ plugins {
     id("kompot.publishing")
 }
 
-group = "io.github.youndie"
 
 // JVM-only on purpose: the spec is a build-time and review-time artefact. It never travels into an
 // iOS framework or a client application — the only runtime consumer of a schema is somebody else's
