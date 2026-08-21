@@ -20,6 +20,10 @@ data class TckEndpoint(
     val statuses: Set<Int>,
     val deprecated: Boolean,
 ) {
+    // How the walk records that it reached this endpoint: method and path together, since one path can
+    // carry a GET and a POST with entirely different kinds.
+    val key: String get() = "$method $path"
+
     // Checks that walk blind apply only to addresses without placeholders: what to put in {formId} or
     // {id} is not something the kit can know.
     val hasPathParams: Boolean get() = '{' in path

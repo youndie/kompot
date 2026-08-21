@@ -22,23 +22,42 @@ data class TckFinding(
     override fun toString() = "[$check] $target — $message"
 }
 
-// The report of a run: the findings, plus how many targets each check actually visited.
+// An endpoint the walk never looked at, and why. The per-check counters cannot show this: they answer
+// "did this check have targets", and the other endpoints keep every check busy while one is quietly
+// left out. A run that is green because it skipped the hardest screen is the failure this closes.
+data class TckSkip(
+    val method: String,
+    val path: String,
+    val reason: String,
+) {
+    override fun toString() = "$method $path ($reason)"
+}
+
+// The report of a run: the findings, plus how many targets each check actually visited, plus what was
+// not visited at all.
 data class TckReport(
     val findings: List<TckFinding>,
     val exercised: Map<String, Int>,
+    val skipped: List<TckSkip> = emptyList(),
     // Printed in the report on purpose: an extension weakens a strict check, and that must be visible
     // in the output of a green run rather than living quietly in a config.
     val declaredExtensions: Set<String> = emptySet(),
 ) {
     val isClean: Boolean get() = findings.isEmpty()
 
-    override fun toString() =
-        if (isClean) {
-            "TCK: no violations. Checks: " + exercised.entries.joinToString { "${it.key}=${it.value}" } +
-                if (declaredExtensions.isEmpty()) "" else ". Deployment extensions: " + declaredExtensions.sorted().joinToString()
-        } else {
-            "TCK: ${findings.size} violations\n" + findings.joinToString("\n")
-        }
+    override fun toString(): String {
+        val head =
+            if (isClean) {
+                "TCK: no violations. Checks: " + exercised.entries.joinToString { "${it.key}=${it.value}" } +
+                    if (declaredExtensions.isEmpty()) "" else ". Deployment extensions: " + declaredExtensions.sorted().joinToString()
+            } else {
+                "TCK: ${findings.size} violations\n" + findings.joinToString("\n")
+            }
+
+        // Printed on a clean run too, and that is the whole point: silence about what was not walked
+        // reads exactly like coverage.
+        return if (skipped.isEmpty()) head else head + "\nNot walked:\n" + skipped.joinToString("\n") { "  $it" }
+    }
 }
 
 // Everything the kit cannot know about the server it is pointed at. Nothing here has a default that
@@ -89,6 +108,11 @@ class TckRunner(
 
     private val exercised = sortedMapOf<String, Int>()
 
+    // Which endpoints a check actually reached, as "METHOD path". Derived from the walk rather than
+    // from a second list of predicates: a list would drift the moment a check widened its reach, and
+    // would then under-report the very thing it exists to report.
+    private val visited = mutableSetOf<String>()
+
     suspend fun run(): TckReport {
         val findings = mutableListOf<TckFinding>()
 
@@ -103,7 +127,7 @@ class TckRunner(
         findings += performTargetsAreSubmitEndpoints()
         findings += idempotencyContract()
 
-        return TckReport(findings, exercised.toMap(), config.extensionTypes)
+        return TckReport(findings, exercised.toMap(), notWalked(), config.extensionTypes)
     }
 
     // Every check records how many targets it actually visited. Without that a green run means
@@ -126,6 +150,7 @@ class TckRunner(
                 "fieldId" to JsonPrimitive("login"),
                 "values" to JsonObject(config.loginValues),
             )
+        visited += "POST $loginPath"
         val response = transport.request("POST", loginPath, body = json.encodeToString(JsonObject.serializer(), body))
 
         if (response.status != 200) {
@@ -326,7 +351,7 @@ class TckRunner(
                 // A route without `kind` is a screen — the default in ScreenRoute, and what every graph
                 // written before the field existed means.
                 val routeKind = (route.jsonObject["kind"] as? JsonPrimitive)?.content ?: ScreenRouteKind.SCREEN
-                val declared = endpoints.firstOrNull { it.path == target && it.method == "GET" }
+                val declared = endpoints.firstOrNull { it.path == target && it.method == "GET" }?.also { visited += it.key }
                 val findings = mutableListOf<TckFinding>()
 
                 // The route says what a client will parse the body as; the HTTP description says what
@@ -372,6 +397,7 @@ class TckRunner(
             .filter { it.kind == "submit" && 400 in it.statuses && 409 in it.statuses && it.path in config.submitPayloads }
             .exercising("idempotency")
             .flatMap { endpoint ->
+                visited += endpoint.key
                 val payload = config.submitPayloads.getValue(endpoint.path)
                 val body = json.encodeToString(JsonElement.serializer(), payload)
                 val findings = mutableListOf<TckFinding>()
@@ -398,7 +424,36 @@ class TckRunner(
 
     // A blind GET applies only to an address with no placeholders that answers JSON. Streaming
     // endpoints — the update channel — are checked differently and stay out of this set (SPEC.md §16.9).
-    private fun probeable() = endpoints.filter { it.method == "GET" && !it.hasPathParams && !it.deprecated && it.respondsWithJson }
+    private fun probeable() =
+        endpoints
+            .filter { it.method == "GET" && !it.hasPathParams && !it.deprecated && it.respondsWithJson }
+            .onEach { visited += it.key }
+
+    // Why an endpoint was left out, in the reader's terms rather than in the kit's. The reason is
+    // explanatory; the SET comes from what the walk really touched.
+    private fun notWalked(): List<TckSkip> =
+        endpoints
+            .filterNot { it.key in visited }
+            .map { endpoint ->
+                val reason =
+                    when {
+                        endpoint.deprecated -> "declared deprecated"
+                        endpoint.hasPathParams -> "no value for the path parameters of \"${endpoint.path}\""
+                        !endpoint.respondsWithJson ->
+                            "the response is ${endpoint.successContentType ?: "not declared"}, not one JSON document"
+
+                        endpoint.method != "GET" && endpoint.kind == "submit" && !config.allowStateChangingChecks ->
+                            "state-changing checks are switched off"
+
+                        endpoint.method != "GET" && endpoint.kind == "submit" ->
+                            "no body for it in TckConfig.submitPayloads"
+
+                        endpoint.method != "GET" -> "only GET endpoints are walked blind"
+                        else -> "no check claims it"
+                    }
+
+                TckSkip(endpoint.method, endpoint.path, reason)
+            }.sortedBy { it.path }
 
     private suspend fun get(
         endpoint: TckEndpoint,
