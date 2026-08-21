@@ -56,6 +56,8 @@ module, and an unknown type degrades to a placeholder instead of taking the scre
 | `wizard-core` | the step machine of a multi-step flow, as a pure function | — |
 | `kompot-wizard` | the wire side of that flow: step screen, transitions, resume request | core, form-core, wizard-core |
 | `form-core` | form state: validation, visibility, cross-field rules, patches | — |
+| `form-standard` | the standard field set over form-core: text, amount, checkbox, autocomplete, selection | form-core |
+| `kompot-forms-standard` | the glue: one call declares a field and draws the component that fills it | kompot-forms, form-standard |
 | `experiments-core` | deterministic A/B assignment plus its header codec | — |
 | `kompot-spec` | the wire specification: schema generator, validator, and the spec module of every module above | all of them |
 | `kompot-tck` | the conformance kit: walks a running server over HTTP and checks the rules a schema cannot express | kompot-spec |

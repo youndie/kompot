@@ -71,6 +71,16 @@ include(":kompot-realtime-redis")
 // without any of the Kompot components — it knows nothing about them.
 include(":form-core")
 
+// The standard field set over form-core: text, amount, checkbox, autocomplete, selection, plus the
+// rules and conditions that go with them. A plug-in like any other — an application may take it,
+// replace it, or add its own field types beside it.
+include(":form-standard")
+
+// The glue between the two: one call declares a field and draws the component that fills it, so a
+// fieldId cannot drift between the schema and the UI (SPEC.md §9.2 asks for that connectivity; this
+// makes breaking it unrepresentable).
+include(":kompot-forms-standard")
+
 // Deterministic A/B assignment from (experiment, subject) with no assignment storage, plus the
 // header codec that carries the result beside a response.
 include(":experiments-core")
