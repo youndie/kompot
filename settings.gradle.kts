@@ -54,6 +54,11 @@ include(":kompot-auth")
 // of any UI toolkit, because the server that serves a theme has no business depending on Compose.
 include(":kompot-theme")
 
+// The reference token set for a Material3 client: ColorToken/TypographyToken constants and nothing
+// else. A server authors trees with the same constants a client resolves, which is what an open
+// string token is for (SPEC.md §6).
+include(":kompot-ds-material")
+
 // The Ktor side: helpers that serialise a polymorphic root correctly, which a plain call.respond
 // does not.
 include(":kompot-ktor")

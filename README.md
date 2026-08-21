@@ -46,6 +46,7 @@ module, and an unknown type degrades to a placeholder instead of taking the scre
 | `kompot-standard` | the standard component set: text, containers, lists, pagination | core |
 | `kompot-forms` | form components over `form-core` | core, form-core |
 | `kompot-theme` | server-driven theming, no UI toolkit | core |
+| `kompot-ds-material` | the reference Material3 token set: constants a server and a client share | core |
 | `kompot-ktor` | Ktor helpers for polymorphic roots, ETags, experiment headers | core, experiments-core |
 | `kompot-realtime` | the live-update channel contract | core |
 | `kompot-realtime-server` | delivery to one instance's subscribers plus the bus contract between instances | kompot-realtime |
