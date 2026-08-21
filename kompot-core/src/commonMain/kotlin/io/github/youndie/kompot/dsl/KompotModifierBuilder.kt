@@ -33,6 +33,21 @@ class KompotModifierBuilder {
         updateOrAddSizeNode { it.copy(height = SizeType.Fill) }
     }
 
+    // Absolute extents, in the same density-independent pixels padding and spacing are measured in.
+    // A number on an axis overrides whatever SizeType the same node carries there, so calling both
+    // width(120) and fillMaxWidth() is not an error the builder needs to reject — the number wins.
+    fun width(dp: Int) {
+        updateOrAddSizeNode { it.copy(widthDp = dp) }
+    }
+
+    fun height(dp: Int) {
+        updateOrAddSizeNode { it.copy(heightDp = dp) }
+    }
+
+    fun size(width: Int, height: Int) {
+        updateOrAddSizeNode { it.copy(widthDp = width, heightDp = height) }
+    }
+
     fun weight(value: Float) {
         nodes += KompotModifierNode.Weight(value)
     }

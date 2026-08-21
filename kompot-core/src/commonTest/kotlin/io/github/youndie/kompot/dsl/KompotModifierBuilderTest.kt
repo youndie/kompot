@@ -48,6 +48,26 @@ class KompotModifierBuilderTest {
         assertEquals(listOf(KompotModifierNode.Size(width = SizeType.Fill, height = SizeType.Fill)), both)
     }
 
+    @Test
+    fun `width and height in dp land on the same node as the symbolic dimensions`() {
+        val widthOnly = KompotModifierBuilder().apply { width(120) }.build()
+        val both = KompotModifierBuilder().apply { size(width = 120, height = 1) }.build()
+        val mixed = KompotModifierBuilder().apply { fillMaxWidth(); height(1) }.build()
+
+        assertEquals(
+            listOf(KompotModifierNode.Size(width = SizeType.Wrap, height = SizeType.Wrap, widthDp = 120)),
+            widthOnly,
+        )
+        assertEquals(
+            listOf(KompotModifierNode.Size(width = SizeType.Wrap, height = SizeType.Wrap, widthDp = 120, heightDp = 1)),
+            both,
+        )
+        assertEquals(
+            listOf(KompotModifierNode.Size(width = SizeType.Fill, height = SizeType.Wrap, heightDp = 1)),
+            mixed,
+        )
+    }
+
     // fillMaxWidth() and fillMaxHeight() describe ONE node with two dimensions. Were each call to
     // add its own node, the second would overwrite the first's dimension when the chain is folded.
     // This checks that the builder collapses both calls into a single node.
