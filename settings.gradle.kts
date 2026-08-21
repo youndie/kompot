@@ -81,6 +81,12 @@ include(":experiments-core")
 // toolkit.
 include(":kompot-spec")
 
+// The conformance kit: the portable half of it. It walks a server over HTTP and checks the rules a
+// schema cannot express — unique ids, form connectivity, ETag revalidation, terminating pagination,
+// the idempotency contract. It is the only level that tests a running server rather than a
+// description, and the only one that runs against an implementation on any stack.
+include(":kompot-tck")
+
 // Multi-step flows. wizard-core is the step machine — a pure function of (session, transition,
 // draft), with no HTTP, no storage and no idea what a component is — and kompot-wizard is its wire
 // side: the step screen, the three transition actions and the resume request.

@@ -20,6 +20,10 @@ object KompotProtocol {
     // protocol itself.
     const val OPENAPI_FILE_NAME = "kompot.openapi.json"
 
+    // The entry point of the reference corpus: it lists every body together with what is expected of
+    // it, so a harness on any stack walks the corpus by the manifest rather than by a list of its own.
+    const val EXAMPLES_INDEX_FILE_NAME = "index.json"
+
     fun fileNameFor(moduleName: String) = "$moduleName.schema.json"
 
     // ---- formats that cannot be derived from a Kotlin type (all of these are declared String) ----

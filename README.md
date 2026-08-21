@@ -58,6 +58,7 @@ module, and an unknown type degrades to a placeholder instead of taking the scre
 | `form-core` | form state: validation, visibility, cross-field rules, patches | — |
 | `experiments-core` | deterministic A/B assignment plus its header codec | — |
 | `kompot-spec` | the wire specification: schema generator, validator, and the spec module of every module above | all of them |
+| `kompot-tck` | the conformance kit: walks a running server over HTTP and checks the rules a schema cannot express | kompot-spec |
 
 `form-core`, `experiments-core` and `wizard-core` are usable on their own and know nothing about
 Kompot components: one manages form state, one assigns variants, one walks a graph of steps. They
@@ -87,6 +88,20 @@ out byte-identical either way.
 val schemas = KompotSpec.generateAll(KompotToolkitSpec.modules + myComponentsSpecModule())
 val profile = KompotSpec.profile(schemas)
 ```
+
+`kompot-tck` is the other half: it points at a **running** server and checks what a schema cannot
+express — ids unique within a tree, a form's screen and schema agreeing on fieldId, a 304 on a
+repeated ETag, pagination that terminates, a 401 without a token, the idempotency contract. It reads
+endpoint kinds out of your OpenAPI document and never assumes an address, so it runs against an
+implementation on any stack:
+
+```kotlin
+val report = TckRunner(RemoteTckTransport("http://localhost:5000"), TckConfig(schemas, openApi)).run()
+check(report.isClean) { report.toString() }
+```
+
+The report prints how many targets each check visited. A check that found nothing to apply to passes
+silently, and that is the commonest way to end up with a conformance kit that proves nothing.
 
 ### 🔌 Installation
 
