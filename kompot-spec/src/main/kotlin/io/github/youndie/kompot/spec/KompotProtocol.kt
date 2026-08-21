@@ -15,6 +15,13 @@ object KompotProtocol {
 
     const val PROFILE_FILE_NAME = "kompot.profile.schema.json"
 
+    // The wire name of the action that performs an operation on one item. The conformance kit works on
+    // JSON rather than on Kotlin types, so it has no serializer to ask — but a wire name written out
+    // twice is how a rename leaves a dead string behind in the half nobody compiles. Hence the name is
+    // written once here, and ToolkitSchemaGoldenTest holds it against the serial name the type really
+    // carries.
+    const val ACTION_PERFORM = "perform"
+
     // The HTTP layer: addresses, status codes, headers. A file of its own rather than a section of the
     // schema, because it describes one concrete server, while the *.schema.json files describe the
     // protocol itself.

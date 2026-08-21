@@ -53,6 +53,7 @@ module, and an unknown type degrades to a placeholder instead of taking the scre
 | `kompot-realtime-redis` | the Redis pub/sub bus, for more than one instance | kompot-realtime-server |
 | `kompot-images` | an image by URL, as a component plug-in | core |
 | `kompot-auth` | the one action that hands the client a new session | core |
+| `kompot-commands` | the one action that acts on a single item of a list, with no form around it | core, form-core |
 | `kompot-navigation` | the navigation graph of plain, code-free screens | — |
 | `wizard-core` | the step machine of a multi-step flow, as a pure function | — |
 | `kompot-wizard` | the wire side of that flow: step screen, transitions, resume request | core, form-core, wizard-core |

@@ -22,6 +22,7 @@ dependencies {
     implementation(projects.kompotWizard)
     implementation(projects.kompotNavigation)
     implementation(projects.kompotAuth)
+    implementation(projects.kompotCommands)
     api(libs.kotlinx.serialization.json)
 
     testImplementation(kotlin("test"))

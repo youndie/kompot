@@ -1,5 +1,6 @@
 package io.github.youndie.kompot.spec
 
+import io.github.youndie.kompot.commands.PerformAction
 import kotlinx.serialization.json.JsonObject
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -34,6 +35,15 @@ class ToolkitSchemaGoldenTest {
             "The schema has drifted from the code: ${stale.keys.sorted()}. " +
                 "Regenerate with ${SchemaFiles.RECORD_ENV}=true ./gradlew :kompot-spec:test",
         )
+    }
+
+    // KompotProtocol.ACTION_PERFORM is the same wire name as @SerialName on the type, written a second
+    // time because the conformance kit reads JSON and has no serializer to ask. A second copy of a wire
+    // name is exactly how a rename leaves a dead string in the half nobody compiles, so the two are
+    // held together here rather than trusted to stay in step.
+    @Test
+    fun `the perform wire name in KompotProtocol is the one the type really carries`() {
+        assertEquals(PerformAction.serializer().descriptor.serialName, KompotProtocol.ACTION_PERFORM)
     }
 
     @Test

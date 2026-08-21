@@ -41,6 +41,10 @@ kotlin {
             // никакого Ktor/SSE здесь, конкретный транспорт в sample/client (см. Realtime.kt).
             implementation(projects.kompotRealtime)
             implementation(projects.formCore)
+            // За PerformAction — действием, которое меняет доменное состояние без формы вокруг
+            // (SPEC.md §16.4). Транспорта здесь по-прежнему нет: withPerform принимает отправку
+            // лямбдой, ровно как withLoginSubmit.
+            implementation(projects.kompotCommands)
 
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
