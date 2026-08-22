@@ -3,6 +3,7 @@ package io.github.youndie.kompot.form.standard
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormCondition
 import io.github.youndie.kompot.form.FormFieldDefinition
 import io.github.youndie.kompot.form.ValidationRule
@@ -25,6 +26,7 @@ data class TextFieldDefinition(
     val mask: String? = null,
     override val visibleIf: @Polymorphic FormCondition? = null,
     override val triggersPatch: Boolean = false,
+    override val initialValue: @Polymorphic FieldValue? = null,
 ) : FormFieldDefinition
 
 @Serializable
@@ -39,6 +41,7 @@ data class AmountFieldDefinition(
     override val rules: List<@Polymorphic ValidationRule>,
     override val visibleIf: @Polymorphic FormCondition? = null,
     override val triggersPatch: Boolean = false,
+    override val initialValue: @Polymorphic FieldValue? = null,
 ) : FormFieldDefinition
 
 @Serializable
@@ -48,6 +51,7 @@ data class CheckboxFieldDefinition(
     override val rules: List<@Polymorphic ValidationRule> = emptyList(),
     override val visibleIf: @Polymorphic FormCondition? = null,
     override val triggersPatch: Boolean = false,
+    override val initialValue: @Polymorphic FieldValue? = null,
 ) : FormFieldDefinition
 
 // A field with remote search. dataSourceId is the identifier of a resource on the backend, not a
@@ -61,6 +65,7 @@ data class AutocompleteFieldDefinition(
     val dataSourceId: String,
     override val visibleIf: @Polymorphic FormCondition? = null,
     override val triggersPatch: Boolean = false,
+    override val initialValue: @Polymorphic FieldValue? = null,
 ) : FormFieldDefinition
 
 // A choice from a fixed list — a dropdown or a radio group. The options themselves are a matter of
@@ -73,4 +78,5 @@ data class SelectionFieldDefinition(
     override val rules: List<@Polymorphic ValidationRule> = emptyList(),
     override val visibleIf: @Polymorphic FormCondition? = null,
     override val triggersPatch: Boolean = false,
+    override val initialValue: @Polymorphic FieldValue? = null,
 ) : FormFieldDefinition

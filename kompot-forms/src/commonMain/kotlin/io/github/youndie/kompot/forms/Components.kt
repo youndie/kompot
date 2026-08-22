@@ -21,6 +21,10 @@ data class TextInputComponent(
     // Upper-case the input automatically — codes and identifiers — both on screen and in the stored
     // value, not merely visually.
     val uppercase: Boolean = false,
+    // Behaviour rather than geometry, and that is the point: a size modifier makes the box taller and
+    // leaves it a one-line field. Nothing else in the type could say this, and a deployment that needed
+    // it had to replace text_input wholesale to change one thing about it.
+    val multiline: Boolean = false,
     // Mask the input with dots or asterisks (a password and the like) — visually only; the stored
     // value stays as it is.
     val secret: Boolean = false,

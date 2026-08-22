@@ -1,6 +1,7 @@
 package io.github.youndie.kompot
 
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
@@ -18,11 +19,24 @@ val kompotCoreSerializersModule =
         }
     }
 
+// The placeholder a client produces for a type it does not know — and the one place a server's
+// suggested equivalent can be read. A deployment that replaces a toolkit component with one of its own
+// knows the exact stand-in (a text_input where its multiline box would be) and had no way to say so;
+// §2.1 left the substitution entirely to the client, which knows only that something was unfamiliar.
+//
+// `fallback` lives here rather than on the KompotComponent base for a reason worth keeping: it is only
+// ever consulted when the type is UNKNOWN, so only the unknown path has to be able to read it. On the
+// base it would have cost a property on all seventeen component types of the toolkit, plus one on
+// every plug-in type anybody else writes — and a type that forgot it would accept a fallback in Kotlin
+// and drop it in transit, because kotlinx.serialization writes what a concrete class declares.
+//
+// A client that DOES know the type never sees the key: an unknown field is ignored by §3.
 @Serializable
 data class UnknownComponent(
     override val id: String = "unknown",
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val originalType: String = "unknown",
+    val fallback: @Polymorphic KompotComponent? = null,
 ) : KompotComponent
 
 @Serializable

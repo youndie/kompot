@@ -33,6 +33,12 @@ data class WizardScreenComponent(
     val totalSteps: Int? = null,
     val canGoBack: Boolean = false,
     val content: @Polymorphic KompotComponent,
+    // The words on the finishing button. Every other control the server places carries its own text —
+    // button.text, text_input.label, ScreenRoute.title — and the wizard chrome was the one thing the
+    // client places alone, so "Finish" read identically under a step that creates something and under
+    // one that deletes a board. null keeps the client's own wording, which is why this is worth having
+    // before a step is irreversible rather than when it is.
+    val finishLabel: String? = null,
 ) : KompotComponent
 
 // The three wizard actions, mirroring SubmitFormAction(formId) in :kompot-forms: a formId rather than

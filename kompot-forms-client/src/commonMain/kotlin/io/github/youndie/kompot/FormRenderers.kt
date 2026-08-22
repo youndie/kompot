@@ -114,6 +114,12 @@ class TextInputRenderer : KompotComponentRenderer<TextInputComponent> {
                 } else {
                     KeyboardOptions.Default
                 },
+                // Only minLines, and singleLine is deliberately left as it was. Passing
+                // `singleLine = !multiline` would have been the truer reading of the flag — and it
+                // changed how every existing single-line field renders, which two screenshots caught.
+                // Whether an ordinary field should stop wrapping is a behavioural decision for every
+                // screen already drawn, not something to carry in on the back of a new field.
+            minLines = if (component.multiline) MULTILINE_MIN_LINES else 1,
             modifier =
                 component.modifiers.toComposeModifier().fillMaxWidth().onFocusChanged { focusState ->
                     if (wasFocused && !focusState.isFocused) {
@@ -499,3 +505,7 @@ class RadioGroupRenderer : KompotComponentRenderer<RadioGroupComponent> {
         }
     }
 }
+
+// Enough room to show that more than one line is welcome, without deciding how much the text will
+// need — the server states behaviour, the box still grows with the content.
+private const val MULTILINE_MIN_LINES = 3

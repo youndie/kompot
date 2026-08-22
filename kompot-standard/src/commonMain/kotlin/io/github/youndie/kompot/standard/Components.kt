@@ -52,6 +52,17 @@ data class TextComponent(
     // null means "no style set explicitly": the renderer decides what that looks like by default.
     // kompot-standard must not assume the client uses Material3 or its type scale at all.
     val style: TypographyToken? = null,
+    // What becomes of a string that does not fit. §14 makes the server the only party allowed to
+    // produce text, so shortening one is its job too — but it knows neither the screen's width nor the
+    // font, and had no way to say what should happen instead. null keeps the previous behaviour: as
+    // many lines as the text needs.
+    //
+    // Two plain fields rather than an overflow vocabulary, deliberately: a closed set of names would
+    // gain a value one day and take down the whole screen of every client released before it, since an
+    // unknown enum constant fails the parse rather than falling back.
+    val maxLines: Int? = null,
+    // Only meaningful together with maxLines: whether the cut is marked. false clips silently.
+    val ellipsis: Boolean = true,
 ) : KompotComponent
 
 @Serializable

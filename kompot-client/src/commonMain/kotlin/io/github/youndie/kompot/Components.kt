@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -125,6 +126,11 @@ class TextRenderer : KompotComponentRenderer<TextComponent> {
                 // background, a typography token is the only place a text colour can come from
                 // (SPEC.md §6); Unspecified is what lets it through.
             color = if (style.color == Color.Unspecified) MaterialTheme.colorScheme.onSurface else Color.Unspecified,
+                // What becomes of a string that does not fit is the server's to decide, because §14
+                // makes it the only party allowed to produce one. Absent, nothing is capped and the
+                // text takes the lines it needs, exactly as before.
+            maxLines = component.maxLines ?: Int.MAX_VALUE,
+            overflow = if (component.ellipsis) TextOverflow.Ellipsis else TextOverflow.Clip,
             modifier = component.modifiers.toComposeModifier(),
         )
     }
@@ -376,8 +382,12 @@ private fun LazyListScope.paginatedListItems(
 }
 
 // Graceful degradation: a type this version of the client does not know — sent by a newer backend,
-// say — decodes into UnknownComponent rather than taking the screen down. Here the node is simply
-// skipped, leaving a trace in the log.
+// say — decodes into UnknownComponent rather than taking the screen down.
+//
+// If the server named an equivalent, it is drawn instead of nothing. Only the server can know one: it
+// chose to replace a component, so it knows what the replacement stands in for. The fallback is an
+// ordinary component and may itself be unfamiliar, in which case this happens again one level down —
+// which is the right behaviour, not an accident of recursion.
 class UnknownComponentRenderer : KompotComponentRenderer<UnknownComponent> {
     @Composable
     override fun Render(
@@ -385,7 +395,14 @@ class UnknownComponentRenderer : KompotComponentRenderer<UnknownComponent> {
         actionHandler: KompotActionHandler,
         formController: FormController,
     ) {
+        val fallback = component.fallback
+        if (fallback == null) {
             println("[Kompot] Unknown component \"${component.originalType}\" skipped")
+            return
+        }
+
+        println("[Kompot] Unknown component \"${component.originalType}\" drawn through its fallback")
+        LocalKompotRegistry.current.RenderNode(fallback, actionHandler, formController)
     }
 }
 
