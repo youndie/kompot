@@ -14,10 +14,10 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.kotlinx.serialization.json)
 
-            implementation(projects.kompotCore)
-            implementation(projects.kompotStandard)
+            api(projects.kompotCore)
+            api(projects.kompotStandard)
             implementation(projects.kompotForms)
-            implementation(projects.kompotAnalytics)
+            api(projects.kompotAnalytics)
             // Формные и банковские рендереры переехали в :kompot-forms-client/:kompot-banking-client —
             // kompot-client теперь зависит от kompot-standard/forms/banking только за их
             // компонентами/generated*SerializersModule (KSP), не за Compose-рендерерами.
@@ -31,17 +31,17 @@ kotlin {
             implementation(projects.kompotWizard)
             // Только протокол (UpdateComponentMessage) + KompotRealtimeSource —
             // никакого Ktor/SSE здесь, конкретный транспорт в sample/client (см. Realtime.kt).
-            implementation(projects.kompotRealtime)
-            implementation(projects.formCore)
+            api(projects.kompotRealtime)
+            api(projects.formCore)
             // За PerformAction — действием, которое меняет доменное состояние без формы вокруг
             // (SPEC.md §16.4). Транспорта здесь по-прежнему нет: withPerform принимает отправку
             // лямбдой, ровно как withLoginSubmit.
             implementation(projects.kompotCommands)
 
-            implementation(libs.compose.runtime)
+            api(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
-            implementation(libs.compose.ui)
+            api(libs.compose.ui)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.components.ui.tooling.preview)
         }

@@ -17,3 +17,11 @@ jobs:
           java-version: 25
       - uses: gradle/actions/setup-gradle@v5
       - run: ./gradlew build --no-daemon
+
+      # A module whose public API is declared `implementation` builds, tests and publishes green, and
+      # the metadata it produces tells a consumer it needs nothing. Only the consumer finds out. The
+      # audit needs real published metadata, so it publishes locally first.
+      - name: Published API metadata is complete
+        run: |
+          ./gradlew publishToMavenLocal -PVERSION=ci-${{ github.run_number }} --no-daemon
+          python3 tools/api-metadata-audit.py ci-${{ github.run_number }}

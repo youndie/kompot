@@ -12,19 +12,19 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.kompotCore)
+            api(projects.kompotCore)
             // kompot-client, а не наоборот — тот же принцип, что у kompot-forms-client/
             // kompot-banking-client/kompot-images-client-coil.
-            implementation(projects.kompotClient)
-            implementation(projects.kompotWizard)
+            api(projects.kompotClient)
+            api(projects.kompotWizard)
             implementation(projects.kompotRegistryAnnotations)
-            implementation(projects.formCore)
+            api(projects.formCore)
             implementation(libs.kotlinx.coroutines.core)
 
-            implementation(libs.compose.runtime)
+            api(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
-            implementation(libs.compose.ui)
+            api(libs.compose.ui)
         }
 
         val desktopTest by getting {

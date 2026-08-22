@@ -10,15 +10,15 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.kompotCore)
+            api(projects.kompotCore)
             // Ради самого контракта KompotDesignSystem/LocalKompotDesignSystem — он живет там же,
             // где рендереры, которые его дергают.
-            implementation(projects.kompotClient)
-            implementation(projects.kompotTheme)
+            api(projects.kompotClient)
+            api(projects.kompotTheme)
 
-            implementation(libs.compose.runtime)
+            api(libs.compose.runtime)
             implementation(libs.compose.foundation)
-            implementation(libs.compose.ui)
+            api(libs.compose.ui)
         }
 
         val desktopTest by getting {
