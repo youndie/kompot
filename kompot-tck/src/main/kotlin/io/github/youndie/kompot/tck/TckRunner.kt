@@ -96,6 +96,11 @@ data class TckConfig(
     // The query an endpoint needs to be a valid call, by the same key. A body alone cannot make a
     // request valid when its subject travels in the query string.
     val queryParameters: Map<String, Map<String, String>> = emptyMap(),
+    // A captured text/event-stream, by the address that serves it. The live channel is the one endpoint
+    // kind a blind walk cannot reach — the body is a sequence of frames rather than one document — so a
+    // conforming implementation and a plausible-looking wrong one are indistinguishable to the kit. A
+    // recording closes everything except who receives which topic, and needs no connection at all.
+    val recordedUpdateStreams: Map<String, String> = emptyMap(),
     // Which property of a rule or condition holds a reference to a NEIGHBOURING field, by wire type.
     // The field plug-in is the application's, so its rule names are too: for the reference field set
     // this is "equals" to "fieldId", "required_if" to "targetFieldId" and so on. An empty map leaves
@@ -149,6 +154,7 @@ class TckRunner(
         findings += paginationTerminates()
         findings += navigationGraphResolves()
         findings += performTargetsAreSubmitEndpoints()
+        findings += recordedUpdateFramesAreValid()
         findings += idempotencyContract()
 
         return TckReport(findings, exercised.toMap(), notWalked(), config.extensionTypes + profileExtensions)
@@ -317,6 +323,55 @@ class TckRunner(
                 }
         }
 
+    // Every frame of the update channel is an UpdateComponentMessage, and the component inside it is
+    // held to the same closed profile as any screen (SPEC.md §16.6). The heartbeat is the one event
+    // that carries no data — an event named ping WITH a payload is a server inventing a meaning.
+    private suspend fun recordedUpdateFramesAreValid(): List<TckFinding> =
+        endpoints
+            .filter { it.kind == UPDATES_KIND && it.path in config.recordedUpdateStreams }
+            .exercising("updates")
+            .onEach { visited += it.key }
+            .flatMap { endpoint ->
+                val events = TckEventStream.parse(config.recordedUpdateStreams.getValue(endpoint.path))
+                val findings = mutableListOf<TckFinding>()
+
+                if (events.isEmpty()) {
+                    findings += TckFinding("updates", endpoint.path, "the recorded stream holds no event at all")
+                }
+
+                events.forEachIndexed { index, event ->
+                    val at = "${endpoint.path} (event #${index + 1})"
+
+                    event.malformed.forEach { line ->
+                        findings += TckFinding("updates", at, "a line belongs to no SSE field and is not a comment: \"$line\"")
+                    }
+
+                    when {
+                        event.name == HEARTBEAT_EVENT && event.data != null ->
+                            findings += TckFinding("updates", at, "the heartbeat carries data, which gives it a meaning the protocol does not define")
+
+                        event.name == HEARTBEAT_EVENT -> Unit
+
+                        event.data == null ->
+                            findings += TckFinding("updates", at, "an event with no data and no name: a frame that says nothing")
+
+                        else -> {
+                            val payload = parse(event.data)
+                            findings +=
+                                if (payload == null) {
+                                    listOf(TckFinding("updates", at, "the data of the event is not one JSON value"))
+                                } else {
+                                    validator
+                                        .validate(payload, UPDATE_FRAME_SCHEMA)
+                                        .map { TckFinding("updates", at, it) }
+                                }
+                        }
+                    }
+                }
+
+                findings
+            }
+
     // Conditional delivery: a repeat with the same ETag must answer 304 with no body (SPEC.md §16.2).
     private suspend fun etagRevalidation(): List<TckFinding> =
         probeable().filter { 304 in it.statuses }.exercising("etag").flatMap { endpoint ->
@@ -482,6 +537,9 @@ class TckRunner(
                         endpoint.deprecated -> "declared deprecated"
                         endpoint.hasPathParams ->
                             "no value in TckConfig.pathParameters for the placeholders of \"${endpoint.path}\""
+                        endpoint.kind == UPDATES_KIND ->
+                            "no recorded stream for it in TckConfig.recordedUpdateStreams"
+
                         !endpoint.respondsWithJson ->
                             "the response is ${endpoint.successContentType ?: "not declared"}, not one JSON document"
 
@@ -537,6 +595,12 @@ class TckRunner(
     private companion object {
         const val MAX_PAGES = 50
         const val IDEMPOTENCY_HEADER = "Idempotency-Key"
+        const val UPDATES_KIND = "updates_stream"
+
+        // The one event without a payload: a heartbeat that stops a proxy dropping an idle connection.
+        const val HEARTBEAT_EVENT = "ping"
+
+        val UPDATE_FRAME_SCHEMA = KompotProtocol.fileNameFor("kompot-realtime") + "#/\$defs/UpdateComponentMessage"
 
         // {task}, {formId} — one placeholder of an OpenAPI path template.
         val PLACEHOLDER = Regex("""\{([^}]+)}""")
