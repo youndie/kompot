@@ -13,7 +13,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.kompotCore)
-            implementation(projects.kompotClient)
+            api(projects.kompotClient)
             // api, не implementation: потребители :kompot-ds-material-compose (см. sample/client)
             // авторят KOMPOT-деревья теми же ключами (ColorToken.PRIMARY и т.п.), что и
             // headless sample/server, — им нужен :kompot-ds-material на своем компайл-класспасе

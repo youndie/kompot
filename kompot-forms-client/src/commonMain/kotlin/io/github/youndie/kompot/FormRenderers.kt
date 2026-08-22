@@ -1,5 +1,8 @@
 package io.github.youndie.kompot
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column as ComposeColumn
 import androidx.compose.foundation.layout.*
@@ -41,6 +44,7 @@ class ReadOnlyFieldRenderer : KompotComponentRenderer<ReadOnlyFieldComponent> {
         actionHandler: KompotActionHandler,
         formController: FormController,
     ) {
+        val surface = LocalKompotDesignSystem.current.resolveSurface(KompotSurfaceRoles.ReadOnlyField)
         OutlinedTextField(
             value = component.value,
             onValueChange = {},
@@ -48,6 +52,11 @@ class ReadOnlyFieldRenderer : KompotComponentRenderer<ReadOnlyFieldComponent> {
             readOnly = true,
             label = { Text(component.label) },
             supportingText = component.helperText?.let { { Text(it) } },
+                // Drawn as a disabled input, this control says the opposite of what it exists to say:
+                // four of them beside each other read as a form somebody could type into. What it
+                // should look like instead belongs to the deployment, so it asks by role.
+            shape = surface.shape ?: OutlinedTextFieldDefaults.shape,
+            colors = outlinedColorsFor(surface),
             modifier = component.modifiers.toComposeModifier().fillMaxWidth(),
         )
     }
@@ -71,6 +80,8 @@ class TextInputRenderer : KompotComponentRenderer<TextInputComponent> {
 
         val mask = component.mask
         val maskTransformation = remember(mask) { mask?.let { MaskVisualTransformation(it) } }
+
+        val fieldSurface = LocalKompotDesignSystem.current.resolveSurface(KompotSurfaceRoles.Field)
 
         // Validation runs on blur rather than on every keystroke.
         var wasFocused by remember(component.fieldId) { mutableStateOf(false) }
@@ -120,6 +131,10 @@ class TextInputRenderer : KompotComponentRenderer<TextInputComponent> {
                 // Whether an ordinary field should stop wrapping is a behavioural decision for every
                 // screen already drawn, not something to carry in on the back of a new field.
             minLines = if (component.multiline) MULTILINE_MIN_LINES else 1,
+                // An outlined field draws a transparent container and a border by default, and neither
+                // is a theme role — so a token named "the fill of an input field" had nowhere to go.
+            shape = fieldSurface.shape ?: OutlinedTextFieldDefaults.shape,
+            colors = outlinedColorsFor(fieldSurface),
             modifier =
                 component.modifiers.toComposeModifier().fillMaxWidth().onFocusChanged { focusState ->
                     if (wasFocused && !focusState.isFocused) {
@@ -509,3 +524,27 @@ class RadioGroupRenderer : KompotComponentRenderer<RadioGroupComponent> {
 // Enough room to show that more than one line is welcome, without deciding how much the text will
 // need — the server states behaviour, the box still grows with the content.
 private const val MULTILINE_MIN_LINES = 3
+
+// Unspecified leaves Material's own answer in place; a colour replaces it in every state, the disabled
+// one included — which is the state a read-only field is always in. Color.Transparent on `outline` is
+// how a design that forbids borders says so, without a flag that would mean the same thing twice.
+@Composable
+private fun outlinedColorsFor(surface: KompotSurface): TextFieldColors {
+    val base = OutlinedTextFieldDefaults.colors()
+    if (surface.container == Color.Unspecified && surface.outline == Color.Unspecified && surface.content == Color.Unspecified) return base
+
+    return base.copy(
+        focusedContainerColor = surface.container.orElse(base.focusedContainerColor),
+        unfocusedContainerColor = surface.container.orElse(base.unfocusedContainerColor),
+        disabledContainerColor = surface.container.orElse(base.disabledContainerColor),
+        errorContainerColor = surface.container.orElse(base.errorContainerColor),
+        focusedTextColor = surface.content.orElse(base.focusedTextColor),
+        unfocusedTextColor = surface.content.orElse(base.unfocusedTextColor),
+        disabledTextColor = surface.content.orElse(base.disabledTextColor),
+        focusedIndicatorColor = surface.outline.orElse(base.focusedIndicatorColor),
+        unfocusedIndicatorColor = surface.outline.orElse(base.unfocusedIndicatorColor),
+        disabledIndicatorColor = surface.outline.orElse(base.disabledIndicatorColor),
+    )
+}
+
+private fun Color.orElse(fallback: Color): Color = if (this == Color.Unspecified) fallback else this
