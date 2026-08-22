@@ -48,7 +48,16 @@ object KompotSpec {
     // contract, at least for KompotComponent and KompotAction. Accepting someone else's server also
     // needs the strict view, "exactly these types are allowed in this profile", and it is assembled here
     // from the x-kompot-contributes of every module.
-    fun profile(schemas: List<GeneratedSchema>): JsonObject {
+    // Wire types a DEPLOYMENT adds on top of its modules, by hierarchy: "KompotComponent" to
+    // ("banking_story"). They reach the profile as names without a shape, which is the whole of what
+    // §2.4 permits — the protocol must not start depending on product modules — but as a real oneOf
+    // branch rather than as a keyword only this toolkit understands. That is the difference the
+    // report was about: an ordinary JSON Schema library accepts a declared extension and rejects an
+    // undeclared one, with no Kotlin and no validator of ours in the picture.
+    fun profile(
+        schemas: List<GeneratedSchema>,
+        extensions: Map<String, Set<String>> = emptyMap(),
+    ): JsonObject {
         val merged = sortedMapOf<String, MutableMap<String, String>>()
         schemas.forEach { schema ->
             schema.contributions.forEach { (hierarchy, members) ->
@@ -69,15 +78,52 @@ object KompotSpec {
             put("x-kompot-modules", JsonArray(schemas.map { JsonPrimitive(it.moduleName) }))
             putJsonObject("\$defs") {
                 merged.forEach { (hierarchy, members) ->
+                    val declared = extensions[hierarchy].orEmpty().sorted()
+                    val extensionKey = "$hierarchy${KompotProtocol.EXTENSION_SUFFIX}"
+                    val extensionRef = "#/\$defs/$extensionKey"
+
                     putJsonObject(hierarchy) {
                         put("x-kompot-kind", "hierarchy")
+                        // Still false, and still not a contradiction with the module file that calls the
+                        // same hierarchy open: the module states what the PROTOCOL permits, the profile
+                        // states what THIS BUILD serves. §2.4 says which question each answers.
                         put("x-kompot-open", false)
-                        put("oneOf", JsonArray(members.values.map { target -> buildJsonObject { put("\$ref", target) } }))
+                        if (declared.isNotEmpty()) {
+                            put("x-kompot-extensions", JsonArray(declared.map { JsonPrimitive(it) }))
+                        }
+                        put(
+                            "oneOf",
+                            JsonArray(
+                                members.values.map { target -> buildJsonObject { put("\$ref", target) } } +
+                                    if (declared.isEmpty()) emptyList() else listOf(buildJsonObject { put("\$ref", extensionRef) }),
+                            ),
+                        )
                         putJsonObject("discriminator") {
                             put("propertyName", KompotProtocol.DISCRIMINATOR)
                             putJsonObject("mapping") {
                                 members.forEach { (wireName, target) -> put(wireName, target) }
+                                declared.forEach { wireName -> put(wireName, extensionRef) }
                             }
+                        }
+                    }
+
+                    if (declared.isNotEmpty()) {
+                        putJsonObject(extensionKey) {
+                            put("x-kompot-kind", "extension")
+                            put(
+                                "description",
+                                "A wire type this deployment adds on top of its modules. Its NAME is declared, its shape " +
+                                    "is not: there is no schema for it here, and that is safe only because an unfamiliar " +
+                                    "type degrades by protocol (see x-kompot-degrades). A type in neither the mapping " +
+                                    "above nor this list is a violation",
+                            )
+                            put("type", "object")
+                            putJsonObject("properties") {
+                                putJsonObject(KompotProtocol.DISCRIMINATOR) {
+                                    put("enum", JsonArray(declared.map { JsonPrimitive(it) }))
+                                }
+                            }
+                            put("required", JsonArray(listOf(JsonPrimitive(KompotProtocol.DISCRIMINATOR))))
                         }
                     }
                 }

@@ -57,7 +57,7 @@ check(report.isClean) { report.toString() }
 | `submitPayloads` | тела для submit-эндпоинтов: что отправить, знает только приложение |
 | `pathParameters` | чем заменить `{...}` в шаблонном адресе: `"/forms/task/{task}" to mapOf("task" to "TAC-1")` |
 | `queryParameters` | query, без которого вызов невалиден, по тому же ключу |
-| `extensionTypes` | wire-типы, которые этот деплой добавляет сверх профиля |
+| `extensionTypes` | wire-типы деплоя, если они не объявлены в самом профиле (см. §2.4) |
 | `crossReferenceKeys` | в каком поле правила лежит ссылка на соседнее поле формы |
 
 ### Свои адреса
