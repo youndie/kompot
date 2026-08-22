@@ -17,6 +17,14 @@ data class ColumnComponent(
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val children: List<@Polymorphic KompotComponent>,
     val spacing: Int = 0,
+    // What tapping the container does. Before it existed only `button` carried an action, so a list
+    // whose rows open something was expressible only as a list of buttons — the protocol deciding a
+    // layout the product should have decided. It is a field here rather than a modifier node because
+    // KompotModifierNode is CLOSED (SPEC.md §2.3): an unknown node fails the parse of the whole
+    // response, so a "clickable" modifier would take the screen down on a client that predates it,
+    // while an unknown FIELD is simply ignored and the row renders exactly as before, merely not
+    // tappable.
+    val action: @Polymorphic KompotAction? = null,
 ) : KompotComponent
 
 // A horizontal container — a pair of fields side by side, say a document number and its date. A
@@ -30,6 +38,8 @@ data class RowComponent(
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val children: List<@Polymorphic KompotComponent>,
     val spacing: Int = 0,
+    // See ColumnComponent.action.
+    val action: @Polymorphic KompotAction? = null,
 ) : KompotComponent
 
 @Serializable
