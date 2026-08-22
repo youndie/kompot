@@ -50,7 +50,10 @@ class FormController(
         field =
         MutableStateFlow<Map<String, FieldState<FieldValue>>>(
             schema.fields.associate { fieldDef ->
-                val initialVal = initialValues[fieldDef.fieldId]
+                // The schema's own initial value, unless the caller passed one: a value handed to the
+                // constructor is what a screen already had — a draft being resumed — and must win over
+                // what the server suggested for an empty form.
+                val initialVal = initialValues[fieldDef.fieldId] ?: fieldDef.initialValue
                 fieldDef.fieldId to
                     FieldState(
                         value = initialVal,

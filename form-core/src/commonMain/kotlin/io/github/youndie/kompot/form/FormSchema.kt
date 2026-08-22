@@ -26,6 +26,15 @@ interface FormFieldDefinition {
     // Changing this field's value requires the backend to recompute the form — picking a template
     // that should auto-fill other fields, say. See FormController.requestPatchIfNeeded and FormPatch.
     val triggersPatch: Boolean get() = false
+
+    // What the field holds before anybody types. Nothing carried one, which costs most inside a
+    // multi-step scenario: `back` with no pre-fill is a form somebody fills in twice.
+    //
+    // A defaulted member here is not enough on its own — kotlinx.serialization writes the properties a
+    // CONCRETE class declares, so a field type that does not override this one simply never puts it on
+    // the wire. Every field in :form-standard does; a plug-in type of your own has to as well, or it
+    // will accept an initial value in Kotlin and drop it in transit.
+    val initialValue: @Polymorphic FieldValue? get() = null
 }
 
 // The open contract for a validation rule. Concrete rules (required, regex, requiredIf and so on)

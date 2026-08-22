@@ -473,7 +473,10 @@ class TckRunner(
         if (!config.allowStateChangingChecks) return emptyList()
 
         return endpoints
-            .filter { it.kind == "submit" && 400 in it.statuses && 409 in it.statuses && it.path in config.submitPayloads }
+            // wizard_resume as well as submit: a finishing transition performs the same domain action a
+            // submit does, and §16.5 now says so. A rule no check keeps is a rule two implementations
+            // disagree about in silence.
+            .filter { it.kind in STATE_CHANGING_KINDS && 400 in it.statuses && 409 in it.statuses && it.path in config.submitPayloads }
             .exercising("idempotency")
             .flatMap { endpoint ->
                 visited += endpoint.key
@@ -596,6 +599,9 @@ class TckRunner(
         const val MAX_PAGES = 50
         const val IDEMPOTENCY_HEADER = "Idempotency-Key"
         const val UPDATES_KIND = "updates_stream"
+
+        // The kinds that change domain state and therefore need an idempotency key (SPEC.md §16.5).
+        val STATE_CHANGING_KINDS = setOf("submit", "wizard_resume")
 
         // The one event without a payload: a heartbeat that stops a proxy dropping an idle connection.
         const val HEARTBEAT_EVENT = "ping"
