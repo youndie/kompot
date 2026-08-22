@@ -42,11 +42,13 @@ class SkippedEndpointsTest {
 
     // The reported case: the most complicated screen in a product sat behind a path parameter and the
     // run was green without ever fetching it.
+    // Naming the endpoint is half of it; the line also has to say what would close the gap, or a
+    // reader learns only that something is missing.
     @Test
-    fun `an endpoint with a path parameter is named, with the reason`() {
+    fun `an endpoint with a path parameter is named, and the reason names the way to fill it`() {
         val reason = reasonFor("/forms/task/{task}")
 
-        assertTrue(reason != null && "path parameter" in reason, report.skipped.toString())
+        assertTrue(reason != null && "pathParameters" in reason, report.skipped.toString())
     }
 
     @Test

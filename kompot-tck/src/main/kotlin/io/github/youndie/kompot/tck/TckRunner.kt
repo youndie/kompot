@@ -85,6 +85,17 @@ data class TckConfig(
     // a feature of its own must DECLARE them here. Declared, not inferred from the responses —
     // otherwise the check "the server keeps to what it declared" would mean nothing.
     val extensionTypes: Set<String> = emptySet(),
+    // Values for the placeholders of a templated address, by the address as the description declares
+    // it: "/forms/task/{task}" to mapOf("task" to "TAC-1"). Without them an endpoint addressed by
+    // naming a thing is unreachable for a walk — and in a tracker that is the screen of one task, the
+    // largest tree the server emits. The kit cannot invent an identifier that exists, so the values are
+    // the application's, exactly like submitPayloads.
+    //
+    // Substituted verbatim: a value that needs percent-encoding arrives already encoded.
+    val pathParameters: Map<String, Map<String, String>> = emptyMap(),
+    // The query an endpoint needs to be a valid call, by the same key. A body alone cannot make a
+    // request valid when its subject travels in the query string.
+    val queryParameters: Map<String, Map<String, String>> = emptyMap(),
     // Which property of a rule or condition holds a reference to a NEIGHBOURING field, by wire type.
     // The field plug-in is the application's, so its rule names are too: for the reference field set
     // this is "equals" to "fieldId", "required_if" to "targetFieldId" and so on. An empty map leaves
@@ -170,7 +181,7 @@ class TckRunner(
     // A secured endpoint must answer 401 without a token, or personal data is available to everyone.
     private suspend fun securedEndpointsRejectAnonymous(): List<TckFinding> =
         probeable().filter { it.secured }.exercising("auth-required").mapNotNull { endpoint ->
-            val response = transport.request(endpoint.method, endpoint.path)
+            val response = transport.request(endpoint.method, endpoint.walkAddress() ?: endpoint.path)
             if (response.status == 401) {
                 null
             } else {
@@ -402,16 +413,17 @@ class TckRunner(
                 val body = json.encodeToString(JsonElement.serializer(), payload)
                 val findings = mutableListOf<TckFinding>()
 
-                val withoutKey = transport.request("POST", endpoint.path, authHeaders(), body)
+                val at = endpoint.walkAddress() ?: endpoint.path
+                val withoutKey = transport.request("POST", at, authHeaders(), body)
                 if (withoutKey.status != 400) {
                     findings += TckFinding("idempotency", endpoint.path, "expected 400 without a key, got ${withoutKey.status}")
                 }
 
                 val key = "tck-" + body.hashCode().toString(16)
-                transport.request("POST", endpoint.path, authHeaders() + mapOf(IDEMPOTENCY_HEADER to key), body)
+                transport.request("POST", at, authHeaders() + mapOf(IDEMPOTENCY_HEADER to key), body)
 
                 val different = json.encodeToString(JsonElement.serializer(), mutate(payload))
-                val conflict = transport.request("POST", endpoint.path, authHeaders() + mapOf(IDEMPOTENCY_HEADER to key), different)
+                val conflict = transport.request("POST", at, authHeaders() + mapOf(IDEMPOTENCY_HEADER to key), different)
                 if (conflict.status != 409) {
                     findings += TckFinding("idempotency", endpoint.path, "the same key with a different body gave ${conflict.status} instead of 409")
                 }
@@ -426,8 +438,25 @@ class TckRunner(
     // endpoints — the update channel — are checked differently and stay out of this set (SPEC.md §16.9).
     private fun probeable() =
         endpoints
-            .filter { it.method == "GET" && !it.hasPathParams && !it.deprecated && it.respondsWithJson }
+            .filter { it.method == "GET" && !it.deprecated && it.respondsWithJson && it.walkAddress() != null }
             .onEach { visited += it.key }
+
+    // The address to actually call: the declared path with its placeholders filled in, plus the query
+    // the endpoint needs. null means a placeholder has no value and the endpoint cannot be walked at
+    // all — which the report says out loud rather than passing over.
+    //
+    // Keyed by the address as DECLARED, placeholders and all, because that is the string a reader
+    // copies out of the HTTP description.
+    private fun TckEndpoint.walkAddress(): String? {
+        var resolved = path
+        PLACEHOLDER.findAll(path).forEach { placeholder ->
+            val value = config.pathParameters[path]?.get(placeholder.groupValues[1]) ?: return null
+            resolved = resolved.replace(placeholder.value, value)
+        }
+
+        val query = config.queryParameters[path].orEmpty()
+        return if (query.isEmpty()) resolved else resolved + "?" + query.entries.joinToString("&") { "${it.key}=${it.value}" }
+    }
 
     // Why an endpoint was left out, in the reader's terms rather than in the kit's. The reason is
     // explanatory; the SET comes from what the walk really touched.
@@ -438,7 +467,8 @@ class TckRunner(
                 val reason =
                     when {
                         endpoint.deprecated -> "declared deprecated"
-                        endpoint.hasPathParams -> "no value for the path parameters of \"${endpoint.path}\""
+                        endpoint.hasPathParams ->
+                            "no value in TckConfig.pathParameters for the placeholders of \"${endpoint.path}\""
                         !endpoint.respondsWithJson ->
                             "the response is ${endpoint.successContentType ?: "not declared"}, not one JSON document"
 
@@ -458,7 +488,7 @@ class TckRunner(
     private suspend fun get(
         endpoint: TckEndpoint,
         extraHeaders: Map<String, String> = emptyMap(),
-    ) = transport.request(endpoint.method, endpoint.path, authHeaders(endpoint) + extraHeaders)
+    ) = transport.request(endpoint.method, endpoint.walkAddress() ?: endpoint.path, authHeaders(endpoint) + extraHeaders)
 
     private fun authHeaders(endpoint: TckEndpoint? = null): Map<String, String> {
         val required = endpoint?.secured ?: true
@@ -494,6 +524,9 @@ class TckRunner(
     private companion object {
         const val MAX_PAGES = 50
         const val IDEMPOTENCY_HEADER = "Idempotency-Key"
+
+        // {task}, {formId} — one placeholder of an OpenAPI path template.
+        val PLACEHOLDER = Regex("""\{([^}]+)}""")
 
         // The fallback for a route whose endpoint the HTTP description does not declare at all.
         const val SCREEN_SCHEMA = "${KompotProtocol.PROFILE_FILE_NAME}#/\$defs/KompotComponent"
