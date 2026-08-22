@@ -18,7 +18,7 @@ import io.github.youndie.kompot.standard.PaginatedListComponent
 import io.github.youndie.kompot.standard.TextComponent
 import kotlin.test.Test
 
-private object NoPages : KompotPageLoader {
+internal object NoPagesAtAll : KompotPageLoader {
     override suspend fun loadPage(
         url: String,
         params: Map<String, String>,
@@ -45,7 +45,7 @@ class PaginatedListScrollTest {
                 TestKompotTheme {
                     CompositionLocalProvider(
                         LocalKompotRegistry provides KompotRegistry(kompotCoreRenderers + kompotStandardRenderers),
-                        LocalKompotPageLoader provides NoPages,
+                        LocalKompotPageLoader provides NoPagesAtAll,
                     ) {
                         // A bounded box is the case the report is about: a column beside a navigation
                         // rail, whose height is decided by the row around it.
