@@ -65,6 +65,58 @@ class ProfileExtensionsTest {
         assertTrue(plain.getValue("\$defs").jsonObject.keys.none { it.endsWith(KompotProtocol.EXTENSION_SUFFIX) })
     }
 
+    // The cost of an undeclared type differs by hierarchy, so the sentence justifying a missing shape
+    // has to differ too. "Safe, because it degrades" over a hierarchy that does not degrade is wrong in
+    // the one direction that matters — it makes a reader relax.
+    @Test
+    fun `the justification for omitting a shape follows the hierarchy it is written under`() {
+        val profile =
+            KompotSpec.profile(
+                schemas,
+                mapOf("KompotComponent" to setOf("banking_story"), "FormFieldDefinition" to setOf("date_field")),
+            )
+        val defs = profile.getValue("\$defs").jsonObject
+
+        val degrading = description(defs, "KompotComponent")
+        val notDegrading = description(defs, "FormFieldDefinition")
+
+        assertTrue("draws a placeholder" in degrading, degrading)
+        assertTrue("does NOT degrade" in notDegrading, notDegrading)
+        assertTrue("WHOLE response" in notDegrading, notDegrading)
+        // The claim that must never appear over a hierarchy without a fallback.
+        assertTrue("safe here because this hierarchy degrades" !in notDegrading, notDegrading)
+    }
+
+    // The value is copied from the module that owns the open base rather than restated, and this holds
+    // the copy to the original: a profile that says a form hierarchy degrades would tell an
+    // implementation on another stack that losing a response is impossible.
+    @Test
+    fun `every hierarchy carries the degradation the owning module declares`() {
+        val profile = KompotSpec.profile(schemas)
+        val fromModules =
+            schemas
+                .flatMap { schema ->
+                    schema.document.getValue("\$defs").jsonObject.mapNotNull { (key, definition) ->
+                        (definition.jsonObject["x-kompot-degrades"] as? JsonPrimitive)?.content?.let { key to it }
+                    }
+                }.toMap()
+
+        assertTrue(fromModules.isNotEmpty(), "no hierarchy declares degradation at all — the guard would be vacuous")
+        fromModules.forEach { (hierarchy, declared) ->
+            assertEquals(
+                declared,
+                (profile.getValue("\$defs").jsonObject.getValue(hierarchy).jsonObject["x-kompot-degrades"] as? JsonPrimitive)?.content,
+                "the profile disagrees with the module about $hierarchy",
+            )
+        }
+    }
+
+    private fun description(
+        defs: JsonObject,
+        hierarchy: String,
+    ): String =
+        (defs.getValue("$hierarchy${KompotProtocol.EXTENSION_SUFFIX}").jsonObject.getValue("description") as JsonPrimitive).content
+
     @Test
     fun `the names are readable without parsing the oneOf`() {
         val profile = KompotSpec.profile(schemas, mapOf("KompotAction" to setOf("open_chat", "share")))

@@ -4,6 +4,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
@@ -69,6 +70,20 @@ object KompotSpec {
             }
         }
 
+        // Whether a hierarchy degrades is stated by the module that OWNS the open base, and nowhere
+        // else. Reading it here rather than restating it is the point: the profile's copy cannot drift
+        // from the module's, and a reader who follows a mention of x-kompot-degrades inside the profile
+        // finds the keyword in the file they are already holding.
+        val degrades: Map<String, Boolean> =
+            schemas
+                .flatMap { schema ->
+                    (schema.document["\$defs"] as? JsonObject).orEmpty().mapNotNull { (key, definition) ->
+                        ((definition as? JsonObject)?.get("x-kompot-degrades") as? JsonPrimitive)
+                            ?.booleanOrNull
+                            ?.let { key to it }
+                    }
+                }.toMap()
+
         return buildJsonObject {
             put("\$schema", KompotProtocol.SCHEMA_DIALECT)
             put("\$id", KompotProtocol.ID_PREFIX + KompotProtocol.PROFILE_FILE_NAME)
@@ -88,6 +103,10 @@ object KompotSpec {
                         // same hierarchy open: the module states what the PROTOCOL permits, the profile
                         // states what THIS BUILD serves. §2.4 says which question each answers.
                         put("x-kompot-open", false)
+                        // Copied from the owning module: what an unfamiliar type costs is a property of
+                        // the hierarchy, and a reader validating against the profile alone has to be able
+                        // to tell "one node becomes a placeholder" from "the whole response is lost".
+                        degrades[hierarchy]?.let { put("x-kompot-degrades", it) }
                         if (declared.isNotEmpty()) {
                             put("x-kompot-extensions", JsonArray(declared.map { JsonPrimitive(it) }))
                         }
@@ -110,13 +129,7 @@ object KompotSpec {
                     if (declared.isNotEmpty()) {
                         putJsonObject(extensionKey) {
                             put("x-kompot-kind", "extension")
-                            put(
-                                "description",
-                                "A wire type this deployment adds on top of its modules. Its NAME is declared, its shape " +
-                                    "is not: there is no schema for it here, and that is safe only because an unfamiliar " +
-                                    "type degrades by protocol (see x-kompot-degrades). A type in neither the mapping " +
-                                    "above nor this list is a violation",
-                            )
+                            put("description", extensionDescription(degrades[hierarchy]))
                             put("type", "object")
                             putJsonObject("properties") {
                                 putJsonObject(KompotProtocol.DISCRIMINATOR) {
@@ -129,6 +142,32 @@ object KompotSpec {
                 }
             }
         }
+    }
+
+    // The cost of an undeclared type is not the same in every hierarchy, so neither is the sentence.
+    // Saying "safe, because it degrades" over a hierarchy that does not degrade is wrong in the one
+    // direction that matters: it makes a reader relax.
+    private fun extensionDescription(degrades: Boolean?): String {
+        val common =
+            "A wire type this deployment adds on top of its modules. Its NAME is declared, its shape is not: " +
+                "there is no schema for it here. A type in neither the mapping above nor this list is a violation. "
+
+        return common +
+            when (degrades) {
+                true ->
+                    "Omitting the shape is safe here because this hierarchy degrades (x-kompot-degrades: true above): " +
+                        "an implementation that knows nothing of the type draws a placeholder and keeps the screen"
+
+                false ->
+                    "This hierarchy does NOT degrade (x-kompot-degrades: false above): an implementation that meets " +
+                        "the type without knowing it loses the WHOLE response, not one node. Roll out the readers " +
+                        "before the writer starts sending it — the same rule SPEC.md §15 states for a type without " +
+                        "degradation"
+
+                null ->
+                    "The owning module declares no x-kompot-degrades for this hierarchy, so what an unfamiliar type " +
+                        "costs here is unstated — treat it as not degrading until it says otherwise"
+            }
     }
 
     // ---- helpers for describing a module -----------------------------------------------------
