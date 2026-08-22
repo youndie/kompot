@@ -3,6 +3,7 @@
 package io.github.youndie.kompot
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -49,7 +50,9 @@ class ColumnRenderer : KompotComponentRenderer<ColumnComponent> {
     ) {
         val registry = LocalKompotRegistry.current
         ComposeColumn(
-            modifier = component.modifiers.toComposeModifier(),
+                // The tap goes on the CONTAINER rather than on a child: the whole row is the target,
+                // which is the gesture a list of openable items expects.
+            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler),
             verticalArrangement = Arrangement.spacedBy(component.spacing.dp),
         ) {
             component.children.forEach { child ->
@@ -78,7 +81,7 @@ class RowRenderer : KompotComponentRenderer<RowComponent> {
     ) {
         val registry = LocalKompotRegistry.current
         Row(
-            modifier = component.modifiers.toComposeModifier(),
+            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler),
             horizontalArrangement = Arrangement.spacedBy(component.spacing.dp),
         ) {
             component.children.forEach { child ->
@@ -545,3 +548,14 @@ class KompotRegistry(
 // TextInputRenderer/AmountInputRenderer/CheckboxInputRenderer/AutocompleteInputRenderer/
 // The select and radio-group renderers live in :kompot-forms-client, in this same package — see the
 // note about the forms renderer map above.
+
+// A tap on a container, or nothing at all when the server named no action. Written once rather than
+// twice because row and column differ in axis and in nothing else here — and because the "no action
+// means no clickable at all" half is the part worth not retyping: wrapping every container in a
+// clickable with an empty lambda would give every row a ripple and a semantics node it has no
+// business having.
+@Composable
+private fun Modifier.clickableWith(
+    action: KompotAction?,
+    actionHandler: KompotActionHandler,
+): Modifier = if (action == null) this else clickable { actionHandler.handle(action) }
