@@ -3,6 +3,7 @@
 package io.github.youndie.kompot
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -48,7 +50,9 @@ class ColumnRenderer : KompotComponentRenderer<ColumnComponent> {
     ) {
         val registry = LocalKompotRegistry.current
         ComposeColumn(
-            modifier = component.modifiers.toComposeModifier(),
+                // The tap goes on the CONTAINER rather than on a child: the whole row is the target,
+                // which is the gesture a list of openable items expects.
+            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler),
             verticalArrangement = Arrangement.spacedBy(component.spacing.dp),
         ) {
             component.children.forEach { child ->
@@ -77,7 +81,7 @@ class RowRenderer : KompotComponentRenderer<RowComponent> {
     ) {
         val registry = LocalKompotRegistry.current
         Row(
-            modifier = component.modifiers.toComposeModifier(),
+            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler),
             horizontalArrangement = Arrangement.spacedBy(component.spacing.dp),
         ) {
             component.children.forEach { child ->
@@ -107,18 +111,20 @@ class TextRenderer : KompotComponentRenderer<TextComponent> {
         formController: FormController,
     ) {
         val designSystem = LocalKompotDesignSystem.current
+            // A null style means the server did not name one: the standard text component
+            // deliberately has no "default" typography token, so the local default lives here, in
+            // a concrete Material3 implementation.
+        val style = component.style?.let { designSystem.resolveTypography(it) } ?: MaterialTheme.typography.bodyMedium
         Text(
             text = component.text,
-                // A null style means the server did not name one: the standard text component
-                // deliberately has no "default" typography token, so the local default lives here, in
-                // a concrete Material3 implementation.
-            style = component.style?.let { designSystem.resolveTypography(it) } ?: MaterialTheme.typography.bodyMedium,
-            color =
-                component.modifiers
-                    .filterIsInstance<KompotModifierNode.Background>()
-                    .firstOrNull()
-                    ?.let { designSystem.resolveColor(it.color) }
-                    ?: MaterialTheme.colorScheme.onSurface,
+            style = style,
+                // An explicit `color` argument OVERRIDES the one inside the style, so passing anything
+                // here throws away what the design system said — a token resolving to a red TextStyle
+                // rendered in the ordinary colour, with nothing unknown and so nothing logged. Since
+                // KompotComponentText carries no colour of its own and a ColorToken only paints a
+                // background, a typography token is the only place a text colour can come from
+                // (SPEC.md §6); Unspecified is what lets it through.
+            color = if (style.color == Color.Unspecified) MaterialTheme.colorScheme.onSurface else Color.Unspecified,
             modifier = component.modifiers.toComposeModifier(),
         )
     }
@@ -542,3 +548,14 @@ class KompotRegistry(
 // TextInputRenderer/AmountInputRenderer/CheckboxInputRenderer/AutocompleteInputRenderer/
 // The select and radio-group renderers live in :kompot-forms-client, in this same package — see the
 // note about the forms renderer map above.
+
+// A tap on a container, or nothing at all when the server named no action. Written once rather than
+// twice because row and column differ in axis and in nothing else here — and because the "no action
+// means no clickable at all" half is the part worth not retyping: wrapping every container in a
+// clickable with an empty lambda would give every row a ripple and a semantics node it has no
+// business having.
+@Composable
+private fun Modifier.clickableWith(
+    action: KompotAction?,
+    actionHandler: KompotActionHandler,
+): Modifier = if (action == null) this else clickable { actionHandler.handle(action) }
