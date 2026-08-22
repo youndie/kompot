@@ -2,6 +2,7 @@
 
 package io.github.youndie.kompot
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.border
@@ -143,8 +144,25 @@ class ButtonRenderer : KompotComponentRenderer<ButtonComponent> {
         actionHandler: KompotActionHandler,
         formController: FormController,
     ) {
+        val surface = LocalKompotDesignSystem.current.resolveSurface(KompotSurfaceRoles.button(component.variant))
         Button(
             onClick = { actionHandler.handle(component.action) },
+                // ButtonDefaults.shape is CircleShape and does NOT come from MaterialTheme.shapes, so
+                // a theme with square corners changed nothing here until the design system could
+                // answer for the role.
+            shape = surface.shape ?: ButtonDefaults.shape,
+            colors =
+                ButtonDefaults.buttonColors().let { base ->
+                    if (surface.container == Color.Unspecified && surface.content == Color.Unspecified) {
+                        base
+                    } else {
+                        base.copy(
+                            containerColor = if (surface.container == Color.Unspecified) base.containerColor else surface.container,
+                            contentColor = if (surface.content == Color.Unspecified) base.contentColor else surface.content,
+                        )
+                    }
+                },
+            border = if (surface.outline == Color.Unspecified) null else BorderStroke(1.dp, surface.outline),
             modifier = component.modifiers.toComposeModifier(),
         ) {
             Text(text = component.text)

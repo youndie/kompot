@@ -18,6 +18,12 @@ interface KompotDesignSystem {
 
     @Composable
     fun resolveTypography(token: TypographyToken): TextStyle
+
+    // The third hook, and the one that closes what a renderer draws for itself. Defaulted so that a
+    // design system written before it keeps compiling and keeps looking exactly as it did: an empty
+    // surface means "the toolkit's own default for this role".
+    @Composable
+    fun resolveSurface(role: SurfaceRole): KompotSurface = KompotSurface()
 }
 
 val LocalKompotDesignSystem =

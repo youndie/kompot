@@ -73,6 +73,14 @@ data class ButtonComponent(
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val text: String,
     val action: @Polymorphic KompotAction,
+    // Which button matters. Emphasis is content rather than theme — whoever wrote the screen decides
+    // that "Cancel" is quiet and "Submit" is not — and there was nowhere to put it, so a deployment
+    // had to signal it some other way. Inferring it from the presence of a background modifier works
+    // and is a guess; a server that does not share the guess draws the two alike.
+    //
+    // An open string, named by the design system exactly as a colour token is: the protocol fixes no
+    // set of emphases, and a client that does not recognise one falls back to its ordinary button.
+    val variant: String? = null,
 ) : KompotComponent
 
 // One row of a simple table grid (see TableComponent); cells in a row always share the width
