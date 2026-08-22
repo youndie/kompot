@@ -22,6 +22,11 @@ object KompotProtocol {
     // carries.
     const val ACTION_PERFORM = "perform"
 
+    // The definition holding a hierarchy's deployment extensions is named after the hierarchy:
+    // KompotComponent -> KompotComponentExtension. One suffix, so a reader of a profile can find the
+    // pair without a lookup table.
+    const val EXTENSION_SUFFIX = "Extension"
+
     // The HTTP layer: addresses, status codes, headers. A file of its own rather than a section of the
     // schema, because it describes one concrete server, while the *.schema.json files describe the
     // protocol itself.

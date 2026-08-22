@@ -115,6 +115,19 @@ class TckRunner(
 
     private val componentTypes: Set<String> = discriminatorsOf("KompotComponent")
 
+    // Extensions the PROFILE declares. They need no help from the validator — the profile carries a
+    // real oneOf branch for them, so the check passes on its own — but the report must still name
+    // them: an extension loosens a strict check, and where it was declared does not change that.
+    private val profileExtensions: Set<String> =
+        (profile["\$defs"] as? JsonObject)
+            .orEmpty()
+            .values
+            .flatMap { definition ->
+                (definition.jsonObject["x-kompot-extensions"] as? JsonArray).orEmpty().mapNotNull {
+                    (it as? JsonPrimitive)?.takeIf { name -> name.isString }?.content
+                }
+            }.toSet()
+
     private var token: String? = null
 
     private val exercised = sortedMapOf<String, Int>()
@@ -138,7 +151,7 @@ class TckRunner(
         findings += performTargetsAreSubmitEndpoints()
         findings += idempotencyContract()
 
-        return TckReport(findings, exercised.toMap(), notWalked(), config.extensionTypes)
+        return TckReport(findings, exercised.toMap(), notWalked(), config.extensionTypes + profileExtensions)
     }
 
     // Every check records how many targets it actually visited. Without that a green run means
