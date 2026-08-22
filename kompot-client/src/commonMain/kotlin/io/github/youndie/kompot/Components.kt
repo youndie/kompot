@@ -350,24 +350,42 @@ class PaginatedListRenderer : KompotComponentRenderer<PaginatedListComponent> {
         val pageLoader = LocalKompotPageLoader.current
         val state = rememberPaginatedListState(component, pageLoader, formController)
 
-        ComposeColumn(modifier = component.modifiers.toComposeModifier().fillMaxWidth()) {
-            when {
-                state.isReloading.value -> {
-                    Box(modifier = Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
+            // Whether this list can scroll is decided by the box it was given, and the box is the only
+            // thing that can decide it. Paging is the point of the component, and laying every item out
+            // in an ordinary column meant it could never reach its own end: anything past the bottom was
+            // clipped, so loadMoreAction could not fire by scrolling to it. It looked like "some
+            // screens" because a root COLUMN takes the lazy projection below and scrolls; a board
+            // rooted in a row took this path and scrolled nowhere.
+            //
+            // Unbounded height is the case that must NOT become a lazy list: inside an already
+            // scrolling parent Compose cannot measure one, which is exactly why the projection exists.
+        BoxWithConstraints(modifier = component.modifiers.toComposeModifier().fillMaxWidth()) {
+            if (constraints.hasBoundedHeight) {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    paginatedListItems(component, state, registry, actionHandler, formController, pageLoader)
+                }
+                return@BoxWithConstraints
+            }
+
+            ComposeColumn(modifier = Modifier.fillMaxWidth()) {
+                when {
+                    state.isReloading.value -> {
+                        Box(modifier = Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
+                        }
                     }
-                }
 
-                state.items.value.isEmpty() -> {
-                    component.emptyState?.let { registry.RenderNode(it, actionHandler, formController) }
-                }
+                    state.items.value.isEmpty() -> {
+                        component.emptyState?.let { registry.RenderNode(it, actionHandler, formController) }
+                    }
 
-                else -> {
-                    state.items.value.forEach { item -> registry.RenderNode(item, actionHandler, formController) }
+                    else -> {
+                        state.items.value.forEach { item -> registry.RenderNode(item, actionHandler, formController) }
 
-                    val next = state.nextLoadAction.value
-                    if (next != null) {
-                        LoadMoreButtonOrSpinner(next, state, pageLoader)
+                        val next = state.nextLoadAction.value
+                        if (next != null) {
+                            LoadMoreButtonOrSpinner(next, state, pageLoader)
+                        }
                     }
                 }
             }
