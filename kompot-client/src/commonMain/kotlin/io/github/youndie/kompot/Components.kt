@@ -265,11 +265,26 @@ private fun rememberPaginatedListState(
     val isReloading = remember(component.id) { mutableStateOf(false) }
     val isLoadingMore = remember(component.id) { mutableStateOf(false) }
 
-        // A live update may deliver a FRESH version of this very component under the same id — when
-        // something on the server changes a list an open screen is already showing, for instance.
-        // The remember above will not see that substitution by itself: the id has not changed, so the
-        // remember key has not changed either. Hence applying it explicitly and imperatively, unlike a
-        // genuine remount where the id really is fresh every time.
+        // A fresh version of this very component arrives under the same id from TWO directions, and
+        // the remember above sees neither: the id has not changed, so the remember key has not
+        // changed either. Both are therefore applied explicitly, unlike a genuine remount where the
+        // id really is fresh every time.
+        //
+        // The first is a whole new tree for the screen — which is the ordinary way anything changes,
+        // since §16.4's idiom is that an action answers with a navigate and the client re-opens the
+        // screen. Without this the answer arrived, the screen reloaded and the list went on showing
+        // what it was first given; on a board, where every card lives in a list, nothing a person did
+        // was ever visible.
+        //
+        // Keyed on the component rather than on its items: equal trees must not disturb a list that
+        // has since loaded further pages, and a data class compares by value.
+    LaunchedEffect(component) {
+        items.value = component.initialItems
+        nextLoadAction.value = component.loadMoreAction
+    }
+
+        // The second is a live update for this node alone. It stays LAST so that a targeted patch is
+        // not undone by a tree that merely arrived again unchanged.
     val realtimeUpdate = LocalKompotRealtimeUpdates.current[component.id] as? PaginatedListComponent
     LaunchedEffect(realtimeUpdate) {
         if (realtimeUpdate != null) {
