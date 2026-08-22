@@ -54,7 +54,9 @@ class SkippedEndpointsTest {
     @Test
     fun `each kind of exclusion gets its own reason rather than one blanket line`() {
         assertTrue(reasonFor("/screens/legacy")!!.contains("deprecated"), report.skipped.toString())
-        assertTrue(reasonFor("/updates")!!.contains("event-stream"), report.skipped.toString())
+        // Not "the response is text/event-stream", which named a fact nobody could act on: the channel
+        // is reachable through a recording, so the line says which config would reach it.
+        assertTrue(reasonFor("/updates")!!.contains("recordedUpdateStreams"), report.skipped.toString())
         assertTrue(reasonFor("/submit/move")!!.contains("submitPayloads"), report.skipped.toString())
     }
 
