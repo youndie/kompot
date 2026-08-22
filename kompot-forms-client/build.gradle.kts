@@ -12,22 +12,22 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.kompotCore)
+            api(projects.kompotCore)
             // kompot-client, а не наоборот — этот модуль потребляет KompotComponentRenderer/
             // LocalKompotDesignSystem (см. комментарий в kompot-images-client-coil/build.gradle.kts
             // про тот же принцип для картинок).
-            implementation(projects.kompotClient)
-            implementation(projects.kompotForms)
+            api(projects.kompotClient)
+            api(projects.kompotForms)
             implementation(projects.kompotRegistryAnnotations)
             // KompotComponentRenderer.Render принимает FormController в сигнатуре, и рендереры полей
             // сами читают/пишут состояние формы через FormController.collectFieldState и т.п.
-            implementation(projects.formCore)
+            api(projects.formCore)
             implementation(projects.formStandard)
 
-            implementation(libs.compose.runtime)
+            api(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
-            implementation(libs.compose.ui)
+            api(libs.compose.ui)
         }
 
         val desktopTest by getting {

@@ -12,7 +12,7 @@ dependencies {
     // The generator reads the SerialDescriptors and polymorphic registrations of exactly the types
     // that travel on the wire. There is no second source of truth for the schema by design, so the
     // dependency is on the protocol modules themselves rather than on a copy of them.
-    implementation(projects.kompotCore)
+    api(projects.kompotCore)
     implementation(projects.kompotStandard)
     implementation(projects.kompotForms)
     implementation(projects.formCore)

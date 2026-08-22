@@ -11,8 +11,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(projects.kompotCore)
-                implementation(projects.formCore)
+                api(projects.kompotCore)
+                api(projects.formCore)
                 implementation(libs.kotlinx.coroutines.core)
             }
         }
