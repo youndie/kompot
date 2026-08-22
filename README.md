@@ -124,7 +124,7 @@ repositories {
     maven("https://reposilite.kotlin.website/snapshots")
 }
 
-val kompotVersion = "SEE THE BADGE ABOVE"
+val kompotVersion = "0.20.0.28"
 
 dependencies {
     implementation(platform("io.github.youndie:kompot-bom:$kompotVersion"))
