@@ -22,6 +22,16 @@ plugins.withId("java") {
 // this block a kotlin("jvm") module builds fine, its publish task reports success and uploads
 // NOTHING — there is simply nothing to upload. Gradle's exit code cannot tell that apart from a
 // successful publish; only asking the server whether the artifact resolves can.
+// A platform registers no publication of its own either, and unlike a Kotlin/JVM module it has no
+// sources to give away — only the component that carries its constraints.
+plugins.withId("java-platform") {
+    afterEvaluate {
+        publishing.publications.create<MavenPublication>("maven") {
+            from(components["javaPlatform"])
+        }
+    }
+}
+
 plugins.withId("org.jetbrains.kotlin.jvm") {
     afterEvaluate {
         publishing.publications.create<MavenPublication>("maven") {
