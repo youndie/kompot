@@ -66,7 +66,19 @@ class ColumnRenderer : KompotComponentRenderer<ColumnComponent> {
                         .filterIsInstance<KompotModifierNode.Weight>()
                         .firstOrNull()
                         ?.value
-                Box(modifier = if (weight != null) Modifier.weight(weight) else Modifier) {
+                    // propagateMinConstraints is what makes weight mean what the word says. Compose's
+                    // own RowScope.weight fills by default, but it fills the node it is applied to —
+                    // here that is this wrapper Box, and a Box hands its child a MAXIMUM without a
+                    // minimum, so the child painted its own content width while its share sat empty
+                    // around it. Reserving the space worked all along; only the painting did not.
+                    //
+                    // Invisible while the data is long: text that wraps stretches itself to the
+                    // constraint, so a screen of long titles looks right and the same tree with short
+                    // ones does not.
+                Box(
+                    modifier = if (weight != null) Modifier.weight(weight) else Modifier,
+                    propagateMinConstraints = weight != null,
+                ) {
                     registry.RenderNode(child, actionHandler, formController)
                 }
             }
@@ -95,7 +107,19 @@ class RowRenderer : KompotComponentRenderer<RowComponent> {
                         .filterIsInstance<KompotModifierNode.Weight>()
                         .firstOrNull()
                         ?.value
-                Box(modifier = if (weight != null) Modifier.weight(weight) else Modifier) {
+                    // propagateMinConstraints is what makes weight mean what the word says. Compose's
+                    // own RowScope.weight fills by default, but it fills the node it is applied to —
+                    // here that is this wrapper Box, and a Box hands its child a MAXIMUM without a
+                    // minimum, so the child painted its own content width while its share sat empty
+                    // around it. Reserving the space worked all along; only the painting did not.
+                    //
+                    // Invisible while the data is long: text that wraps stretches itself to the
+                    // constraint, so a screen of long titles looks right and the same tree with short
+                    // ones does not.
+                Box(
+                    modifier = if (weight != null) Modifier.weight(weight) else Modifier,
+                    propagateMinConstraints = weight != null,
+                ) {
                     registry.RenderNode(child, actionHandler, formController)
                 }
             }
