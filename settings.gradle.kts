@@ -150,6 +150,10 @@ include(":kompot-wizard")
 // from. Only for screens that need no client code of their own.
 include(":kompot-navigation")
 
+// The version-aligned list of everything published here. Last on purpose: it reads the publications of
+// every other module, so it has to be configured after them.
+include(":kompot-bom")
+
 // Acting on one item of a list without a form around it. One action, and it is here rather than in
 // :kompot-standard so that a profile of "core + standard" keeps its promise of needing no form
 // vocabulary at all.

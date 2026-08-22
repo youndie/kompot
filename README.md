@@ -41,6 +41,7 @@ module, and an unknown type degrades to a placeholder instead of taking the scre
 | module | what for | depends on |
 | --- | --- | --- |
 | `kompot-core` | the tree, actions, modifiers, design-system tokens | — |
+| `kompot-bom` | the platform: one version for every coordinate this build publishes | — |
 | `kompot-registry-annotations` | the `@KompotComponentMarker` annotation | — |
 | `kompot-registry-processor` | the KSP processor that generates registrations | — |
 | `kompot-standard` | the standard component set: text, containers, lists, pagination | core |
@@ -115,20 +116,32 @@ silently, and that is the commonest way to end up with a conformance kit that pr
 
 ### 🔌 Installation
 
-Every module is published under one version, so the numbers below move together. The badges at the top
-show what the latest one is.
+Every module is published under one version, so take the version once, from the platform, and name no
+version anywhere else. The badge at the top of this file shows the latest one — substitute it below.
 
 ```kotlin
 repositories {
     maven("https://reposilite.kotlin.website/snapshots")
 }
 
+val kompotVersion = "SEE THE BADGE ABOVE"
+
 dependencies {
-    implementation("io.github.youndie:kompot-core:0.9.0.15")
-    implementation("io.github.youndie:kompot-standard:0.9.0.15")
-    implementation("io.github.youndie:kompot-ktor:0.9.0.15")
+    implementation(platform("io.github.youndie:kompot-bom:$kompotVersion"))
+
+    implementation("io.github.youndie:kompot-core")
+    implementation("io.github.youndie:kompot-standard")
+    implementation("io.github.youndie:kompot-ktor")
 }
 ```
+
+The platform is worth using rather than repeating the version, and not only for brevity. A version
+carries the CI run number on its tail, so **any two publishes differ** — and
+`kompot-core:0.19.0.26` beside `kompot-client:0.19.0.27` resolves quietly into a combination nobody
+ever built or tested. Through the platform that combination cannot be written down. It constrains
+every coordinate this build publishes, including the per-target ones a Kotlin Multiplatform module
+adds beside its root (`kompot-core-jvm`, `kompot-core-iosarm64`, and so on), so a consumer naming one
+of those directly is covered too.
 
 To have registrations generated, add KSP to the module that declares components and give it a tag
 unique to that module:
@@ -137,8 +150,8 @@ unique to that module:
 plugins { id("com.google.devtools.ksp") }
 
 dependencies {
-    implementation("io.github.youndie:kompot-registry-annotations:0.9.0.15")
-    ksp("io.github.youndie:kompot-registry-processor:0.9.0.15")
+    implementation("io.github.youndie:kompot-registry-annotations")
+    ksp("io.github.youndie:kompot-registry-processor")
 }
 
 ksp { arg("kompotModuleTag", "Catalogue") }
