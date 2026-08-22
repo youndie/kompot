@@ -23,6 +23,7 @@
     "FieldValue": {
       "x-kompot-kind": "hierarchy",
       "x-kompot-open": false,
+      "x-kompot-degrades": false,
       "oneOf": [
         {
           "$ref": "form-standard.schema.json#/$defs/FieldValueAmountValue"
@@ -50,6 +51,7 @@
     "FormCondition": {
       "x-kompot-kind": "hierarchy",
       "x-kompot-open": false,
+      "x-kompot-degrades": false,
       "oneOf": [
         {
           "$ref": "form-standard.schema.json#/$defs/FormConditionEquals"
@@ -69,6 +71,7 @@
     "FormFieldDefinition": {
       "x-kompot-kind": "hierarchy",
       "x-kompot-open": false,
+      "x-kompot-degrades": false,
       "oneOf": [
         {
           "$ref": "form-standard.schema.json#/$defs/FormFieldDefinitionAmountField"
@@ -100,6 +103,7 @@
     "KompotAction": {
       "x-kompot-kind": "hierarchy",
       "x-kompot-open": false,
+      "x-kompot-degrades": true,
       "oneOf": [
         {
           "$ref": "kompot-standard.schema.json#/$defs/KompotActionClose"
@@ -155,6 +159,7 @@
     "KompotComponent": {
       "x-kompot-kind": "hierarchy",
       "x-kompot-open": false,
+      "x-kompot-degrades": true,
       "oneOf": [
         {
           "$ref": "kompot-forms.schema.json#/$defs/KompotComponentAmountInput"
@@ -226,6 +231,7 @@
     "ValidationRule": {
       "x-kompot-kind": "hierarchy",
       "x-kompot-open": false,
+      "x-kompot-degrades": false,
       "oneOf": [
         {
           "$ref": "form-standard.schema.json#/$defs/ValidationRuleMaxAmountFromField"
