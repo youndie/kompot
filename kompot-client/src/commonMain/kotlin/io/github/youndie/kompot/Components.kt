@@ -193,7 +193,17 @@ class ButtonRenderer : KompotComponentRenderer<ButtonComponent> {
                 // the platform's fallback font: Material's own typography names no family, and the
                 // label's width follows the font, so two machines disagree even about where the
                 // button's edge is.
-            Text(text = component.text, style = surface.textStyle ?: LocalTextStyle.current)
+            Text(
+                text = component.text,
+                    // Explicitly, and not through the style: a Text resolves its colour as argument,
+                    // then style.color, then LocalContentColor — so an ambient text style that names a
+                    // colour of its own wins over the contentColor the Button was given, and both a
+                    // primary and a quiet button come out in the theme's grey. The container half
+                    // worked all along, which is what made the fill look like the only channel
+                    // emphasis had.
+                color = surface.content,
+                style = surface.textStyle ?: LocalTextStyle.current,
+            )
         }
     }
 }
