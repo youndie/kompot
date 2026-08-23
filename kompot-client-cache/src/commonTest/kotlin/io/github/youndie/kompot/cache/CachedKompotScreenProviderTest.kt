@@ -65,7 +65,7 @@ private class FakeFetcher(
 @OptIn(ExperimentalCoroutinesApi::class)
 class CachedKompotScreenProviderTest {
     @Test
-    fun `a cache miss blocks on a fetch, then stores and returns the result`() =
+    fun `a cache miss blocks on a fetch — then stores and returns the result`() =
         runTest {
             val store = FakeCacheStore()
             val fetcher =

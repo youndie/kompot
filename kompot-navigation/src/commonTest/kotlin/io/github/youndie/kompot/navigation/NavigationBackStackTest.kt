@@ -7,7 +7,7 @@ import kotlin.test.assertTrue
 
 class NavigationBackStackTest {
     @Test
-    fun `a fresh stack has one entry, is that entry's current, and cannot go back`() {
+    fun `a fresh stack has one entry — is that entry's current — and cannot go back`() {
         val stack = NavigationBackStack("app://promo")
 
         assertEquals("app://promo", stack.current)
@@ -15,7 +15,7 @@ class NavigationBackStackTest {
     }
 
     @Test
-    fun `push adds a new entry and becomes current, back is now possible`() {
+    fun `push adds a new entry and becomes current — back is now possible`() {
         val stack = NavigationBackStack("app://promo").push("app://catalogue/item")
 
         assertEquals("app://catalogue/item", stack.current)
@@ -24,7 +24,7 @@ class NavigationBackStackTest {
     }
 
     @Test
-    fun `pushing the deeplink already on top is a no-op, not a duplicate`() {
+    fun `pushing the deeplink already on top is a no-op — not a duplicate`() {
         val stack = NavigationBackStack("app://promo").push("app://promo")
 
         assertEquals(listOf("app://promo"), stack.entries)

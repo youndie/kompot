@@ -26,7 +26,7 @@ class CompositeAnalyticsTrackerTest {
     }
 
     @Test
-    fun `an empty tracker list is a no-op, not a crash`() {
+    fun `an empty tracker list is a no-op — not a crash`() {
         CompositeAnalyticsTracker(emptyList()).track(AnalyticsEvent.ScreenView("home"))
     }
 
