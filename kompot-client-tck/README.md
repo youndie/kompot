@@ -72,11 +72,16 @@ interface KompotFormClient {
 
 ## Запуск
 
+Случаи едут **внутри артефакта**, поэтому копировать их к себе не нужно — и не нужно знать ни путей,
+ни числа файлов:
+
 ```kotlin
-val cases = ClientCorpusRunner.casesFrom(index = indexJson, read = ::readCaseFile)
-val report = ClientCorpusRunner(cases) { MyClientAdapter() }.run()
+val report = ClientCorpusRunner(ClientCorpusResources.cases()) { MyClientAdapter() }.run()
 check(report.isClean) { report.toString() }
 ```
+
+Копия корпуса у себя — это способ перестать соответствовать спеке, из которой он взят, и не узнать
+об этом.
 
 Клиент создаётся **на каждый случай заново**: состояние, оставшееся от предыдущего, — привычный
 способ получить корпус, который ничего не значит.
