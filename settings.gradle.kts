@@ -155,6 +155,10 @@ include(":kompot-client-cache")
 // description, and the only one that runs against an implementation on any stack.
 include(":kompot-tck")
 
+// The same idea pointed the other way: a corpus that holds a CLIENT to the rules it alone carries.
+// Data plus an adapter contract, in the toolkit's own vocabulary, so it needs no application to run.
+include(":kompot-client-tck")
+
 // The Swift bridge: non-generic wrappers over the reified and suspend calls that the Kotlin/Native
 // ObjC export does not publish, plus the unwrapping of value-class tokens that erode at that
 // boundary. It builds no Json of its own — which types an application speaks is the application's.

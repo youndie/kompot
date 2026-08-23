@@ -64,6 +64,7 @@ module, and an unknown type degrades to a placeholder instead of taking the scre
 | `experiments-core` | deterministic A/B assignment plus its header codec | — |
 | `kompot-spec` | the wire specification: schema generator, validator, and the spec module of every module above | all of them |
 | `kompot-tck` | the conformance kit: walks a running server over HTTP and checks the rules a schema cannot express | kompot-spec |
+| `kompot-client-tck` | the corpus that holds a CLIENT to the rules only it carries | — |
 | `kompot-swift-interop` | the Swift bridge: what the Kotlin/Native ObjC export drops — reified calls, suspend contracts, value-class tokens | core, standard, forms, wizard |
 | `kompot-client` | the Compose client: a registry keyed by wire type, the core renderers, live updates, impression tracking | core, standard, forms |
 | `kompot-forms-client`, `kompot-wizard-client`, `kompot-images-client-coil` | the renderers of the form, wizard and image plug-ins | kompot-client |
