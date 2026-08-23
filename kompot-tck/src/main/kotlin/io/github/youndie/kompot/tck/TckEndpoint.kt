@@ -24,6 +24,22 @@ data class TckEndpoint(
     // carry a GET and a POST with entirely different kinds.
     val key: String get() = "$method $path"
 
+    // Whether a concrete address is this endpoint. Segment by segment, with {…} matching exactly one
+    // segment, because a description declares the templated form while an action on a screen carries
+    // the resolved one — "/submit/task-view/{task}" against "/submit/task-view/TAC-1".
+    //
+    // Comparing the two literally reported a declared endpoint as undeclared, and only on the
+    // comparison: the same description resolves correctly everywhere the walk FETCHES a templated
+    // address, which is what makes the finding read like a server defect rather than a kit one.
+    fun matches(address: String): Boolean {
+        val declared = path.trim('/').split('/')
+        val actual = address.substringBefore('?').trim('/').split('/')
+        if (declared.size != actual.size) return false
+        return declared.zip(actual).all { (segment, value) ->
+            (segment.startsWith("{") && segment.endsWith("}") && value.isNotEmpty()) || segment == value
+        }
+    }
+
     // Checks that walk blind apply only to addresses without placeholders: what to put in {formId} or
     // {id} is not something the kit can know.
     val hasPathParams: Boolean get() = '{' in path

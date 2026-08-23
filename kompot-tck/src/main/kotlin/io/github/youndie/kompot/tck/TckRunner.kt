@@ -306,7 +306,11 @@ class TckRunner(
                 .mapNotNull { (it["url"] as? JsonPrimitive)?.takeIf { url -> url.isString }?.content }
                 .distinct()
                 .mapNotNull { url ->
-                    val target = endpoints.firstOrNull { it.path == url && it.method == "POST" }
+                    // A literal path first, so an exact declaration always wins over a template that
+                    // would also match it.
+                    val target =
+                        endpoints.firstOrNull { it.path == url && it.method == "POST" }
+                            ?: endpoints.firstOrNull { it.matches(url) && it.method == "POST" }
                     when {
                         target == null ->
                             TckFinding("perform", endpoint.path, "a perform action posts to \"$url\", which the HTTP description does not declare")

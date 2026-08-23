@@ -2,6 +2,7 @@ package io.github.youndie.kompot
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.TextStyle
 import kotlin.jvm.JvmInline
 
 // What a renderer draws for ITSELF — the shape of a button, the fill behind a field, whether a border
@@ -47,4 +48,13 @@ data class KompotSurface(
     val container: Color = Color.Unspecified,
     val content: Color = Color.Unspecified,
     val outline: Color = Color.Unspecified,
+    // The words ON the control, which were outside the design system for the same reason its corner
+    // was: a renderer that draws its own label picks a style nobody it was given can set. Material's
+    // default typography names no font family, so the label came out in whatever the machine had
+    // installed — invisible until two machines drew the same screen and disagreed about it.
+    //
+    // Here rather than through resolveTypography(token) because the caller is a ROLE, not a token: the
+    // button asks for "the button's surface" and gets everything about it at once, variant included.
+    // null keeps the ambient LocalTextStyle, which is what the control provided before.
+    val textStyle: TextStyle? = null,
 )
