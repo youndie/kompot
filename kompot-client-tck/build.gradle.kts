@@ -4,6 +4,14 @@ plugins {
     id("kompot.publishing")
 }
 
+// The corpus files stay where they are — a plain directory anybody can read, diff and copy into
+// another language — and are ALSO packaged into the jar. Without this the artefact carries the runner
+// and not one case, so a Kotlin consumer would have to vendor the JSON, and a vendored copy is how a
+// corpus quietly stops matching the specification it came from.
+sourceSets.main {
+    resources.srcDir("corpus")
+}
+
 dependencies {
     // Only JSON. The corpus is data and the adapter is the implementer's: nothing here decodes a form
     // into Kotlin types, because the moment it did, the contract would stop being one a client on
