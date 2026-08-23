@@ -5,6 +5,8 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
 import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.decodeKompotComponent
+import io.github.youndie.kompot.encodeKompotComponent
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
@@ -55,9 +57,9 @@ class CachedKompotScreenProvider(
         }
     }
 
-    private fun decode(payload: String): KompotComponent = json.decodeFromString(PolymorphicSerializer(KompotComponent::class), payload)
+    private fun decode(payload: String): KompotComponent = json.decodeKompotComponent(payload)
 
-    private fun encode(component: KompotComponent): String = json.encodeToString(PolymorphicSerializer(KompotComponent::class), component)
+    private fun encode(component: KompotComponent): String = json.encodeKompotComponent(component)
 
     private fun now(): Long = Clock.System.now().toEpochMilliseconds()
 }

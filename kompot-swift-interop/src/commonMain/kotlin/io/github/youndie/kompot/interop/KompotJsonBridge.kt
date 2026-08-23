@@ -3,6 +3,10 @@ package io.github.youndie.kompot.interop
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
 import io.github.youndie.kompot.KompotAction
+import io.github.youndie.kompot.encodeKompotAction
+import io.github.youndie.kompot.decodeKompotAction
+import io.github.youndie.kompot.encodeKompotComponent
+import io.github.youndie.kompot.decodeKompotComponent
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.forms.KompotFormResponse
 import io.github.youndie.kompot.forms.FormPatchRequest
@@ -22,22 +26,22 @@ import io.github.youndie.kompot.wizard.core.WizardTransition
 fun decodeKompotComponent(
     json: Json,
     text: String,
-): KompotComponent = json.decodeFromString(PolymorphicSerializer(KompotComponent::class), text)
+): KompotComponent = json.decodeKompotComponent(text)
 
 fun encodeKompotComponent(
     json: Json,
     component: KompotComponent,
-): String = json.encodeToString(PolymorphicSerializer(KompotComponent::class), component)
+): String = json.encodeKompotComponent(component)
 
 fun decodeKompotAction(
     json: Json,
     text: String,
-): KompotAction = json.decodeFromString(PolymorphicSerializer(KompotAction::class), text)
+): KompotAction = json.decodeKompotAction(text)
 
 fun encodeKompotAction(
     json: Json,
     action: KompotAction,
-): String = json.encodeToString(PolymorphicSerializer(KompotAction::class), action)
+): String = json.encodeKompotAction(action)
 
 // KompotFormResponse and FormPatchRequest are not polymorphic themselves — plain @Serializable data
 // classes whose compiler-generated serializer() is available directly, no PolymorphicSerializer
