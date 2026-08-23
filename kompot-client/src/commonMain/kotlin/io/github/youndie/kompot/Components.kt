@@ -189,7 +189,11 @@ class ButtonRenderer : KompotComponentRenderer<ButtonComponent> {
             border = if (surface.outline == Color.Unspecified) null else BorderStroke(1.dp, surface.outline),
             modifier = component.modifiers.toComposeModifier(),
         ) {
-            Text(text = component.text)
+                // The label goes through the design system too. Without it a button's words are set in
+                // the platform's fallback font: Material's own typography names no family, and the
+                // label's width follows the font, so two machines disagree even about where the
+                // button's edge is.
+            Text(text = component.text, style = surface.textStyle ?: LocalTextStyle.current)
         }
     }
 }
