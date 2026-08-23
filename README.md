@@ -211,6 +211,22 @@ bug so easy to miss.
   `SerializersModule` from the generated pieces, which is precisely why the library never has to
   know what your product contains.
 
+### 🎯 Targets
+
+Every protocol and client module publishes for **JVM, the three iOS targets and `wasmJs`**, so the
+same screens are drawn on a desktop, on a phone and in a browser without a line of the wire changing.
+There is no `expect`/`actual` anywhere in the toolkit — the modules are common code — which is why a
+target costs a declaration rather than a port.
+
+Three modules stay off the browser and off iOS on purpose, and it is worth naming them so a
+deployment can plan around it rather than discover it:
+
+| module | why |
+|---|---|
+| `kompot-ktor` | server helpers over Ktor's server engine |
+| `kompot-realtime-server` | delivery to one instance's subscribers |
+| `kompot-forms-standard` | a DSL that builds a form **on the server** |
+
 ### 🛠️ Building
 
 ```bash

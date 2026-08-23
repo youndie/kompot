@@ -9,6 +9,7 @@ plugins {
 }
 kotlin {
     jvm("desktop")
+    wasmJs { browser() }
 
     sourceSets {
         commonMain.dependencies {
@@ -48,6 +49,10 @@ kotlin {
 
         commonTest.dependencies {
             implementation(kotlin("test"))
+            // In commonTest rather than in desktopTest: the tests that use runTest live in
+            // commonMain's test set, so every target that exists needs the dependency — a target
+            // added later otherwise fails to compile tests that were there all along.
+            implementation(libs.kotlinx.coroutines.test)
         }
 
         val desktopTest by getting {
@@ -56,7 +61,6 @@ kotlin {
                 // рантайм текущей ОС, а не только API тестового фреймворка.
                 implementation(compose.desktop.currentOs)
                 implementation(libs.ui.test)
-                implementation(libs.kotlinx.coroutines.test)
                 // Готовые Material3-ключи (ColorToken.PRIMARY и т.п.) для тестовых фикстур —
                 // сам kompot-client их не использует, только тесты рендереров.
                 implementation(projects.kompotDsMaterial)

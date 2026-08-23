@@ -1,6 +1,6 @@
 package io.github.youndie.kompot.form
 
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -20,7 +20,7 @@ private fun schema() = FormSchema("test", listOf(SoFieldDefinition("beneficiary"
 class FormControllerSearchOptionsTest {
     @Test
     fun `searchOptions delegates to the configured resolver`() =
-        runBlocking {
+        runTest {
             var calledWith: Pair<String, String>? = null
             val resolver =
                 object : RemoteDataSourceResolver {
@@ -42,7 +42,7 @@ class FormControllerSearchOptionsTest {
 
     @Test
     fun `searchOptions returns an empty list when no resolver is configured`() =
-        runBlocking {
+        runTest {
             val controller = FormController(schema()) // no dataSourceResolver
 
             val results = controller.searchOptions("beneficiaries_search", "Ivan")

@@ -49,7 +49,7 @@ class NavigationGraphTest {
     // The reason kind is a String. An enum would fail here — not by returning null for one route, but
     // by taking the whole graph down before any route could be skipped.
     @Test
-    fun `a kind from a newer server does not break the graph, it just hides that route`() {
+    fun `a kind from a newer server does not break the graph — it just hides that route`() {
         val decoded =
             json.decodeFromString<NavigationGraph>(
                 """{"routes":[{"deeplink":"app://home","endpoint":"/screens/home"},""" +
@@ -62,7 +62,7 @@ class NavigationGraphTest {
     }
 
     @Test
-    fun `a route without kind is a screen, so graphs written before the field keep working`() {
+    fun `a route without kind is a screen — so graphs written before the field keep working`() {
         val decoded = json.decodeFromString<NavigationGraph>("""{"routes":[{"deeplink":"app://home","endpoint":"/screens/home"}]}""")
 
         assertEquals(ScreenRouteKind.SCREEN, decoded.routes.single().kind)

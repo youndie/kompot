@@ -34,6 +34,26 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+
+        // The Kotlin plugin registers its own repository for the Node and Yarn distributions the
+        // wasmJs/js test infrastructure runs on. PREFER_SETTINGS above overrides it, so the lookup
+        // falls through to Maven Central and fails with "Could not find org.nodejs:node".
+        //
+        // Filtered, and that is not decoration: an unfiltered repository takes part in resolving
+        // EVERY dependency, and when it is unreachable Gradle disables it and fails everything that
+        // had not resolved earlier in the list — including artifacts that are perfectly fine.
+        ivy("https://nodejs.org/dist/") {
+            name = "Node distributions"
+            patternLayout { artifact("v[revision]/[artifact](-v[revision]-[classifier]).[ext]") }
+            metadataSources { artifact() }
+            content { includeModule("org.nodejs", "node") }
+        }
+        ivy("https://github.com/yarnpkg/yarn/releases/download") {
+            name = "Yarn distributions"
+            patternLayout { artifact("v[revision]/[artifact](-v[revision]).[ext]") }
+            metadataSources { artifact() }
+            content { includeModule("com.yarnpkg", "yarn") }
+        }
         // The screenshot tester lives in a repository of its own (github.com/youndie/viddik) and is
         // published to the same Reposilite this toolkit publishes to. /snapshots reads anonymously.
         maven("https://reposilite.kotlin.website/snapshots") {

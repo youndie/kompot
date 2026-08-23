@@ -7,7 +7,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -166,7 +165,7 @@ class FormControllerPatchTest {
 
     @Test
     fun `applyPatch emits a focus request`() =
-        runBlocking {
+        runTest {
             val controller = FormController(schema())
 
             val focusDeferred = async { controller.focusRequests.first() }
