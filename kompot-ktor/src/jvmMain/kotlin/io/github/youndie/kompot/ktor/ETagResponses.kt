@@ -12,6 +12,7 @@ import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.encodeKompotComponent
 import java.security.MessageDigest
 
 // java.security.MessageDigest is a JVM-specific API, so this whole file lives in jvmMain rather than
@@ -28,7 +29,7 @@ suspend fun ApplicationCall.respondKompotComponentCached(
     json: Json,
     component: KompotComponent,
 ) {
-    respondWithETag(json.encodeToString(PolymorphicSerializer(KompotComponent::class), component))
+    respondWithETag(json.encodeKompotComponent(component))
 }
 
 // The same, but for ordinary @Serializable types, which need no polymorphic-serialiser detour —

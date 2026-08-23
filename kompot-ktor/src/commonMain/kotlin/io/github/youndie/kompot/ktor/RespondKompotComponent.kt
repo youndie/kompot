@@ -6,6 +6,7 @@ import io.ktor.server.response.respondText
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
 import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.encodeKompotComponent
 
 // KompotComponent is an open interface, not @Serializable, so a plain call.respond(component)
 // serialises it through the CONCRETE runtime class's serialiser: ContentNegotiation resolves by the
@@ -18,5 +19,5 @@ suspend fun ApplicationCall.respondKompotComponent(
     json: Json,
     component: KompotComponent,
 ) {
-    respondText(json.encodeToString(PolymorphicSerializer(KompotComponent::class), component), ContentType.Application.Json)
+    respondText(json.encodeKompotComponent(component), ContentType.Application.Json)
 }

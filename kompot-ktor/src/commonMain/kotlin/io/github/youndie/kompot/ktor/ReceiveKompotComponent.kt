@@ -8,6 +8,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
 import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.decodeKompotComponent
 
 // The inbound mirror of respondKompotComponent: KompotComponent is an open interface, not
 // @Serializable, so a plain call.receive<KompotComponent>() cannot resolve the concrete runtime
@@ -15,7 +16,7 @@ import io.github.youndie.kompot.KompotComponent
 // decoded explicitly through PolymorphicSerializer.
 suspend fun ApplicationCall.receiveKompotComponent(json: Json): KompotComponent =
     try {
-        json.decodeFromString(PolymorphicSerializer(KompotComponent::class), receiveText())
+        json.decodeKompotComponent(receiveText())
     } catch (e: Exception) {
         if (e is CancellationException) throw e
         throw BadRequestException("Failed to parse KompotComponent: ${e.message}")
