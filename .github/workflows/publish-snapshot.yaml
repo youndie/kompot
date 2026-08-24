@@ -52,6 +52,9 @@ jobs:
   consumer:
     needs: publish
     runs-on: ubuntu-latest
+    # Only the badge branch is written, and only by the step below.
+    permissions:
+      contents: write
     steps:
       - name: What a consumer gets
         uses: youndie/proba@main
@@ -64,6 +67,7 @@ jobs:
             io.github.youndie:kompot-bom:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-core:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-standard:${{ needs.publish.outputs.version }}
+            io.github.youndie:kompot-client:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-client-tck:${{ needs.publish.outputs.version }}
           repository: https://reposilite.kotlin.website/snapshots
           # The confirming tier. `implementation` is right exactly when no public signature mentions
@@ -74,20 +78,32 @@ jobs:
           # An undetermined never fails anything anywhere: a check that could not run turned red is how
           # people learn to switch the answers off along with the noise.
           fail-on: defect
+          # One SVG per coordinate, written rather than served. A publication never changes, so the
+          # state of a badge changes when a version is released — which is when this job runs anyway,
+          # and never between times.
+          badge-dir: badges
 
-      # kompot-client is checked apart and cannot fail the job, for one named reason with an end
-      # date: the reader counts every type the bytecode mentions, so it reports five
-      # compose-resources types that only ActualResourceCollectorsKt names — a file Compose Resources
-      # generates for this module's own resources, which no consumer ever loads (youndie/proba#5).
+      # The badges live on a branch of their own, holding nothing else and keeping no history: they
+      # are output, not source. Committing them to main would put a machine-written file in the log
+      # of every release and make every publish a change to the tree it was built from.
       #
-      # Reported rather than dropped, and advisory rather than absent: a job that is red for a reason
-      # everybody knows is wrong stops being read, and this is the module whose api surface moves
-      # most. Restore `fail-on: defect` and put it back in the list above once the reader looks at
-      # the member surface instead.
-      - name: What a consumer gets — kompot-client, advisory
-        uses: youndie/proba@main
-        with:
-          coordinate: io.github.youndie:kompot-client:${{ needs.publish.outputs.version }}
-          repository: https://reposilite.kotlin.website/snapshots
-          deep: "true"
-          fail-on: none
+      # Force-pushed a single commit each time for the same reason — nobody diffs yesterday's badge,
+      # and a branch that only grows is a cost with no reader.
+      - name: Publish the badges
+        # Also when the check failed, and especially then: the badge's whole job is to say "2
+        # defects" out loud. Skipping it on failure would leave the last clean picture standing over
+        # a release that is not, which is worse than having no badge at all.
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          test -d badges || { echo "the checker wrote no badges — nothing to publish"; exit 1; }
+          ls badges/*.svg >/dev/null
+          cd badges
+          git init -q -b badges .
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git -c commit.gpgsign=false commit -q -m "chore: badges for ${{ needs.publish.outputs.version }}"
+          git push -q --force "https://x-access-token:$GITHUB_TOKEN@github.com/${{ github.repository }}.git" badges
+
