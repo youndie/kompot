@@ -56,18 +56,8 @@ jobs:
     permissions:
       contents: write
     steps:
-      # Pinned, and not for the usual reason. `@main` stopped loading entirely — its action.yml
-      # carries a replacement character after one input's default, so GitHub fails the job at
-      # "Set up job" and nothing is checked at all (youndie/proba#10).
-      #
-      # ef9b687 is the last commit whose manifest parses. It is BEFORE two things: the badge file
-      # (so `badge-dir` does not exist here and no badge is written) and the fix that reads the
-      # surface a consumer can write (so kompot-client reports types only its generated resource
-      # accessor names, and is checked below where it cannot fail the job).
-      #
-      # Both come back together: unpin, restore badge-dir, and put kompot-client back in this list.
       - name: What a consumer gets
-        uses: youndie/proba@ef9b6871cdbf27904067dee3c583bf2f8364148c
+        uses: youndie/proba@main
         with:
           # The coordinates a consumer starts from: the platform that pins the set, the protocol every
           # implementation compiles against, and the two clients. Not all thirty-four — the cost is a
@@ -77,6 +67,7 @@ jobs:
             io.github.youndie:kompot-bom:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-core:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-standard:${{ needs.publish.outputs.version }}
+            io.github.youndie:kompot-client:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-client-tck:${{ needs.publish.outputs.version }}
           repository: https://reposilite.kotlin.website/snapshots
           # The confirming tier. `implementation` is right exactly when no public signature mentions
@@ -87,8 +78,10 @@ jobs:
           # An undetermined never fails anything anywhere: a check that could not run turned red is how
           # people learn to switch the answers off along with the noise.
           fail-on: defect
-          # No badge-dir: this pin predates it. The step below stays, and says so rather than
-          # failing, so that unpinning is one line and not an archaeology exercise.
+          # One SVG per coordinate, written rather than served. A publication never changes, so the
+          # state of a badge changes when a version is released — which is when this job runs anyway,
+          # and never between times.
+          badge-dir: badges
 
       # The badges live on a branch of their own, holding nothing else and keeping no history: they
       # are output, not source. Committing them to main would put a machine-written file in the log
@@ -96,14 +89,6 @@ jobs:
       #
       # Force-pushed a single commit each time for the same reason — nobody diffs yesterday's badge,
       # and a branch that only grows is a cost with no reader.
-      - name: What a consumer gets — kompot-client, advisory
-        uses: youndie/proba@ef9b6871cdbf27904067dee3c583bf2f8364148c
-        with:
-          coordinate: io.github.youndie:kompot-client:${{ needs.publish.outputs.version }}
-          repository: https://reposilite.kotlin.website/snapshots
-          deep: "true"
-          fail-on: none
-
       - name: Publish the badges
         # Also when the check failed, and especially then: the badge's whole job is to say "2
         # defects" out loud. Skipping it on failure would leave the last clean picture standing over
@@ -112,12 +97,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Absent while the checker is pinned to a commit that cannot write them. Not a failure:
-          # the badge is a picture of the check, and the check itself ran in the step above.
-          if [ ! -d badges ] || ! ls badges/*.svg >/dev/null 2>&1; then
-            echo "no badges were written — the pinned checker does not write them (youndie/proba#10)"
-            exit 0
-          fi
+          # Absence is a signal now: the checker writes one badge per coordinate before it decides
+          # anything, so no badges means it did not run at all — the shape a broken action manifest
+          # took, which failed the job at "Set up job" and left the release unread.
+          test -d badges || { echo "the checker wrote no badges — it did not run"; exit 1; }
+          ls badges/*.svg >/dev/null
           cd badges
           git init -q -b badges .
           git config user.name "github-actions[bot]"
