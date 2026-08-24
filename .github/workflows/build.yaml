@@ -18,10 +18,15 @@ jobs:
       - uses: gradle/actions/setup-gradle@v5
       - run: ./gradlew build --no-daemon
 
-      # A module whose public API is declared `implementation` builds, tests and publishes green, and
-      # the metadata it produces tells a consumer it needs nothing. Only the consumer finds out. The
-      # audit needs real published metadata, so it publishes locally first.
-      - name: Published API metadata is complete
+      # Both audits below read real published metadata, which is why they publish locally first, and
+      # both exist because the defect they look for is invisible to the build itself: everything
+      # compiles, tests and publishes green, and only a consumer finds out.
+      #
+      # A module whose public API is declared `implementation` tells a consumer it needs nothing.
+      # An artifact whose file name is built from a different version than its coordinate arrives
+      # under a name no release ever had.
+      - name: Published metadata is complete and correctly named
         run: |
           ./gradlew publishToMavenLocal -PVERSION=ci-${{ github.run_number }} --no-daemon
           python3 tools/api-metadata-audit.py ci-${{ github.run_number }}
+          python3 tools/artifact-name-audit.py ci-${{ github.run_number }}

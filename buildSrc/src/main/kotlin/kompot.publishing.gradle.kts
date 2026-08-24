@@ -7,10 +7,16 @@ plugins {
 // surfaced only at upload time, as a PUT to the wrong path, after everything had compiled and tested.
 group = "io.github.youndie"
 
-// The default version comes from gradle.properties so that a local build and publishToMavenLocal
-// work without extra parameters. CI overrides it through -PVERSION (see afterEvaluate below),
-// appending the run number.
-version = findProperty("kompot.version")?.toString() ?: "0.1.0"
+// One version, reaching both the coordinate a consumer asks for and the name of the file that
+// arrives. CI passes the full number through -PVERSION; gradle.properties holds the head of it so a
+// local build and publishToMavenLocal work without extra parameters.
+//
+// Setting the publication version alone is not enough, and the difference is invisible here: the
+// archive tasks take their file name from the PROJECT version, so every publish shipped a
+// kompot-core-jvm-0.27.0.jar under the coordinate 0.27.0.46. Resolving works — the metadata points at
+// the right url — and the file is simply misnamed on arrival, which makes two different releases
+// indistinguishable to anything downstream that reads file names, under a version never released.
+version = findProperty("VERSION")?.toString() ?: findProperty("kompot.version")?.toString() ?: "0.1.0"
 
 plugins.withId("java") {
     extensions.configure<JavaPluginExtension> {
@@ -50,14 +56,6 @@ publishing {
                 username = findProperty("REPOSILITE_USER")?.toString()
                 password = findProperty("REPOSILITE_SECRET")?.toString()
             }
-        }
-    }
-}
-
-afterEvaluate {
-    findProperty("VERSION")?.toString()?.let { publishVersion ->
-        publishing.publications.withType<MavenPublication>().configureEach {
-            version = publishVersion
         }
     }
 }
