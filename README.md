@@ -1,11 +1,12 @@
 # kompot
 
 [![kotlin](https://img.shields.io/badge/Kotlin-2.4.10-blue?logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![kompot-core](https://reposilite.kotlin.website/api/badge/latest/snapshots/io/github/youndie/kompot-core?name=kompot-core&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/io/github/youndie/kompot-core)
+[![what a consumer gets](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-core.svg)](https://github.com/youndie/proba)
 
-[![kompot-core](https://reposilite.kotlin.website/api/badge/latest/snapshots/io/github/youndie/kompot-core?name=kompot-core&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/io/github/youndie/kompot-core) [![what a consumer gets from kompot-core](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-core.svg)](https://github.com/youndie/proba) — the protocol  
-[![kompot-standard](https://reposilite.kotlin.website/api/badge/latest/snapshots/io/github/youndie/kompot-standard?name=kompot-standard&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/io/github/youndie/kompot-standard) [![what a consumer gets from kompot-standard](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-standard.svg)](https://github.com/youndie/proba) — the components  
-[![kompot-client](https://reposilite.kotlin.website/api/badge/latest/snapshots/io/github/youndie/kompot-client?name=kompot-client&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/io/github/youndie/kompot-client) [![what a consumer gets from kompot-client](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-client.svg)](https://github.com/youndie/proba) — the Compose client  
-[![kompot-ktor](https://reposilite.kotlin.website/api/badge/latest/snapshots/io/github/youndie/kompot-ktor?name=kompot-ktor&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/io/github/youndie/kompot-ktor) [![what a consumer gets from kompot-ktor](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-ktor.svg)](https://github.com/youndie/proba) — the server plug-in
+![JVM](https://img.shields.io/badge/platform-jvm-DB413D?style=flat)
+![iOS](https://img.shields.io/badge/platform-ios-CDCDCD?style=flat)
+![wasmJs](https://img.shields.io/badge/platform-wasmJs-624FE8?style=flat)
 
 **a backend-driven UI toolkit for Kotlin Multiplatform** — the server describes a screen as a tree
 of components, the client renders it, and a new screen ships without a new client release
@@ -49,10 +50,11 @@ The distinction is the point. A module whose public API returns a type it declar
 cannot name; a file can go up under a name carrying a version that was never released. Both happened,
 both were found from the other side, and neither is visible from this one.
 
-The second badge on each line above says what it found, in a word — `clean`, `1 suspicion`,
-`1 unchecked` — and the colour only agrees with it. Each is a file written by the run that published
-the version beside it, not a service answering when somebody looks: a publication never changes, so
-neither can the answer.
+The third badge above says what it found, in a word — `clean`, `1 suspicion`, `1 unchecked` — and the
+colour only agrees with it. It is a file written by the run that published the version beside it, not
+a service answering when somebody looks: a publication never changes, so neither can the answer. The
+other checked coordinates report the same way in the job's summary; the readme carries the one a
+consumer starts from.
 
 `1 unchecked` is not `clean`: a check that could not run is not a check that passed. A suspicion is a
 shape the metadata cannot tell apart from the correct case — on `wasmJs`, for instance, where a jvm

@@ -64,8 +64,9 @@ jobs:
           # thirty-four — the cost is a real consumer build per coordinate, and a defect in this build
           # reaches all of them the same way.
           #
-          # Each of these is also a badge in the readme, which is the other reason the list is this
-          # one: a badge nobody can attach to an artefact says nothing at all.
+          # The readme carries the badge of one of them — the coordinate a consumer starts from. The
+          # rest report into the job summary, which is where somebody looking for a reason goes
+          # anyway; a header of six pictures is a header nobody reads.
           coordinate: |
             io.github.youndie:kompot-bom:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-core:${{ needs.publish.outputs.version }}
