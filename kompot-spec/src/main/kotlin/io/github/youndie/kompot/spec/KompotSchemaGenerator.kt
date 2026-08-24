@@ -197,7 +197,7 @@ class KompotSchemaGenerator(
                 JsonArray(members.map { ref(memberKey(key, it.serialName)) }),
             )
             putJsonObject("discriminator") {
-                put("propertyName", KompotProtocol.DISCRIMINATOR)
+                put("propertyName", module.discriminator)
                 putJsonObject("mapping") {
                     members.forEach { member ->
                         put(member.serialName, "#/\$defs/${memberKey(key, member.serialName)}")
@@ -221,8 +221,8 @@ class KompotSchemaGenerator(
         val properties =
             buildJsonObject {
                 if (wireName != null) {
-                    required += KompotProtocol.DISCRIMINATOR
-                    putJsonObject(KompotProtocol.DISCRIMINATOR) { put("const", wireName) }
+                    required += module.discriminator
+                    putJsonObject(module.discriminator) { put("const", wireName) }
                 }
                 for (i in 0 until descriptor.elementsCount) {
                     val name = descriptor.getElementName(i)
@@ -237,10 +237,14 @@ class KompotSchemaGenerator(
             put("type", "object")
             put("properties", properties)
             put("required", JsonArray(required.map { JsonPrimitive(it) }))
-            // Not false: clients read with ignoreUnknownKeys = true, and that is part of the
+            // True on the wire: clients read with ignoreUnknownKeys = true, and that is part of the
             // compatibility contract — a newer server may send a property an older client does not know
             // yet (see SPEC.md, "Evolution").
-            put("additionalProperties", true)
+            //
+            // A module that is not the wire says otherwise. For the client corpus the rule is the exact
+            // opposite: a key the runner does not recognise must stop it, because a misread key is a
+            // clause that silently goes unchecked while the case still reports green.
+            put("additionalProperties", module.openObjects)
         }
     }
 

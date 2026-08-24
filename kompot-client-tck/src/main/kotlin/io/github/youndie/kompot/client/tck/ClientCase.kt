@@ -64,4 +64,9 @@ data class ClientExpectation(
 @Serializable
 data class ClientCorpusIndex(
     val cases: List<String>,
+    // The case format, described beside the cases. A runner in another language validates what it
+    // parsed against this instead of inferring the vocabulary of `expect` from whichever cases happen
+    // to exist — the inference that turned a list of field ids into a flag, and a case into one that
+    // asserts nothing while reporting green.
+    val schema: String = "client-corpus.schema.json",
 )
