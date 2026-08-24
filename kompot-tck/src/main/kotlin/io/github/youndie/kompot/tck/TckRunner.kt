@@ -213,23 +213,43 @@ class TckRunner(
     private suspend fun responsesMatchSchema(): List<TckFinding> =
         probeable().exercising("schema").flatMap { endpoint ->
             val response = get(endpoint)
-            val schema = endpoint.successSchema
+            val body = endpoint.successBody
 
             when {
                 response.status != endpoint.successStatus ->
                     listOf(TckFinding("status", endpoint.path, "expected ${endpoint.successStatus}, got ${response.status}"))
 
-                schema == null -> emptyList()
+                body == null -> emptyList()
 
                 else -> {
                     val element = parse(response.body)
                     if (element == null) {
                         listOf(TckFinding("schema", endpoint.path, "the body is not valid JSON"))
                     } else {
-                        validator.validate(element, schema).map { TckFinding("schema", endpoint.path, it) }
+                        validateBody(element, body).map { TckFinding("schema", endpoint.path, it) }
                     }
                 }
             }
+        }
+
+    // One place where a body meets its schema, because there are three checks that do it and the array
+    // case was written into none of them.
+    //
+    // Element by element rather than as a whole: a finding then names WHICH item of the list is wrong,
+    // which is the difference between "this data source is broken" and an address a person can look
+    // at. A body that is not an array where one was declared is itself the finding — validating its
+    // items would report nothing at all.
+    private fun validateBody(
+        element: JsonElement,
+        body: TckResponseBody,
+    ): List<String> =
+        when {
+            !body.isList -> validator.validate(element, body.ref)
+            element !is JsonArray -> listOf("$: the endpoint declares a list of ${body.ref}, and the body is not an array")
+            else ->
+                element.flatMapIndexed { index, item ->
+                    validator.validate(item, body.ref).map { "[$index]$it" }
+                }
         }
 
     // A node's id addresses point updates (SPEC.md §4.2): an empty or duplicated id makes the address
@@ -444,8 +464,8 @@ class TckRunner(
                     findings += TckFinding("pagination", url, "the page is not valid JSON")
                     break
                 }
-                endpoint.successSchema?.let { schema ->
-                    findings += validator.validate(page, schema).map { TckFinding("pagination", url, it) }
+                endpoint.successBody?.let { body ->
+                    findings += validateBody(page, body).map { TckFinding("pagination", url, it) }
                 }
 
                 val next = (page["nextLoadAction"] as? JsonObject)?.get("url") as? JsonPrimitive ?: return@flatMap findings
@@ -493,12 +513,14 @@ class TckRunner(
                         // The schema to check against follows the KIND, not a hardcoded assumption that
                         // every route yields a component tree — which is what made a form route
                         // unreportable except as a false finding against it.
-                        val schema = declared?.successSchema ?: SCREEN_SCHEMA.takeIf { routeKind == ScreenRouteKind.SCREEN }
+                        val body =
+                            declared?.successBody
+                                ?: TckResponseBody(SCREEN_SCHEMA, isList = false).takeIf { routeKind == ScreenRouteKind.SCREEN }
 
                         when {
                             element == null -> findings + TckFinding("navigation", target, "the body is not valid JSON")
-                            schema == null -> findings
-                            else -> findings + validator.validate(element, schema).map { TckFinding("navigation", target, it) }
+                            body == null -> findings
+                            else -> findings + validateBody(element, body).map { TckFinding("navigation", target, it) }
                         }
                     }
                 }
