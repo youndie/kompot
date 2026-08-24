@@ -9,13 +9,21 @@ import kotlinx.serialization.json.jsonObject
 // another stack describes itself with the same document carrying x-kompot-endpoint-kind, and the same
 // set of checks applies to it without a line of code changing. The addresses themselves may be
 // anything at all (SPEC.md §16).
+// What a successful response carries: the schema of ONE value, and whether the body is a list of
+// them. Two fields rather than a schema document, because every check needs the same two questions
+// answered and a document would have each of them asking the second one for itself.
+data class TckResponseBody(
+    val ref: String,
+    val isList: Boolean,
+)
+
 data class TckEndpoint(
     val method: String,
     val path: String,
     val kind: String,
     val secured: Boolean,
     val successStatus: Int,
-    val successSchema: String?,
+    val successBody: TckResponseBody?,
     val successContentType: String?,
     val statuses: Set<Int>,
     val deprecated: Boolean,
@@ -67,7 +75,7 @@ object TckEndpoints {
                     kind = (json["x-kompot-endpoint-kind"] as? JsonPrimitive)?.content ?: "unknown",
                     secured = securedBy(json["security"] as? JsonArray ?: documentSecurity),
                     successStatus = success,
-                    successSchema = successSchema(responses.getValue(success.toString()).jsonObject),
+                    successBody = successBody(responses.getValue(success.toString()).jsonObject),
                     successContentType = successContentType(responses.getValue(success.toString()).jsonObject),
                     statuses = statuses,
                     deprecated = (json["deprecated"] as? JsonPrimitive)?.content == "true",
@@ -87,11 +95,15 @@ object TckEndpoints {
     private fun successContentType(response: JsonObject): String? = (response["content"] as? JsonObject)?.keys?.firstOrNull()
 
     // The $ref is either directly in the schema or under items of an array — a data source answers a
-    // list.
-    private fun successSchema(response: JsonObject): String? {
+    // list — and WHICH of the two travels on, because the ref alone describes an element and the body
+    // is the array around it. Flattening the array away left every check validating a list against the
+    // schema of one item, which can never agree: the finding named the server, and the server was
+    // answering exactly what it declared.
+    private fun successBody(response: JsonObject): TckResponseBody? {
         val content = response["content"] as? JsonObject ?: return null
         val schema = content.values.firstOrNull()?.jsonObject?.get("schema")?.jsonObject ?: return null
-        (schema["\$ref"] as? JsonPrimitive)?.let { return it.content }
-        return ((schema["items"] as? JsonObject)?.get("\$ref") as? JsonPrimitive)?.content
+        (schema["\$ref"] as? JsonPrimitive)?.let { return TckResponseBody(it.content, isList = false) }
+        val items = (schema["items"] as? JsonObject)?.get("\$ref") as? JsonPrimitive ?: return null
+        return TckResponseBody(items.content, isList = true)
     }
 }

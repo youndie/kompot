@@ -10,8 +10,17 @@ object ScreenRouteKind {
     const val SCREEN = "screen"
     const val FORM = "form"
 
+    // A screen whose response is a KompotScreenResponse rather than a bare component tree: the same
+    // tree, plus the channel its updates arrive on (§10.4).
+    //
+    // Its own kind rather than a second shape allowed at `screen`, for the reason `form` has one: a
+    // client picks its deserialiser by kind, and a client released before this existed would meet an
+    // envelope where it expects a node. §12.1 already says such a client skips the route — it loses a
+    // screen it could not have subscribed to anyway, instead of failing to parse one.
+    const val LIVE_SCREEN = "live_screen"
+
     // Every kind this build can draw. A client passes what IT supports, which is not necessarily this.
-    val known: Set<String> = setOf(SCREEN, FORM)
+    val known: Set<String> = setOf(SCREEN, FORM, LIVE_SCREEN)
 }
 
 // One plain screen of the graph: the deeplink the client opens it by — the same deeplink that a

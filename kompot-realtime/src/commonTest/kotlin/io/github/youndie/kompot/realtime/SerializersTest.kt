@@ -43,6 +43,36 @@ class SerializersTest {
         assertEquals(message, decoded)
     }
 
+    // The envelope a screen that is not a form travels in. Before it, a topic could only be carried by
+    // KompotFormResponse, which also requires a schema — so such a screen went out as a form response
+    // with a form that does not exist.
+    @Test
+    fun `KompotScreenResponse round-trips with its topic and its polymorphic screen`() {
+        val response =
+            KompotScreenResponse(
+                screen = UnknownComponent(id = "sweep", originalType = "column"),
+                realtimeTopic = "sweep:io.ktor",
+            )
+
+        val encoded = json.encodeToString(KompotScreenResponse.serializer(), response)
+
+        assertEquals(response, json.decodeFromString(KompotScreenResponse.serializer(), encoded))
+        assertEquals(true, encoded.contains("\"type\":"), encoded)
+    }
+
+    // The field is optional so that the envelope stays usable for a screen with nothing to say about
+    // updates — but a screen that says nothing is better off as a bare tree (§10.4), and the absent
+    // field must decode as absent rather than as some topic of the toolkit's choosing.
+    @Test
+    fun `a screen response without a topic says so rather than carrying an empty one`() {
+        val response = KompotScreenResponse(screen = UnknownComponent(id = "sweep", originalType = "column"))
+
+        val encoded = json.encodeToString(KompotScreenResponse.serializer(), response)
+
+        assertEquals(false, encoded.contains("realtimeTopic"), encoded)
+        assertEquals(null, json.decodeFromString(KompotScreenResponse.serializer(), encoded).realtimeTopic)
+    }
+
     @Test
     fun `the nested component's type discriminator is present in the encoded JSON`() {
         val message =
