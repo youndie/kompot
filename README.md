@@ -5,6 +5,10 @@
 [![kompot-standard](https://reposilite.kotlin.website/api/badge/latest/snapshots/io/github/youndie/kompot-standard?name=snapshots&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/io/github/youndie/kompot-standard)
 [![kompot-ktor](https://reposilite.kotlin.website/api/badge/latest/snapshots/io/github/youndie/kompot-ktor?name=snapshots&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/io/github/youndie/kompot-ktor)
 
+[![kompot-core, from a consumer](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-core.svg)](https://github.com/youndie/proba)
+[![kompot-client, from a consumer](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-client.svg)](https://github.com/youndie/proba)
+[![kompot-client-tck, from a consumer](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-client-tck.svg)](https://github.com/youndie/proba)
+
 **a backend-driven UI toolkit for Kotlin Multiplatform** — the server describes a screen as a tree
 of components, the client renders it, and a new screen ships without a new client release
 
@@ -47,8 +51,11 @@ The distinction is the point. A module whose public API returns a type it declar
 cannot name; a file can go up under a name carrying a version that was never released. Both happened,
 both were found from the other side, and neither is visible from this one.
 
-A badge saying that in a word — `clean`, `2 suspicions`, `1 unchecked` — belongs above, and will be
-there once the checker can write one again.
+The second row of badges says it in a word — `clean`, `1 suspicion`, `1 unchecked` — and the colour
+only agrees with it. Each is a file written by the run that published the version it describes, not a
+service answering when somebody looks: a publication never changes, so neither can the answer.
+
+`1 unchecked` is not `clean`: a check that could not run is not a check that passed.
 
 ### 📦 Modules
 
