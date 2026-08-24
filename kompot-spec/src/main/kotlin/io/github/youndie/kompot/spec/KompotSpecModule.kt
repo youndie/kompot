@@ -29,6 +29,15 @@ data class KompotSpecModule(
     // Constraints on GENERATED properties: defKey -> property name -> keywords to add. Needed wherever
     // the Kotlin type of a property (usually String) says nothing about its allowed format.
     val annotations: Map<String, Map<String, JsonObject>> = emptyMap(),
+    // The property a polymorphic value carries its wire name in. Everything on the kompot wire uses
+    // "type" and no module should change it — this exists for a schema of something that is NOT the
+    // wire, and there is exactly one: the client corpus, whose steps are discriminated by "step" so
+    // that a step's own key does not read like the "type" of the value inside it.
+    val discriminator: String = KompotProtocol.DISCRIMINATOR,
+    // Whether an object in this module may carry properties the schema does not list. True for
+    // anything on the wire — §3 and §15 require a reader to ignore what it does not know — and false
+    // for a format whose reader must instead refuse it. Only the client corpus is the second kind.
+    val openObjects: Boolean = true,
 )
 
 // Assembling a spec from an ordered list of modules. The list belongs to a PARTICULAR BUILD rather

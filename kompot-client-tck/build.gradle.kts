@@ -19,6 +19,10 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     testImplementation(kotlin("test"))
+    // Only to GENERATE the case-format schema that ships beside the cases, and only in tests: the
+    // artefact carries the finished .schema.json, not the generator. Same posture the schemas of the
+    // wire take towards :kompot-spec.
+    testImplementation(projects.kompotSpec)
     testImplementation(projects.formCore)
     testImplementation(projects.formStandard)
     testImplementation(libs.kotlinx.coroutines.test)
