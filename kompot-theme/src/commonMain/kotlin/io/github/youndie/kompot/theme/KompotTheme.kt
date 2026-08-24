@@ -64,6 +64,15 @@ data class KompotTextStyle(
     // :kompot-theme must not know one toolkit's set of weights.
     val fontWeight: Int? = null,
     val letterSpacingSp: Float? = null,
+    // The colour of text in this style, and the reason it is here rather than only on the component:
+    // a theme could restyle the size, weight and tracking of every text on a screen and could not
+    // change one of their colours. Repainting a product is what a server-driven theme is for, and
+    // colour is the half of it that could not travel.
+    //
+    // A hex value like the palette's, not a token key, and for the same reason every other property
+    // here is a value: this IS the resolution of a token. A style whose colour named another token
+    // would resolve one name into another name.
+    val color: String? = null,
 )
 
 // Parses a hex colour into packed ARGB. #RGB, #RRGGBB and #AARRGGBB are supported, with or without
