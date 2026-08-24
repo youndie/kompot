@@ -79,4 +79,16 @@ kotlin.sourceSets.getByName("desktopTest") {
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 
+    // The published bytecode of this module is Java 17 like every other module's; these TESTS are
+    // what needs a newer runtime. viddik ships class file 65 (Java 21), so on a 17 launcher the
+    // screenshot suite dies at class loading — the very failure mode JVM_FLOOR exists to keep off
+    // consumers, arriving here from a dependency of the harness rather than from anything published.
+    //
+    // Only the launcher moves. Compiling the tests on 17 against a newer class file is fine, and
+    // keeping the compile there is what stops a test accidentally teaching main code to use an API
+    // no consumer has.
+    javaLauncher =
+        javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(SCREENSHOT_RUNTIME)
+        }
 }

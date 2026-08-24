@@ -1,3 +1,7 @@
+import org.gradle.api.attributes.Category
+import org.gradle.api.attributes.Usage
+import org.gradle.api.attributes.java.TargetJvmVersion
+
 plugins {
     `maven-publish`
 }
@@ -43,6 +47,35 @@ plugins.withId("org.jetbrains.kotlin.jvm") {
         publishing.publications.create<MavenPublication>("maven") {
             from(components["java"])
         }
+    }
+}
+
+// The floor, said out loud in the metadata. A plain kotlin("jvm") module gets this for free — the
+// java plugin derives org.gradle.jvm.version from the toolchain — but a Kotlin Multiplatform module
+// publishes its jvm variants with no such attribute at all, and those are the ones consumers actually
+// take. Gradle then has nothing to refuse a too-old consumer with: resolution succeeds, compilation
+// succeeds, and the failure arrives at class loading as UnsupportedClassVersionError, naming a
+// bytecode version rather than this library.
+//
+// Declared here rather than left to the toolchain because the toolchain moving is precisely the event
+// this exists to catch: with the attribute, a consumer gets "requires JVM runtime 17, you are on 11"
+// at resolution time; without it, the floor moves silently with whatever JDK the build machine has.
+plugins.withId("org.jetbrains.kotlin.multiplatform") {
+    afterEvaluate {
+        // Found by what a configuration IS rather than by what it is called. The obvious version of
+        // this named "jvmApiElements" and "jvmRuntimeElements", which covers a jvm() target and
+        // misses jvm("desktop") entirely — six Compose modules, the ones a client application
+        // actually depends on. A configuration's name comes from its target, so a name is not a
+        // property of the thing being looked for; the java-api/java-runtime usage is, and only a jvm
+        // target carries it — every other target of a multiplatform module publishes kotlin-api.
+        configurations
+            .filter { configuration ->
+                configuration.isCanBeConsumed &&
+                    configuration.attributes.getAttribute(Category.CATEGORY_ATTRIBUTE)?.name == Category.LIBRARY &&
+                    configuration.attributes.getAttribute(Usage.USAGE_ATTRIBUTE)?.name in setOf(Usage.JAVA_API, Usage.JAVA_RUNTIME)
+            }.forEach { configuration ->
+                configuration.attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, JVM_FLOOR)
+            }
     }
 }
 

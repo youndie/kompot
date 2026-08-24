@@ -24,9 +24,11 @@ jobs:
       #
       # A module whose public API is declared `implementation` tells a consumer it needs nothing.
       # An artifact whose file name is built from a different version than its coordinate arrives
-      # under a name no release ever had.
-      - name: Published metadata is complete and correctly named
+      # under a name no release ever had. Bytecode newer than the floor resolves, compiles, and then
+      # fails in the consumer's runtime — and every machine this is built on is too new to see it.
+      - name: Published metadata is complete, correctly named and within the JVM floor
         run: |
           ./gradlew publishToMavenLocal -PVERSION=ci-${{ github.run_number }} --no-daemon
           python3 tools/api-metadata-audit.py ci-${{ github.run_number }}
           python3 tools/artifact-name-audit.py ci-${{ github.run_number }}
+          python3 tools/jvm-floor-audit.py ci-${{ github.run_number }}
