@@ -213,6 +213,16 @@ object KompotToolkitSpec {
                                     forbid = KompotProtocol.DEEPLINK_FORBIDDEN_PATTERN,
                                 ),
                         ),
+                    "KompotActionOpenUrl" to
+                        mapOf(
+                            "url" to
+                                KompotSpec.constrained(
+                                    KompotProtocol.EXTERNAL_URL_PATTERN,
+                                    "An address OUTSIDE the application. navigate cannot carry one and must not (§12.2); this " +
+                                        "action exists so that leaving is explicit, and a client may put a confirmation or an " +
+                                        "allowlist in front of it",
+                                ),
+                        ),
                     "LoadPage" to mapOf("url" to KompotSpec.constrained(KompotProtocol.ENDPOINT_PATTERN, "The relative address of the next page")),
                     "KompotActionLoadPage" to
                         mapOf("url" to KompotSpec.constrained(KompotProtocol.ENDPOINT_PATTERN, "The relative address of the next page")),

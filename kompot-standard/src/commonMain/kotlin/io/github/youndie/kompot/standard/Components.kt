@@ -52,6 +52,17 @@ data class TextComponent(
     // null means "no style set explicitly": the renderer decides what that looks like by default.
     // kompot-standard must not assume the client uses Material3 or its type scale at all.
     val style: TypographyToken? = null,
+    // The same text, cut into runs that can differ. Absent means the node is uniform, which is what it
+    // always was.
+    //
+    // `text` above stays the whole string and remains authoritative: a client that knows nothing of
+    // spans draws it flat and loses styling rather than content. That is why this could be added at
+    // all — the alternative, a component of its own, would have degraded to a placeholder and taken
+    // the words with it.
+    //
+    // Hence the rule in §14: `text` MUST equal the concatenation of the spans. Two places holding one
+    // string is the shape that drifts, so the conformance kit checks it rather than trusting it.
+    val spans: List<TextSpan> = emptyList(),
     // What becomes of a string that does not fit. §14 makes the server the only party allowed to
     // produce text, so shortening one is its job too — but it knows neither the screen's width nor the
     // font, and had no way to say what should happen instead. null keeps the previous behaviour: as
@@ -64,6 +75,16 @@ data class TextComponent(
     // Only meaningful together with maxLines: whether the cut is marked. false clips silently.
     val ellipsis: Boolean = true,
 ) : KompotComponent
+
+// One run of a text node: its own words, optionally its own style, optionally something to do. A span
+// carrying an action is what makes a link inside a sentence possible — the thing a row of text nodes
+// cannot be, because a row does not wrap and the first long sentence leaves the screen.
+@Serializable
+data class TextSpan(
+    val text: String,
+    val style: TypographyToken? = null,
+    val action: @Polymorphic KompotAction? = null,
+)
 
 @Serializable
 @SerialName("button")
@@ -106,6 +127,22 @@ data class TableComponent(
 @SerialName("navigate")
 data class NavigateAction(
     val deeplink: String,
+) : KompotAction
+
+// Leaving the application, on purpose and visibly. navigate cannot do it and must not: its deeplink
+// forbids http and https precisely so that a server cannot walk somebody out to a web page through an
+// ordinary transition (SPEC.md §12.2). That ban stays — this is a different door, and it is marked.
+//
+// The separation is the whole design. A client can treat one action as "goes somewhere inside" and
+// this one as "leaves", and can put a confirmation, an allowlist or nothing at all in front of it;
+// with a flag on navigate the two would have been indistinguishable at the point where it matters.
+//
+// The toolkit opens nothing itself: like every other action this one is handed to the application's
+// KompotActionHandler, which knows what "open" means where it runs.
+@Serializable
+@SerialName("open_url")
+data class OpenUrlAction(
+    val url: String,
 ) : KompotAction
 
 @Serializable

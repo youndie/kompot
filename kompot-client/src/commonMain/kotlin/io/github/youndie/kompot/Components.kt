@@ -15,6 +15,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withLink
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.collectLatest
@@ -141,6 +146,12 @@ class TextRenderer : KompotComponentRenderer<TextComponent> {
             // deliberately has no "default" typography token, so the local default lives here, in
             // a concrete Material3 implementation.
         val style = component.style?.let { designSystem.resolveTypography(it) } ?: MaterialTheme.typography.bodyMedium
+
+        if (component.spans.isNotEmpty()) {
+            SpannedText(component, style, designSystem, actionHandler)
+            return
+        }
+
         Text(
             text = component.text,
             style = style,
@@ -665,3 +676,49 @@ private fun Modifier.clickableWith(
     action: KompotAction?,
     actionHandler: KompotActionHandler,
 ): Modifier = if (action == null) this else clickable { actionHandler.handle(action) }
+
+// A text node cut into runs. One node rather than a row of them, because a row does not wrap and the
+// first long sentence walks off the screen — which is what makes a paragraph with a link inside it
+// impossible to assemble out of the pieces the vocabulary already had.
+//
+// Only reached when the server sent spans: a node without them takes exactly the path it always did.
+@Composable
+private fun SpannedText(
+    component: TextComponent,
+    base: TextStyle,
+    designSystem: KompotDesignSystem,
+    actionHandler: KompotActionHandler,
+) {
+        // Resolved before the builder rather than inside it: resolveTypography is @Composable and the
+        // annotated-string builder is not a composable context.
+    val styles = component.spans.map { span -> span.style?.let { designSystem.resolveTypography(it) } }
+
+    val annotated =
+        buildAnnotatedString {
+            component.spans.forEachIndexed { index, span ->
+                val spanStyle = styles[index]?.toSpanStyle()
+                val action = span.action
+
+                if (action == null) {
+                    if (spanStyle == null) append(span.text) else withStyle(spanStyle) { append(span.text) }
+                    return@forEachIndexed
+                }
+
+                    // A link annotation rather than a click on the whole node: only the run itself is
+                    // pressable, which is the difference between a sentence containing a link and a
+                    // sentence that is one.
+                withLink(LinkAnnotation.Clickable(tag = "kompot-span-$index") { actionHandler.handle(action) }) {
+                    if (spanStyle == null) append(span.text) else withStyle(spanStyle) { append(span.text) }
+                }
+            }
+        }
+
+    Text(
+        text = annotated,
+        style = base,
+        color = if (base.color == Color.Unspecified) MaterialTheme.colorScheme.onSurface else Color.Unspecified,
+        maxLines = component.maxLines ?: Int.MAX_VALUE,
+        overflow = if (component.ellipsis) TextOverflow.Ellipsis else TextOverflow.Clip,
+        modifier = component.modifiers.toComposeModifier(),
+    )
+}
