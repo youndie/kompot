@@ -4,9 +4,9 @@
 [![kompot-core](https://reposilite.kotlin.website/api/badge/latest/snapshots/io/github/youndie/kompot-core?name=kompot-core&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/io/github/youndie/kompot-core)
 [![what a consumer gets](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-core.svg)](https://github.com/youndie/proba)
 
-![JVM](https://img.shields.io/badge/platform-jvm-DB413D?style=flat)
-![iOS](https://img.shields.io/badge/platform-ios-CDCDCD?style=flat)
-![wasmJs](https://img.shields.io/badge/platform-wasmJs-624FE8?style=flat)
+![jvm](https://img.shields.io/badge/jvm-DB413D?style=flat)
+![ios](https://img.shields.io/badge/ios-CDCDCD?style=flat)
+![wasmJs](https://img.shields.io/badge/wasmJs-624FE8?style=flat)
 
 **a backend-driven UI toolkit for Kotlin Multiplatform** — the server describes a screen as a tree
 of components, the client renders it, and a new screen ships without a new client release
