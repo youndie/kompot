@@ -23,7 +23,8 @@ class GraphRouteKindTest {
               "paths": {
                 "/graph":         { "get": { "x-kompot-endpoint-kind": "graph",  "responses": { "200": { "content": { "application/json": {} } } } } },
                 "/screens/home":  { "get": { "x-kompot-endpoint-kind": "screen", "responses": { "200": { "content": { "application/json": { "schema": { "${'$'}ref": "kompot.profile.schema.json#/${'$'}defs/KompotComponent" } } } } } } },
-                "/forms/new-task":{ "get": { "x-kompot-endpoint-kind": "form",   "responses": { "200": { "content": { "application/json": { "schema": { "${'$'}ref": "kompot-forms.schema.json#/${'$'}defs/KompotFormResponse" } } } } } } }
+                "/forms/new-task":{ "get": { "x-kompot-endpoint-kind": "form",   "responses": { "200": { "content": { "application/json": { "schema": { "${'$'}ref": "kompot-forms.schema.json#/${'$'}defs/KompotFormResponse" } } } } } } },
+                "/screens/sweep": { "get": { "x-kompot-endpoint-kind": "live_screen", "responses": { "200": { "content": { "application/json": {} } } } } }
               }
             }
             """.trimIndent(),
@@ -31,21 +32,29 @@ class GraphRouteKindTest {
 
     private val screen = """{"type":"text","id":"title","text":"Home"}"""
     private val form = """{"schema":{"formId":"new-task","fields":[]},"screen":$screen}"""
+    private val live = """{"screen":$screen,"realtimeTopic":"sweep:ktor"}"""
 
-    private fun graph(routeKindOfForm: String) =
-        """
+    private fun graph(
+        routeKindOfForm: String = "form",
+        routeKindOfSweep: String = "live_screen",
+    ) = """
         {
           "routes": [
             { "deeplink": "app://home", "endpoint": "/screens/home" },
-            { "deeplink": "app://new-task", "endpoint": "/forms/new-task", "kind": "$routeKindOfForm" }
+            { "deeplink": "app://new-task", "endpoint": "/forms/new-task", "kind": "$routeKindOfForm" },
+            { "deeplink": "app://sweep", "endpoint": "/screens/sweep", "kind": "$routeKindOfSweep" }
           ]
         }
         """.trimIndent()
 
     // The report's case, and the whole point: a form screen reachable through the graph.
+    //
+    // Scoped to its own route rather than asserting the whole run is quiet: the graph carries three
+    // routes, and a test that owns all of them fails for a neighbour's reasons and reads as if this
+    // one broke.
     @Test
     fun `a form route is accepted and validated as a form envelope`() {
-        assertEquals(emptyList(), findings(graph(routeKindOfForm = "form")))
+        assertEquals(emptyList(), findings(graph()).filter { it.target == "/forms/new-task" })
     }
 
     // The mistake the kit could not name before: the route promises a component tree, the description
@@ -59,7 +68,27 @@ class GraphRouteKindTest {
         assertTrue(reported.any { "/forms/new-task" == it.target }, reported.toString())
     }
 
-    private fun findings(graph: String): List<TckFinding> =
+    // The third envelope, and the one the walk had no fallback for: a screen that is not a form and
+    // names the channel its updates arrive on (§10.4). Its endpoint declares no response schema on
+    // purpose — that is the path where the kit picks a schema from the kind alone, and picking the
+    // screen one would report a conformant server for answering an envelope where a node was
+    // expected. Exactly the finding a form route used to get.
+    @Test
+    fun `a live_screen route is validated as a screen envelope`() {
+        assertEquals(emptyList(), findings(graph()).filter { it.target == "/screens/sweep" })
+    }
+
+    @Test
+    fun `a live_screen route answering a bare component tree is reported`() {
+        val reported = findings(graph(), sweepBody = screen)
+
+        assertTrue(reported.any { it.target == "/screens/sweep" }, reported.toString())
+    }
+
+    private fun findings(
+        graph: String,
+        sweepBody: String = live,
+    ): List<TckFinding> =
         runBlocking {
             TckRunner(
                 RoutingTransport(
@@ -67,6 +96,7 @@ class GraphRouteKindTest {
                         "/graph" to graph,
                         "/screens/home" to screen,
                         "/forms/new-task" to form,
+                        "/screens/sweep" to sweepBody,
                     ),
                 ),
                 TckConfig(schemas = schemas, openApi = openApi),

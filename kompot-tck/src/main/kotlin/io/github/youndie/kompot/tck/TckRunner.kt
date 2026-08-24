@@ -232,6 +232,14 @@ class TckRunner(
             }
         }
 
+    // What a route of this kind answers when the HTTP description says nothing about its endpoint.
+    private fun fallbackBody(routeKind: String): TckResponseBody? =
+        when (routeKind) {
+            ScreenRouteKind.SCREEN -> TckResponseBody(SCREEN_SCHEMA, isList = false)
+            ScreenRouteKind.LIVE_SCREEN -> TckResponseBody(LIVE_SCREEN_SCHEMA, isList = false)
+            else -> null
+        }
+
     // One place where a body meets its schema, because there are three checks that do it and the array
     // case was written into none of them.
     //
@@ -513,9 +521,7 @@ class TckRunner(
                         // The schema to check against follows the KIND, not a hardcoded assumption that
                         // every route yields a component tree — which is what made a form route
                         // unreportable except as a false finding against it.
-                        val body =
-                            declared?.successBody
-                                ?: TckResponseBody(SCREEN_SCHEMA, isList = false).takeIf { routeKind == ScreenRouteKind.SCREEN }
+                        val body = declared?.successBody ?: fallbackBody(routeKind)
 
                         when {
                             element == null -> findings + TckFinding("navigation", target, "the body is not valid JSON")
@@ -672,7 +678,10 @@ class TckRunner(
         // {task}, {formId} — one placeholder of an OpenAPI path template.
         val PLACEHOLDER = Regex("""\{([^}]+)}""")
 
-        // The fallback for a route whose endpoint the HTTP description does not declare at all.
+        // The fallbacks for a route whose endpoint the HTTP description does not declare at all. One
+        // per kind that has a known envelope: a kind with none is left unchecked rather than checked
+        // against the wrong shape, which is what a single hardcoded schema did to a form route.
         const val SCREEN_SCHEMA = "${KompotProtocol.PROFILE_FILE_NAME}#/\$defs/KompotComponent"
+        const val LIVE_SCREEN_SCHEMA = "kompot-realtime.schema.json#/\$defs/KompotScreenResponse"
     }
 }

@@ -20,6 +20,7 @@ import io.github.youndie.kompot.generated.generatedImagesSerializersModule
 import io.github.youndie.kompot.generated.generatedStandardSerializersModule
 import io.github.youndie.kompot.generated.generatedWizardSerializersModule
 import io.github.youndie.kompot.navigation.NavigationGraph
+import io.github.youndie.kompot.realtime.KompotScreenResponse
 import io.github.youndie.kompot.realtime.UpdateComponentMessage
 import io.github.youndie.kompot.standard.KompotPageResponse
 import io.github.youndie.kompot.commands.kompotCommandsSerializersModule
@@ -307,8 +308,28 @@ object KompotToolkitSpec {
     fun realtime() =
         KompotSpecModule(
             name = "kompot-realtime",
-            description = "One frame of the component live-update channel",
-            roots = listOf(UpdateComponentMessage.serializer().descriptor),
+            description = "The live-update channel: the screen envelope that names a topic, and one frame of the channel itself",
+            roots =
+                listOf(
+                    UpdateComponentMessage.serializer().descriptor,
+                    KompotScreenResponse.serializer().descriptor,
+                ),
+            // The same constraint the form envelope's topic carries. A rule kept on one of two
+            // carriers is a rule a server learns by which door it walked through: the pattern is what
+            // makes a topic personal, and a topic that is not personal leaks one person's updates to
+            // another.
+            annotations =
+                mapOf(
+                    "KompotScreenResponse" to
+                        mapOf(
+                            "realtimeTopic" to
+                                KompotSpec.constrained(
+                                    KompotProtocol.REALTIME_TOPIC_PATTERN,
+                                    "The live-update topic of this screen. The string is opaque to the client; a server " +
+                                        "must make it per-subject wherever the data is personal (see SPEC.md §10.4)",
+                                ),
+                        ),
+                ),
         )
 
     fun wizard() =
