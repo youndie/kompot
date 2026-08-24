@@ -3,12 +3,14 @@ package io.github.youndie.kompot.standard
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.plus
+import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.KompotAction
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.UnknownComponent
 import io.github.youndie.kompot.kompotCoreSerializersModule
 import io.github.youndie.kompot.generated.generatedStandardSerializersModule
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
@@ -44,6 +46,37 @@ class SerializersTest {
 
         val row = RowComponent(id = "row", children = listOf(TextComponent(id = "t", text = "hi")))
         assertEquals(row, json.decodeComponent(json.encodeComponent(row)))
+    }
+
+    // §6 gives text three places a colour can come from, and two of them are on the wire. A field
+    // that survives the round trip but arrives shaped differently than the schema says would still
+    // read as green here, so the encoded form is asserted rather than only the decoded object.
+    @Test
+    fun `a colour on a text node and on a span travels as a plain token string`() {
+        val text =
+            TextComponent(
+                id = "t",
+                text = "Paid 12 EUR",
+                color = ColorToken("on_surface_variant"),
+                spans = listOf(TextSpan(text = "Paid "), TextSpan(text = "12 EUR", color = ColorToken("danger"))),
+            )
+
+        val encoded = json.encodeComponent(text)
+
+        assertContains(encoded, "\"color\":\"on_surface_variant\"")
+        assertContains(encoded, "\"color\":\"danger\"")
+        assertEquals(text, json.decodeComponent(encoded))
+    }
+
+    // The compatible half of §15: a body written before the field existed must still decode, and the
+    // node must come out saying "no colour" rather than some colour of the toolkit's choosing.
+    @Test
+    fun `a text node from before the field decodes with no colour`() {
+        val decoded = json.decodeComponent("""{"type":"text","id":"t","text":"hi"}""")
+
+        assertIs<TextComponent>(decoded)
+        assertEquals(null, decoded.color)
+        assertEquals(null, decoded.spans.firstOrNull()?.color)
     }
 
     @Test

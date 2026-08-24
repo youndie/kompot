@@ -363,6 +363,16 @@
             }
           ]
         },
+        "color": {
+          "anyOf": [
+            {
+              "$ref": "kompot-core.schema.json#/$defs/ColorToken"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
         "spans": {
           "type": "array",
           "items": {
@@ -457,6 +467,16 @@
           "anyOf": [
             {
               "$ref": "kompot-core.schema.json#/$defs/TypographyToken"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "color": {
+          "anyOf": [
+            {
+              "$ref": "kompot-core.schema.json#/$defs/ColorToken"
             },
             {
               "type": "null"

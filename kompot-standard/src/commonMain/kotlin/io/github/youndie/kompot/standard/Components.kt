@@ -3,6 +3,7 @@ package io.github.youndie.kompot.standard
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.KompotAction
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.KompotModifierNode
@@ -52,6 +53,18 @@ data class TextComponent(
     // null means "no style set explicitly": the renderer decides what that looks like by default.
     // kompot-standard must not assume the client uses Material3 or its type scale at all.
     val style: TypographyToken? = null,
+    // The colour of the letters, which for a long time nothing on the wire could say: a ColorToken
+    // reached only `background` and `gradient`, which paint behind the content, so the only way to
+    // colour a word was a typography token that happens to carry a colour — turning "the same body
+    // text, but red" into a second entry in the design system's type scale.
+    //
+    // A token rather than a value, like every other colour here: the server names a role and the
+    // client's design system decides what it looks like, so a deployment cannot paint an unreadable
+    // screen from the backend. Unknown token falls back the way §6 requires.
+    //
+    // null keeps the resolution that was there before, and the order matters (§6): this token, then
+    // the colour of the typography token, then the colour of the surface the text sits on.
+    val color: ColorToken? = null,
     // The same text, cut into runs that can differ. Absent means the node is uniform, which is what it
     // always was.
     //
@@ -83,6 +96,13 @@ data class TextComponent(
 data class TextSpan(
     val text: String,
     val style: TypographyToken? = null,
+    // One word in the sentence's colour and not the sentence's: an amount in red, a warning inside a
+    // paragraph. Spans carry no modifiers, so before this there was no way to colour a run at all —
+    // not even the expensive one of giving it a background.
+    //
+    // Resolved exactly like the node's own colour and independently of it: a span that names none
+    // takes the node's, which takes the typography token's, which takes the surface's.
+    val color: ColorToken? = null,
     val action: @Polymorphic KompotAction? = null,
 )
 

@@ -1,5 +1,6 @@
 package io.github.youndie.kompot.standard
 
+import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.KompotAction
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.KompotModifierNode
@@ -84,11 +85,12 @@ fun KompotContainerContext.row(
 fun KompotContainerContext.text(
     text: String,
     style: TypographyToken? = null,
+    color: ColorToken? = null,
     id: String? = null,
     modifierBlock: (KompotModifierBuilder.() -> Unit)? = null,
 ) {
     val mods = modifierBlock?.let { KompotModifierBuilder().apply(it).build() } ?: emptyList()
-    addComponent(TextComponent(id ?: Uuid.random().toString(), mods, text, style))
+    addComponent(TextComponent(id ?: Uuid.random().toString(), mods, text, style, color))
 }
 
 fun KompotContainerContext.button(

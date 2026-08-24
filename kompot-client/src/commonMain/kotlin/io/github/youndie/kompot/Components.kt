@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withLink
@@ -134,6 +135,25 @@ class RowRenderer : KompotComponentRenderer<RowComponent> {
 
 // The read-only field renderer lives in :kompot-forms-client, in the same package.
 
+// The order §6 fixes, in the one place that decides it: the node's own colour token, then the colour
+// carried by the typography token, then the surface's foreground.
+//
+// It is written as a resolution rather than left to Compose because Compose resolves it the other way
+// round. An explicit `color` argument OVERRIDES the one inside a TextStyle, so passing the default
+// unconditionally throws away what the design system said — a token resolving to a red style rendered
+// in the ordinary colour, nothing unknown and so nothing logged. Handing Text a colour that was
+// already decided here keeps both halves: the token wins when there is one, and the style's colour
+// still reaches the screen when there is not.
+@Composable
+private fun resolveTextColor(
+    token: ColorToken?,
+    style: TextStyle,
+    designSystem: KompotDesignSystem,
+): Color =
+    token?.let { designSystem.resolveColor(it) }
+        ?: style.color.takeIf { it != Color.Unspecified }
+        ?: MaterialTheme.colorScheme.onSurface
+
 class TextRenderer : KompotComponentRenderer<TextComponent> {
     @Composable
     override fun Render(
@@ -147,21 +167,17 @@ class TextRenderer : KompotComponentRenderer<TextComponent> {
             // a concrete Material3 implementation.
         val style = component.style?.let { designSystem.resolveTypography(it) } ?: MaterialTheme.typography.bodyMedium
 
+        val color = resolveTextColor(component.color, style, designSystem)
+
         if (component.spans.isNotEmpty()) {
-            SpannedText(component, style, designSystem, actionHandler)
+            SpannedText(component, style, color, designSystem, actionHandler)
             return
         }
 
         Text(
             text = component.text,
             style = style,
-                // An explicit `color` argument OVERRIDES the one inside the style, so passing anything
-                // here throws away what the design system said — a token resolving to a red TextStyle
-                // rendered in the ordinary colour, with nothing unknown and so nothing logged. Since
-                // KompotComponentText carries no colour of its own and a ColorToken only paints a
-                // background, a typography token is the only place a text colour can come from
-                // (SPEC.md §6); Unspecified is what lets it through.
-            color = if (style.color == Color.Unspecified) MaterialTheme.colorScheme.onSurface else Color.Unspecified,
+            color = color,
                 // What becomes of a string that does not fit is the server's to decide, because §14
                 // makes it the only party allowed to produce one. Absent, nothing is capped and the
                 // text takes the lines it needs, exactly as before.
@@ -686,17 +702,30 @@ private fun Modifier.clickableWith(
 private fun SpannedText(
     component: TextComponent,
     base: TextStyle,
+    baseColor: Color,
     designSystem: KompotDesignSystem,
     actionHandler: KompotActionHandler,
 ) {
         // Resolved before the builder rather than inside it: resolveTypography is @Composable and the
         // annotated-string builder is not a composable context.
     val styles = component.spans.map { span -> span.style?.let { designSystem.resolveTypography(it) } }
+        // A run's colour is decided the same way the node's is, one step shorter: its own token, then
+        // the colour of its own typography token, then nothing — which leaves the node's, since a span
+        // style that names no colour must not repaint the run in the ambient default.
+    val colors =
+        component.spans.mapIndexed { index, span ->
+            span.color?.let { designSystem.resolveColor(it) }
+                ?: styles[index]?.color?.takeIf { it != Color.Unspecified }
+        }
 
     val annotated =
         buildAnnotatedString {
             component.spans.forEachIndexed { index, span ->
-                val spanStyle = styles[index]?.toSpanStyle()
+                val spanStyle =
+                    styles[index]?.toSpanStyle().let { style ->
+                        val color = colors[index] ?: return@let style
+                        style?.copy(color = color) ?: SpanStyle(color = color)
+                    }
                 val action = span.action
 
                 if (action == null) {
@@ -716,7 +745,7 @@ private fun SpannedText(
     Text(
         text = annotated,
         style = base,
-        color = if (base.color == Color.Unspecified) MaterialTheme.colorScheme.onSurface else Color.Unspecified,
+        color = baseColor,
         maxLines = component.maxLines ?: Int.MAX_VALUE,
         overflow = if (component.ellipsis) TextOverflow.Ellipsis else TextOverflow.Clip,
         modifier = component.modifiers.toComposeModifier(),

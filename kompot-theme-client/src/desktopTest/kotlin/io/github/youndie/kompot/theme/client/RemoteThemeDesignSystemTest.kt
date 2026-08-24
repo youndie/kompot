@@ -179,6 +179,7 @@ class RemoteThemeDesignSystemTest {
                                     lineHeightSp = 32f,
                                     fontWeight = 700,
                                     letterSpacingSp = 1.5f,
+                                    color = "#B8860B",
                                 )
                             }
                         },
@@ -195,6 +196,47 @@ class RemoteThemeDesignSystemTest {
             assertEquals(32.sp, style.lineHeight)
             assertEquals(FontWeight(700), style.fontWeight)
             assertEquals(1.5.sp, style.letterSpacing)
+            assertEquals(Color(0xFFB8860B), style.color)
+        }
+
+    // The half of a theme that could not travel: a brand could restyle the size, weight and tracking
+    // of every text on a screen and could not change one of their colours.
+    @Test
+    fun `a colour named inside a typography style repaints the text`() =
+        runDesktopComposeUiTest {
+            val designSystem =
+                RemoteThemeDesignSystem(
+                    theme = kompotTheme("gold") { typography { style(M3Typography.TitleLarge, color = "#B8860B") } },
+                    fallback = FakeDesignSystem(),
+                    darkModeOverride = false,
+                )
+            var resolved: TextStyle? = null
+
+            setContent { resolved = designSystem.resolveTypography(M3Typography.TitleLarge) }
+
+            waitForIdle()
+            val style = requireNotNull(resolved)
+            assertEquals(Color(0xFFB8860B), style.color)
+            assertEquals(FallbackStyle.fontSize, style.fontSize)
+        }
+
+    // Same treatment as a malformed palette entry: the theme keeps working and that one value is
+    // ignored, rather than the text being painted with a parse failure.
+    @Test
+    fun `a malformed colour inside a typography style leaves the built-in one`() =
+        runDesktopComposeUiTest {
+            val designSystem =
+                RemoteThemeDesignSystem(
+                    theme = kompotTheme("broken") { typography { style(M3Typography.TitleLarge, color = "rebeccapurple") } },
+                    fallback = FakeDesignSystem(),
+                    darkModeOverride = false,
+                )
+            var resolved: TextStyle? = null
+
+            setContent { resolved = designSystem.resolveTypography(M3Typography.TitleLarge) }
+
+            waitForIdle()
+            assertEquals(FallbackStyle.color, requireNotNull(resolved).color)
         }
 
     @Test

@@ -66,9 +66,13 @@ class KompotTypographyBuilder {
         lineHeightSp: Float? = null,
         fontWeight: Int? = null,
         letterSpacingSp: Float? = null,
+        // A hex string, checked the same way the palette's values are: malformed leaves the built-in
+        // colour rather than failing the theme.
+        color: String? = null,
     ) {
         styles[token.key] =
             KompotTextStyle(
+                color = color,
                 fontSizeSp = fontSizeSp,
                 lineHeightSp = lineHeightSp,
                 fontWeight = fontWeight,

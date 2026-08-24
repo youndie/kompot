@@ -12,6 +12,7 @@ import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.theme.KompotTextStyle
 import io.github.youndie.kompot.theme.KompotTheme
+import io.github.youndie.kompot.theme.parseArgbHex
 
 // A design system that asks the theme delivered by the server first and falls back — usually to the
 // Material3 one — only for what the theme did not describe. An overlay, not a replacement: a theme
@@ -49,6 +50,9 @@ class RemoteThemeDesignSystem(
 // without redescribing the font family and everything else a KompotTextStyle does not even carry.
 private fun TextStyle.mergeWith(overrides: KompotTextStyle): TextStyle =
     copy(
+        // Same treatment as a palette entry: a value that does not parse leaves the built-in colour
+        // alone rather than painting the text with a failure.
+        color = overrides.color?.let(::parseArgbHex)?.let(::Color) ?: color,
         fontSize = overrides.fontSizeSp?.sp ?: fontSize,
         lineHeight = overrides.lineHeightSp?.sp ?: lineHeight,
         fontWeight = overrides.fontWeight?.let(::FontWeight) ?: fontWeight,
