@@ -64,7 +64,6 @@ jobs:
             io.github.youndie:kompot-bom:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-core:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-standard:${{ needs.publish.outputs.version }}
-            io.github.youndie:kompot-client:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-client-tck:${{ needs.publish.outputs.version }}
           repository: https://reposilite.kotlin.website/snapshots
           # The confirming tier. `implementation` is right exactly when no public signature mentions
@@ -75,3 +74,20 @@ jobs:
           # An undetermined never fails anything anywhere: a check that could not run turned red is how
           # people learn to switch the answers off along with the noise.
           fail-on: defect
+
+      # kompot-client is checked apart and cannot fail the job, for one named reason with an end
+      # date: the reader counts every type the bytecode mentions, so it reports five
+      # compose-resources types that only ActualResourceCollectorsKt names — a file Compose Resources
+      # generates for this module's own resources, which no consumer ever loads (youndie/proba#5).
+      #
+      # Reported rather than dropped, and advisory rather than absent: a job that is red for a reason
+      # everybody knows is wrong stops being read, and this is the module whose api surface moves
+      # most. Restore `fail-on: defect` and put it back in the list above once the reader looks at
+      # the member surface instead.
+      - name: What a consumer gets — kompot-client, advisory
+        uses: youndie/proba@main
+        with:
+          coordinate: io.github.youndie:kompot-client:${{ needs.publish.outputs.version }}
+          repository: https://reposilite.kotlin.website/snapshots
+          deep: "true"
+          fail-on: none

@@ -16,7 +16,12 @@ dependencies {
     // Only JSON. The corpus is data and the adapter is the implementer's: nothing here decodes a form
     // into Kotlin types, because the moment it did, the contract would stop being one a client on
     // another language could satisfy.
-    implementation(libs.kotlinx.serialization.json)
+    //
+    // api, and here it is not a nicety: JsonObject is the vocabulary of KompotFormClient itself —
+    // every value crossing the adapter boundary is one — so a consumer who cannot name the type
+    // cannot implement the interface at all. It appears in thirty public member descriptors of this
+    // artefact, and as `implementation` a consumer received none of them.
+    api(libs.kotlinx.serialization.json)
 
     testImplementation(kotlin("test"))
     // Only to GENERATE the case-format schema that ships beside the cases, and only in tests: the
