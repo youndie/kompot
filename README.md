@@ -5,10 +5,6 @@
 [![kompot-standard](https://reposilite.kotlin.website/api/badge/latest/snapshots/io/github/youndie/kompot-standard?name=snapshots&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/io/github/youndie/kompot-standard)
 [![kompot-ktor](https://reposilite.kotlin.website/api/badge/latest/snapshots/io/github/youndie/kompot-ktor?name=snapshots&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/io/github/youndie/kompot-ktor)
 
-[![kompot-core, from a consumer](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-core.svg)](https://github.com/youndie/proba)
-[![kompot-client, from a consumer](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-client.svg)](https://github.com/youndie/proba)
-[![kompot-client-tck, from a consumer](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-client-tck.svg)](https://github.com/youndie/proba)
-
 **a backend-driven UI toolkit for Kotlin Multiplatform** — the server describes a screen as a tree
 of components, the client renders it, and a new screen ships without a new client release
 
@@ -40,18 +36,19 @@ module, and an unknown type degrades to a placeholder instead of taking the scre
 - **it degrades rather than breaks** — an unknown component, an unknown action or a malformed theme
   token costs a widget or some styling, never the screen.
 
-### 🧪 The second row of badges
+### 🧪 Read back from the repository
 
-Those say what somebody who is not us gets when they add the library — read from the published
-artefact by [proba](https://github.com/youndie/proba) after every release, not from this build.
+Every release is checked from the other side by [proba](https://github.com/youndie/proba): it resolves
+the published coordinates the way a stranger's build does and reports what a consumer actually
+receives.
 
 The distinction is the point. A module whose public API returns a type it declares as
 `implementation` compiles, tests and publishes green here, and hands a consumer a signature they
 cannot name; a file can go up under a name carrying a version that was never released. Both happened,
 both were found from the other side, and neither is visible from this one.
 
-The state is a **word** — `clean`, `2 suspicions`, `1 unchecked` — and the colour only agrees with it.
-`1 unchecked` is not `clean`: a check that could not run is not a check that passed.
+A badge saying that in a word — `clean`, `2 suspicions`, `1 unchecked` — belongs above, and will be
+there once the checker can write one again.
 
 ### 📦 Modules
 
