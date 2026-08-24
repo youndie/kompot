@@ -60,15 +60,19 @@ jobs:
         uses: youndie/proba@main
         with:
           # The coordinates a consumer starts from: the platform that pins the set, the protocol every
-          # implementation compiles against, and the two clients. Not all thirty-four — the cost is a
-          # real consumer build per coordinate, and a defect in this build reaches all of them the same
-          # way.
+          # implementation compiles against, the two clients and the server plug-in. Not all
+          # thirty-four — the cost is a real consumer build per coordinate, and a defect in this build
+          # reaches all of them the same way.
+          #
+          # Each of these is also a badge in the readme, which is the other reason the list is this
+          # one: a badge nobody can attach to an artefact says nothing at all.
           coordinate: |
             io.github.youndie:kompot-bom:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-core:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-standard:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-client:${{ needs.publish.outputs.version }}
             io.github.youndie:kompot-client-tck:${{ needs.publish.outputs.version }}
+            io.github.youndie:kompot-ktor:${{ needs.publish.outputs.version }}
           repository: https://reposilite.kotlin.website/snapshots
           # The confirming tier. `implementation` is right exactly when no public signature mentions
           # the dependency, and only a build that compiles against the publication can tell those apart
