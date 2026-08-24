@@ -13,6 +13,7 @@ val kompotStandardSerializersModule =
     SerializersModule {
         polymorphic(KompotAction::class) {
             subclass(NavigateAction::class)
+            subclass(OpenUrlAction::class)
             subclass(CopyTextAction::class)
             subclass(CloseAction::class)
             subclass(LoadPageAction::class)

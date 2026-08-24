@@ -59,6 +59,11 @@ object KompotProtocol {
     // could take the client to an external page through an ordinary navigate.
     const val DEEPLINK_FORBIDDEN_PATTERN = "^https?:"
 
+    // The mirror image of the deeplink rule: open_url exists to LEAVE the application, so an address
+    // that is not a web address has no business there — a relative path would be an ordinary screen and
+    // belongs behind navigate.
+    const val EXTERNAL_URL_PATTERN = "^https?://[^\\s]+${'$'}"
+
     // An address on the same host as the rest of the API — always relative.
     const val ENDPOINT_PATTERN = "^/[^\\s#]*${'$'}"
 

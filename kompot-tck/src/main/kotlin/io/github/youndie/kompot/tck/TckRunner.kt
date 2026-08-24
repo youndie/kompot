@@ -155,6 +155,7 @@ class TckRunner(
         findings += navigationGraphResolves()
         findings += performTargetsAreSubmitEndpoints()
         findings += recordedUpdateFramesAreValid()
+        findings += textSpansSpellTheirOwnText()
         findings += idempotencyContract()
 
         return TckReport(findings, exercised.toMap(), notWalked(), config.extensionTypes + profileExtensions)
@@ -375,6 +376,39 @@ class TckRunner(
 
                 findings
             }
+
+    // `text` stays the whole string and the spans are its runs, so the two have to agree (SPEC.md §14).
+    // One string kept in two places is the shape that drifts, and it drifts INVISIBLY here: a client
+    // that reads the spans shows one sentence and a client that reads the flat form shows another,
+    // and neither has any way to notice.
+    private suspend fun textSpansSpellTheirOwnText(): List<TckFinding> =
+        probeable().exercising("text-spans").flatMap { endpoint ->
+            val element = parse(get(endpoint).body) ?: return@flatMap emptyList()
+
+            collectJsonObjects(element)
+                .filter { (it[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content == TEXT_TYPE }
+                .mapNotNull { node ->
+                    val spans = node["spans"] as? JsonArray ?: return@mapNotNull null
+                    if (spans.isEmpty()) return@mapNotNull null
+
+                    val whole = (node["text"] as? JsonPrimitive)?.content.orEmpty()
+                    val spelled =
+                        spans.joinToString("") { span ->
+                            ((span as? JsonObject)?.get("text") as? JsonPrimitive)?.content.orEmpty()
+                        }
+
+                    if (whole == spelled) {
+                        null
+                    } else {
+                        val id = (node["id"] as? JsonPrimitive)?.content ?: "?"
+                        TckFinding(
+                            "text-spans",
+                            endpoint.path,
+                            "text \"$id\" reads \"$whole\" flat and \"$spelled\" through its spans — a client sees one or the other",
+                        )
+                    }
+                }
+        }
 
     // Conditional delivery: a repeat with the same ETag must answer 304 with no body (SPEC.md §16.2).
     private suspend fun etagRevalidation(): List<TckFinding> =
@@ -603,6 +637,7 @@ class TckRunner(
         const val MAX_PAGES = 50
         const val IDEMPOTENCY_HEADER = "Idempotency-Key"
         const val UPDATES_KIND = "updates_stream"
+        const val TEXT_TYPE = "text"
 
         // The kinds that change domain state and therefore need an idempotency key (SPEC.md §16.5).
         val STATE_CHANGING_KINDS = setOf("submit", "wizard_resume")
