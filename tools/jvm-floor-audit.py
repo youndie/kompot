@@ -55,6 +55,10 @@ for path in modules:
         attributes = variant.get("attributes", {})
         if attributes.get("org.gradle.category") != "library":
             continue
+        # Android variants are skipped on purpose: they carry java-api/java-runtime usage like a jvm
+        # one, and no org.gradle.jvm.version at all, because what bounds an Android consumer is
+        # minSdk rather than a JVM runtime. Asking them for a floor they do not have would fail every
+        # publication for a rule that does not apply to them.
         if attributes.get("org.jetbrains.kotlin.platform.type") not in (None, "jvm"):
             continue
         if not any(file["url"].endswith(".jar") for file in variant.get("files", [])):

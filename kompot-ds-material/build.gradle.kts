@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
     id("kompot.publishing")
 }
 
@@ -9,6 +10,11 @@ plugins {
 // open string — see SPEC.md §6.
 kotlin {
     jvm()
+    androidLibrary {
+        namespace = "io.github.youndie.kompot.ds.material"
+        compileSdk = 36
+        minSdk = 24
+    }
     iosX64()
     iosArm64()
     iosSimulatorArm64()

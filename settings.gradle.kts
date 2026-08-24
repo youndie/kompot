@@ -7,6 +7,20 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        // The Android Gradle plugin is published here and nowhere else. Filtered like every
+        // third-party repository in this file: an unfiltered one takes part in resolving EVERY
+        // plugin, and when it is unreachable Gradle disables it and fails plugins it never served.
+        //
+        // Three groups rather than com.android alone: the plugin's own classpath reaches into
+        // androidx.databinding and com.google.*, and a filter that admits the plugin but not what it
+        // is made of fails at the same point with a longer message.
+        google {
+            content {
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.google")
+            }
+        }
     }
 }
 

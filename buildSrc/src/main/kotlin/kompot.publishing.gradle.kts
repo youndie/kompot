@@ -79,6 +79,21 @@ plugins.withId("org.jetbrains.kotlin.multiplatform") {
     }
 }
 
+// An .aar leaves the build named after its module and nothing else — kompot-core.aar, with no
+// version in it at all. That is the defect a jar had until the archive tasks were made to name their
+// output from the published version: two releases put identically named files on a consumer's
+// classpath, and anything reading file names rather than coordinates cannot tell them apart.
+//
+// Matched by name rather than by type: the AGP classes are not on this plugin's classpath. And the
+// whole file name is set rather than its base and version parts, because the task that packages an
+// aar composes the name itself and ignores them.
+//
+// The lint variant of the same task keeps its own name: nothing publishes it, and a second file
+// called the same thing in the same build is how a task ends up overwriting another one's output.
+tasks.matching { it.name.matches(Regex("^bundle.*Aar$")) && !it.name.contains("LocalLint") }.configureEach {
+    (this as AbstractArchiveTask).archiveFileName.set("${project.name}-android-${project.version}.aar")
+}
+
 publishing {
     repositories {
         maven {

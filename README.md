@@ -5,6 +5,7 @@
 [![what a consumer gets](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-core.svg)](https://github.com/youndie/proba)
 
 ![jvm](https://img.shields.io/badge/jvm-DB413D?style=flat)
+![android](https://img.shields.io/badge/android-3DDC84?style=flat)
 ![ios](https://img.shields.io/badge/ios-CDCDCD?style=flat)
 ![wasmJs](https://img.shields.io/badge/wasmJs-624FE8?style=flat)
 
@@ -238,13 +239,19 @@ bug so easy to miss.
 
 ### 🎯 Targets
 
-Every protocol and client module publishes for **JVM, the three iOS targets and `wasmJs`**, so the
-same screens are drawn on a desktop, on a phone and in a browser without a line of the wire changing.
-There is no `expect`/`actual` anywhere in the toolkit — the modules are common code — which is why a
-target costs a declaration rather than a port.
+Every protocol and client module publishes for **JVM, Android, the three iOS targets and `wasmJs`**,
+so the same screens are drawn on a desktop, on a phone and in a browser without a line of the wire
+changing. There is no `expect`/`actual` anywhere in the toolkit — the modules are common code — which
+is why a target costs a declaration rather than a port.
 
-Three modules stay off the browser and off iOS on purpose, and it is worth naming them so a
-deployment can plan around it rather than discover it:
+Android is the newest of them, and it is worth saying what its absence used to do rather than only
+that it is there. Nothing failed: an Android consumer resolved the **desktop** variant, because
+Gradle will hand an `androidJvm` consumer a `jvm` artefact when the producer publishes no android
+one. It compiled, and the app then carried a client built against desktop Compose beside its own
+android Compose. Now the same build receives `kompot-client-android` and an `.aar`.
+
+Three modules stay off the browser, off iOS and off Android on purpose, and it is worth naming them
+so a deployment can plan around it rather than discover it:
 
 | module | why |
 |---|---|

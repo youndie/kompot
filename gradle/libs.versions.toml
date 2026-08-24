@@ -1,4 +1,5 @@
 [versions]
+androidGradlePlugin = "9.3.1"
 kotlin = "2.4.10"
 ktor = "3.5.2"
 ksp = "2.3.11"
@@ -51,6 +52,10 @@ kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
 
 [plugins]
+# The Kotlin Multiplatform flavour of AGP: it adds an android target to a kotlin{} block rather than
+# asking a module to be an Android library that happens to share code, which is the wrong way round
+# for a toolkit whose modules are common code with no expect/actual anywhere.
+androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "androidGradlePlugin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     id("kompot.publishing")
@@ -7,6 +8,11 @@ plugins {
 
 kotlin {
     jvm("desktop")
+    androidLibrary {
+        namespace = "io.github.youndie.kompot.theme.client"
+        compileSdk = 36
+        minSdk = 24
+    }
     wasmJs { browser() }
 
     sourceSets {
