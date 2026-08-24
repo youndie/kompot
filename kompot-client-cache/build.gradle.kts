@@ -18,7 +18,10 @@ kotlin {
             dependencies {
                 api(projects.kompotCore)
                 implementation(libs.kotlinx.serialization.json)
-                implementation(libs.kotlinx.coroutines.core)
+                // api and not implementation: the public API of this module hands the type out, so a consumer
+                // that cannot name it cannot call the function. The build, the tests and the publish stay green
+                // either way — only somebody compiling against the artefact finds out (see #70).
+                api(libs.kotlinx.coroutines.core)
             }
         }
         commonTest {

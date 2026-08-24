@@ -10,6 +10,13 @@ needs nothing but the Kotlin standard library. Only a consumer finds out, with
 
 and only if that consumer does not already name the module itself for other reasons.
 
+What it does NOT cover, so that nobody reads a clean run as more than it is: dependencies outside
+io.github.youndie. Mapping androidx.compose.foundation.layout.PaddingValues to the artefact that
+provides it needs a resolved classpath, and this script has only the sources and ~/.m2 — so a public
+signature handing out a third-party type from an `implementation` dependency passes here and fails at
+a consumer. That gap is covered from the other side, by a consumer-side reader in the publish
+workflow, and it is where #70 was found.
+
 Run against a local publication:
 
     ./gradlew publishToMavenLocal -PVERSION=<v>
