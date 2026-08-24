@@ -40,9 +40,16 @@ kotlin {
             implementation(projects.kompotCommands)
 
             api(libs.compose.runtime)
-            implementation(libs.compose.foundation)
+            // api and not implementation: the public API of this module hands the type out, so a consumer
+            // that cannot name it cannot call the function. The build, the tests and the publish stay green
+            // either way — only somebody compiling against the artefact finds out (see #70).
+            api(libs.compose.foundation)
             implementation(libs.compose.material3)
             api(libs.compose.ui)
+            // NOT api, even though a consumer-side reader flagged five compose-resources types as
+            // unreachable: they occur only in ActualResourceCollectorsKt, the accessor file Compose
+            // Resources generates for this module's own resources. Public in the bytecode, invisible
+            // to a Kotlin consumer, and nothing in the API hands one out.
             implementation(libs.compose.components.resources)
             implementation(libs.compose.components.ui.tooling.preview)
         }

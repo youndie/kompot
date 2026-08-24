@@ -29,7 +29,10 @@ kotlin {
             implementation(libs.compose.foundation)
             api(libs.compose.ui)
 
-            implementation(libs.coil3.compose)
+            // api and not implementation: the public API of this module hands the type out, so a consumer
+            // that cannot name it cannot call the function. The build, the tests and the publish stay green
+            // either way — only somebody compiling against the artefact finds out (see #70).
+            api(libs.coil3.compose)
             implementation(libs.coil3.network.ktor3)
             implementation(libs.coil3.svg)
         }

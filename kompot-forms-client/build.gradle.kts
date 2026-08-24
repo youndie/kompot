@@ -23,11 +23,14 @@ kotlin {
             // KompotComponentRenderer.Render принимает FormController в сигнатуре, и рендереры полей
             // сами читают/пишут состояние формы через FormController.collectFieldState и т.п.
             api(projects.formCore)
+            // NOT api, though the same reader flagged four of its types: every mention is inside a
+            // synthetic class inlining left behind — AmountInputRenderer$Render$$inlined$collectFieldState$1
+            // and lambdas like it. A consumer calling these renderers names none of them.
             implementation(projects.formStandard)
 
             api(libs.compose.runtime)
             implementation(libs.compose.foundation)
-            implementation(libs.compose.material3)
+            api(libs.compose.material3)
             api(libs.compose.ui)
         }
 

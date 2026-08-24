@@ -25,7 +25,10 @@ kotlin {
             api(projects.kompotTheme)
 
             implementation(libs.compose.runtime)
-            implementation(libs.compose.material3)
+            // api and not implementation: the public API of this module hands the type out, so a consumer
+            // that cannot name it cannot call the function. The build, the tests and the publish stay green
+            // either way — only somebody compiling against the artefact finds out (see #70).
+            api(libs.compose.material3)
             implementation(libs.compose.ui)
         }
 
