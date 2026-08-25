@@ -10,6 +10,11 @@ plugins {
 
 kotlin {
     jvm("desktop")
+    // Two Apple targets rather than the three the protocol modules carry: compose.runtime published
+    // its last iosX64 artefact at 1.11.0-alpha01, so an Intel simulator is not reachable for anything
+    // that depends on Compose (see the Targets section of the readme).
+    iosArm64()
+    iosSimulatorArm64()
     androidLibrary {
         namespace = "io.github.youndie.kompot.ds.material.compose"
         compileSdk = 36
