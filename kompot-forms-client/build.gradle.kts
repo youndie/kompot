@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
     kotlin("plugin.serialization")
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
@@ -9,6 +10,11 @@ plugins {
 
 kotlin {
     jvm("desktop")
+    androidLibrary {
+        namespace = "io.github.youndie.kompot.forms.client"
+        compileSdk = 36
+        minSdk = 24
+    }
     wasmJs { browser() }
 
     sourceSets {

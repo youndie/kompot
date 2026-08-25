@@ -2,6 +2,7 @@ import org.gradle.kotlin.dsl.kotlin
 
 plugins {
     kotlin("multiplatform")
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
     kotlin("plugin.serialization")
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
@@ -9,6 +10,16 @@ plugins {
 }
 kotlin {
     jvm("desktop")
+    androidLibrary {
+        namespace = "io.github.youndie.kompot.client"
+        compileSdk = 36
+        minSdk = 24
+        // The common tests run on this target too. They pass on jvm already and the modules are
+        // common code with no expect/actual, so this is not about a second answer — it is about the
+        // target that has none: without it the plugin skips them with a warning, and a suite nobody
+        // runs on a platform is the same silence as a suite that does not exist.
+        withHostTest {}
+    }
     wasmJs { browser() }
 
     sourceSets {
