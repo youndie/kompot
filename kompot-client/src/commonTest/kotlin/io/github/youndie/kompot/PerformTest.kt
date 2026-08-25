@@ -60,7 +60,7 @@ class PerformTest {
         }
 
     @Test
-    fun `the original action is forwarded synchronously, before the send resolves`() =
+    fun `the original action is forwarded synchronously before the send resolves`() =
         runTest {
             var forwarded: KompotAction? = null
             val action = PerformAction(url = "/tasks/move", payload = mapOf("taskId" to TestValue("T-42")))
