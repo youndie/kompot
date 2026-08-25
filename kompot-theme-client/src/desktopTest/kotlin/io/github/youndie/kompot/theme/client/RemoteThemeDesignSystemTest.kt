@@ -8,6 +8,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.github.youndie.kompot.KompotDesignSystem
+import io.github.youndie.kompot.KompotSurface
+import io.github.youndie.kompot.KompotSurfaceRoles
+import io.github.youndie.kompot.SurfaceRole
 import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.material3.M3Colors
@@ -24,9 +27,14 @@ private val FallbackColor = Color(0xFF00FF00)
 private val FallbackStyle =
     TextStyle(fontSize = 14.sp, lineHeight = 20.sp, fontWeight = FontWeight(400), letterSpacing = 0.5.sp)
 
+// A surface no toolkit default would produce: the case below is about the WRAPPED design system's
+// answer surviving, and a default-shaped one cannot be told from the default.
+private val FallbackSurface = KompotSurface(container = Color(0xFF102030), content = Color(0xFFEEEEEE))
+
 private class FakeDesignSystem : KompotDesignSystem {
     val requestedColors = mutableListOf<ColorToken>()
     val requestedStyles = mutableListOf<TypographyToken>()
+    val requestedSurfaces = mutableListOf<SurfaceRole>()
 
     @Composable
     override fun resolveColor(token: ColorToken): Color {
@@ -38,6 +46,12 @@ private class FakeDesignSystem : KompotDesignSystem {
     override fun resolveTypography(token: TypographyToken): TextStyle {
         requestedStyles += token
         return FallbackStyle
+    }
+
+    @Composable
+    override fun resolveSurface(role: SurfaceRole): KompotSurface {
+        requestedSurfaces += role
+        return FallbackSurface
     }
 }
 
@@ -142,6 +156,33 @@ class RemoteThemeDesignSystemTest {
 
             waitForIdle()
             assertEquals(FallbackColor, resolved)
+        }
+
+    // The third hook, and the one the overlay forgot. A theme describing colours and nothing else was
+    // answering "the toolkit's own default" for every surface role, discarding what the wrapped design
+    // system said — so a deployment's field, button and read-only affordances reverted to Material's
+    // the moment the theme arrived.
+    //
+    // Invisible in the obvious places: before the theme lands the fallback is returned directly and
+    // everything is right, and a screenshot taken with the theme already present has both sides of the
+    // comparison wrong in the same way.
+    @Test
+    fun `a surface role is answered by the design system the theme wraps`() =
+        runDesktopComposeUiTest {
+            val fallback = FakeDesignSystem()
+            val designSystem =
+                RemoteThemeDesignSystem(
+                    theme = kompotTheme("gold") { light { color(M3Colors.Primary, "#B8860B") } },
+                    fallback = fallback,
+                    darkModeOverride = false,
+                )
+            var resolved: KompotSurface? = null
+
+            setContent { resolved = designSystem.resolveSurface(KompotSurfaceRoles.Field) }
+
+            waitForIdle()
+            assertEquals(FallbackSurface, resolved)
+            assertEquals(listOf(KompotSurfaceRoles.Field), fallback.requestedSurfaces)
         }
 
     @Test

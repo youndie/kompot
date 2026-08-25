@@ -34,6 +34,13 @@ object KompotSurfaceRoles {
     // screen. The renderer composes the role from the variant the server sent, so a design system
     // answers "button.quiet" the way it answers "button".
     fun button(variant: String?): SurfaceRole = if (variant == null) Button else SurfaceRole("${Button.key}.$variant")
+
+    // The same composition for a boolean's affordance: a design system answers "checkbox_input.switch"
+    // the way it answers "checkbox_input", and neither string is the protocol's business.
+    val CheckboxInput = SurfaceRole("checkbox_input")
+
+    fun checkboxInput(variant: String?): SurfaceRole =
+        if (variant == null) CheckboxInput else SurfaceRole("${CheckboxInput.key}.$variant")
 }
 
 // Four slots, each with an explicit "not set". Unspecified means the toolkit's own default for that

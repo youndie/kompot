@@ -8,6 +8,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.github.youndie.kompot.KompotDesignSystem
+import io.github.youndie.kompot.KompotSurface
+import io.github.youndie.kompot.SurfaceRole
 import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.theme.KompotTextStyle
@@ -44,6 +46,17 @@ class RemoteThemeDesignSystem(
         val overrides = theme.styleFor(token) ?: return base
         return base.mergeWith(overrides)
     }
+
+    // Delegated rather than left to the interface default, and that default is why this was missing:
+    // a hook with one costs nothing to forget. For colour and typography this class is an overlay —
+    // what the theme does not describe comes from the wrapped design system — and for surfaces it was
+    // the opposite, an empty theme replacing every role with the toolkit's own.
+    //
+    // A server theme says nothing about surfaces today, so there is nothing here to merge: the shape
+    // of a control, the fill of a field, whether a border exists at all are the design system's, and
+    // this class must not stand between a deployment and its own answers.
+    @Composable
+    override fun resolveSurface(role: SurfaceRole): KompotSurface = fallback.resolveSurface(role)
 }
 
 // A property left null keeps the built-in design system's value: a theme may raise a heading's size

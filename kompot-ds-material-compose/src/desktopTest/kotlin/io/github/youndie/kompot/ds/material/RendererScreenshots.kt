@@ -30,6 +30,7 @@ import io.github.youndie.kompot.generated.generatedFormsClientRenderers
 import io.github.youndie.kompot.forms.AmountInputComponent
 import io.github.youndie.kompot.forms.AutocompleteInputComponent
 import io.github.youndie.kompot.forms.CheckboxInputComponent
+import io.github.youndie.kompot.forms.KompotCheckboxVariants
 import io.github.youndie.kompot.forms.ReadOnlyFieldComponent
 import io.github.youndie.kompot.forms.RadioGroupComponent
 import io.github.youndie.kompot.forms.SelectInputComponent
@@ -163,6 +164,34 @@ fun CheckboxInputRendererScreenshot() {
     RendererScreenshotTheme {
         CheckboxInputRenderer().Render(
             component = CheckboxInputComponent(id = "checkbox", fieldId = "agree", label = "I accept the terms"),
+            actionHandler = recordingActionHandler(),
+            formController = controller,
+        )
+    }
+}
+
+// The same field, the same value, the other promise: a switch takes effect now and a checkbox takes
+// effect on submit, which is what the variant exists to let a server say.
+@ViddikScreenshot(name = "CheckboxInput - the switch variant", group = "Renderer")
+@Composable
+fun CheckboxInputSwitchVariantScreenshot() {
+    val controller =
+        remember {
+            FormController(
+                schema = FormSchema(formId = "screenshot", fields = listOf(CheckboxFieldDefinition(fieldId = "roaming"))),
+                initialValues = mapOf("roaming" to BooleanValue(true)),
+            )
+        }
+
+    RendererScreenshotTheme {
+        CheckboxInputRenderer().Render(
+            component =
+                CheckboxInputComponent(
+                    id = "checkbox",
+                    fieldId = "roaming",
+                    label = "Roaming",
+                    variant = KompotCheckboxVariants.SWITCH,
+                ),
             actionHandler = recordingActionHandler(),
             formController = controller,
         )

@@ -10,7 +10,7 @@ import io.github.youndie.kompot.form.FormSchema
 
     // A stand-in design system: renderers resolve tokens through LocalKompotDesignSystem, and a UI
     // test cares that something rendered and what text it shows, not the exact colour or font.
-private class TestDesignSystem : KompotDesignSystem {
+internal class TestDesignSystem : KompotDesignSystem {
     @Composable
     override fun resolveColor(token: ColorToken): Color = Color.Black
 

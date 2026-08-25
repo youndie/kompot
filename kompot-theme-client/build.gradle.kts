@@ -31,6 +31,10 @@ kotlin {
         val desktopTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                // For the guard that asks which hooks this module's overlay declares itself: Java
+                // reflection cannot tell an inherited default from an override, and that difference
+                // is the whole question.
+                implementation(kotlin("reflect"))
                 // Compose UI-тесты рендерят реальное (офскрин) дерево через Skiko — нужен
                 // рантайм текущей ОС, а не только API тестового фреймворка.
                 implementation(compose.desktop.currentOs)

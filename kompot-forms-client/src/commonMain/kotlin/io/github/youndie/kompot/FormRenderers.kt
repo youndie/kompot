@@ -20,6 +20,7 @@ import kotlinx.coroutines.delay
 import io.github.youndie.kompot.forms.AmountInputComponent
 import io.github.youndie.kompot.forms.AutocompleteInputComponent
 import io.github.youndie.kompot.forms.CheckboxInputComponent
+import io.github.youndie.kompot.forms.KompotCheckboxVariants
 import io.github.youndie.kompot.forms.ReadOnlyFieldComponent
 import io.github.youndie.kompot.forms.RadioGroupComponent
 import io.github.youndie.kompot.forms.SelectInputComponent
@@ -258,13 +259,17 @@ class CheckboxInputRenderer : KompotComponentRenderer<CheckboxInputComponent> {
                     }.padding(vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Checkbox(
-                checked = isChecked,
-                onCheckedChange = { checked ->
-                    formController.onValueChanged(component.fieldId, BooleanValue(checked))
-                    formController.requestPatchIfNeeded(component.fieldId)
-                },
-            )
+            val toggle = { checked: Boolean ->
+                formController.onValueChanged(component.fieldId, BooleanValue(checked))
+                formController.requestPatchIfNeeded(component.fieldId)
+            }
+                // The one variant this renderer knows. An unfamiliar word draws a checkbox rather than
+                // failing — the same degradation an unknown component gets, one field down.
+            if (component.variant == KompotCheckboxVariants.SWITCH) {
+                Switch(checked = isChecked, onCheckedChange = toggle)
+            } else {
+                Checkbox(checked = isChecked, onCheckedChange = toggle)
+            }
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = component.label)
         }
