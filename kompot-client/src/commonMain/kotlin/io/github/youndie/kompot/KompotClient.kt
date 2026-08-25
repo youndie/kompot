@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -72,6 +74,14 @@ fun List<KompotModifierNode>.toComposeModifier(): Modifier {
                 // what Compose already does without a size modifier.
                 val widthDp = node.widthDp
                 val heightDp = node.heightDp
+                // The ceiling goes on FIRST, and the order is the whole of it. Constraints travel
+                // outward-in: widthIn placed first narrows what the extent below it may fill, so
+                // fillMaxWidth then fills 400. Placed after, it receives constraints whose minimum is
+                // already the window — fillMaxWidth fixed both ends at 1200 — and a maximum below the
+                // minimum is coerced back up. Written that way round the cap reads correctly, changes
+                // nothing, and was measured at 1200.dp against a 400.dp ceiling.
+                node.maxWidthDp?.let { mod = mod.widthIn(max = it.dp) }
+                node.maxHeightDp?.let { mod = mod.heightIn(max = it.dp) }
                 when {
                     widthDp != null -> mod = mod.width(widthDp.dp)
                     node.width == SizeType.Fill -> mod = mod.fillMaxWidth()
