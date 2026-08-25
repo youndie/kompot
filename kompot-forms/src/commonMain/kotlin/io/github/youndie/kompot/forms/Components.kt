@@ -55,6 +55,15 @@ data class CheckboxInputComponent(
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val fieldId: String,
     val label: String,
+    // Which affordance a boolean wears, and it is not decoration: on both phones a switch takes
+    // effect now and a checkbox takes effect on submit, so a settings screen drawn as checkboxes
+    // promises the wrong thing. The state is the same either way — form-standard's boolean_value
+    // carries it — and only the look and the promise differ.
+    //
+    // An open string, like button's variant and like a colour token: the server names a kind and the
+    // client decides what it looks like. "switch" is the one word the standard renderer knows; any
+    // other degrades to a checkbox rather than failing, which is what §2.1 asks of an unknown name.
+    val variant: String? = null,
 ) : KompotComponent
 
 @Serializable
@@ -123,3 +132,10 @@ data class ReadOnlyFieldComponent(
 data class SubmitFormAction(
     val formId: String,
 ) : KompotAction
+
+// The words a server may send as a checkbox_input variant that the standard renderer acts on. Here
+// rather than in the client because the SERVER is the side that has to spell it, and a constant is
+// how a shared string stops being spelled twice.
+object KompotCheckboxVariants {
+    const val SWITCH = "switch"
+}

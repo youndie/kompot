@@ -28,6 +28,7 @@ class SerializersTest {
                 TextInputComponent(id = "1", fieldId = "search", label = "Search", uppercase = true),
                 AmountInputComponent(id = "2", fieldId = "amount", label = "Amount", currencyFromField = "bucket"),
                 CheckboxInputComponent(id = "3", fieldId = "auto", label = "Auto"),
+                CheckboxInputComponent(id = "3s", fieldId = "roaming", label = "Roaming", variant = KompotCheckboxVariants.SWITCH),
                 AutocompleteInputComponent(id = "4", fieldId = "b", label = "Recipient", dataSourceId = "search"),
                 SelectInputComponent(id = "5", fieldId = "status", label = "Status", options = listOf(SelectOption("a", "A"))),
                 RadioGroupComponent(id = "6", fieldId = "commission", label = "Surcharge", options = listOf(SelectOption("a", "A"))),
