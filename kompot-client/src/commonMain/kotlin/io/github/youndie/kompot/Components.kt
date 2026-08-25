@@ -511,13 +511,14 @@ class UnknownComponentRenderer : KompotComponentRenderer<UnknownComponent> {
         actionHandler: KompotActionHandler,
         formController: FormController,
     ) {
+        val sink = LocalKompotDegradationSink.current
         val fallback = component.fallback
         if (fallback == null) {
-            println("[Kompot] Unknown component \"${component.originalType}\" skipped")
+            sink.onUnknown(KompotDegradationKind.UNKNOWN_COMPONENT, component.originalType, drawnAsFallback = false)
             return
         }
 
-        println("[Kompot] Unknown component \"${component.originalType}\" drawn through its fallback")
+        sink.onUnknown(KompotDegradationKind.UNKNOWN_COMPONENT, component.originalType, drawnAsFallback = true)
         LocalKompotRegistry.current.RenderNode(fallback, actionHandler, formController)
     }
 }
@@ -670,9 +671,22 @@ class KompotRegistry(
         @Suppress("UNCHECKED_CAST")
         val renderer = renderers[actual::class] as? KompotComponentRenderer<KompotComponent>
 
+            // Wrapped here because this is the single point every render passes through, so an action
+            // no renderer understands is reported once wherever it was raised. Already-wrapped handlers
+            // are passed on as they are: a child receives its parent's wrapper, and wrapping again
+            // would report a tap once per level of the tree.
+        val sink = LocalKompotDegradationSink.current
+        val reporting =
+            if (actionHandler is ReportingActionHandler) actionHandler else ReportingActionHandler(actionHandler, sink)
+
         if (renderer != null) {
-            renderer.Render(actual, actionHandler, formController)
+            renderer.Render(actual, reporting, formController)
         } else {
+            sink.onUnknown(
+                KompotDegradationKind.UNRENDERABLE_COMPONENT,
+                actual::class.simpleName ?: "unknown",
+                drawnAsFallback = true,
+            )
             UnknownComponentPlaceholder()
         }
     }
