@@ -74,6 +74,23 @@ data class TckConfig(
     // null means the run stays anonymous, and every check that needs a token is skipped.
     val loginPath: String? = null,
     val loginValues: Map<String, JsonElement> = emptyMap(),
+    // The whole request body of the login call, when the way in is not an ordinary form. The toolkit
+    // never required it to be one — kompot-auth is a single update_session action and everything
+    // around it belongs to the application — so a server exchanging a one-time code for a session
+    // through a plain DTO is conformant, and the envelope built from loginValues does not fit it.
+    //
+    // Set, it is posted verbatim and loginValues is ignored; unset, the envelope is what it always
+    // was. What comes BACK is unchanged either way: an update_session carrying an accessToken, which
+    // is the part §12 makes a rule.
+    val loginBody: JsonElement? = null,
+    // A session the kit is handed rather than one it obtains. For a server whose login cannot be
+    // reached from a test at all — an external identity provider, a second factor in somebody's hand
+    // — there is otherwise no way to check anything behind it.
+    //
+    // It does NOT become a header the transport always adds, and that distinction is the whole care
+    // of it: one check asks a secured endpoint for a 401 with no token at all, and a token applied
+    // unconditionally would turn that check green while proving the opposite.
+    val bearerToken: String? = null,
     // Bodies for submit endpoints: what exactly to send is the application's domain, and the kit
     // cannot guess it. The idempotency check runs only for the paths listed here.
     val submitPayloads: Map<String, JsonElement> = emptyMap(),
@@ -172,17 +189,25 @@ class TckRunner(
     // Not a check of the protocol but a precondition of the rest: without a token the secured
     // endpoints are out of reach.
     private suspend fun authenticate(): List<TckFinding> {
+        // A token handed over skips the exchange entirely — there is nothing to ask for and nothing
+        // to check about the asking.
+        config.bearerToken?.let {
+            token = it
+            return emptyList()
+        }
+
         val loginPath = config.loginPath ?: return emptyList()
-        if (config.loginValues.isEmpty()) return emptyList()
+        if (config.loginBody == null && config.loginValues.isEmpty()) return emptyList()
 
         val body =
-            buildJsonObjectOf(
-                "formId" to JsonPrimitive("login"),
-                "fieldId" to JsonPrimitive("login"),
-                "values" to JsonObject(config.loginValues),
-            )
+            config.loginBody
+                ?: buildJsonObjectOf(
+                    "formId" to JsonPrimitive("login"),
+                    "fieldId" to JsonPrimitive("login"),
+                    "values" to JsonObject(config.loginValues),
+                )
         visited += "POST $loginPath"
-        val response = transport.request("POST", loginPath, body = json.encodeToString(JsonObject.serializer(), body))
+        val response = transport.request("POST", loginPath, body = json.encodeToString(JsonElement.serializer(), body))
 
         if (response.status != 200) {
             return listOf(TckFinding("auth", loginPath, "login failed: ${response.status} ${response.body.take(200)}"))
