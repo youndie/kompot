@@ -34,6 +34,31 @@ class SizeModifierSerializationTest {
         assertEquals("""{"type":"size","width":"Fill"}""", encoded)
     }
 
+    // The ceiling travels beside the extent rather than instead of it: "as wide as the window, but no
+    // wider than this" is two facts on one axis, and a payload carrying only one of them is a reading
+    // measure with half its meaning.
+    @Test
+    fun `a maximum travels beside the extent it bounds`() {
+        val node = KompotModifierNode.Size(width = SizeType.Fill, maxWidthDp = 800)
+
+        val encoded = json.encodeToString(KompotModifierNode.serializer(), node)
+
+        assertEquals("""{"type":"size","width":"Fill","maxWidthDp":800}""", encoded)
+        assertEquals(node, json.decodeFromString(KompotModifierNode.serializer(), encoded))
+    }
+
+    @Test
+    fun `a payload written before the maximum still decodes with none`() {
+        val node =
+            json.decodeFromString(
+                KompotModifierNode.serializer(),
+                """{"type":"size","width":"Fill","widthDp":320}""",
+            )
+
+        assertEquals(KompotModifierNode.Size(width = SizeType.Fill, widthDp = 320), node)
+        assertEquals(null, (node as KompotModifierNode.Size).maxWidthDp)
+    }
+
     @Test
     fun `a reader that does not know the dp fields still reads the node`() {
         // What an older client does with a newer payload: unknown keys are dropped rather than

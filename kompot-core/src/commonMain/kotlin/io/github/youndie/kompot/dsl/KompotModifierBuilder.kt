@@ -48,6 +48,16 @@ class KompotModifierBuilder {
         updateOrAddSizeNode { it.copy(widthDp = width, heightDp = height) }
     }
 
+    // A ceiling rather than an extent: the node keeps whatever width it already had — usually Fill —
+    // and stops growing past this. `fillMaxWidth(); maxWidth(800)` is the reading measure.
+    fun maxWidth(dp: Int) {
+        updateOrAddSizeNode { it.copy(maxWidthDp = dp) }
+    }
+
+    fun maxHeight(dp: Int) {
+        updateOrAddSizeNode { it.copy(maxHeightDp = dp) }
+    }
+
     fun weight(value: Float) {
         nodes += KompotModifierNode.Weight(value)
     }
