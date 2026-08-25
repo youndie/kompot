@@ -239,10 +239,21 @@ bug so easy to miss.
 
 ### 🎯 Targets
 
-Every protocol and client module publishes for **JVM, Android, the three iOS targets and `wasmJs`**,
-so the same screens are drawn on a desktop, on a phone and in a browser without a line of the wire
-changing. There is no `expect`/`actual` anywhere in the toolkit — the modules are common code — which
-is why a target costs a declaration rather than a port.
+Every protocol module publishes for **JVM, Android, the three iOS targets and `wasmJs`**, and every
+Compose client module for the same set minus one: **`iosX64` is not reachable for anything that
+depends on Compose**, because `compose.runtime` published its last artefact for it at
+`1.11.0-alpha01`. An Intel simulator is where that ends; a device and an Apple-silicon simulator are
+not.
+
+So the same screens are drawn on a desktop, on a phone, on an iPhone and in a browser without a line
+of the wire changing. There is no `expect`/`actual` anywhere in the toolkit — the modules are common
+code — which is why a target costs a declaration rather than a port.
+
+The Compose half is built against **Compose Multiplatform 1.11.1** and **material3 1.11.0-alpha07**,
+and the second number is not sloppiness: that line has no stable material3 at all. It is worth
+knowing because mixing lines fails late — a consumer on 1.12.0 resolves foundation and runtime to
+1.12.0 while material3 stays where these modules put it, and the pair compiles, starts, and throws
+`AbstractMethodError` at the first screen with a text field on it.
 
 Android is the newest of them, and it is worth saying what its absence used to do rather than only
 that it is there. Nothing failed: an Android consumer resolved the **desktop** variant, because
@@ -251,7 +262,8 @@ one. It compiled, and the app then carried a client built against desktop Compos
 android Compose. Now the same build receives `kompot-client-android` and an `.aar`.
 
 Three modules stay off the browser, off iOS and off Android on purpose, and it is worth naming them
-so a deployment can plan around it rather than discover it:
+so a deployment can plan around it rather than discover it — a deployment plans around a documented
+absence and stumbles into an undocumented one:
 
 | module | why |
 |---|---|

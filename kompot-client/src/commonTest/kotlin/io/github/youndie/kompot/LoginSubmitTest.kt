@@ -61,7 +61,7 @@ class LoginSubmitTest {
         }
 
     @Test
-    fun `the original SubmitFormAction is always forwarded synchronously, even before submit resolves`() =
+    fun `the original SubmitFormAction is forwarded synchronously even before submit resolves`() =
         runTest {
             val controller = FormController(loginSubmitTestSchema())
             controller.onValueChanged("password", TestValue("1234"))
