@@ -15,6 +15,12 @@
         "clause": {
           "type": "string"
         },
+        "holds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "title": {
           "type": "string"
         },
