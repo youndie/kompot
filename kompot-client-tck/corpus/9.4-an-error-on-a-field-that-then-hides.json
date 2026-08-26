@@ -1,0 +1,83 @@
+{
+  "id": "9.4-an-error-on-a-field-that-then-hides",
+  "clause": "§9.4",
+  "title": "a rule that already failed stops mattering when its field goes away",
+  "why": "the state decides whether a submit can be blocked by a field nobody can see or correct — a screen that refuses to send and shows no error anywhere is a dead end",
+  "form": {
+    "formId": "f",
+    "fields": [
+      {
+        "type": "text_field",
+        "fieldId": "kind",
+        "rules": []
+      },
+      {
+        "type": "text_field",
+        "fieldId": "other_reason",
+        "rules": [
+          {
+            "type": "regex",
+            "pattern": "^[A-Z]{3}$",
+            "errorMessage": "Three capitals"
+          }
+        ],
+        "visibleIf": {
+          "type": "equals",
+          "fieldId": "kind",
+          "expectedValue": {
+            "type": "text_value",
+            "text": "other"
+          }
+        }
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": "set",
+      "fieldId": "kind",
+      "value": {
+        "type": "text_value",
+        "text": "other"
+      }
+    },
+    {
+      "step": "set",
+      "fieldId": "other_reason",
+      "value": {
+        "type": "text_value",
+        "text": "a"
+      }
+    },
+    {
+      "step": "blur",
+      "fieldId": "other_reason"
+    },
+    {
+      "step": "set",
+      "fieldId": "kind",
+      "value": {
+        "type": "text_value",
+        "text": "salary"
+      }
+    },
+    {
+      "step": "submit"
+    }
+  ],
+  "expect": {
+    "visibleFields": [
+      "kind"
+    ],
+    "noErrors": [
+      "other_reason"
+    ],
+    "payloadBlocked": false,
+    "payload": {
+      "kind": {
+        "type": "text_value",
+        "text": "salary"
+      }
+    }
+  }
+}
