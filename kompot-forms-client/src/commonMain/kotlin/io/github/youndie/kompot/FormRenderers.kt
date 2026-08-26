@@ -26,6 +26,7 @@ import io.github.youndie.kompot.forms.RadioGroupComponent
 import io.github.youndie.kompot.forms.SelectInputComponent
 import io.github.youndie.kompot.forms.TextInputComponent
 import io.github.youndie.kompot.registry.KompotComponentMarker
+import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.collectFieldState
 import io.github.youndie.kompot.form.collectVisibility
@@ -45,9 +46,23 @@ class ReadOnlyFieldRenderer : KompotComponentRenderer<ReadOnlyFieldComponent> {
         actionHandler: KompotActionHandler,
         formController: FormController,
     ) {
+        val fieldId = component.fieldId
+        // Bound only when the server said so. Reading the controller for an unbound component would
+        // be harmless and wrong: a form has no field of that name, and "no value" would silently
+        // become an empty box where the server's own text used to be.
+        val bound =
+            if (fieldId == null) {
+                null
+            } else {
+                val isVisible by formController.collectVisibility(fieldId)
+                if (!isVisible) return
+                val state by formController.collectFieldState<FieldValue>(fieldId)
+                state.value?.plainValue
+            }
+
         val surface = LocalKompotDesignSystem.current.resolveSurface(KompotSurfaceRoles.ReadOnlyField)
         OutlinedTextField(
-            value = component.value,
+            value = bound ?: component.value,
             onValueChange = {},
             enabled = false,
             readOnly = true,

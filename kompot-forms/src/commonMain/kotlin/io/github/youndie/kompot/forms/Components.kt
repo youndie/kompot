@@ -114,8 +114,17 @@ data class RadioGroupComponent(
     val options: List<SelectOption>,
 ) : KompotComponent
 
-// A non-editable "label plus value" field. It is not bound to the FormController: the value arrives
-// wholly from the server at render time, like ordinary text but styled as an input.
+// A non-editable "label plus value" field: like ordinary text, styled as an input.
+//
+// Unbound by default — the value arrives from the server at render time — and bound when it names a
+// fieldId. That second half exists because a value the SERVER computes as the form changes had
+// nowhere to live: every component a patch can reach is editable, so a running total, a fee, a
+// computed date or a price was either something the person could type into, or correct once and
+// stale after. Fetching a whole new response to show it loses focus and scroll on every change,
+// which is what FormPatch exists to avoid.
+//
+// Bound means bound: the field is declared in the schema like any other, follows visibleIf, receives
+// patches and travels in the payload. Only the typing is missing.
 @Serializable
 @SerialName("read_only_field")
 @KompotComponentMarker
@@ -123,8 +132,18 @@ data class ReadOnlyFieldComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val label: String,
+    // What to draw before anything is bound, and what a client released before `fieldId` draws
+    // always. Not a fallback for a missing value but the first paint: a bound field with nothing in
+    // it yet shows this rather than an empty box.
     val value: String,
     val helperText: String? = null,
+    // The field of the form this displays. Absent — today's behaviour exactly, so every existing
+    // tree keeps its meaning.
+    //
+    // What is drawn is the value's plainValue. A server that wants a formatted string sends a
+    // text_value: §14 makes the server the only party allowed to produce text, and a price with a
+    // currency and a separator is text.
+    val fieldId: String? = null,
 ) : KompotComponent
 
 @Serializable
