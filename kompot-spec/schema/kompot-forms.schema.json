@@ -252,6 +252,12 @@
             "string",
             "null"
           ]
+        },
+        "fieldId": {
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "required": [

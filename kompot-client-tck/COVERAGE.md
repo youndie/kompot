@@ -23,6 +23,7 @@
 | `9.5.4` | `9.5-blur-raises-the-error-the-rule-carries` |  |
 | `9.5.5` | `9.5-validation-waits-for-blur`, `9.5-blur-raises-the-error-the-rule-carries` |  |
 | `9.5.6` | `9.5-required-before-regex-blocks-an-empty-value`, `9.3-required-if-follows-a-neighbour`, `9.5-an-amount-over-a-balance-is-refused` |  |
+| `9.6.5` | — | отрисовка: тест рендерера `BoundReadOnlyFieldTest`, не корпус |
 | `9.6.1` | `9.6-a-patch-is-requested-once-by-the-field-that-triggers-it` |  |
 | `9.6.2` | `9.6-a-field-that-triggers-no-patch-sends-nothing` |  |
 | `9.6.3` | `9.6-a-patch-replaces-a-value`, `9.6-a-patch-clears-what-it-names` |  |
@@ -39,5 +40,5 @@
 | `9.8.1` | — | структура схемы, не решение клиента |
 | `9.8.2` | — | адаптер не умеет источники данных |
 
-Корпус держит 19 из 33; ещё 14 держит не он.
+Корпус держит 19 из 34; ещё 15 держит не он.
 Остальные — 0 — не держит никто.
