@@ -34,4 +34,17 @@ interface KompotFormClient {
 
     // The map a submit would carry, or null when validation blocks it (§9.4, §9.5).
     fun payload(): JsonObject?
+
+    // What the client SENT, in order, as JSON objects: today the patch requests a field with
+    // triggersPatch causes (§9.6). Everything else the corpus looks at is state the client holds, and
+    // a patch is the one rule that is only observable as an outgoing call — a client that never sends
+    // one, or sends two, or sends the wrong snapshot, has state that looks perfect throughout.
+    //
+    // null, the default, means this adapter does not record them. A case that expects requests is
+    // then reported UNCHECKED rather than passed or failed: a client that cannot answer the question
+    // has not answered it, and an empty list would accuse it of sending nothing.
+    //
+    // Defaulted so that an adapter written before this operation still compiles — the same
+    // compatibility rule the wire keeps for a new field.
+    fun requests(): List<JsonObject>? = null
 }

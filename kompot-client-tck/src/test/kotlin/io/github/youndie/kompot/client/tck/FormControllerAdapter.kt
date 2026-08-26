@@ -7,16 +7,41 @@ import io.github.youndie.kompot.form.FormSchema
 import io.github.youndie.kompot.form.standard.formStandardSerializersModule
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonObject
 
 // The first adapter, and the reason the format is not merely written down: a corpus nobody has run is
 // a document. This one drives form-core the way a Compose screen does — the same calls in the same
 // order — so what the corpus finds is a divergence of the client, not of a test harness.
 class FormControllerAdapter : KompotFormClient {
     private lateinit var controller: FormController
+    private val sent = mutableListOf<JsonObject>()
 
     override fun load(form: JsonObject) {
-        controller = FormController(json.decodeFromJsonElement(FormSchema.serializer(), form))
+        sent.clear()
+        controller =
+            FormController(
+                schema = json.decodeFromJsonElement(FormSchema.serializer(), form),
+                // Recording what the client would send, and answering the way a server that changes
+                // nothing does. An empty patch keeps the case about the REQUEST: a fetcher that also
+                // returned updates would mix the sending rule with the applying one, and §9.6 already
+                // has cases for the second.
+                patchFetcher = { fieldId, values ->
+                    sent +=
+                        buildJsonObject {
+                            put("kind", JsonPrimitive("patch"))
+                            put("fieldId", JsonPrimitive(fieldId))
+                            put("values", JsonObject(values.mapValues { (_, value) -> json.encodeToJsonElement(fieldValue, value) }))
+                        }
+                    FormPatch()
+                },
+                // The patch runs in the controller's own scope through mapLatest; the corpus is
+                // synchronous, so it runs here on a scheduler the case can drain.
+                scope = CoroutineScope(patchDispatcher),
+            )
     }
 
     override fun set(
@@ -24,9 +49,18 @@ class FormControllerAdapter : KompotFormClient {
         value: JsonObject,
     ) {
         controller.onValueChanged(fieldId, json.decodeFromJsonElement(fieldValue, value))
+        controller.requestPatchIfNeeded(fieldId)
     }
 
     override fun blur(fieldId: String) = controller.onFieldBlurred(fieldId)
+
+    override fun requests(): List<JsonObject> {
+        // Everything the controller queued has to have run before the answer is read, or a case would
+        // see the state of a request that is still on its way — which is exactly the shape of bug the
+        // patch rule is about.
+        patchDispatcher.scheduler.advanceUntilIdle()
+        return sent.toList()
+    }
 
     override fun applyPatch(patch: JsonObject) = controller.applyPatch(json.decodeFromJsonElement(FormPatch.serializer(), patch))
 
@@ -44,6 +78,11 @@ class FormControllerAdapter : KompotFormClient {
         }
 
     private companion object {
+        // One dispatcher for the whole adapter: a case sets a value, the controller queues the patch,
+        // and requests() drains it. A real screen has a remembered scope instead.
+        @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+        val patchDispatcher = kotlinx.coroutines.test.UnconfinedTestDispatcher()
+
         val json =
             Json {
                 classDiscriminator = "type"

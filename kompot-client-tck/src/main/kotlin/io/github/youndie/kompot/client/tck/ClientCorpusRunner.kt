@@ -13,14 +13,26 @@ data class ClientFinding(
 data class ClientReport(
     val findings: List<ClientFinding>,
     val casesRun: Int,
+    // Cases whose expectation this adapter cannot answer — it does not implement the operation they
+    // read. Reported apart from findings and apart from passes, because a check that could not run is
+    // not a check that passed, and calling it either would be a lie in one direction or the other.
+    val unchecked: List<ClientFinding> = emptyList(),
 ) {
     val isClean: Boolean get() = findings.isEmpty()
 
     override fun toString(): String =
-        if (isClean) {
-            "Client corpus: $casesRun cases, no violations"
-        } else {
-            "Client corpus: ${findings.size} violations out of $casesRun cases\n" + findings.joinToString("\n")
+        buildString {
+            append(
+                if (isClean) {
+                    "Client corpus: $casesRun cases, no violations"
+                } else {
+                    "Client corpus: ${findings.size} violations out of $casesRun cases\n" + findings.joinToString("\n")
+                },
+            )
+            if (unchecked.isNotEmpty()) {
+                append("\n${unchecked.size} case(s) this adapter cannot answer:\n")
+                append(unchecked.joinToString("\n"))
+            }
         }
 }
 
@@ -34,11 +46,20 @@ class ClientCorpusRunner(
     private val clientFactory: () -> KompotFormClient,
 ) {
     fun run(): ClientReport {
-        val findings = cases.flatMap { case -> runCase(case) }
-        return ClientReport(findings, cases.size)
+        val outcomes = cases.map { case -> runCase(case) }
+        return ClientReport(
+            findings = outcomes.flatMap { it.findings },
+            casesRun = cases.size,
+            unchecked = outcomes.flatMap { it.unchecked },
+        )
     }
 
-    private fun runCase(case: ClientCase): List<ClientFinding> {
+    private data class CaseOutcome(
+        val findings: List<ClientFinding>,
+        val unchecked: List<ClientFinding>,
+    )
+
+    private fun runCase(case: ClientCase): CaseOutcome {
         val client = clientFactory()
         val findings = mutableListOf<ClientFinding>()
         // Counted, not assumed. A conformance kit's one job is to fail when the implementation is
@@ -59,8 +80,10 @@ class ClientCorpusRunner(
                 }
             }
         }.onFailure { failure ->
-            return listOf(ClientFinding(case.id, case.clause, "the case could not be run: $failure"))
+            return CaseOutcome(listOf(ClientFinding(case.id, case.clause, "the case could not be run: $failure")), emptyList())
         }
+
+        val unchecked = mutableListOf<ClientFinding>()
 
         case.expect.visibleFields?.let { expected ->
             checks++
@@ -107,11 +130,34 @@ class ClientCorpusRunner(
             }
         }
 
+        // The one expectation an adapter may be unable to answer at all, so it is the one place the
+        // runner reports something that is neither a pass nor a violation.
+        case.expect.requests?.let { expected ->
+            when (val actual = client.requests()) {
+                null ->
+                    unchecked +=
+                        ClientFinding(
+                            case.id,
+                            case.clause,
+                            "this adapter does not record what the client sends, so the case was not run — see KompotFormClient.requests",
+                        )
+
+                else -> {
+                    checks++
+                    if (actual != expected) {
+                        findings += ClientFinding(case.id, case.clause, "the client sent $actual, expected $expected — ${case.why}")
+                    }
+                }
+            }
+        }
+
         // Inside the case rather than over the whole run: a corpus where one case in twelve is inert
         // reports eleven passes and one silence, and the silence is what a total would hide. An empty
         // `errors: {}` or `noErrors: []` counts as nothing here for the same reason — it is a clause
         // that names no subject.
-        if (checks == 0) {
+        // A case left unrun by a missing operation is not a case that asserted nothing: the first is
+        // the adapter's silence, the second is the corpus's own, and only the second is a defect here.
+        if (checks == 0 && unchecked.isEmpty()) {
             findings +=
                 ClientFinding(
                     case.id,
@@ -120,7 +166,7 @@ class ClientCorpusRunner(
                 )
         }
 
-        return findings
+        return CaseOutcome(findings, unchecked)
     }
 
     companion object {
