@@ -38,6 +38,10 @@ dependencies {
 // rather than by a relative path from someone else's working directory.
 tasks.processResources {
     from("schema") { into("kompot-spec/schema") }
+    // The prose too, and not for reading pleasure: a conformance case names the rule it holds by the
+    // id §9 carries, and until now that id pointed at a document living only in this repository. A
+    // reader on another language got the reference and no way to resolve it.
+    from("SPEC.md") { into("kompot-spec") }
 }
 
 tasks.test {

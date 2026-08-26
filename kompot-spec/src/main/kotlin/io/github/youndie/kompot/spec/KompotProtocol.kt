@@ -13,6 +13,9 @@ object KompotProtocol {
     // between files ("kompot-core.schema.json#/${'$'}defs/X") have an unambiguous base for validators.
     const val ID_PREFIX = "https://kompot.workinprogress.ru/schema/"
 
+    // The specification as it ships in the artefact, beside the schemas it describes.
+    const val SPEC_FILE_NAME = "SPEC.md"
+
     const val PROFILE_FILE_NAME = "kompot.profile.schema.json"
 
     // The wire name of the action that performs an operation on one item. The conformance kit works on

@@ -117,6 +117,15 @@ cannot express — degradation, the two kinds of extensibility, form connectivit
 transport — are written out in [`kompot-spec/SPEC.md`](kompot-spec/SPEC.md), addressed to somebody
 implementing a server on another stack.
 
+Both travel in the artefact — the schemas and the document — because a rule of §9 carries an id a
+conformance case names, and an id whose text lives only in this repository is a reference with
+nothing behind it for anybody reading from another language:
+
+```kotlin
+val rules = KompotSpecResources(root = "kompot-spec").rules()
+rules["9.4.3"] // "Ошибка, поднятая до того, как поле скрылось, перестаёт действовать вместе с полем."
+```
+
 The closed list of types is a property of a **build**, not of the toolkit: an application assembles
 its own spec from these modules plus its own, and gets its own profile. The ten toolkit files come
 out byte-identical either way.

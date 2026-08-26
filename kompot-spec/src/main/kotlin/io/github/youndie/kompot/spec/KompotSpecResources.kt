@@ -37,9 +37,43 @@ class KompotSpecResources(
 
     fun openApi(): JsonObject = readObject("$schemaPath/${KompotProtocol.OPENAPI_FILE_NAME}")
 
+    // The specification itself, as it travels in the artefact. Russian prose (see the readme): the
+    // rules are the machine-readable part of it, and they are below.
+    fun specification(): String = read("$root/${KompotProtocol.SPEC_FILE_NAME}")
+
+    // The numbered rules, by id: "9.4.3" to the sentence that states it. A conformance case names
+    // ids, a finding can quote one, and a report can list the ones nothing holds — all of which need
+    // the text to be reachable from the artefact rather than from somebody's checkout.
+    //
+    // Parsed from the blocks the specification marks as rules rather than from every backticked
+    // number in it: §9 refers to its own clauses constantly, and a reference is not a statement.
+    fun rules(): Map<String, String> {
+        val text = specification()
+        val rules = LinkedHashMap<String, String>()
+
+        RULE_BLOCK.findAll(text).forEach { block ->
+            val body = block.groupValues[1].replace(Regex("\\s+"), " ").trim()
+            val ids = RULE_ID.findAll(body).toList()
+            ids.forEachIndexed { index, match ->
+                val from = match.range.last + 1
+                val to = if (index + 1 < ids.size) ids[index + 1].range.first else body.length
+                rules[match.groupValues[1]] = body.substring(from, to).trim()
+            }
+        }
+        return rules
+    }
+
+    fun rule(id: String): String? = rules()[id]
+
     fun examplesIndex(): JsonObject = readObject("$examplesPath/${KompotProtocol.EXAMPLES_INDEX_FILE_NAME}")
 
     fun example(fileName: String): JsonElement = json.parseToJsonElement(read("$examplesPath/$fileName"))
+
+    private companion object {
+        // A rules paragraph: everything from the marker to the blank line that ends the paragraph.
+        val RULE_BLOCK = Regex("""\*\*Правила\.\*\*(.+?)(?=\n\n)""", RegexOption.DOT_MATCHES_ALL)
+        val RULE_ID = Regex("""`(\d+\.\d+\.\d+)`""")
+    }
 
     private fun readObject(path: String): JsonObject = json.parseToJsonElement(read(path)).jsonObject
 

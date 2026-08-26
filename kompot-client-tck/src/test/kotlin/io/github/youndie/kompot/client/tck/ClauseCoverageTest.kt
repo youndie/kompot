@@ -1,5 +1,6 @@
 package io.github.youndie.kompot.client.tck
 
+import io.github.youndie.kompot.spec.KompotSpecResources
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,14 +17,15 @@ import kotlin.test.assertTrue
 // fail is a case pointing at a rule that no longer exists, because that is how a report starts
 // claiming coverage nobody has.
 class ClauseCoverageTest {
-    private val spec = File("../kompot-spec/SPEC.md")
     private val report = File("COVERAGE.md")
 
-    private val ruleIds: List<String> by lazy {
-        val text = spec.readText()
-        val section = text.substring(text.indexOf("\n## 9. Формы"), text.indexOf("\n## 10."))
-        Regex("`(9\\.\\d+\\.\\d+)`").findAll(section).map { it.groupValues[1] }.distinct().toList()
-    }
+    // Read from the classpath rather than from ../kompot-spec/SPEC.md: the rules are shipped in the
+    // artefact now, and reading them the way a consumer does is the only version of this that also
+    // proves they arrived. The relative path was the same bytes only while somebody remembered to
+    // package them.
+    private val rules: Map<String, String> by lazy { KompotSpecResources(root = "kompot-spec").rules() }
+
+    private val ruleIds: List<String> by lazy { rules.keys.filter { it.startsWith("9.") } }
 
     private fun cases() = ClientCorpusResources.cases()
 
