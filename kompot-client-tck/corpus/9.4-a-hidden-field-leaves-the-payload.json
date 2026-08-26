@@ -1,6 +1,9 @@
 {
   "id": "9.4-a-hidden-field-leaves-the-payload",
   "clause": "§9.4",
+  "holds": [
+    "9.4.2"
+  ],
   "title": "a field whose condition stops holding is neither shown nor submitted, even after a value was typed into it",
   "why": "a value typed before the condition turned false is the one a person cannot see and cannot remove; sending it submits something nobody agreed to",
   "form": {

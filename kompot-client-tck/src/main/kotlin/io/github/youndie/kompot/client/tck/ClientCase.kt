@@ -13,6 +13,13 @@ data class ClientCase(
     val id: String,
     // The clause it holds a client to. A case without one is a case nobody can argue with.
     val clause: String,
+    // The RULES of that clause, by the ids §9 carries: "9.4.3". A clause is a paragraph and holds
+    // several rules, so the clause alone cannot answer "what does the corpus not check" — which is
+    // the only question a coverage report is worth writing for.
+    //
+    // An id no rule has fails the build rather than being ignored: a renumbered rule must not leave a
+    // case silently pointing at nothing, which is how a coverage report starts overstating.
+    val holds: List<String> = emptyList(),
     val title: String,
     // What goes wrong when a client gets this wrong — in a sentence, for whoever reads the failure
     // rather than the case.
