@@ -15,6 +15,27 @@ import kotlin.test.assertTrue
 // Both failures are invisible from the outside — the report is green either way — so they are checked
 // here rather than trusted.
 class ClientCorpusRunnerTest {
+    private class SilentClient : KompotFormClient {
+        override fun load(form: kotlinx.serialization.json.JsonObject) = Unit
+
+        override fun set(
+            fieldId: String,
+            value: kotlinx.serialization.json.JsonObject,
+        ) = Unit
+
+        override fun blur(fieldId: String) = Unit
+
+        override fun applyPatch(patch: kotlinx.serialization.json.JsonObject) = Unit
+
+        override fun submit() = Unit
+
+        override fun visibleFields(): List<String> = emptyList()
+
+        override fun errors(): Map<String, String> = emptyMap()
+
+        override fun payload(): kotlinx.serialization.json.JsonObject? = null
+    }
+
     private val form =
         buildJsonObject {
             put("formId", "f")
@@ -62,6 +83,22 @@ class ClientCorpusRunnerTest {
     // The failure mode of the report itself: `noErrors` was read as a flag, the comparison never held,
     // and the case ran with one clause fewer while reporting green. A runner that does not know a key
     // must say so.
+    // An adapter that cannot answer a question has not answered it. Reporting the case as passed
+    // would credit a client for a rule nobody checked; reporting it as failed would accuse it of
+    // sending nothing. Both are lies, in opposite directions.
+    @Test
+    fun `a case the adapter cannot answer is neither passed nor failed`() {
+        val expectation = ClientExpectation(requests = listOf(buildJsonObject { put("kind", "patch") }))
+
+        // An adapter written before the operation existed: it inherits the default, which records
+        // nothing — exactly the compatibility that default is for.
+        val report = ClientCorpusRunner(listOf(case(expectation))) { SilentClient() }.run()
+
+        assertTrue(report.isClean, report.toString())
+        assertEquals(1, report.unchecked.size, report.toString())
+        assertContains(report.unchecked.single().message, "does not record")
+    }
+
     @Test
     fun `an expectation key the runner does not know stops the corpus`() {
         val text =

@@ -111,6 +111,18 @@
           "items": {
             "type": "string"
           }
+        },
+        "requests": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/$defs/JsonElement"
+            }
+          }
         }
       },
       "required": [],

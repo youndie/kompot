@@ -59,6 +59,10 @@ data class ClientExpectation(
     val payloadBlocked: Boolean? = null,
     val errors: Map<String, String>? = null,
     val noErrors: List<String>? = null,
+    // The calls the client made, in order — see KompotFormClient.requests. The whole list: "one patch
+    // and no more" is most of what §9.6 says, and a check that only looked for the presence of one
+    // would pass a client that sends a patch per keystroke.
+    val requests: List<JsonObject>? = null,
 )
 
 @Serializable
