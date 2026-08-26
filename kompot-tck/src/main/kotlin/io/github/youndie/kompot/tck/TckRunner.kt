@@ -94,6 +94,14 @@ data class TckConfig(
     // Bodies for submit endpoints: what exactly to send is the application's domain, and the kit
     // cannot guess it. The idempotency check runs only for the paths listed here.
     val submitPayloads: Map<String, JsonElement> = emptyMap(),
+    // Which form a patch endpoint patches: the patch address to the form address. A patch answers a
+    // FormPatch that names fields, and whether those fields exist is a question only the schema of
+    // its own form can answer — the kit has no way to pair the two by looking, since neither the path
+    // nor the kind says which form is meant.
+    //
+    // The body to post is the one in submitPayloads under the patch address, for the same reason it
+    // is there for a submit: what a valid patch request contains is the application's domain.
+    val patchEndpoints: Map<String, String> = emptyMap(),
     // The idempotency check performs a REAL operation — there is no other way to reach 400/409, since
     // a route validates fields first. Run it against a test environment only.
     val allowStateChangingChecks: Boolean = true,
@@ -171,6 +179,7 @@ class TckRunner(
         findings += paginationTerminates()
         findings += navigationGraphResolves()
         findings += performTargetsAreSubmitEndpoints()
+        findings += patchesNameDeclaredFields()
         findings += recordedUpdateFramesAreValid()
         findings += textSpansSpellTheirOwnText()
         findings += idempotencyContract()
@@ -344,6 +353,67 @@ class TckRunner(
             (referenced - declared).map { TckFinding("form-fields", endpoint.path, "a component refers to undeclared field \"$it\"") } +
                 (declared - referenced).map { TckFinding("form-fields", endpoint.path, "field \"$it\" is declared but never rendered") } +
                 (crossReferences - declared).map { TckFinding("form-fields", endpoint.path, "a cross-reference points at non-existent field \"$it\"") }
+        }
+
+    // A patch names fields, and every one of them has to be a field the form declares (SPEC.md §9.2,
+    // §9.6). Nothing fails when they are not: FormController keys by string, so a patch naming
+    // "balanse" applies cleanly, the value goes to a field nobody renders, and the screen simply
+    // stops updating. focusOn naming nothing focuses nothing. No exception, no log, and on screen it
+    // looks exactly like a server that has not answered yet.
+    //
+    // The same class of claim form-fields already holds for a form, and the walk could not reach it:
+    // a patch is a POST, the blind walk is GET, and declaring the endpoint `form` would be worse than
+    // declaring nothing — it would enter form-fields, find no schema in the body and report nothing,
+    // which reads as a pass.
+    private suspend fun patchesNameDeclaredFields(): List<TckFinding> =
+        config.patchEndpoints.entries.exercising("patch").flatMap { (patchPath, formPath) ->
+            val form = endpoints.firstOrNull { it.path == formPath && it.method == "GET" }
+            if (form == null) {
+                return@flatMap listOf(
+                    TckFinding("patch", patchPath, "the form it patches, \"$formPath\", is not a GET endpoint of the description"),
+                )
+            }
+
+            val declared =
+                (parse(get(form).body)?.jsonObject?.get("schema")?.jsonObject?.get("fields") as? JsonArray)
+                    .orEmpty()
+                    .mapNotNull { (it.jsonObject["fieldId"] as? JsonPrimitive)?.content }
+                    .toSet()
+            if (declared.isEmpty()) {
+                return@flatMap listOf(TckFinding("patch", patchPath, "\"$formPath\" answered no schema, so nothing could be checked"))
+            }
+
+            val body = config.submitPayloads[patchPath]
+            if (body == null) {
+                return@flatMap listOf(
+                    TckFinding("patch", patchPath, "no body for this address in submitPayloads, so the patch was never asked for"),
+                )
+            }
+
+            visited += "POST $patchPath"
+            val response =
+                transport.request("POST", patchPath, authHeaders(), json.encodeToString(JsonElement.serializer(), body))
+            val patch = parse(response.body)?.jsonObject
+            when {
+                response.status != 200 ->
+                    listOf(TckFinding("patch", patchPath, "the patch answered ${response.status} ${response.body.take(200)}"))
+
+                patch == null -> listOf(TckFinding("patch", patchPath, "the body is not valid JSON"))
+
+                else -> {
+                    val updates = (patch["updates"] as? JsonObject)?.keys.orEmpty()
+                    val cleared = (patch["clearFields"] as? JsonArray).orEmpty().mapNotNull { (it as? JsonPrimitive)?.content }
+                    val focus = (patch["focusOn"] as? JsonPrimitive)?.takeIf { it.isString }?.content
+
+                    (updates - declared).map { TckFinding("patch", patchPath, "updates a field \"$it\" the form does not declare") } +
+                        (cleared.toSet() - declared).map { TckFinding("patch", patchPath, "clears a field \"$it\" the form does not declare") } +
+                        listOfNotNull(
+                            focus?.takeUnless { it in declared }?.let {
+                                TckFinding("patch", patchPath, "focuses \"$it\", which the form does not declare")
+                            },
+                        )
+                }
+            }
         }
 
     // A perform action names the address it posts to, and SPEC.md §16.4 requires that address to be an
@@ -643,6 +713,9 @@ class TckRunner(
                         endpoint.method != "GET" && endpoint.kind == "submit" ->
                             "no body for it in TckConfig.submitPayloads"
 
+                        endpoint.kind == PATCH_KIND ->
+                            "no pairing for it in TckConfig.patchEndpoints, so the form it patches is unknown"
+
                         endpoint.method != "GET" -> "only GET endpoints are walked blind"
                         else -> "no check claims it"
                     }
@@ -694,6 +767,7 @@ class TckRunner(
 
         // The kinds that change domain state and therefore need an idempotency key (SPEC.md §16.5).
         val STATE_CHANGING_KINDS = setOf("submit", "wizard_resume")
+        const val PATCH_KIND = "patch"
 
         // The one event without a payload: a heartbeat that stops a proxy dropping an idle connection.
         const val HEARTBEAT_EVENT = "ping"
