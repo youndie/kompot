@@ -1,6 +1,7 @@
 package io.github.youndie.kompot
 
 import androidx.compose.foundation.background
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -94,7 +95,11 @@ fun List<KompotModifierNode>.toComposeModifier(): Modifier {
             }
 
             is KompotModifierNode.Background -> {
-                currentModifier.background(designSystem.resolveColor(node.color))
+                val color = designSystem.resolveColor(node.color)
+                val shape = node.role?.let { designSystem.resolveSurface(SurfaceRole(it)).shape }
+                    // Clipped as well as painted: a card whose fill is rounded and whose content is
+                    // not is a card with square corners under the first child that reaches the edge.
+                if (shape == null) currentModifier.background(color) else currentModifier.clip(shape).background(color)
             }
 
             is KompotModifierNode.Gradient -> {
