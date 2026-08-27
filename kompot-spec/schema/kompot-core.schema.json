@@ -97,6 +97,12 @@
         },
         "color": {
           "$ref": "#/$defs/ColorToken"
+        },
+        "role": {
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "required": [

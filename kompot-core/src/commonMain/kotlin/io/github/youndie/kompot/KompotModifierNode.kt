@@ -24,6 +24,19 @@ sealed interface KompotModifierNode {
     @SerialName("background")
     data class Background(
         val color: ColorToken,
+        // Which surface this fill belongs to, so that a group can be a CARD and not a rectangle. The
+        // colour stays this node's own token; the role contributes only what the design system says
+        // about the shape of that surface, and null keeps the square corner every existing tree has.
+        //
+        // A role on the wire is the exception §6 already makes for button.variant, and for the same
+        // reason: what a card looks like is the design system's, but WHICH group is a card is decided
+        // by whoever wrote the screen. Without it the only way to draw the rounded filled group every
+        // design asks for is a component type that hard-codes the grouping — a layout property
+        // smuggled into a product's dictionary of wire types.
+        //
+        // Unknown to the client, or a design system with no shape for it: the rectangle, as before.
+        // An unfamiliar name costs the corner, not the screen.
+        val role: String? = null,
     ) : KompotModifierNode
 
     @Serializable
