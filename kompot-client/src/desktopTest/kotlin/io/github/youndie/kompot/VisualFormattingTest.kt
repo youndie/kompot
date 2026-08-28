@@ -71,6 +71,42 @@ class VisualFormattingTest {
         assertEquals("1 500", AmountVisualTransformation(currencySuffix = " ").filter(AnnotatedString("1500")).text.text)
     }
 
+    // Where the symbol goes is a property of the currency: of five a product might ship, two write it
+    // first. A field that can only append is right for some of them and wrong for the rest, quietly —
+    // the amount is correct and the symbol sits on the wrong side of it.
+    @Test
+    fun `AmountVisualTransformation writes the symbol first when it is a prefix`() {
+        val transformation = AmountVisualTransformation(currencyPrefix = "$")
+
+        assertEquals("$ 1 500", transformation.filter(AnnotatedString("1500")).text.text)
+        assertEquals("", transformation.filter(AnnotatedString("")).text.text)
+    }
+
+    // The wire says at most one is set, and both set is a server mistake rather than a state with a
+    // meaning. The suffix wins because a client built before the prefix existed draws it regardless:
+    // this is the precedence under which one payload looks the same on every client.
+    @Test
+    fun `AmountVisualTransformation draws the suffix when a caller sets both`() {
+        val transformation = AmountVisualTransformation(currencySuffix = "UZS", currencyPrefix = "$")
+
+        assertEquals("1 500 UZS", transformation.filter(AnnotatedString("1500")).text.text)
+    }
+
+    // The caret is the half a prefix breaks: every digit of the field moves right by the width of the
+    // symbol, so a mapping that ignores it puts the cursor one place per character away from where it
+    // was typed.
+    @Test
+    fun `AmountVisualTransformation offset mapping carries the width of a prefix`() {
+        val transformed = AmountVisualTransformation(currencyPrefix = "$").filter(AnnotatedString("1500"))
+
+            // "$ 1 500": the caret after all four digits sits at the end of the string.
+        assertEquals(transformed.text.text.length, transformed.offsetMapping.originalToTransformed(4))
+        assertEquals(4, transformed.offsetMapping.transformedToOriginal(transformed.text.text.length))
+            // And the caret before the first digit is after the symbol, not at the very start.
+        assertEquals(2, transformed.offsetMapping.originalToTransformed(0))
+        assertEquals(0, transformed.offsetMapping.transformedToOriginal(2))
+    }
+
     @Test
     fun `AmountVisualTransformation offset mapping is consistent round-trip across a grouping separator`() {
         val transformation = AmountVisualTransformation()

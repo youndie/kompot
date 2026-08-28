@@ -90,6 +90,12 @@
             "null"
           ]
         },
+        "currencyPrefix": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "currencyFromField": {
           "type": [
             "string",
