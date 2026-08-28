@@ -63,10 +63,15 @@ class MaskVisualTransformation(
 
 /**
      * Visual formatting of an amount: digits grouped in threes from the right, plus an optional
-     * currency suffix. The stored value stays a number with no spaces.
+     * currency symbol on either side. The stored value stays a number with no spaces.
+     *
+     * The side matters to the caret, not only to the eye: a symbol drawn in front shifts every digit
+     * of the field, so the offset mapping carries its width or the cursor lands one place per
+     * character away from where it was typed.
  */
 class AmountVisualTransformation(
     private val currencySuffix: String? = null,
+    private val currencyPrefix: String? = null,
 ) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val digits = text.text.filter { it.isDigit() }
@@ -83,15 +88,22 @@ class AmountVisualTransformation(
         }
         digitToOutput[n] = grouped.length
 
+        // Neither side is drawn for an empty field: a lone symbol in a box nobody has typed in reads
+        // as a value of nothing rather than as a hint.
+        // The suffix wins when a caller sets both, matching the rule the wire states: a client built
+        // before the prefix existed draws the suffix regardless, so this is the precedence under which
+        // one payload looks the same everywhere.
         val suffixText = if (!currencySuffix.isNullOrBlank() && n > 0) " $currencySuffix" else ""
-        val fullText = grouped.toString() + suffixText
+        val prefixText = if (suffixText.isEmpty() && !currencyPrefix.isNullOrBlank() && n > 0) "$currencyPrefix " else ""
+        val fullText = prefixText + grouped.toString() + suffixText
+        val shift = prefixText.length
 
         val offsetMapping =
             object : OffsetMapping {
-                override fun originalToTransformed(offset: Int): Int = digitToOutput[offset.coerceIn(0, n)]
+                override fun originalToTransformed(offset: Int): Int = digitToOutput[offset.coerceIn(0, n)] + shift
 
                 override fun transformedToOriginal(offset: Int): Int {
-                    val clamped = offset.coerceIn(0, grouped.length)
+                    val clamped = (offset - shift).coerceIn(0, grouped.length)
                     for (i in n downTo 0) {
                         if (digitToOutput[i] <= clamped) return i
                     }

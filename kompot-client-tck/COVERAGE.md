@@ -29,6 +29,8 @@
 | `9.6.2` | `9.6-a-field-that-triggers-no-patch-sends-nothing` |  |
 | `9.6.3` | `9.6-a-patch-replaces-a-value`, `9.6-a-patch-clears-what-it-names` |  |
 | `9.6.4` | — | сервер: патч против нового конверта |
+| `9.7.10` | — | отрисовка: тесты `AmountInputRendererTest`, не корпус |
+| `9.7.11` | — | отрисовка: тест `VisualFormattingTest`, не корпус |
 | `9.7.1` | `9.6-a-patch-replaces-a-value`, `9.7-an-entity-value-keeps-its-metadata` |  |
 | `9.7.2` | `9.7-an-entity-value-keeps-its-metadata` |  |
 | `9.7.3` | `9.5-an-amount-over-a-balance-is-refused` |  |
@@ -41,5 +43,5 @@
 | `9.8.1` | — | структура схемы, не решение клиента |
 | `9.8.2` | — | адаптер не умеет источники данных |
 
-Корпус держит 19 из 35; ещё 16 держит не он.
+Корпус держит 19 из 37; ещё 18 держит не он.
 Остальные — 0 — не держит никто.

@@ -38,8 +38,23 @@ data class AmountInputComponent(
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val fieldId: String,
     val label: String,
-    // A unit suffix for visual formatting, for example "USD"
+    // A unit written AFTER the number, for example "10 UZS".
     val currencySuffix: String? = null,
+    // The same unit written BEFORE it — "$10", "¥10". Where the symbol goes is a property of the
+    // currency rather than a style choice, and of any five a product might ship two write it first,
+    // so a server filling only the suffix from its own currency table is right for some of them and
+    // wrong for the rest. Nothing fails when it is wrong: the field renders, the form submits, the
+    // amount is correct, and the symbol sits on the wrong side of it.
+    //
+    // At most one of the two is set. Both set is a server mistake rather than a state with a meaning,
+    // and the SUFFIX wins — not by preference but because a client released before this field draws
+    // the suffix regardless, so the rule is the one that makes old and new clients agree on one
+    // payload.
+    //
+    // This field also decides the side of a symbol that did NOT come from it: a currency arriving in
+    // the value itself — through currencyFromField or a patch — is a string with no placement of its
+    // own, so the component's choice of field is what says which side it goes on.
+    val currencyPrefix: String? = null,
     // When set, the renderer watches this field's EntityValue locally, with no server round trip,
     // and as soon as rawMetadata["currency"] appears there it carries the unit over to the amount.
     // Picking a source instantly changes the amount's unit, because the data is already on the

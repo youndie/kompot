@@ -127,6 +127,95 @@ class AmountInputRendererTest {
             assertEquals(1000L, controller.getTypedState<AmountValue>("amount").value?.long)
         }
 
+    // A symbol-first currency drawn by the field rather than smuggled into the label, which is what a
+    // deployment has to do while the wire can only append.
+    @Test
+    fun `a currency prefix is drawn in front of the number`() =
+        runFormsComposeUiTest {
+            val controller =
+                FormController(
+                    FormSchema("form", fields = listOf(AmountFieldDefinition("amount", rules = emptyList()))),
+                    initialValues = mapOf("amount" to AmountValue(1500L)),
+                )
+
+            setContent {
+                TestKompotTheme {
+                    AmountInputRenderer().Render(
+                        component = AmountInputComponent(id = "c", fieldId = "amount", label = "Amount", currencyPrefix = "$"),
+                        actionHandler = recordingActionHandler(),
+                        formController = controller,
+                    )
+                }
+            }
+
+            onNodeWithText("$ 1 500").assertIsDisplayed()
+        }
+
+    // The side is the component's even when the symbol is not: a currency arriving in the value is a
+    // string, so which field the component filled is what says where it goes.
+    @Test
+    fun `a currency derived from a neighbour keeps the side the component chose`() =
+        runFormsComposeUiTest {
+            val controller =
+                FormController(
+                    FormSchema(
+                        "form",
+                        fields =
+                            listOf(
+                                SelectionFieldDefinition("account"),
+                                AmountFieldDefinition("amount", rules = emptyList()),
+                            ),
+                    ),
+                    initialValues = mapOf("amount" to AmountValue(1500L)),
+                )
+
+            setContent {
+                TestKompotTheme {
+                    AmountInputRenderer().Render(
+                        component =
+                            AmountInputComponent(
+                                id = "c",
+                                fieldId = "amount",
+                                label = "Amount",
+                                currencyPrefix = "$",
+                                currencyFromField = "account",
+                            ),
+                        actionHandler = recordingActionHandler(),
+                        formController = controller,
+                    )
+                }
+            }
+
+            controller.onValueChanged("account", EntityValue(id = "acc_1", title = "Yen", rawMetadata = mapOf("currency" to "¥")))
+            waitForIdle()
+
+            onNodeWithText("¥ 1 500").assertIsDisplayed()
+        }
+
+    // The control, and the compatibility question in one: a component that names only a suffix draws
+    // exactly what it drew before.
+    @Test
+    fun `a suffix stays behind the number`() =
+        runFormsComposeUiTest {
+            val controller =
+                FormController(
+                    FormSchema("form", fields = listOf(AmountFieldDefinition("amount", rules = emptyList()))),
+                    initialValues = mapOf("amount" to AmountValue(1500L)),
+                )
+
+            setContent {
+                TestKompotTheme {
+                    AmountInputRenderer().Render(
+                        component = AmountInputComponent(id = "c", fieldId = "amount", label = "Amount", currencySuffix = "UZS"),
+                        actionHandler = recordingActionHandler(),
+                        formController = controller,
+                    )
+                }
+            }
+
+            onNodeWithText("1 500 UZS").assertIsDisplayed()
+        }
+
     @Test
     fun `the field is not rendered at all when its visibleIf condition is not satisfied`() =
         runFormsComposeUiTest {

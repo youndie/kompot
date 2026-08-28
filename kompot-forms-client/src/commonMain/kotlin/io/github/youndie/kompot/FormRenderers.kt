@@ -197,8 +197,10 @@ class AmountInputRenderer : KompotComponentRenderer<AmountInputComponent> {
         // A null value shows as an empty string.
         val currentValue = fieldState.value?.long?.toString() ?: ""
         // The currency of the value itself — switched by the derivation above or by a patch — wins
-        // over the static one on the component.
-        val currencySuffix = fieldState.value?.currency ?: component.currencySuffix
+        // over the static one on the component. Its side does not come with it: a currency in a value
+        // is a string, so which field the component filled is what says where the symbol goes.
+        val drawnBefore = component.currencySuffix.isNullOrBlank() && !component.currencyPrefix.isNullOrBlank()
+        val currencySymbol = fieldState.value?.currency ?: component.currencySuffix ?: component.currencyPrefix
 
         // Validation runs on blur rather than on every keystroke.
         var wasFocused by remember(component.fieldId) { mutableStateOf(false) }
@@ -234,7 +236,14 @@ class AmountInputRenderer : KompotComponentRenderer<AmountInputComponent> {
                     Text(fieldState.error.orEmpty(), color = MaterialTheme.colorScheme.error)
                 }
             },
-            visualTransformation = remember(currencySuffix) { AmountVisualTransformation(currencySuffix) },
+            visualTransformation =
+                remember(currencySymbol, drawnBefore) {
+                    if (drawnBefore) {
+                        AmountVisualTransformation(currencyPrefix = currencySymbol)
+                    } else {
+                        AmountVisualTransformation(currencySuffix = currencySymbol)
+                    }
+                },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier =
                 component.modifiers.toComposeModifier().fillMaxWidth().onFocusChanged { focusState ->
