@@ -1,3 +1,3 @@
 package io.github.youndie.kompot
 
-interface KompotAction
+public interface KompotAction

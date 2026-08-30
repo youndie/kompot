@@ -5,10 +5,10 @@ import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.SizeType
 
 @KompotDsl
-class KompotModifierBuilder {
+public class KompotModifierBuilder {
     private val nodes = mutableListOf<KompotModifierNode>()
 
-    fun padding(
+    public fun padding(
         top: Int = 0,
         bottom: Int = 0,
         start: Int = 0,
@@ -17,48 +17,48 @@ class KompotModifierBuilder {
         nodes += KompotModifierNode.Padding(top = top, bottom = bottom, start = start, end = end)
     }
 
-    fun background(token: ColorToken) {
+    public fun background(token: ColorToken) {
         nodes += KompotModifierNode.Background(token)
     }
 
-    fun gradientBackground(tokens: List<ColorToken>) {
+    public fun gradientBackground(tokens: List<ColorToken>) {
         nodes += KompotModifierNode.Gradient(tokens)
     }
 
-    fun fillMaxWidth() {
+    public fun fillMaxWidth() {
         updateOrAddSizeNode { it.copy(width = SizeType.Fill) }
     }
 
-    fun fillMaxHeight() {
+    public fun fillMaxHeight() {
         updateOrAddSizeNode { it.copy(height = SizeType.Fill) }
     }
 
     // Absolute extents, in the same density-independent pixels padding and spacing are measured in.
     // A number on an axis overrides whatever SizeType the same node carries there, so calling both
     // width(120) and fillMaxWidth() is not an error the builder needs to reject — the number wins.
-    fun width(dp: Int) {
+    public fun width(dp: Int) {
         updateOrAddSizeNode { it.copy(widthDp = dp) }
     }
 
-    fun height(dp: Int) {
+    public fun height(dp: Int) {
         updateOrAddSizeNode { it.copy(heightDp = dp) }
     }
 
-    fun size(width: Int, height: Int) {
+    public fun size(width: Int, height: Int) {
         updateOrAddSizeNode { it.copy(widthDp = width, heightDp = height) }
     }
 
     // A ceiling rather than an extent: the node keeps whatever width it already had — usually Fill —
     // and stops growing past this. `fillMaxWidth(); maxWidth(800)` is the reading measure.
-    fun maxWidth(dp: Int) {
+    public fun maxWidth(dp: Int) {
         updateOrAddSizeNode { it.copy(maxWidthDp = dp) }
     }
 
-    fun maxHeight(dp: Int) {
+    public fun maxHeight(dp: Int) {
         updateOrAddSizeNode { it.copy(maxHeightDp = dp) }
     }
 
-    fun weight(value: Float) {
+    public fun weight(value: Float) {
         nodes += KompotModifierNode.Weight(value)
     }
 
@@ -74,5 +74,5 @@ class KompotModifierBuilder {
         }
     }
 
-    fun build(): List<KompotModifierNode> = nodes.toList()
+    public fun build(): List<KompotModifierNode> = nodes.toList()
 }

@@ -1,6 +1,6 @@
 package io.github.youndie.kompot
 
-interface KompotComponent {
-    val id: String
-    val modifiers: List<KompotModifierNode>
+public interface KompotComponent {
+    public val id: String
+    public val modifiers: List<KompotModifierNode>
 }

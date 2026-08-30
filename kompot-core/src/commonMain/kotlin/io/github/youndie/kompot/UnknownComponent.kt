@@ -9,7 +9,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 
-val kompotCoreSerializersModule =
+public val kompotCoreSerializersModule: SerializersModule =
     SerializersModule {
         polymorphic(KompotComponent::class) {
             defaultDeserializer { className -> UnknownComponentSerializer(className ?: "unknown") }
@@ -32,7 +32,7 @@ val kompotCoreSerializersModule =
 //
 // A client that DOES know the type never sees the key: an unknown field is ignored by §3.
 @Serializable
-data class UnknownComponent(
+public data class UnknownComponent(
     override val id: String = "unknown",
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val originalType: String = "unknown",
@@ -40,7 +40,7 @@ data class UnknownComponent(
 ) : KompotComponent
 
 @Serializable
-data class UnknownAction(
+public data class UnknownAction(
     val originalType: String = "unknown",
 ) : KompotAction
 

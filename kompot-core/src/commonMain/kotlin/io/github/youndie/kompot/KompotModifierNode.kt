@@ -9,10 +9,10 @@ import kotlinx.serialization.Serializable
 // (see KompotModifierBuilder) instead of being hardcoded in the client. classDiscriminator = "type"
 // in the shared Json configuration adds the "type" field to each node on serialisation.
 @Serializable
-sealed interface KompotModifierNode {
+public sealed interface KompotModifierNode {
     @Serializable
     @SerialName("padding")
-    data class Padding(
+    public data class Padding(
         val all: Int? = null,
         val top: Int? = null,
         val bottom: Int? = null,
@@ -22,7 +22,7 @@ sealed interface KompotModifierNode {
 
     @Serializable
     @SerialName("background")
-    data class Background(
+    public data class Background(
         val color: ColorToken,
         // Which surface this fill belongs to, so that a group can be a CARD and not a rectangle. The
         // colour stays this node's own token; the role contributes only what the design system says
@@ -41,7 +41,7 @@ sealed interface KompotModifierNode {
 
     @Serializable
     @SerialName("gradient")
-    data class Gradient(
+    public data class Gradient(
         val colors: List<ColorToken>,
     ) : KompotModifierNode
 
@@ -53,7 +53,7 @@ sealed interface KompotModifierNode {
     // built before them reads the node it already understood and drops the keys it does not.
     @Serializable
     @SerialName("size")
-    data class Size(
+    public data class Size(
         val width: SizeType? = null,
         val height: SizeType? = null,
         val widthDp: Int? = null,
@@ -78,7 +78,7 @@ sealed interface KompotModifierNode {
     // deliberately ignores it — the parent renderer extracts and applies it itself.
     @Serializable
     @SerialName("weight")
-    data class Weight(
+    public data class Weight(
         val value: Float,
     ) : KompotModifierNode
 }
