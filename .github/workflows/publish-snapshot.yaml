@@ -17,21 +17,17 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v5
 
-      - name: Setup Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'temurin'
-          java-version: 25
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+      # Java and Gradle in one step and at one version for the portfolio. The JDK here is what
+      # GRADLE runs on; what the modules compile to is `sborka.jvmToolchain=17`.
+      - name: Setup Java and Gradle
+        uses: youndie/sborka/.github/actions/setup-kotlin@main
 
       # The run number goes on the tail of the version: two publishes in a row must not produce
       # the same artifact, or a consumer cannot tell them apart and keeps the cached older one.
       - name: Determine version
         id: ver
         run: |
-          VERSION=$(grep kompot.version gradle.properties | cut -d'=' -f2).${{ github.run_number }}
+          VERSION=$(grep '^version=' gradle.properties | cut -d'=' -f2).${{ github.run_number }}
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build and publish

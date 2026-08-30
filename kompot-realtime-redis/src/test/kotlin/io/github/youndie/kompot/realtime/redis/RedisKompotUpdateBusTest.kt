@@ -10,7 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
-import org.junit.Assume.assumeTrue
+import org.junit.jupiter.api.Assumptions.assumeTrue
 import io.github.youndie.kompot.realtime.server.KompotBusMessage
 import io.github.youndie.kompot.realtime.server.KompotUpdateBroadcaster
 import kotlin.test.AfterTest
@@ -52,7 +52,7 @@ class RedisKompotUpdateBusTest {
 
     @Test
     fun `a message published to redis comes back on the subscription`() {
-        assumeTrue("REDIS_URL is not set — the run against a real Redis is skipped", redisUrl != null)
+        assumeTrue(redisUrl != null) { "REDIS_URL is not set — the run against a real Redis is skipped" }
         runBlocking {
             val bus = bus()
             val received = Channel<KompotBusMessage>(Channel.BUFFERED)
@@ -71,7 +71,7 @@ class RedisKompotUpdateBusTest {
     // subscriber on ANOTHER. Two independent Redis clients are exactly two processes.
     @Test
     fun `an update published on one instance reaches a subscriber on another`() {
-        assumeTrue("REDIS_URL is not set — the run against a real Redis is skipped", redisUrl != null)
+        assumeTrue(redisUrl != null) { "REDIS_URL is not set — the run against a real Redis is skipped" }
         runBlocking {
             val prefix = "test:${System.nanoTime()}"
             val instanceA = bus(prefix)
@@ -96,7 +96,7 @@ class RedisKompotUpdateBusTest {
     // up to the first separator, or the addressee of an update would change in flight.
     @Test
     fun `a topic containing colons survives the round trip`() {
-        assumeTrue("REDIS_URL is not set — the run against a real Redis is skipped", redisUrl != null)
+        assumeTrue(redisUrl != null) { "REDIS_URL is not set — the run against a real Redis is skipped" }
         runBlocking {
             val bus = bus()
             val received = Channel<KompotBusMessage>(Channel.BUFFERED)
@@ -112,7 +112,7 @@ class RedisKompotUpdateBusTest {
     // One Redis is usually shared between environments: events from one must not reach another.
     @Test
     fun `buses with different channel prefixes do not see each other`() {
-        assumeTrue("REDIS_URL is not set — the run against a real Redis is skipped", redisUrl != null)
+        assumeTrue(redisUrl != null) { "REDIS_URL is not set — the run against a real Redis is skipped" }
         runBlocking {
             val dev = bus("test:dev:${System.nanoTime()}")
             val prod = bus("test:prod:${System.nanoTime()}")

@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
-    id("kompot.publishing")
+    id("ru.workinprogress.sborka.jvm")
+    id("ru.workinprogress.sborka.publish")
 }
 
 

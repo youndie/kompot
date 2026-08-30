@@ -6,7 +6,8 @@ plugins {
     kotlin("plugin.serialization")
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    id("kompot.publishing")
+    id("ru.workinprogress.sborka.kmp")
+    id("ru.workinprogress.sborka.publish")
 }
 kotlin {
     jvm("desktop")

@@ -1,6 +1,6 @@
 plugins {
     `java-platform`
-    id("kompot.publishing")
+    id("ru.workinprogress.sborka.publish")
 }
 
 // A version-aligned list of everything this build publishes. The point is not brevity: a kompot

@@ -18,9 +18,12 @@ Run against a local publication:
 """
 import glob, json, os, re, struct, sys, zipfile
 
-FLOOR = int(re.search(r"JVM_FLOOR\s*=\s*(\d+)", open(
-    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "buildSrc/src/main/kotlin/JvmFloor.kt")
-).read()).group(1))
+# Read from where the build reads it, so the audit cannot check a number the build no longer uses.
+# It moved from a constant in buildSrc to `sborka.jvmFloor` when the build went onto the shared
+# conventions; a copy here would be the same defect this file exists to catch, one level up.
+FLOOR = int(re.search(r"^sborka\.jvmFloor\s*=\s*(\d+)\s*$", open(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "gradle.properties")
+).read(), re.MULTILINE).group(1))
 # Java 17 is class file 61, and every release since is one more.
 CLASS_FILE = FLOOR + 44
 

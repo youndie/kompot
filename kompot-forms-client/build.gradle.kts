@@ -5,7 +5,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ksp)
-    id("kompot.publishing")
+    id("ru.workinprogress.sborka.kmp")
+    id("ru.workinprogress.sborka.publish")
 }
 
 kotlin {

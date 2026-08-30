@@ -1,7 +1,8 @@
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
-    id("kompot.publishing")
+    id("ru.workinprogress.sborka.jvm")
+    id("ru.workinprogress.sborka.publish")
 }
 
 // The corpus files stay where they are — a plain directory anybody can read, diff and copy into

@@ -3,7 +3,8 @@ plugins {
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     kotlin("plugin.serialization")
     alias(libs.plugins.ksp)
-    id("kompot.publishing")
+    id("ru.workinprogress.sborka.kmp")
+    id("ru.workinprogress.sborka.publish")
 }
 
 

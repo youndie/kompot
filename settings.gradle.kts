@@ -21,34 +21,35 @@ pluginManagement {
                 includeGroupAndSubgroups("com.google")
             }
         }
+        // Where the build conventions come from. Written out by hand, and it has to be:
+        // `pluginManagement` is evaluated before any settings plugin is applied — including the
+        // sborka one, which is fetched through it.
+        maven("https://reposilite.kotlin.website/snapshots") {
+            name = "wip-snapshots"
+            content { includeGroupByRegex("ru\\.workinprogress.*") }
+        }
     }
 }
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+    // google() and mavenCentral() with their content filters, the snapshot repository, the shared
+    // `wip` catalog, and the check that this repository's `.editorconfig` is the one the rest of the
+    // portfolio uses. What this file keeps is what is kompot's: Compose's own plugin repository
+    // above, and the two ivy repositories the wasmJs toolchain needs below.
+    id("ru.workinprogress.sborka.settings") version "0.1.0.18"
 }
 
 dependencyResolutionManagement {
-    // Settings repositories win over module ones. Nothing here declares its own `repositories`
+    // Settings repositories win over module ones — `sborka.repositoriesMode=PREFER_SETTINGS` in
+    // gradle.properties, where the reason is written. Nothing here declares its own `repositories`
     // block, and nothing should: a module-level block silently overrides this list, and a
     // dependency declared only here then fails to resolve in exactly that module — with an error
     // that reads "artifact not found" while it resolves fine for the module next door.
-    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
-
+    //
+    // google() and mavenCentral() are the settings plugin's, with the same group filters this file
+    // used to carry.
     repositories {
-        // Compose Multiplatform resolves a long tail of androidx artifacts that live here and
-        // nowhere else. Filtered by group, like every third-party repository should be: an
-        // unfiltered one takes part in resolving EVERY dependency, and when it goes unreachable
-        // Gradle disables it and fails artifacts it never served.
-        google {
-            mavenContent {
-                includeGroupAndSubgroups("androidx")
-                includeGroupAndSubgroups("com.android")
-                includeGroupAndSubgroups("com.google")
-            }
-        }
-        mavenCentral()
-
         // The Kotlin plugin registers its own repository for the Node and Yarn distributions the
         // wasmJs/js test infrastructure runs on. PREFER_SETTINGS above overrides it, so the lookup
         // falls through to Maven Central and fails with "Could not find org.nodejs:node".
@@ -67,11 +68,6 @@ dependencyResolutionManagement {
             patternLayout { artifact("v[revision]/[artifact](-v[revision]).[ext]") }
             metadataSources { artifact() }
             content { includeModule("com.yarnpkg", "yarn") }
-        }
-        // The screenshot tester lives in a repository of its own (github.com/youndie/viddik) and is
-        // published to the same Reposilite this toolkit publishes to. /snapshots reads anonymously.
-        maven("https://reposilite.kotlin.website/snapshots") {
-            mavenContent { includeGroup("ru.workinprogress") }
         }
     }
 }
