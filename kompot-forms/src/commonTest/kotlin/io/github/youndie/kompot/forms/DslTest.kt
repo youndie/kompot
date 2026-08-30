@@ -52,7 +52,31 @@ class DslTest {
 
         val component = container.single() as AmountInputComponent
         assertNull(component.currencySuffix)
+        assertNull(component.currencyPrefix)
         assertNull(component.currencyFromField)
+    }
+
+    // The three the DSL had no way to say: the side arrived on the component two releases before it
+    // arrived here, and a builder that cannot pass a field is the same to a server as a field that
+    // does not exist.
+    @Test
+    fun `amountInput carries the side and the gap of a currency through to the component`() {
+        val container = RecordingContainer()
+        container.amountInput(fieldId = "amount", label = "Amount", currencyPrefix = "$", currencySpaced = false)
+
+        val component = container.single() as AmountInputComponent
+        assertEquals("$", component.currencyPrefix)
+        assertFalse(component.currencySpaced)
+    }
+
+    // The default is a space, and it has to be: an already-released client draws one for a payload
+    // that says nothing, so anything else would make one response look different on two clients.
+    @Test
+    fun `amountInput leaves the currency spaced unless a server says otherwise`() {
+        val container = RecordingContainer()
+        container.amountInput(fieldId = "amount", label = "Amount", currencyPrefix = "$")
+
+        assertTrue((container.single() as AmountInputComponent).currencySpaced)
     }
 
     @Test

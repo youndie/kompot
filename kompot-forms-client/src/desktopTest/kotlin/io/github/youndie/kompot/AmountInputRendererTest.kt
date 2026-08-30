@@ -192,6 +192,38 @@ class AmountInputRendererTest {
             onNodeWithText("¥ 1 500").assertIsDisplayed()
         }
 
+    // The gap is one bit of how a currency is written, and the server holds the table that knows it.
+    // Without this the same response draws "$ 50" in the field and "Between $10 and $50,000." in the
+    // text under it — one currency, two ways, three lines apart.
+    @Test
+    fun `a currency the server marked unspaced is drawn against the number`() =
+        runFormsComposeUiTest {
+            val controller =
+                FormController(
+                    FormSchema("form", fields = listOf(AmountFieldDefinition("amount", rules = emptyList()))),
+                    initialValues = mapOf("amount" to AmountValue(1500L)),
+                )
+
+            setContent {
+                TestKompotTheme {
+                    AmountInputRenderer().Render(
+                        component =
+                            AmountInputComponent(
+                                id = "c",
+                                fieldId = "amount",
+                                label = "Amount",
+                                currencyPrefix = "$",
+                                currencySpaced = false,
+                            ),
+                        actionHandler = recordingActionHandler(),
+                        formController = controller,
+                    )
+                }
+            }
+
+            onNodeWithText("$1 500").assertIsDisplayed()
+        }
+
     // The control, and the compatibility question in one: a component that names only a suffix draws
     // exactly what it drew before.
     @Test

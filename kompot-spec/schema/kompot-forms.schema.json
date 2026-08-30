@@ -101,6 +101,9 @@
             "string",
             "null"
           ]
+        },
+        "currencySpaced": {
+          "type": "boolean"
         }
       },
       "required": [

@@ -237,11 +237,11 @@ class AmountInputRenderer : KompotComponentRenderer<AmountInputComponent> {
                 }
             },
             visualTransformation =
-                remember(currencySymbol, drawnBefore) {
+                remember(currencySymbol, drawnBefore, component.currencySpaced) {
                     if (drawnBefore) {
-                        AmountVisualTransformation(currencyPrefix = currencySymbol)
+                        AmountVisualTransformation(currencyPrefix = currencySymbol, currencySpaced = component.currencySpaced)
                     } else {
-                        AmountVisualTransformation(currencySuffix = currencySymbol)
+                        AmountVisualTransformation(currencySuffix = currencySymbol, currencySpaced = component.currencySpaced)
                     }
                 },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

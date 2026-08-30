@@ -82,6 +82,32 @@ class VisualFormattingTest {
         assertEquals("", transformation.filter(AnnotatedString("")).text.text)
     }
 
+    // Whether there is a gap belongs to the currency alongside the symbol and its side: "$50" is
+    // written closed up and "50 €" is not. A field with a fixed gap is right for some currencies and
+    // wrong for others, and wrong in the same quiet way the fixed side was — the amount is correct,
+    // and one screen writes one currency two ways a few lines apart.
+    @Test
+    fun `AmountVisualTransformation closes the gap on either side when the currency is not spaced`() {
+        val prefix = AmountVisualTransformation(currencyPrefix = "$", currencySpaced = false)
+        val suffix = AmountVisualTransformation(currencySuffix = "\u20BD", currencySpaced = false)
+
+        assertEquals("$1 500", prefix.filter(AnnotatedString("1500")).text.text)
+        assertEquals("1 500\u20BD", suffix.filter(AnnotatedString("1500")).text.text)
+    }
+
+    // The caret moves with the gap: an unspaced symbol shifts every digit by one place less than a
+    // spaced one, so a mapping that assumed the gap puts the cursor off by exactly that character.
+    @Test
+    fun `AmountVisualTransformation offset mapping follows the narrower prefix of an unspaced currency`() {
+        val transformed = AmountVisualTransformation(currencyPrefix = "$", currencySpaced = false).filter(AnnotatedString("1500"))
+
+            // "$1 500": the caret before the first digit sits right after the symbol.
+        assertEquals(1, transformed.offsetMapping.originalToTransformed(0))
+        assertEquals(0, transformed.offsetMapping.transformedToOriginal(1))
+        assertEquals(transformed.text.text.length, transformed.offsetMapping.originalToTransformed(4))
+        assertEquals(4, transformed.offsetMapping.transformedToOriginal(transformed.text.text.length))
+    }
+
     // The wire says at most one is set, and both set is a server mistake rather than a state with a
     // meaning. The suffix wins because a client built before the prefix existed draws it regardless:
     // this is the precedence under which one payload looks the same on every client.

@@ -59,13 +59,16 @@ fun KompotFormContext.boundTextInput(
     )
 }
 
-// The currency is a matter of UI only: currencySuffix is what to show beside the amount, and
-// currencyFromField says which neighbouring field to take it from. The field definition has no
-// currency of its own any more — nothing read it, and its default belonged to one application.
+// The currency is a matter of UI only: the three currency parameters say how it is written — the
+// symbol, which side of the number it goes on, and whether it stands away from it — and
+// currencyFromField says which neighbouring field to take the symbol from. The field definition has
+// no currency of its own any more — nothing read it, and its default belonged to one application.
 fun KompotFormContext.boundAmountInput(
     fieldId: String,
     label: String,
     currencySuffix: String? = null,
+    currencyPrefix: String? = null,
+    currencySpaced: Boolean = true,
     currencyFromField: String? = null,
     visibleIf: FormCondition? = null,
     triggersPatch: Boolean = false,
@@ -77,6 +80,8 @@ fun KompotFormContext.boundAmountInput(
         fieldId = fieldId,
         label = label,
         currencySuffix = currencySuffix,
+        currencyPrefix = currencyPrefix,
+        currencySpaced = currencySpaced,
         currencyFromField = currencyFromField,
         id = id,
         modifierBlock = modifierBlock,
