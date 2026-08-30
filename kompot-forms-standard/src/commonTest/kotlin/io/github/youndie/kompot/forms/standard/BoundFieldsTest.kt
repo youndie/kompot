@@ -56,6 +56,20 @@ class BoundFieldsTest {
         assertEquals("source", ui.currencyFromField)
     }
 
+    // The bound helper is the one most servers write, so a currency field it does not forward is a
+    // field most servers do not have.
+    @Test
+    fun `boundAmountInput forwards the side and the gap along with the symbol`() {
+        val response =
+            buildFormScreen("form") {
+                boundAmountInput(fieldId = "amount", label = "Amount", currencyPrefix = "$", currencySpaced = false)
+            }
+
+        val ui = uiChild<AmountInputComponent>(response)
+        assertEquals("$", ui.currencyPrefix)
+        assertFalse(ui.currencySpaced)
+    }
+
     @Test
     fun `boundCheckboxInput registers a CheckboxFieldDefinition alongside the checkbox`() {
         val response = buildFormScreen("form") { boundCheckboxInput(fieldId = "auto", label = "Auto") }

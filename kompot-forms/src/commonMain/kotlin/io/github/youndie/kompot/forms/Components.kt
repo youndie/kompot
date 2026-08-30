@@ -60,6 +60,15 @@ data class AmountInputComponent(
     // Picking a source instantly changes the amount's unit, because the data is already on the
     // client.
     val currencyFromField: String? = null,
+    // Whether the symbol stands away from the number. It is the third thing a currency says about how
+    // it is written, after the symbol itself and the side: "$50" is closed up, "50 €" is not, and a
+    // server holding a table of currencies has all three in it.
+    //
+    // The default is a space on either side, which is NOT the typographically right answer for a
+    // symbol-first currency — nobody writes "$ 50". It is what every already-released client draws,
+    // and a payload that says nothing has to look the same on all of them; a server that knows better
+    // says so here.
+    val currencySpaced: Boolean = true,
 ) : KompotComponent
 
 @Serializable

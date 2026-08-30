@@ -67,11 +67,13 @@ class MaskVisualTransformation(
      *
      * The side matters to the caret, not only to the eye: a symbol drawn in front shifts every digit
      * of the field, so the offset mapping carries its width or the cursor lands one place per
-     * character away from where it was typed.
+     * character away from where it was typed. The gap counts toward that width, which is why it is
+     * this class that draws it rather than the caller pre-pending a space to the symbol.
  */
 class AmountVisualTransformation(
     private val currencySuffix: String? = null,
     private val currencyPrefix: String? = null,
+    private val currencySpaced: Boolean = true,
 ) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val digits = text.text.filter { it.isDigit() }
@@ -93,8 +95,10 @@ class AmountVisualTransformation(
         // The suffix wins when a caller sets both, matching the rule the wire states: a client built
         // before the prefix existed draws the suffix regardless, so this is the precedence under which
         // one payload looks the same everywhere.
-        val suffixText = if (!currencySuffix.isNullOrBlank() && n > 0) " $currencySuffix" else ""
-        val prefixText = if (suffixText.isEmpty() && !currencyPrefix.isNullOrBlank() && n > 0) "$currencyPrefix " else ""
+        // Whether a gap is drawn is the currency's business too, not only the symbol and its side.
+        val gap = if (currencySpaced) " " else ""
+        val suffixText = if (!currencySuffix.isNullOrBlank() && n > 0) "$gap$currencySuffix" else ""
+        val prefixText = if (suffixText.isEmpty() && !currencyPrefix.isNullOrBlank() && n > 0) "$currencyPrefix$gap" else ""
         val fullText = prefixText + grouped.toString() + suffixText
         val shift = prefixText.length
 
