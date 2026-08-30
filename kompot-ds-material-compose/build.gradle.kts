@@ -5,7 +5,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ksp)
-    id("kompot.publishing")
+    id("ru.workinprogress.sborka.kmp")
+    id("ru.workinprogress.sborka.publish")
 }
 
 kotlin {
@@ -93,16 +94,21 @@ kotlin.sourceSets.getByName("desktopTest") {
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 
-    // The published bytecode of this module is Java 17 like every other module's; these TESTS are
-    // what needs a newer runtime. viddik ships class file 65 (Java 21), so on a 17 launcher the
-    // screenshot suite dies at class loading — the very failure mode JVM_FLOOR exists to keep off
-    // consumers, arriving here from a dependency of the harness rather than from anything published.
+    // The published bytecode of this module is Java 17 like every other module's (`sborka.jvmFloor`);
+    // these TESTS are what needs a newer runtime. viddik ships class file 65 (Java 21), so on a 17
+    // launcher the screenshot suite dies at class loading — the very failure mode the floor exists to
+    // keep off consumers, arriving here from a dependency of the harness rather than from anything
+    // published.
     //
     // Only the launcher moves. Compiling the tests on 17 against a newer class file is fine, and
     // keeping the compile there is what stops a test accidentally teaching main code to use an API
     // no consumer has.
+    //
+    // The number is written here rather than in a constant: it was one of two in `buildSrc`, and the
+    // other one — the floor, which was the one repeated — is a line of `gradle.properties` now. This
+    // one has exactly one reader, and a constant with one reader only hides where it is read.
     javaLauncher =
         javaToolchains.launcherFor {
-            languageVersion = JavaLanguageVersion.of(SCREENSHOT_RUNTIME)
+            languageVersion = JavaLanguageVersion.of(21)
         }
 }

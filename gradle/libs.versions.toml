@@ -1,4 +1,8 @@
 [versions]
+# The build conventions: where the group, the version, the toolchain, the jvm floor and the
+# publication come from. Bumping this changes how every module is built, so it is pinned like any
+# other dependency and moved deliberately.
+sborka = "0.1.0.18"
 androidGradlePlugin = "9.3.1"
 kotlin = "2.4.10"
 ktor = "3.5.2"
@@ -62,3 +66,6 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+sborkaJvm = { id = "ru.workinprogress.sborka.jvm", version.ref = "sborka" }
+sborkaKmp = { id = "ru.workinprogress.sborka.kmp", version.ref = "sborka" }
+sborkaPublish = { id = "ru.workinprogress.sborka.publish", version.ref = "sborka" }

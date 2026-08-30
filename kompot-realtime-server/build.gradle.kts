@@ -1,7 +1,8 @@
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    id("kompot.publishing")
+    id("ru.workinprogress.sborka.kmp")
+    id("ru.workinprogress.sborka.publish")
 }
 
 
