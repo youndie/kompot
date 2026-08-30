@@ -8,7 +8,7 @@ import io.github.youndie.kompot.form.FormCondition
 import io.github.youndie.kompot.form.FormFieldDefinition
 import io.github.youndie.kompot.form.ValidationRule
 
-enum class KeyboardType {
+public enum class KeyboardType {
     TEXT,
     NUMBER,
     EMAIL,
@@ -17,7 +17,7 @@ enum class KeyboardType {
 
 @Serializable
 @SerialName("text_field")
-data class TextFieldDefinition(
+public data class TextFieldDefinition(
     override val fieldId: String,
     override val rules: List<@Polymorphic ValidationRule>,
     val keyboardType: KeyboardType = KeyboardType.TEXT,
@@ -36,7 +36,7 @@ data class TextFieldDefinition(
 // itself (AmountValue.currency) or from the UI component (amount_input.currencySuffix). Checked
 // across every consumer — Compose, SwiftUI, the reference corpus — a third home for the same fact
 // only let you set it and see no effect.
-data class AmountFieldDefinition(
+public data class AmountFieldDefinition(
     override val fieldId: String,
     override val rules: List<@Polymorphic ValidationRule>,
     override val visibleIf: @Polymorphic FormCondition? = null,
@@ -46,7 +46,7 @@ data class AmountFieldDefinition(
 
 @Serializable
 @SerialName("checkbox_field")
-data class CheckboxFieldDefinition(
+public data class CheckboxFieldDefinition(
     override val fieldId: String,
     override val rules: List<@Polymorphic ValidationRule> = emptyList(),
     override val visibleIf: @Polymorphic FormCondition? = null,
@@ -59,7 +59,7 @@ data class CheckboxFieldDefinition(
 // :form-core), and the UI layer knows nothing about the network.
 @Serializable
 @SerialName("autocomplete_field")
-data class AutocompleteFieldDefinition(
+public data class AutocompleteFieldDefinition(
     override val fieldId: String,
     override val rules: List<@Polymorphic ValidationRule> = emptyList(),
     val dataSourceId: String,
@@ -73,7 +73,7 @@ data class AutocompleteFieldDefinition(
 // only. The value of such a field is an EntityValue(id, title).
 @Serializable
 @SerialName("selection_field")
-data class SelectionFieldDefinition(
+public data class SelectionFieldDefinition(
     override val fieldId: String,
     override val rules: List<@Polymorphic ValidationRule> = emptyList(),
     override val visibleIf: @Polymorphic FormCondition? = null,

@@ -23,22 +23,22 @@ import io.github.youndie.kompot.wizard.core.WizardTransition
 //
 // Every function takes the Json as a parameter. Which concrete types it knows is the application's
 // business: this module carries a tree without knowing one component type in it.
-fun decodeKompotComponent(
+public fun decodeKompotComponent(
     json: Json,
     text: String,
 ): KompotComponent = json.decodeKompotComponent(text)
 
-fun encodeKompotComponent(
+public fun encodeKompotComponent(
     json: Json,
     component: KompotComponent,
 ): String = json.encodeKompotComponent(component)
 
-fun decodeKompotAction(
+public fun decodeKompotAction(
     json: Json,
     text: String,
 ): KompotAction = json.decodeKompotAction(text)
 
-fun encodeKompotAction(
+public fun encodeKompotAction(
     json: Json,
     action: KompotAction,
 ): String = json.encodeKompotAction(action)
@@ -47,12 +47,12 @@ fun encodeKompotAction(
 // classes whose compiler-generated serializer() is available directly, no PolymorphicSerializer
 // needed. But decodeFromString<T>()/encodeToString<T>() are still reified, the same export gap as
 // above, so they need the same non-generic wrappers.
-fun decodeKompotFormResponse(
+public fun decodeKompotFormResponse(
     json: Json,
     text: String,
 ): KompotFormResponse = json.decodeFromString(KompotFormResponse.serializer(), text)
 
-fun encodeFormPatchRequest(
+public fun encodeFormPatchRequest(
     json: Json,
     formId: String,
     fieldId: String,
@@ -61,13 +61,13 @@ fun encodeFormPatchRequest(
 
 // KompotPageResponse is not polymorphic itself either — only its nested
 // `items: List<@Polymorphic KompotComponent>` is — the same reified gap as above.
-fun decodeKompotPageResponse(
+public fun decodeKompotPageResponse(
     json: Json,
     text: String,
 ): KompotPageResponse = json.decodeFromString(KompotPageResponse.serializer(), text)
 
 // FormPatch is the answer to a patch request, and hits the same non-generic gap.
-fun decodeFormPatch(
+public fun decodeFormPatch(
     json: Json,
     text: String,
 ): FormPatch = json.decodeFromString(FormPatch.serializer(), text)
@@ -77,7 +77,7 @@ fun decodeFormPatch(
 // serialisation inside, and the compiler generates a non-reified serializer() for it anyway — the
 // same gap as encodeFormPatchRequest above. Swift builds a WizardTransition from the exported Kotlin
 // classes directly (WizardTransition.Next.shared and friends) and needs no factory here.
-fun encodeWizardResumeRequest(
+public fun encodeWizardResumeRequest(
     json: Json,
     transition: WizardTransition,
     values: Map<String, FieldValue>,

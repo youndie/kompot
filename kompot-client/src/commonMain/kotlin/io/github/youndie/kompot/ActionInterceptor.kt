@@ -1,5 +1,6 @@
 package io.github.youndie.kompot
 
+import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf
 import io.github.youndie.kompot.analytics.AnalyticsTracker
 
@@ -7,21 +8,21 @@ import io.github.youndie.kompot.analytics.AnalyticsTracker
 // travels through an ordered list of independent interceptors — analytics, permission checks,
 // routing. Each one decides whether to call chain.proceed() or to stop the chain, the way a
 // permission interceptor does when access is refused.
-fun interface KompotActionInterceptor {
-    fun intercept(chain: KompotActionChain)
+public fun interface KompotActionInterceptor {
+    public fun intercept(chain: KompotActionChain)
 }
 
-interface KompotActionChain {
-    val action: KompotAction
+public interface KompotActionChain {
+    public val action: KompotAction
 
         // Passes the same action on by default; an interceptor may substitute another one — a
         // wrapped, enriched version, say — by passing it explicitly.
-    fun proceed(action: KompotAction = this.action)
+    public fun proceed(action: KompotAction = this.action)
 }
 
     // Folds the list of interceptors into a single handler, which is what component renderers
     // actually call.
-fun kompotActionHandler(interceptors: List<KompotActionInterceptor>): KompotActionHandler =
+public fun kompotActionHandler(interceptors: List<KompotActionInterceptor>): KompotActionHandler =
     KompotActionHandler { action -> RealKompotActionChain(interceptors, 0, action).proceed(action) }
 
 private class RealKompotActionChain(
@@ -39,12 +40,12 @@ private class RealKompotActionChain(
     }
 }
 
-val LocalKompotActionHandler =
+public val LocalKompotActionHandler: ProvidableCompositionLocal<KompotActionHandler> =
     staticCompositionLocalOf<KompotActionHandler> {
         error("LocalKompotActionHandler not provided")
     }
 
-val LocalAnalyticsTracker =
+public val LocalAnalyticsTracker: ProvidableCompositionLocal<AnalyticsTracker> =
     staticCompositionLocalOf<AnalyticsTracker> {
         error("LocalAnalyticsTracker not provided")
     }

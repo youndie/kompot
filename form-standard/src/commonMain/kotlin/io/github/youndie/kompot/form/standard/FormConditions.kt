@@ -8,7 +8,7 @@ import io.github.youndie.kompot.form.FormCondition
 
 @Serializable
 @SerialName("equals")
-data class EqualsCondition(
+public data class EqualsCondition(
     val fieldId: String,
     val expectedValue: @Polymorphic FieldValue,
 ) : FormCondition {
@@ -20,7 +20,7 @@ data class EqualsCondition(
 // numbering is off, for instance.
 @Serializable
 @SerialName("not_equals")
-data class NotEqualsCondition(
+public data class NotEqualsCondition(
     val fieldId: String,
     val expectedValue: @Polymorphic FieldValue,
 ) : FormCondition {

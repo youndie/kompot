@@ -36,7 +36,7 @@ import androidx.compose.foundation.layout.Column as ComposeColumn
 // The registry is the only dispatch mechanism: there is no hard-wired `when` over types anywhere, so
 // EVERY component type — the standard column/row/text/button and UnknownComponent included — has to be
 // registered in a KompotRegistry explicitly. An application merges the renderer maps below into one.
-val LocalKompotRegistry =
+public val LocalKompotRegistry: ProvidableCompositionLocal<KompotRegistry> =
     staticCompositionLocalOf<KompotRegistry> {
         error("LocalKompotRegistry not provided")
     }
@@ -44,12 +44,12 @@ val LocalKompotRegistry =
 // The contract for fetching a page of a list. An application plugs in a concrete HTTP implementation
 // the same way it plugs in the registry, the design system and the action handler: one
 // CompositionLocalProvider at the root.
-val LocalKompotPageLoader =
+public val LocalKompotPageLoader: ProvidableCompositionLocal<KompotPageLoader> =
     staticCompositionLocalOf<KompotPageLoader> {
         error("LocalKompotPageLoader not provided")
     }
 
-class ColumnRenderer : KompotComponentRenderer<ColumnComponent> {
+public class ColumnRenderer : KompotComponentRenderer<ColumnComponent> {
     @Composable
     override fun Render(
         component: ColumnComponent,
@@ -92,7 +92,7 @@ class ColumnRenderer : KompotComponentRenderer<ColumnComponent> {
     }
 }
 
-class RowRenderer : KompotComponentRenderer<RowComponent> {
+public class RowRenderer : KompotComponentRenderer<RowComponent> {
     @Composable
     override fun Render(
         component: RowComponent,
@@ -154,7 +154,7 @@ private fun resolveTextColor(
         ?: style.color.takeIf { it != Color.Unspecified }
         ?: MaterialTheme.colorScheme.onSurface
 
-class TextRenderer : KompotComponentRenderer<TextComponent> {
+public class TextRenderer : KompotComponentRenderer<TextComponent> {
     @Composable
     override fun Render(
         component: TextComponent,
@@ -188,7 +188,7 @@ class TextRenderer : KompotComponentRenderer<TextComponent> {
     }
 }
 
-class ButtonRenderer : KompotComponentRenderer<ButtonComponent> {
+public class ButtonRenderer : KompotComponentRenderer<ButtonComponent> {
     @Composable
     override fun Render(
         component: ButtonComponent,
@@ -235,7 +235,7 @@ class ButtonRenderer : KompotComponentRenderer<ButtonComponent> {
     }
 }
 
-class TableRenderer : KompotComponentRenderer<TableComponent> {
+public class TableRenderer : KompotComponentRenderer<TableComponent> {
     @Composable
     override fun Render(
         component: TableComponent,
@@ -395,7 +395,7 @@ private fun LoadMoreButtonOrSpinner(
 // The non-lazy projection — a Column and a forEach — for a paginated list met somewhere OTHER than
 // the root of a screen, nested inside a column or a row, where virtualisation is impossible anyway.
 // A whole screen uses the lazy one instead, which lifts the list's items straight into the LazyColumn.
-class PaginatedListRenderer : KompotComponentRenderer<PaginatedListComponent> {
+public class PaginatedListRenderer : KompotComponentRenderer<PaginatedListComponent> {
     @Composable
     override fun Render(
         component: PaginatedListComponent,
@@ -504,7 +504,7 @@ private fun LazyListScope.paginatedListItems(
 // chose to replace a component, so it knows what the replacement stands in for. The fallback is an
 // ordinary component and may itself be unfamiliar, in which case this happens again one level down —
 // which is the right behaviour, not an accident of recursion.
-class UnknownComponentRenderer : KompotComponentRenderer<UnknownComponent> {
+public class UnknownComponentRenderer : KompotComponentRenderer<UnknownComponent> {
     @Composable
     override fun Render(
         component: UnknownComponent,
@@ -525,10 +525,10 @@ class UnknownComponentRenderer : KompotComponentRenderer<UnknownComponent> {
 
 // The "plug-ins" of the renderer registry: an application merges them when assembling a registry,
 // exactly as it merges serializers modules.
-val kompotCoreRenderers: Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>> =
+public val kompotCoreRenderers: Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>> =
     mapOf(UnknownComponent::class to UnknownComponentRenderer())
 
-val kompotStandardRenderers: Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>> =
+public val kompotStandardRenderers: Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>> =
     mapOf(
         ColumnComponent::class to ColumnRenderer(),
         RowComponent::class to RowRenderer(),
@@ -542,7 +542,7 @@ val kompotStandardRenderers: Map<KClass<out KompotComponent>, KompotComponentRen
 // generated as generatedFormsClientRenderers.
 
 @Composable
-fun KompotNode(
+public fun KompotNode(
     registry: KompotRegistry,
     formController: FormController,
     component: KompotComponent,
@@ -552,7 +552,7 @@ fun KompotNode(
 }
 
 @Composable
-fun KompotScreen(
+public fun KompotScreen(
     rootComponent: KompotComponent,
     registry: KompotRegistry,
     formController: FormController,
@@ -578,7 +578,7 @@ fun KompotScreen(
 // the LazyColumn itself, and the top-level children become its items. A paginated list among them is
 // the special case: its items become items of THAT SAME LazyColumn rather than a nested list.
 @Composable
-fun KompotLazyScreen(
+public fun KompotLazyScreen(
     rootComponent: KompotComponent,
     registry: KompotRegistry,
     formController: FormController,
@@ -632,18 +632,21 @@ fun KompotLazyScreen(
     }
 }
 
+// Internal: the registry's own last resort when nothing is registered for a component's class. It is
+// drawn from one place, three lines below, and it is not a piece of a design system — the text is not
+// even themed. A consumer who wants something better registers a renderer.
 @Composable
-fun UnknownComponentPlaceholder() {
+internal fun UnknownComponentPlaceholder() {
     Text("Unknown component", color = MaterialTheme.colorScheme.error)
 }
 
-typealias RenderersMap = Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>>
+public typealias RenderersMap = Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>>
 
-class KompotRegistry(
+public class KompotRegistry(
     private val renderers: RenderersMap,
 ) {
-    companion object {
-        operator fun invoke(
+    public companion object {
+        public operator fun invoke(
             vararg renderers: RenderersMap,
             decorator: (RenderersMap) -> RenderersMap = { it },
         ): KompotRegistry =
@@ -655,7 +658,7 @@ class KompotRegistry(
     }
 
     @Composable
-    fun <T : KompotComponent> RenderNode(
+    public fun <T : KompotComponent> RenderNode(
         component: T,
         actionHandler: KompotActionHandler,
         formController: FormController,

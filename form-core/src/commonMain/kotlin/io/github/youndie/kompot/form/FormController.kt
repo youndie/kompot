@@ -22,16 +22,16 @@ import kotlinx.coroutines.flow.update
 
 // T is covariant (out) so that a FieldState of any concrete FieldValue can be held in a variable of
 // type FieldState<FieldValue>.
-data class FieldState<out T : FieldValue>(
+public data class FieldState<out T : FieldValue>(
     val value: T?,
     val error: String? = null,
     val changed: Boolean = false,
 )
 
-typealias PatchFetcher = suspend (fieldId: String, payload: Map<String, FieldValue>) -> FormPatch
+public typealias PatchFetcher = suspend (fieldId: String, payload: Map<String, FieldValue>) -> FormPatch
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class FormController(
+public class FormController(
     private val schema: FormSchema,
     initialValues: Map<String, FieldValue> = emptyMap(),
     // Optional: how to fetch a patch from the backend for a field with triggersPatch = true. When it
@@ -46,7 +46,7 @@ class FormController(
     // standalone scope, for places where that lifecycle binding does not matter — tests above all.
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
 ) {
-    val fieldsState: StateFlow<Map<String, FieldState<FieldValue>>>
+    public val fieldsState: StateFlow<Map<String, FieldState<FieldValue>>>
         field =
         MutableStateFlow<Map<String, FieldState<FieldValue>>>(
             schema.fields.associate { fieldDef ->
@@ -68,7 +68,7 @@ class FormController(
     // with no manual isLoading.value = true/false from several places racing to overwrite each other.
     private val activePatchRequests = MutableStateFlow(0)
 
-    val isLoading: StateFlow<Boolean> =
+    public val isLoading: StateFlow<Boolean> =
         activePatchRequests
             .map { it > 0 }
             .stateIn(scope, SharingStarted.Eagerly, false)
@@ -86,7 +86,7 @@ class FormController(
 
     // A patch may ask for focus to move to a particular field (focusOn). FormController knows
     // nothing about focus itself; it just relays the request to the UI layer as an event.
-    val focusRequests: SharedFlow<String>
+    public val focusRequests: SharedFlow<String>
         field = MutableSharedFlow<String>(extraBufferCapacity = 1)
 
     init {
@@ -100,7 +100,7 @@ class FormController(
 
     // A convenience for UI components: obtain a state of the required type without manual casts.
     // val state = formController.getTypedState<TextValue>("hisob_raqam")
-    inline fun <reified T : FieldValue> getTypedState(fieldId: String): FieldState<T> {
+    public inline fun <reified T : FieldValue> getTypedState(fieldId: String): FieldState<T> {
         val state = fieldsState.value[fieldId]
 
         // Cast safely to the requested type; if the field is missing or the type does not match,
@@ -109,7 +109,7 @@ class FormController(
         return (state as? FieldState<T>) ?: FieldState(null)
     }
 
-    inline fun <reified T : FieldValue> getFieldFlow(fieldId: String): Flow<FieldState<T>> {
+    public inline fun <reified T : FieldValue> getFieldFlow(fieldId: String): Flow<FieldState<T>> {
         return fieldsState
             .map { map ->
                 @Suppress("UNCHECKED_CAST")
@@ -119,14 +119,14 @@ class FormController(
 
     // Whether this particular field is visible right now (a snapshot). Fields without visibleIf are
     // always true.
-    fun isFieldVisible(fieldId: String): Boolean {
+    public fun isFieldVisible(fieldId: String): Boolean {
         val fieldDef = schema.fields.find { it.fieldId == fieldId } ?: return true
         return isVisible(fieldDef, fieldsState.value)
     }
 
     // The reactive visibility stream, recomputed when ANY field changes — a condition may reference
     // another field — but emitting only when the visibility result itself changes.
-    fun getVisibilityFlow(fieldId: String): Flow<Boolean> {
+    public fun getVisibilityFlow(fieldId: String): Flow<Boolean> {
         val fieldDef = schema.fields.find { it.fieldId == fieldId } ?: return flowOf(true)
         return fieldsState.map { state -> isVisible(fieldDef, state) }.distinctUntilChanged()
     }
@@ -140,7 +140,7 @@ class FormController(
     }
 
     // The value-update entry point, called from the UI.
-    fun onValueChanged(
+    public fun onValueChanged(
         fieldId: String,
         newValue: FieldValue,
     ) {
@@ -169,7 +169,7 @@ class FormController(
     // Validation on blur. It checks this field only, not the whole form, and sets its error when a
     // rule fails. Called by the UI component when focus is lost. A field hidden by visibleIf is not
     // validated.
-    fun onFieldBlurred(fieldId: String) {
+    public fun onFieldBlurred(fieldId: String) {
         val fieldDef = schema.fields.find { it.fieldId == fieldId } ?: return
 
         fieldsState.update { currentMap ->
@@ -188,7 +188,7 @@ class FormController(
     // Highlights a field with an error that came from the backend — a saga rejecting the operation
     // during its validation phase, say. Business validation of that kind is deliberately not
     // duplicated in a ValidationRule: it is the server's responsibility.
-    fun setFieldError(
+    public fun setFieldError(
         fieldId: String,
         errorMessage: String?,
     ) {
@@ -204,7 +204,7 @@ class FormController(
     // the field changes again before the server answers, the earlier request is cancelled
     // automatically. When patching is not configured, or the field does not need it, this quietly
     // does nothing.
-    fun requestPatchIfNeeded(fieldId: String) {
+    public fun requestPatchIfNeeded(fieldId: String) {
         val fieldDef = schema.fields.find { it.fieldId == fieldId } ?: return
         if (patchFetcher == null || !fieldDef.triggersPatch) return
 
@@ -233,7 +233,7 @@ class FormController(
     // Applies a patch received from the backend: updates values, clears the listed fields and, when
     // asked, requests a focus move. A patch never changes the form's set of fields — for that the
     // server must send a whole new form.
-    fun applyPatch(patch: FormPatch) {
+    public fun applyPatch(patch: FormPatch) {
         fieldsState.update { currentMap ->
             var updated = currentMap
 
@@ -276,7 +276,7 @@ class FormController(
 
     // Marks every field as changed, which submit needs in order to highlight empty required fields.
     // Fields hidden by visibleIf are not validated and must not block submission.
-    fun markAllAsChanged() {
+    public fun markAllAsChanged() {
         fieldsState.update { currentMap ->
             currentMap.mapValues { (fieldId, state) ->
                 val fieldDef = schema.fields.find { it.fieldId == fieldId }
@@ -311,19 +311,19 @@ class FormController(
     // The form's raw values as they are, regardless of validity or visibility — what goes to the
     // patchFetcher, since the backend needs to see everything the user typed, including the
     // not-yet-valid.
-    fun getRawValues(): Map<String, FieldValue> =
+    public fun getRawValues(): Map<String, FieldValue> =
         fieldsState.value.mapNotNull { (fieldId, state) -> state.value?.let { fieldId to it } }.toMap()
 
     // Remote lookup for autocomplete fields. With no dataSourceResolver it quietly returns an empty
     // list rather than throwing.
-    suspend fun searchOptions(
+    public suspend fun searchOptions(
         dataSourceId: String,
         query: String,
     ): List<FieldValue> = dataSourceResolver?.search(dataSourceId, query) ?: emptyList()
 
     // Payload assembly. Returns Map<String, FieldValue> so that kotlinx.serialization can turn it
     // into JSON of the required shape directly.
-    fun getPayload(): Map<String, FieldValue>? {
+    public fun getPayload(): Map<String, FieldValue>? {
         val currentState = fieldsState.value
 
         // First check whether any VISIBLE field has an error: a field hidden by visibleIf must not

@@ -10,7 +10,7 @@ import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.material3.M3Colors
 import io.github.youndie.kompot.material3.M3Typography
 
-class Material3DesignSystem : KompotDesignSystem {
+public class Material3DesignSystem : KompotDesignSystem {
     @Composable
     override fun resolveColor(token: ColorToken): Color =
         when (token) {

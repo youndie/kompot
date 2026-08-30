@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 // a description of the wire with no transport detail. A concrete SSE implementation lives in the
 // application, not here — neither kompot-realtime nor kompot-client should know which HTTP client
 // is in use.
-fun interface KompotRealtimeSource {
-    fun subscribe(topic: String): Flow<UpdateComponentMessage>
+public fun interface KompotRealtimeSource {
+    public fun subscribe(topic: String): Flow<UpdateComponentMessage>
 }

@@ -8,59 +8,59 @@ import io.github.youndie.kompot.TypographyToken
 // Map<String, String> of text keys — makes a typo in a token far too easy. Here the key arrives
 // typed as a ColorToken or TypographyToken, usually a ready-made constant from :kompot-ds-material.
 @DslMarker
-annotation class KompotThemeDsl
+public annotation class KompotThemeDsl
 
-fun kompotTheme(
+public fun kompotTheme(
     id: String,
     block: KompotThemeBuilder.() -> Unit,
 ): KompotTheme = KompotThemeBuilder(id).apply(block).build()
 
 @KompotThemeDsl
-class KompotThemeBuilder(
+public class KompotThemeBuilder(
     private val id: String,
 ) {
     private var light = KompotPalette()
     private var dark: KompotPalette? = null
     private val typography = mutableMapOf<String, KompotTextStyle>()
 
-    fun light(block: KompotPaletteBuilder.() -> Unit) {
+    public fun light(block: KompotPaletteBuilder.() -> Unit) {
         light = KompotPaletteBuilder().apply(block).build()
     }
 
     // Not calling this is a valid decision: the client then stays entirely on its own palette in
     // dark mode (see the comment on KompotTheme.dark).
-    fun dark(block: KompotPaletteBuilder.() -> Unit) {
+    public fun dark(block: KompotPaletteBuilder.() -> Unit) {
         dark = KompotPaletteBuilder().apply(block).build()
     }
 
-    fun typography(block: KompotTypographyBuilder.() -> Unit) {
+    public fun typography(block: KompotTypographyBuilder.() -> Unit) {
         typography += KompotTypographyBuilder().apply(block).build()
     }
 
-    fun build() = KompotTheme(id = id, light = light, dark = dark, typography = typography.toMap())
+    public fun build(): KompotTheme = KompotTheme(id = id, light = light, dark = dark, typography = typography.toMap())
 }
 
 @KompotThemeDsl
-class KompotPaletteBuilder {
+public class KompotPaletteBuilder {
     private val colors = mutableMapOf<String, String>()
 
-    fun color(
+    public fun color(
         token: ColorToken,
         hex: String,
     ) {
         colors[token.key] = hex
     }
 
-    fun build() = KompotPalette(colors.toMap())
+    public fun build(): KompotPalette = KompotPalette(colors.toMap())
 }
 
 @KompotThemeDsl
-class KompotTypographyBuilder {
+public class KompotTypographyBuilder {
     private val styles = mutableMapOf<String, KompotTextStyle>()
 
     // Every parameter is optional by design: an unset property is taken from the client's built-in
     // design system (see KompotTextStyle).
-    fun style(
+    public fun style(
         token: TypographyToken,
         fontSizeSp: Float? = null,
         lineHeightSp: Float? = null,
@@ -80,5 +80,5 @@ class KompotTypographyBuilder {
             )
     }
 
-    fun build(): Map<String, KompotTextStyle> = styles.toMap()
+    public fun build(): Map<String, KompotTextStyle> = styles.toMap()
 }

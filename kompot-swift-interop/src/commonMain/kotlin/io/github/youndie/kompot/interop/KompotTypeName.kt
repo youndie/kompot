@@ -14,7 +14,7 @@ import io.github.youndie.kompot.KompotComponent
 // discriminator. A renderer on the Swift side can then dispatch on that string through an ordinary
 // [String: Renderer] dictionary.
 @OptIn(ExperimentalSerializationApi::class)
-fun kompotComponentTypeName(
+public fun kompotComponentTypeName(
     component: KompotComponent,
     json: Json,
 ): String =
@@ -22,7 +22,7 @@ fun kompotComponentTypeName(
         ?: error("No serializer registered for ${component::class}")
 
 @OptIn(ExperimentalSerializationApi::class)
-fun kompotActionTypeName(
+public fun kompotActionTypeName(
     action: KompotAction,
     json: Json,
 ): String =

@@ -10,7 +10,7 @@ import io.github.youndie.kompot.registry.KompotComponentMarker
 @Serializable
 @SerialName("text_input")
 @KompotComponentMarker
-data class TextInputComponent(
+public data class TextInputComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val fieldId: String,
@@ -33,7 +33,7 @@ data class TextInputComponent(
 @Serializable
 @SerialName("amount_input")
 @KompotComponentMarker
-data class AmountInputComponent(
+public data class AmountInputComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val fieldId: String,
@@ -74,7 +74,7 @@ data class AmountInputComponent(
 @Serializable
 @SerialName("checkbox_input")
 @KompotComponentMarker
-data class CheckboxInputComponent(
+public data class CheckboxInputComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val fieldId: String,
@@ -93,7 +93,7 @@ data class CheckboxInputComponent(
 @Serializable
 @SerialName("autocomplete_input")
 @KompotComponentMarker
-data class AutocompleteInputComponent(
+public data class AutocompleteInputComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val fieldId: String,
@@ -109,7 +109,7 @@ data class AutocompleteInputComponent(
 // capacity, say — so that other fields or a ValidationRule can read it locally, with no server round
 // trip.
 @Serializable
-data class SelectOption(
+public data class SelectOption(
     val id: String,
     val label: String,
     val rawMetadata: Map<String, String>? = null,
@@ -118,7 +118,7 @@ data class SelectOption(
 @Serializable
 @SerialName("select_input")
 @KompotComponentMarker
-data class SelectInputComponent(
+public data class SelectInputComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val fieldId: String,
@@ -130,7 +130,7 @@ data class SelectInputComponent(
 @Serializable
 @SerialName("radio_group")
 @KompotComponentMarker
-data class RadioGroupComponent(
+public data class RadioGroupComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val fieldId: String,
@@ -152,7 +152,7 @@ data class RadioGroupComponent(
 @Serializable
 @SerialName("read_only_field")
 @KompotComponentMarker
-data class ReadOnlyFieldComponent(
+public data class ReadOnlyFieldComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val label: String,
@@ -172,13 +172,13 @@ data class ReadOnlyFieldComponent(
 
 @Serializable
 @SerialName("submit_form")
-data class SubmitFormAction(
+public data class SubmitFormAction(
     val formId: String,
 ) : KompotAction
 
 // The words a server may send as a checkbox_input variant that the standard renderer acts on. Here
 // rather than in the client because the SERVER is the side that has to spell it, and a constant is
 // how a shared string stops being spelled twice.
-object KompotCheckboxVariants {
-    const val SWITCH = "switch"
+public object KompotCheckboxVariants {
+    public const val SWITCH: String = "switch"
 }

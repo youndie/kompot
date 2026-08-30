@@ -22,8 +22,8 @@ private fun stableHash(key: String): Int {
 // the SAME experiment, with no assignment storage at all. The assignment is computed entirely from
 // (experiment.id, subjectId) through a stable hash, so behaviour is a pure function of the data
 // rather than mutable state that would have to be synchronised between server instances.
-object ExperimentAssigner {
-    fun assign(
+public object ExperimentAssigner {
+    public fun assign(
         experiment: Experiment,
         subjectId: String,
     ): String {

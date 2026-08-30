@@ -14,7 +14,7 @@ import io.github.youndie.kompot.decodeKompotComponent
 // @Serializable, so a plain call.receive<KompotComponent>() cannot resolve the concrete runtime
 // class's serialiser by itself (see the comment in RespondKompotComponent.kt) — the body has to be
 // decoded explicitly through PolymorphicSerializer.
-suspend fun ApplicationCall.receiveKompotComponent(json: Json): KompotComponent =
+public suspend fun ApplicationCall.receiveKompotComponent(json: Json): KompotComponent =
     try {
         json.decodeKompotComponent(receiveText())
     } catch (e: Exception) {

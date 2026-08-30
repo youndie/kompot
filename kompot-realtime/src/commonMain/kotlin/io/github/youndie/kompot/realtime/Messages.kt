@@ -14,7 +14,7 @@ import io.github.youndie.kompot.KompotComponent
 // (server -> client) and the client physically cannot send anything after the handshake, so both
 // became unreachable code and were removed: the one remaining frame type needs no sealed wrapper.
 @Serializable
-data class UpdateComponentMessage(
+public data class UpdateComponentMessage(
     val componentId: String,
     val component: @Polymorphic KompotComponent,
 )

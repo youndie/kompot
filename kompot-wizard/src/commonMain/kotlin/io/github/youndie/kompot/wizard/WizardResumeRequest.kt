@@ -10,7 +10,7 @@ import io.github.youndie.kompot.wizard.core.WizardTransition
 // Converting them into whatever flat representation a server-side engine expects is the application's
 // business, and this module needs to know nothing about it.
 @Serializable
-data class WizardResumeRequest(
+public data class WizardResumeRequest(
     val transition: WizardTransition,
     val values: Map<String, @Polymorphic FieldValue> = emptyMap(),
     // Which run of the scenario this is. It arrives from the start endpoint in a response HEADER — the

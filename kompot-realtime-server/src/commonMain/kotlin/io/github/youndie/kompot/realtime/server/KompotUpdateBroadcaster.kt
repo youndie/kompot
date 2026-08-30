@@ -20,7 +20,7 @@ import kotlinx.coroutines.sync.withLock
 // A subscriber is a Channel<String> carrying an already serialised payload rather than a transport's
 // own event type: this module knows nothing about SSE or any HTTP framework, so it works just as well
 // behind a WebSocket. Wrapping a payload into a transport event is the routing layer's business.
-class KompotUpdateBroadcaster(
+public class KompotUpdateBroadcaster(
     private val bus: KompotUpdateBus = InMemoryKompotUpdateBus(),
 ) {
     private val mutex = Mutex()
@@ -35,7 +35,7 @@ class KompotUpdateBroadcaster(
     // The bus subscription lives as long as the scope passed in — an application's own background
     // scope. A separate method rather than the constructor: a constructor is no place to launch
     // coroutines, and a test is better off driving delivery by hand.
-    fun start(scope: CoroutineScope): Job {
+    public fun start(scope: CoroutineScope): Job {
         // UNDISPATCHED: the subscription must be in place BEFORE start() returns, or there is a window
         // between "started" and "actually subscribed" in which a published update is lost — the bus has
         // no replay and must not have one (see InMemoryKompotUpdateBus). At application start-up that is
@@ -48,14 +48,14 @@ class KompotUpdateBroadcaster(
         }
     }
 
-    suspend fun subscribe(
+    public suspend fun subscribe(
         topic: String,
         channel: Channel<String>,
     ) {
         mutex.withLock { subscribers.getOrPut(topic) { mutableSetOf() }.add(channel) }
     }
 
-    suspend fun unsubscribe(
+    public suspend fun unsubscribe(
         topic: String,
         channel: Channel<String>,
     ) {
@@ -67,7 +67,7 @@ class KompotUpdateBroadcaster(
         }
     }
 
-    suspend fun broadcast(
+    public suspend fun broadcast(
         topic: String,
         payload: String,
     ) {
@@ -79,7 +79,7 @@ class KompotUpdateBroadcaster(
 
     // How many subscribers THIS instance holds. For tests and diagnostics: the number shows that
     // unsubscribing really happens instead of piling up.
-    suspend fun localSubscriberCount(topic: String): Int = mutex.withLock { subscribers[topic]?.size ?: 0 }
+    public suspend fun localSubscriberCount(topic: String): Int = mutex.withLock { subscribers[topic]?.size ?: 0 }
 
     private suspend fun deliverLocally(
         topic: String,

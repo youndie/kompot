@@ -24,7 +24,7 @@ import io.github.youndie.kompot.form.FormSchema
 @Serializable
 @SerialName("wizard_screen")
 @KompotComponentMarker
-data class WizardScreenComponent(
+public data class WizardScreenComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val formId: String,
@@ -47,19 +47,19 @@ data class WizardScreenComponent(
 // transition to make.
 @Serializable
 @SerialName("wizard_next")
-data class NextStepAction(
+public data class NextStepAction(
     val formId: String,
 ) : KompotAction
 
 @Serializable
 @SerialName("wizard_back")
-data class PrevStepAction(
+public data class PrevStepAction(
     val formId: String,
 ) : KompotAction
 
 @Serializable
 @SerialName("wizard_finish")
-data class FinishWizardAction(
+public data class FinishWizardAction(
     val formId: String,
 ) : KompotAction
 
@@ -71,7 +71,7 @@ data class FinishWizardAction(
 // involved at all.
 @Serializable
 @SerialName("wizard_step_result")
-data class WizardStepAction(
+public data class WizardStepAction(
     val formId: String,
     val schema: FormSchema,
     val screen: @Polymorphic KompotComponent,

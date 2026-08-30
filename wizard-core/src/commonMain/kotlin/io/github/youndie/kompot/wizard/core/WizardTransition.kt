@@ -16,22 +16,22 @@ import kotlinx.serialization.Serializable
 // names are the same style as the rest of the toolkit's wire types. This module has already been
 // through that once: the transitions used to travel as their Kotlin FQNs.
 @Serializable
-sealed interface WizardTransition {
+public sealed interface WizardTransition {
     @Serializable
     @SerialName("next")
-    data object Next : WizardTransition
+    public data object Next : WizardTransition
 
     @Serializable
     @SerialName("back")
-    data object Back : WizardTransition
+    public data object Back : WizardTransition
 
     @Serializable
     @SerialName("jump_to")
-    data class JumpTo(
+    public data class JumpTo(
         val stepId: String,
     ) : WizardTransition
 
     @Serializable
     @SerialName("finish")
-    data object Finish : WizardTransition
+    public data object Finish : WizardTransition
 }

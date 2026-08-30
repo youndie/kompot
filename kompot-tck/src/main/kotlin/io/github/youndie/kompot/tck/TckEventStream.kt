@@ -3,7 +3,7 @@ package io.github.youndie.kompot.tck
 // One event of a text/event-stream recording. `data` is the concatenation SSE prescribes: several
 // data: lines in one event join with a newline between them and mean ONE value, which is how a
 // payload containing a line break travels legally.
-data class TckEvent(
+public data class TckEvent(
     val name: String?,
     val data: String?,
     val malformed: List<String> = emptyList(),
@@ -16,8 +16,8 @@ data class TckEvent(
 // Deliberately strict about lines it does not recognise: the point of the check is to catch a server
 // that writes almost-SSE, and a lenient reader would quietly repair exactly the mistakes worth
 // reporting.
-object TckEventStream {
-    fun parse(recording: String): List<TckEvent> {
+public object TckEventStream {
+    public fun parse(recording: String): List<TckEvent> {
         val events = mutableListOf<TckEvent>()
         var name: String? = null
         val data = mutableListOf<String>()

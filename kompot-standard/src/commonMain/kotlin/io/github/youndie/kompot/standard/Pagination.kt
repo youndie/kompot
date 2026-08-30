@@ -18,7 +18,7 @@ import io.github.youndie.kompot.registry.KompotComponentMarker
 @Serializable
 @SerialName("paginated_list")
 @KompotComponentMarker
-data class PaginatedListComponent(
+public data class PaginatedListComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val initialItems: List<@Polymorphic KompotComponent>,
@@ -32,7 +32,7 @@ data class PaginatedListComponent(
 // particular step.
 @Serializable
 @SerialName("load_page")
-data class LoadPageAction(
+public data class LoadPageAction(
     val url: String,
 ) : KompotAction
 
@@ -40,7 +40,7 @@ data class LoadPageAction(
 // the current list on a filter reload and are APPENDED when loading a further page — the client
 // decides which, not the server. nextLoadAction == null means there is no more data.
 @Serializable
-data class KompotPageResponse(
+public data class KompotPageResponse(
     val items: List<@Polymorphic KompotComponent>,
     val nextLoadAction: LoadPageAction? = null,
 )
@@ -48,8 +48,8 @@ data class KompotPageResponse(
 // The contract for fetching a page over the network, implemented on the client over whichever HTTP
 // client is in use. The list renderer knows nothing about HTTP, only about this contract — the same
 // idea as the remote data source resolver behind autocomplete.
-interface KompotPageLoader {
-    suspend fun loadPage(
+public interface KompotPageLoader {
+    public suspend fun loadPage(
         url: String,
         params: Map<String, String> = emptyMap(),
     ): KompotPageResponse

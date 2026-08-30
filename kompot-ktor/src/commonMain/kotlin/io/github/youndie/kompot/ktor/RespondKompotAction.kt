@@ -13,7 +13,7 @@ import io.github.youndie.kompot.encodeKompotAction
 // and loses the "type" discriminator. Needed when the server answers a client action with an action
 // rather than with a component tree — for instance to tell the client about a new session after a
 // successful login.
-suspend fun ApplicationCall.respondKompotAction(
+public suspend fun ApplicationCall.respondKompotAction(
     json: Json,
     action: KompotAction,
 ) {

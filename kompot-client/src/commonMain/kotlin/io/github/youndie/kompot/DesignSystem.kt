@@ -1,6 +1,7 @@
 package io.github.youndie.kompot
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -12,21 +13,21 @@ import androidx.compose.ui.text.TextStyle
     //
     // Icons are deliberately not part of this: drawing an icon as a glyph string was removed in favour
     // of real images (see :kompot-images and its Coil renderer).
-interface KompotDesignSystem {
+public interface KompotDesignSystem {
     @Composable
-    fun resolveColor(token: ColorToken): Color
+    public fun resolveColor(token: ColorToken): Color
 
     @Composable
-    fun resolveTypography(token: TypographyToken): TextStyle
+    public fun resolveTypography(token: TypographyToken): TextStyle
 
     // The third hook, and the one that closes what a renderer draws for itself. Defaulted so that a
     // design system written before it keeps compiling and keeps looking exactly as it did: an empty
     // surface means "the toolkit's own default for this role".
     @Composable
-    fun resolveSurface(role: SurfaceRole): KompotSurface = KompotSurface()
+    public fun resolveSurface(role: SurfaceRole): KompotSurface = KompotSurface()
 }
 
-val LocalKompotDesignSystem =
+public val LocalKompotDesignSystem: ProvidableCompositionLocal<KompotDesignSystem> =
     staticCompositionLocalOf<KompotDesignSystem> {
         error("LocalKompotDesignSystem not provided")
     }

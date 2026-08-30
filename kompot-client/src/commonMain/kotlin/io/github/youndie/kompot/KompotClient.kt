@@ -31,7 +31,7 @@ import io.github.youndie.kompot.wizard.kompotWizardSerializersModule
     // register the actions that annotation does not cover.
 //
     // Nothing of an application's own belongs here: which components an application has, it knows.
-val kompotEngineSerializersModule: SerializersModule =
+public val kompotEngineSerializersModule: SerializersModule =
     kompotCoreSerializersModule +
         kompotStandardSerializersModule +
         generatedStandardSerializersModule +
@@ -47,7 +47,7 @@ val kompotEngineSerializersModule: SerializersModule =
 // library knowing what a particular product contains, which is exactly what open hierarchies exist to
 // avoid. The application already assembled its own Json on top; it was simply on top of an already
 // polluted one.
-fun kompotJson(applicationModule: SerializersModule = EmptySerializersModule()): Json =
+public fun kompotJson(applicationModule: SerializersModule = EmptySerializersModule()): Json =
     Json {
         ignoreUnknownKeys = true
         classDiscriminator = "type"
@@ -55,15 +55,15 @@ fun kompotJson(applicationModule: SerializersModule = EmptySerializersModule()):
         serializersModule = kompotEngineSerializersModule + applicationModule
     }
 
-fun interface KompotActionHandler {
-    fun handle(action: KompotAction)
+public fun interface KompotActionHandler {
+    public fun handle(action: KompotAction)
 }
 
 // A chain of nodes rather than a flat set of fields: the order of application is decided by the
 // backend, through the order of calls in its modifier block, instead of being fixed here. fold applies
 // the nodes one after another, in the order they arrived.
 @Composable
-fun List<KompotModifierNode>.toComposeModifier(): Modifier {
+public fun List<KompotModifierNode>.toComposeModifier(): Modifier {
     val designSystem = LocalKompotDesignSystem.current
 
     return fold(Modifier as Modifier) { currentModifier, node ->

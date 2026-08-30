@@ -23,7 +23,7 @@ import io.github.youndie.kompot.realtime.server.KompotUpdateBus
 // you can afford to lose — the client gets the current state with its next screen request anyway —
 // while a queue with guarantees would cost separate infrastructure. Anything that must not be lost
 // travels through an outbox instead, not through here.
-class RedisKompotUpdateBus(
+public class RedisKompotUpdateBus(
     private val client: RedisClient,
     // The channel prefix. A parameter of its own because one Redis is usually shared between several
     // applications and environments: without a prefix, events from one would reach subscribers of
@@ -65,16 +65,16 @@ class RedisKompotUpdateBus(
             }
         }
 
-    fun close() {
+    public fun close() {
         publisher.close()
         client.shutdown()
     }
 
-    companion object {
+    public companion object {
         // A factory from a URL: an application picks a bus backend, not a Redis library, and needs no
         // knowledge of which client is inside. It is also the only place a RedisClient is created, which
         // is why closing it lives here too.
-        fun create(
+        public fun create(
             url: String,
             channelPrefix: String = "kompot:updates",
         ): RedisKompotUpdateBus = RedisKompotUpdateBus(RedisClient.create(url), channelPrefix)

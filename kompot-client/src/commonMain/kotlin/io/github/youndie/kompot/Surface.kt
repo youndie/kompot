@@ -16,30 +16,30 @@ import kotlin.jvm.JvmInline
 // which is the property worth protecting. That is why this lives in :kompot-client rather than beside
 // ColorToken in :kompot-core.
 @JvmInline
-value class SurfaceRole(
-    val key: String,
+public value class SurfaceRole(
+    public val key: String,
 )
 
-object KompotSurfaceRoles {
-    val Button = SurfaceRole("button")
-    val Field = SurfaceRole("field")
+public object KompotSurfaceRoles {
+    public val Button: SurfaceRole = SurfaceRole("button")
+    public val Field: SurfaceRole = SurfaceRole("field")
 
     // Its own role rather than the field's, because the whole point of read_only_field is to say
     // "this is a value, not an input" — and drawn as a disabled input it says the opposite. What it
     // should look like instead is the deployment's to decide, not the toolkit's.
-    val ReadOnlyField = SurfaceRole("read_only_field")
-    val Container = SurfaceRole("container")
+    public val ReadOnlyField: SurfaceRole = SurfaceRole("read_only_field")
+    public val Container: SurfaceRole = SurfaceRole("container")
 
     // A button's emphasis is content, not theme: which one is primary is decided by whoever wrote the
     // screen. The renderer composes the role from the variant the server sent, so a design system
     // answers "button.quiet" the way it answers "button".
-    fun button(variant: String?): SurfaceRole = if (variant == null) Button else SurfaceRole("${Button.key}.$variant")
+    public fun button(variant: String?): SurfaceRole = if (variant == null) Button else SurfaceRole("${Button.key}.$variant")
 
     // The same composition for a boolean's affordance: a design system answers "checkbox_input.switch"
     // the way it answers "checkbox_input", and neither string is the protocol's business.
-    val CheckboxInput = SurfaceRole("checkbox_input")
+    public val CheckboxInput: SurfaceRole = SurfaceRole("checkbox_input")
 
-    fun checkboxInput(variant: String?): SurfaceRole =
+    public fun checkboxInput(variant: String?): SurfaceRole =
         if (variant == null) CheckboxInput else SurfaceRole("${CheckboxInput.key}.$variant")
 }
 
@@ -50,7 +50,7 @@ object KompotSurfaceRoles {
 // `content` is here because the first golden of this feature showed why: a container set without one
 // leaves Material's own foreground on top of it, and a pale container turned "Cancel" into text you
 // cannot read. A container that could be set alone would be a trap laid for whoever sets it.
-data class KompotSurface(
+public data class KompotSurface(
     val shape: Shape? = null,
     val container: Color = Color.Unspecified,
     val content: Color = Color.Unspecified,

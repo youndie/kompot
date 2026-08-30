@@ -18,7 +18,7 @@ import coil3.compose.LocalPlatformContext
 // There is no hand-written renderer map here: :kompot-registry-processor generates it as
 // generatedImagesClientRenderers (see io.github.youndie.kompot.generated).
 @KompotComponentMarker
-class KompotImageRenderer : KompotComponentRenderer<KompotImageComponent> {
+public class KompotImageRenderer : KompotComponentRenderer<KompotImageComponent> {
     @Composable
     override fun Render(
         component: KompotImageComponent,

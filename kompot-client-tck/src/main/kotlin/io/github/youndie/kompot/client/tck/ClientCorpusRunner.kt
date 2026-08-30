@@ -2,15 +2,15 @@ package io.github.youndie.kompot.client.tck
 
 import kotlinx.serialization.json.Json
 
-data class ClientFinding(
+public data class ClientFinding(
     val case: String,
     val clause: String,
     val message: String,
 ) {
-    override fun toString() = "[$clause] $case — $message"
+    override fun toString(): String = "[$clause] $case — $message"
 }
 
-data class ClientReport(
+public data class ClientReport(
     val findings: List<ClientFinding>,
     val casesRun: Int,
     // Cases whose expectation this adapter cannot answer — it does not implement the operation they
@@ -39,13 +39,13 @@ data class ClientReport(
 // Drives a client through the corpus. It knows nothing about how a client is built — only the seven
 // operations of KompotFormClient — and nothing about a domain: every case is written in the toolkit's
 // own vocabulary, so this ships with the protocol rather than with an application.
-class ClientCorpusRunner(
+public class ClientCorpusRunner(
     private val cases: List<ClientCase>,
     // A fresh client per case: state left behind by one case turning the next one green (or red) is
     // the classic way a corpus stops meaning anything.
     private val clientFactory: () -> KompotFormClient,
 ) {
-    fun run(): ClientReport {
+    public fun run(): ClientReport {
         val outcomes = cases.map { case -> runCase(case) }
         return ClientReport(
             findings = outcomes.flatMap { it.findings },
@@ -169,14 +169,17 @@ class ClientCorpusRunner(
         return CaseOutcome(findings, unchecked)
     }
 
-    companion object {
+    public companion object {
         // Strict about keys, deliberately. ignoreUnknownKeys would turn a misspelt or unsupported
         // expectation into a case that runs, asserts less than it says, and passes — the same silence
         // the check counter exists for, arriving one layer earlier. A corpus read by a runner that
         // does not know a key must stop, not shrug.
-        val json = Json { ignoreUnknownKeys = false; classDiscriminator = "step" }
+        // Internal: the runner's own parser, not something the kit offers. A consumer reads cases
+        // through casesFrom or ClientCorpusResources; the discriminator this configures is a fact of
+        // the case schema that ships beside the corpus, so nobody needs this instance to know it.
+        internal val json = Json { ignoreUnknownKeys = false; classDiscriminator = "step" }
 
-        fun casesFrom(
+        public fun casesFrom(
             index: String,
             read: (String) -> String,
         ): List<ClientCase> =

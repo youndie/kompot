@@ -7,7 +7,7 @@ package io.github.youndie.kompot.wizard.core
 // tied to no form or component model, so an entire transition graph can be covered by unit tests with
 // any simple T — a Map<String, Int>, a data class, whatever — with no HTTP server, database or UI
 // framework in sight (see WizardEngineTest).
-data class WizardSession<T>(
+public data class WizardSession<T>(
     val currentStepId: String,
     val history: List<String> = emptyList(),
     val draft: T,

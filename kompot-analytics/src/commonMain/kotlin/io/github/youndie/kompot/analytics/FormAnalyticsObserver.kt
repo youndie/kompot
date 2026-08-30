@@ -11,7 +11,7 @@ import io.github.youndie.kompot.form.FormController
 // FormController offers no callbacks on field changes, so this subscribes to fieldsState from the
 // outside and diffs consecutive snapshots itself, changing nothing in form-core. It returns a Job:
 // when to cancel it is the caller's decision.
-fun observeFormAnalytics(
+public fun observeFormAnalytics(
     formController: FormController,
     tracker: AnalyticsTracker,
     scope: CoroutineScope,

@@ -26,7 +26,7 @@ import io.github.youndie.kompot.form.RemoteDataSourceResolver
 // resume, and specifically on the failure branch. The empirical result is unambiguous, so the
 // always-resume-with-success shape stays.
 
-fun swiftRemoteDataSourceResolver(
+public fun swiftRemoteDataSourceResolver(
     search: (
         dataSourceId: String,
         query: String,
@@ -54,7 +54,7 @@ fun swiftRemoteDataSourceResolver(
         }
     }
 
-fun swiftPatchFetcher(
+public fun swiftPatchFetcher(
     fetch: (
         fieldId: String,
         payload: Map<String, FieldValue>,

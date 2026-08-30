@@ -8,7 +8,7 @@ import io.github.youndie.kompot.form.FormController
     // A wrapper AROUND a handler rather than a handler itself. It adds no actual form submission —
     // only the analytics, in the one place where a screen's FormController and its action handler are
     // both in scope at once.
-fun KompotActionHandler.withFormSubmitTracking(
+public fun KompotActionHandler.withFormSubmitTracking(
     formController: FormController,
     tracker: AnalyticsTracker,
     formId: String,

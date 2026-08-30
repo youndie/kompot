@@ -8,7 +8,7 @@ import io.github.youndie.kompot.form.ValidationRule
 
 @Serializable
 @SerialName("required")
-data class RequiredRule(
+public data class RequiredRule(
     override val errorMessage: String,
 ) : ValidationRule {
     override fun validate(
@@ -37,7 +37,7 @@ data class RequiredRule(
 
 @Serializable
 @SerialName("regex")
-data class RegexRule(
+public data class RegexRule(
     val pattern: String,
     override val errorMessage: String,
 ) : ValidationRule {
@@ -75,7 +75,7 @@ data class RegexRule(
 // the fieldId its answer names (see FormController.setFieldError).
 @Serializable
 @SerialName("required_if")
-data class RequiredIfRule(
+public data class RequiredIfRule(
     val targetFieldId: String,
     val expectedValue: @Polymorphic FieldValue,
     override val errorMessage: String,
@@ -109,7 +109,7 @@ data class RequiredIfRule(
 // passed — what is left could have changed between rendering the form and submitting it.
 @Serializable
 @SerialName("max_amount_from_field")
-data class MaxAmountRule(
+public data class MaxAmountRule(
     val balanceFieldId: String,
     val balanceMetadataKey: String = "balance",
     override val errorMessage: String,

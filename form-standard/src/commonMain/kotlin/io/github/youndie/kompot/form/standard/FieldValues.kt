@@ -6,7 +6,7 @@ import io.github.youndie.kompot.form.FieldValue
 
 @Serializable
 @SerialName("text_value")
-data class TextValue(
+public data class TextValue(
     val text: String,
 ) : FieldValue {
     override val plainValue: String get() = text
@@ -14,7 +14,7 @@ data class TextValue(
 
 @Serializable
 @SerialName("amount_value")
-data class AmountValue(
+public data class AmountValue(
     val long: Long,
     // The currency of the value itself, which may depend on what is selected in a neighbouring field.
     // null means "no currency here": a renderer then takes it from the UI component
@@ -28,7 +28,7 @@ data class AmountValue(
 
 @Serializable
 @SerialName("boolean_value")
-data class BooleanValue(
+public data class BooleanValue(
     val value: Boolean,
 ) : FieldValue {
     override val plainValue: String get() = value.toString()
@@ -40,7 +40,7 @@ data class BooleanValue(
 // the protocol, see SPEC.md §9.7.
 @Serializable
 @SerialName("entity_value")
-data class EntityValue(
+public data class EntityValue(
     val id: String,
     val title: String,
     val rawMetadata: Map<String, String>? = null,

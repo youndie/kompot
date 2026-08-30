@@ -5,7 +5,7 @@ import io.github.youndie.kompot.dsl.KompotContainerContext
 import io.github.youndie.kompot.dsl.KompotModifierBuilder
 import kotlin.uuid.Uuid
 
-fun KompotContainerContext.image(
+public fun KompotContainerContext.image(
     url: String,
     contentDescription: String? = null,
     scaleType: ImageScaleType = ImageScaleType.Fit,

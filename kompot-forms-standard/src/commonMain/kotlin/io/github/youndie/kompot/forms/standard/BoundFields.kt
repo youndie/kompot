@@ -23,7 +23,7 @@ import io.github.youndie.kompot.form.standard.TextFieldDefinition
 // For free-standing UI — text, a column, a button, a read-only field — use the ordinary builders of
 // kompot-standard and kompot-forms; the form builder is a KompotContainerContext itself.
 
-fun KompotFormContext.boundTextInput(
+public fun KompotFormContext.boundTextInput(
     fieldId: String,
     label: String,
     placeholder: String? = null,
@@ -63,7 +63,7 @@ fun KompotFormContext.boundTextInput(
 // symbol, which side of the number it goes on, and whether it stands away from it — and
 // currencyFromField says which neighbouring field to take the symbol from. The field definition has
 // no currency of its own any more — nothing read it, and its default belonged to one application.
-fun KompotFormContext.boundAmountInput(
+public fun KompotFormContext.boundAmountInput(
     fieldId: String,
     label: String,
     currencySuffix: String? = null,
@@ -96,7 +96,7 @@ fun KompotFormContext.boundAmountInput(
     )
 }
 
-fun KompotFormContext.boundCheckboxInput(
+public fun KompotFormContext.boundCheckboxInput(
     fieldId: String,
     label: String,
     visibleIf: FormCondition? = null,
@@ -116,7 +116,7 @@ fun KompotFormContext.boundCheckboxInput(
     )
 }
 
-fun KompotFormContext.boundAutocompleteInput(
+public fun KompotFormContext.boundAutocompleteInput(
     fieldId: String,
     label: String,
     dataSourceId: String,
@@ -146,7 +146,7 @@ fun KompotFormContext.boundAutocompleteInput(
     )
 }
 
-fun KompotFormContext.boundSelectInput(
+public fun KompotFormContext.boundSelectInput(
     fieldId: String,
     label: String,
     options: List<SelectOption>,
@@ -175,7 +175,7 @@ fun KompotFormContext.boundSelectInput(
     )
 }
 
-fun KompotFormContext.boundRadioGroup(
+public fun KompotFormContext.boundRadioGroup(
     fieldId: String,
     label: String,
     options: List<SelectOption>,

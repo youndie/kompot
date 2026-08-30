@@ -45,7 +45,10 @@ private data class RendererEntry(
 // <Tag> comes from the KSP option kompotModuleTag, unique per consuming module (see
 // KompotRegistryProcessorProvider): otherwise several modules would generate files and objects of
 // the same name in one package and collide in the consumer's build.
-class KompotRegistrySymbolProcessor(
+// Internal: KSP reaches this module through the provider named in META-INF/services and nowhere
+// else, and the provider hands back a SymbolProcessor. Nobody constructs this class, and a
+// consumer who could would be configuring the processor around KSP rather than through it.
+internal class KompotRegistrySymbolProcessor(
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
     private val moduleTag: String,

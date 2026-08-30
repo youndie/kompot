@@ -7,7 +7,7 @@ import io.github.youndie.kompot.realtime.UpdateComponentMessage
 // KompotFormResponse — only its `component` is, and that is settled by the SerializersModule of the
 // Json passed in. All that is needed here is a non-generic wrapper over the reified
 // decodeFromString<T>(), which is not exported to Swift.
-fun decodeUpdateComponentMessage(
+public fun decodeUpdateComponentMessage(
     json: Json,
     text: String,
 ): UpdateComponentMessage = json.decodeFromString(UpdateComponentMessage.serializer(), text)

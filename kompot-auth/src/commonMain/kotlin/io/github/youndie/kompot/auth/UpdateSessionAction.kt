@@ -10,7 +10,7 @@ import io.github.youndie.kompot.KompotAction
 // application, where server-driven UI and authentication meet.
 @Serializable
 @SerialName("update_session")
-data class UpdateSessionAction(
+public data class UpdateSessionAction(
     val accessToken: String,
     val refreshToken: String,
 ) : KompotAction

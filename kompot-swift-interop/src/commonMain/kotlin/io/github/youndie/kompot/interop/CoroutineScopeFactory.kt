@@ -13,4 +13,4 @@ import kotlinx.coroutines.SupervisorJob
 // Cancelling it is the caller's business: a CoroutineScope has no such method of its own, so Swift
 // normally just releases the controller together with the scope. Nothing has to wait for the child
 // coroutines explicitly, because the scope never outlives the controller.
-fun mainCoroutineScope(): CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+public fun mainCoroutineScope(): CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)

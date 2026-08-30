@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 // The transport stays outside: `perform` is a lambda the application supplies, the same way the
 // toolkit takes no opinion on HTTP anywhere else. That is also where the Idempotency-Key required by
 // SPEC.md §16.5 is attached — a key per attempt, not per screen.
-fun KompotActionHandler.withPerform(
+public fun KompotActionHandler.withPerform(
     scope: CoroutineScope,
     perform: suspend (url: String, payload: Map<String, FieldValue>) -> KompotAction,
 ): KompotActionHandler =

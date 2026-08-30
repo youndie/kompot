@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 // §16.1). It is what tells a client which serialiser to use, and without it the graph could carry only
 // component trees: a form endpoint answers a KompotFormResponse envelope, which has no discriminator
 // of its own, so a client following a route had nothing to decide by.
-object ScreenRouteKind {
-    const val SCREEN = "screen"
-    const val FORM = "form"
+public object ScreenRouteKind {
+    public const val SCREEN: String = "screen"
+    public const val FORM: String = "form"
 
     // A screen whose response is a KompotScreenResponse rather than a bare component tree: the same
     // tree, plus the channel its updates arrive on (§10.4).
@@ -17,10 +17,10 @@ object ScreenRouteKind {
     // client picks its deserialiser by kind, and a client released before this existed would meet an
     // envelope where it expects a node. §12.1 already says such a client skips the route — it loses a
     // screen it could not have subscribed to anyway, instead of failing to parse one.
-    const val LIVE_SCREEN = "live_screen"
+    public const val LIVE_SCREEN: String = "live_screen"
 
     // Every kind this build can draw. A client passes what IT supports, which is not necessarily this.
-    val known: Set<String> = setOf(SCREEN, FORM, LIVE_SCREEN)
+    public val known: Set<String> = setOf(SCREEN, FORM, LIVE_SCREEN)
 }
 
 // One plain screen of the graph: the deeplink the client opens it by — the same deeplink that a
@@ -33,7 +33,7 @@ object ScreenRouteKind {
 // is NOT such a screen: nothing about rendering one is specific to a particular form, which is why it
 // belongs here and why excluding it cost the graph most of its point.
 @Serializable
-data class ScreenRoute(
+public data class ScreenRoute(
     val deeplink: String,
     val endpoint: String,
     val title: String? = null,
@@ -45,13 +45,13 @@ data class ScreenRoute(
 )
 
 @Serializable
-data class NavigationGraph(
+public data class NavigationGraph(
     val routes: List<ScreenRoute>,
 ) {
     // Defaulting to screens only is not caution for its own sake: it is exactly what a caller written
     // before `kind` existed did, so the default preserves that behaviour instead of silently handing it
     // a route it cannot draw. A client that renders forms passes ScreenRouteKind.known.
-    fun routeFor(
+    public fun routeFor(
         deeplink: String,
         supportedKinds: Set<String> = setOf(ScreenRouteKind.SCREEN),
     ): ScreenRoute? = routes.find { it.deeplink == deeplink && it.kind in supportedKinds }

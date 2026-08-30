@@ -26,7 +26,7 @@ import io.github.youndie.kompot.form.FormController
 // content, usually a form whose submit action is a NextStepAction. That way Enter on a mobile
 // keyboard advances the flow without any extra UI element.
 @KompotComponentMarker
-class WizardScreenRenderer : KompotComponentRenderer<WizardScreenComponent> {
+public class WizardScreenRenderer : KompotComponentRenderer<WizardScreenComponent> {
     @Composable
     override fun Render(
         component: WizardScreenComponent,

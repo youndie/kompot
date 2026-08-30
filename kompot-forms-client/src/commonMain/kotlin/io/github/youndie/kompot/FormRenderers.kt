@@ -39,7 +39,7 @@ import io.github.youndie.kompot.form.standard.TextValue
 // renderers live in, so a consumer's imports do not depend on which module a renderer sits in.
 
 @KompotComponentMarker
-class ReadOnlyFieldRenderer : KompotComponentRenderer<ReadOnlyFieldComponent> {
+public class ReadOnlyFieldRenderer : KompotComponentRenderer<ReadOnlyFieldComponent> {
     @Composable
     override fun Render(
         component: ReadOnlyFieldComponent,
@@ -79,7 +79,7 @@ class ReadOnlyFieldRenderer : KompotComponentRenderer<ReadOnlyFieldComponent> {
 }
 
 @KompotComponentMarker
-class TextInputRenderer : KompotComponentRenderer<TextInputComponent> {
+public class TextInputRenderer : KompotComponentRenderer<TextInputComponent> {
     @Composable
     override fun Render(
         component: TextInputComponent,
@@ -163,7 +163,7 @@ class TextInputRenderer : KompotComponentRenderer<TextInputComponent> {
 }
 
 @KompotComponentMarker
-class AmountInputRenderer : KompotComponentRenderer<AmountInputComponent> {
+public class AmountInputRenderer : KompotComponentRenderer<AmountInputComponent> {
     @Composable
     override fun Render(
         component: AmountInputComponent,
@@ -257,7 +257,7 @@ class AmountInputRenderer : KompotComponentRenderer<AmountInputComponent> {
 }
 
 @KompotComponentMarker
-class CheckboxInputRenderer : KompotComponentRenderer<CheckboxInputComponent> {
+public class CheckboxInputRenderer : KompotComponentRenderer<CheckboxInputComponent> {
     @Composable
     override fun Render(
         component: CheckboxInputComponent,
@@ -303,7 +303,7 @@ class CheckboxInputRenderer : KompotComponentRenderer<CheckboxInputComponent> {
 private const val AUTOCOMPLETE_SEARCH_DEBOUNCE_MS = 500L
 
 @KompotComponentMarker
-class AutocompleteInputRenderer : KompotComponentRenderer<AutocompleteInputComponent> {
+public class AutocompleteInputRenderer : KompotComponentRenderer<AutocompleteInputComponent> {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Render(
@@ -422,7 +422,7 @@ class AutocompleteInputRenderer : KompotComponentRenderer<AutocompleteInputCompo
 // A dropdown over a static list of options that arrived in the response itself: unlike the
 // autocomplete, no search over the network. The value of the field is an EntityValue(id, label).
 @KompotComponentMarker
-class SelectInputRenderer : KompotComponentRenderer<SelectInputComponent> {
+public class SelectInputRenderer : KompotComponentRenderer<SelectInputComponent> {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Render(
@@ -494,7 +494,7 @@ class SelectInputRenderer : KompotComponentRenderer<SelectInputComponent> {
 // A radio group: visually a different projection of the same "choose one of a fixed list" as the
 // dropdown, down to the value type.
 @KompotComponentMarker
-class RadioGroupRenderer : KompotComponentRenderer<RadioGroupComponent> {
+public class RadioGroupRenderer : KompotComponentRenderer<RadioGroupComponent> {
     @Composable
     override fun Render(
         component: RadioGroupComponent,

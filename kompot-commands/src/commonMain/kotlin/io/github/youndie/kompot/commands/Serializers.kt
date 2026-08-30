@@ -5,7 +5,7 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 
-val kompotCommandsSerializersModule =
+public val kompotCommandsSerializersModule: SerializersModule =
     SerializersModule {
         polymorphic(KompotAction::class) {
             subclass(PerformAction::class)

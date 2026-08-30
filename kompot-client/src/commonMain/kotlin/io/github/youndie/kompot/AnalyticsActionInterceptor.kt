@@ -7,7 +7,7 @@ import io.github.youndie.kompot.analytics.KompotEventNamingRegistry
     // The mechanics here — always track, always proceed — do not depend on any application, which is
     // why this one lives in the toolkit while permission and navigation interceptors do not: those
     // are tied to an application's own notions of access and destinations.
-class AnalyticsActionInterceptor(
+public class AnalyticsActionInterceptor(
     private val tracker: AnalyticsTracker,
     private val naming: KompotEventNamingRegistry,
 ) : KompotActionInterceptor {

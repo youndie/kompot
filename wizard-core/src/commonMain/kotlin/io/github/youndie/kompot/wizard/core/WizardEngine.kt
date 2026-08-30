@@ -7,8 +7,8 @@ package io.github.youndie.kompot.wizard.core
 // has to confirm explicitly with Finish. "No next step" and "the wizard is over" are different things:
 // on a final step there is usually something to review, and a Back to take, before actually
 // submitting.
-fun interface WizardStepResolver<T> {
-    fun resolveNext(
+public fun interface WizardStepResolver<T> {
+    public fun resolveNext(
         currentStepId: String,
         draft: T,
     ): String?
@@ -18,15 +18,15 @@ fun interface WizardStepResolver<T> {
 // transition() call is a pure function (session, transition, draft) -> new session. That is what makes
 // a wizard graph of any size and complexity checkable by ordinary unit tests without a single trip to
 // a database or the network.
-class WizardEngine<T>(
+public class WizardEngine<T>(
     private val initialStepId: String,
     private val stepResolver: WizardStepResolver<T>,
 ) {
-    fun start(initialDraft: T): WizardSession<T> = WizardSession(currentStepId = initialStepId, draft = initialDraft)
+    public fun start(initialDraft: T): WizardSession<T> = WizardSession(currentStepId = initialStepId, draft = initialDraft)
 
     // updatedDraft is the draft that ALREADY carries the values entered on currentStepId — merging them
     // is the caller's responsibility. The engine merges nothing and knows nothing about what is inside T.
-    fun transition(
+    public fun transition(
         session: WizardSession<T>,
         transition: WizardTransition,
         updatedDraft: T,

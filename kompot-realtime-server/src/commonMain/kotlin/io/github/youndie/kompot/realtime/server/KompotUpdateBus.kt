@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 // One bus message. `payload` is already-serialised JSON — normally an UpdateComponentMessage from
 // :kompot-realtime. The bus must not know what is inside, or it stops being a transport and becomes
 // part of the protocol.
-data class KompotBusMessage(
+public data class KompotBusMessage(
     val topic: String,
     val payload: String,
 )
@@ -24,20 +24,20 @@ data class KompotBusMessage(
 // per-subject (`home:$userId`), there are as many of them as there are active users, and subscribing
 // to each would mean one external subscription per user. One stream per process plus local routing by
 // topic is orders of magnitude cheaper — in RedisKompotUpdateBus it is a single PSUBSCRIBE.
-interface KompotUpdateBus {
-    suspend fun publish(
+public interface KompotUpdateBus {
+    public suspend fun publish(
         topic: String,
         payload: String,
     )
 
     // Messages from every instance, this one included: a subscriber must not have to tell its own
     // events from someone else's — delivery has to work the same either way.
-    fun messages(): Flow<KompotBusMessage>
+    public fun messages(): Flow<KompotBusMessage>
 }
 
 // The single-instance implementation, and the default: an application running as one local copy must
 // not be made to require Redis.
-class InMemoryKompotUpdateBus : KompotUpdateBus {
+public class InMemoryKompotUpdateBus : KompotUpdateBus {
     // extraBufferCapacity rather than replay: a subscriber that connects later must not receive events
     // that happened before it subscribed — the screen was already rendered by the server with current
     // data, and replaying an old update would only corrupt it.

@@ -13,7 +13,7 @@ import io.github.youndie.kompot.registry.KompotComponentMarker
 @Serializable
 @SerialName("column")
 @KompotComponentMarker
-data class ColumnComponent(
+public data class ColumnComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val children: List<@Polymorphic KompotComponent>,
@@ -34,7 +34,7 @@ data class ColumnComponent(
 @Serializable
 @SerialName("row")
 @KompotComponentMarker
-data class RowComponent(
+public data class RowComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val children: List<@Polymorphic KompotComponent>,
@@ -46,7 +46,7 @@ data class RowComponent(
 @Serializable
 @SerialName("text")
 @KompotComponentMarker
-data class TextComponent(
+public data class TextComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val text: String,
@@ -93,7 +93,7 @@ data class TextComponent(
 // carrying an action is what makes a link inside a sentence possible — the thing a row of text nodes
 // cannot be, because a row does not wrap and the first long sentence leaves the screen.
 @Serializable
-data class TextSpan(
+public data class TextSpan(
     val text: String,
     val style: TypographyToken? = null,
     // One word in the sentence's colour and not the sentence's: an amount in red, a warning inside a
@@ -109,7 +109,7 @@ data class TextSpan(
 @Serializable
 @SerialName("button")
 @KompotComponentMarker
-data class ButtonComponent(
+public data class ButtonComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val text: String,
@@ -127,7 +127,7 @@ data class ButtonComponent(
 // One row of a simple table grid (see TableComponent); cells in a row always share the width
 // equally. `header` is a visual accent only and does not affect the data.
 @Serializable
-data class TableRow(
+public data class TableRow(
     val cells: List<String>,
     val header: Boolean = false,
 )
@@ -137,7 +137,7 @@ data class TableRow(
 @Serializable
 @SerialName("table")
 @KompotComponentMarker
-data class TableComponent(
+public data class TableComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val rows: List<TableRow>,
@@ -145,7 +145,7 @@ data class TableComponent(
 
 @Serializable
 @SerialName("navigate")
-data class NavigateAction(
+public data class NavigateAction(
     val deeplink: String,
 ) : KompotAction
 
@@ -161,13 +161,13 @@ data class NavigateAction(
 // KompotActionHandler, which knows what "open" means where it runs.
 @Serializable
 @SerialName("open_url")
-data class OpenUrlAction(
+public data class OpenUrlAction(
     val url: String,
 ) : KompotAction
 
 @Serializable
 @SerialName("copy_text")
-data class CopyTextAction(
+public data class CopyTextAction(
     val text: String,
 ) : KompotAction
 
@@ -176,4 +176,4 @@ data class CopyTextAction(
 // screen on the client decides what that means.
 @Serializable
 @SerialName("close")
-data object CloseAction : KompotAction
+public data object CloseAction : KompotAction
