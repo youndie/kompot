@@ -22,7 +22,7 @@ import kotlinx.serialization.modules.SerializersModuleCollector
 import kotlin.reflect.KClass
 
 // The result of generating one schema file.
-data class GeneratedSchema(
+public data class GeneratedSchema(
     val moduleName: String,
     val fileName: String,
     val document: JsonObject,
@@ -40,7 +40,7 @@ data class GeneratedSchema(
 // very descriptors kotlinx.serialization uses to encode a response, and the result is committed as a
 // golden file — human-readable and reviewable, but unable to fall quietly behind the code.
 @OptIn(ExperimentalSerializationApi::class)
-class KompotSchemaGenerator(
+public class KompotSchemaGenerator(
     private val module: KompotSpecModule,
     // defKey -> the file a type is already described in. Modules are generated in order, the core
     // first.
@@ -49,7 +49,7 @@ class KompotSchemaGenerator(
     private val defs = sortedMapOf<String, JsonObject>()
     private val contributions = sortedMapOf<String, MutableMap<String, String>>()
 
-    fun generate(): GeneratedSchema {
+    public fun generate(): GeneratedSchema {
         module.handWritten.forEach { (key, schema) -> defs[key] = schema }
         module.roots.forEach { root -> bareRef(root) }
 
@@ -332,7 +332,10 @@ class KompotSchemaGenerator(
 // defaultDeserializer are ignored deliberately: UnknownComponent/UnknownAction are a client-side
 // fallback, never a server's answer, and therefore not part of the wire schema.
 @OptIn(ExperimentalSerializationApi::class)
-class PolymorphicDump : SerializersModuleCollector {
+// Internal: the generator's own way of asking a SerializersModule what is registered in it. It was
+// never part of what this module offers — a consumer assembles a spec from modules and reads the
+// schemas, and how the registrations are collected is not their business.
+internal class PolymorphicDump : SerializersModuleCollector {
     data class Entry(
         val hierarchy: String,
         val wireName: String,

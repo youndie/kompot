@@ -9,6 +9,8 @@ plugins {
 
 
 kotlin {
+    explicitApi()
+
     jvm()
     androidLibrary {
         namespace = "io.github.youndie.kompot.core"

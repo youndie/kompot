@@ -19,7 +19,7 @@ import kotlinx.serialization.json.longOrNull
 // more than these hundred and fifty lines. A conformance kit run against SOMEONE ELSE'S server is a
 // different matter — there the schema is external input rather than our own output, and a full
 // validator earns its place.
-class JsonSchemaValidator(
+public class JsonSchemaValidator(
     private val documents: Map<String, JsonObject>,
     // Strict mode: definitions from the profile stand in for open bases (x-kompot-open: true) while
     // resolving a $ref. It is needed because nested nodes of a tree refer to the OPEN KompotComponent
@@ -42,7 +42,7 @@ class JsonSchemaValidator(
             ?.mapValues { (_, value) -> value.jsonObject }
             .orEmpty()
 
-    fun validate(
+    public fun validate(
         value: JsonElement,
         ref: String,
     ): List<String> {

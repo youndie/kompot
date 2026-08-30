@@ -15,7 +15,7 @@ import kotlinx.serialization.modules.SerializersModule
 // modularity on purpose: a server implementation elsewhere must be able to say "I speak kompot-core
 // and kompot-standard but not your catalogue plug-in" — the same "open core plus plug-ins" division
 // the Kotlin modules have.
-data class KompotSpecModule(
+public data class KompotSpecModule(
     val name: String,
     val description: String,
     // Open hierarchies: their members are collected from here through dumpTo.
@@ -43,8 +43,8 @@ data class KompotSpecModule(
 // Assembling a spec from an ordered list of modules. The list belongs to a PARTICULAR BUILD rather
 // than to the toolkit: only an application knows the set of types that can really travel on its wire,
 // and only it knows where its own modules sit among the toolkit's.
-object KompotSpec {
-    fun generateAll(modules: List<KompotSpecModule>): List<GeneratedSchema> {
+public object KompotSpec {
+    public fun generateAll(modules: List<KompotSpecModule>): List<GeneratedSchema> {
         val external = mutableMapOf<String, String>()
         return modules.map { module ->
             KompotSchemaGenerator(module, external.toMap()).generate().also { generated ->
@@ -64,7 +64,7 @@ object KompotSpec {
     // branch rather than as a keyword only this toolkit understands. That is the difference the
     // report was about: an ordinary JSON Schema library accepts a declared extension and rejects an
     // undeclared one, with no Kotlin and no validator of ours in the picture.
-    fun profile(
+    public fun profile(
         schemas: List<GeneratedSchema>,
         extensions: Map<String, Set<String>> = emptyMap(),
     ): JsonObject {
@@ -185,7 +185,7 @@ object KompotSpec {
     // always carry it: a negative lookahead makes the pattern uncompilable for RE2 engines, and those
     // refuse the whole schema file rather than the one keyword. Expressed as `not`, the same rule
     // reaches every implementation (see KompotProtocol.DEEPLINK_FORBIDDEN_PATTERN).
-    fun constrained(
+    public fun constrained(
         pattern: String?,
         description: String,
         forbid: String? = null,
@@ -198,7 +198,7 @@ object KompotSpec {
             put("description", description)
         }
 
-    fun reservedMetadata(): JsonObject =
+    public fun reservedMetadata(): JsonObject =
         constrained(
             pattern = null,
             description =
@@ -208,7 +208,7 @@ object KompotSpec {
                     "Every other key is a convention of the particular form",
         )
 
-    fun openHierarchy(
+    public fun openHierarchy(
         description: String,
         degrades: Boolean,
         extraRequired: List<String> = emptyList(),

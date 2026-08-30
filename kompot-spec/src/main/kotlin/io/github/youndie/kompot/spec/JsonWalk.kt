@@ -7,7 +7,7 @@ import kotlinx.serialization.json.JsonObject
 // Every object of a JSON tree, the root included. Both the conformance checks and the corpus tests
 // need it: a rule about a component — a non-empty id, a fieldId that resolves — applies to every
 // node rather than to the root alone.
-fun collectJsonObjects(element: JsonElement): List<JsonObject> =
+public fun collectJsonObjects(element: JsonElement): List<JsonObject> =
     when (element) {
         is JsonObject -> listOf(element) + element.values.flatMap { collectJsonObjects(it) }
         is JsonArray -> element.flatMap { collectJsonObjects(it) }

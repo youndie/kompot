@@ -17,10 +17,10 @@ import kotlinx.serialization.json.Json
 //
 // SPEC.md §4.5 states the rule for implementations that are not written in Kotlin.
 
-fun Json.decodeKompotComponent(body: String): KompotComponent = decodeFromString(PolymorphicSerializer(KompotComponent::class), body)
+public fun Json.decodeKompotComponent(body: String): KompotComponent = decodeFromString(PolymorphicSerializer(KompotComponent::class), body)
 
-fun Json.encodeKompotComponent(component: KompotComponent): String = encodeToString(PolymorphicSerializer(KompotComponent::class), component)
+public fun Json.encodeKompotComponent(component: KompotComponent): String = encodeToString(PolymorphicSerializer(KompotComponent::class), component)
 
-fun Json.decodeKompotAction(body: String): KompotAction = decodeFromString(PolymorphicSerializer(KompotAction::class), body)
+public fun Json.decodeKompotAction(body: String): KompotAction = decodeFromString(PolymorphicSerializer(KompotAction::class), body)
 
-fun Json.encodeKompotAction(action: KompotAction): String = encodeToString(PolymorphicSerializer(KompotAction::class), action)
+public fun Json.encodeKompotAction(action: KompotAction): String = encodeToString(PolymorphicSerializer(KompotAction::class), action)

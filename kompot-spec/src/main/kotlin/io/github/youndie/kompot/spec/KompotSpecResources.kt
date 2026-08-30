@@ -16,7 +16,7 @@ import kotlinx.serialization.json.jsonObject
 //
 // No list of files is duplicated anywhere: module names come from the profile, example names from
 // the corpus manifest.
-class KompotSpecResources(
+public class KompotSpecResources(
     private val root: String,
     private val classLoader: ClassLoader = KompotSpecResources::class.java.classLoader,
 ) {
@@ -25,7 +25,7 @@ class KompotSpecResources(
 
     private val json = Json { ignoreUnknownKeys = true }
 
-    fun schemas(): Map<String, JsonObject> {
+    public fun schemas(): Map<String, JsonObject> {
         val profile = readObject("$schemaPath/${KompotProtocol.PROFILE_FILE_NAME}")
         val modules = (profile.getValue("x-kompot-modules") as JsonArray).map { (it as JsonPrimitive).content }
 
@@ -35,11 +35,11 @@ class KompotSpecResources(
         } + (KompotProtocol.PROFILE_FILE_NAME to profile)
     }
 
-    fun openApi(): JsonObject = readObject("$schemaPath/${KompotProtocol.OPENAPI_FILE_NAME}")
+    public fun openApi(): JsonObject = readObject("$schemaPath/${KompotProtocol.OPENAPI_FILE_NAME}")
 
     // The specification itself, as it travels in the artefact. Russian prose (see the readme): the
     // rules are the machine-readable part of it, and they are below.
-    fun specification(): String = read("$root/${KompotProtocol.SPEC_FILE_NAME}")
+    public fun specification(): String = read("$root/${KompotProtocol.SPEC_FILE_NAME}")
 
     // The numbered rules, by id: "9.4.3" to the sentence that states it. A conformance case names
     // ids, a finding can quote one, and a report can list the ones nothing holds — all of which need
@@ -47,7 +47,7 @@ class KompotSpecResources(
     //
     // Parsed from the blocks the specification marks as rules rather than from every backticked
     // number in it: §9 refers to its own clauses constantly, and a reference is not a statement.
-    fun rules(): Map<String, String> {
+    public fun rules(): Map<String, String> {
         val text = specification()
         val rules = LinkedHashMap<String, String>()
 
@@ -63,11 +63,11 @@ class KompotSpecResources(
         return rules
     }
 
-    fun rule(id: String): String? = rules()[id]
+    public fun rule(id: String): String? = rules()[id]
 
-    fun examplesIndex(): JsonObject = readObject("$examplesPath/${KompotProtocol.EXAMPLES_INDEX_FILE_NAME}")
+    public fun examplesIndex(): JsonObject = readObject("$examplesPath/${KompotProtocol.EXAMPLES_INDEX_FILE_NAME}")
 
-    fun example(fileName: String): JsonElement = json.parseToJsonElement(read("$examplesPath/$fileName"))
+    public fun example(fileName: String): JsonElement = json.parseToJsonElement(read("$examplesPath/$fileName"))
 
     private companion object {
         // A rules paragraph: everything from the marker to the blank line that ends the paragraph.

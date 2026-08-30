@@ -1,45 +1,45 @@
 package io.github.youndie.kompot.spec
 
 // Constants and naming rules shared by the schema generator and the conformance tests.
-object KompotProtocol {
+public object KompotProtocol {
     // The same value an application configures as classDiscriminator on its Json. It lives here
     // because it is part of the protocol rather than a detail of one Json instance, and a test checks
     // that a really serialised component carries a property with exactly this name.
-    const val DISCRIMINATOR = "type"
+    public const val DISCRIMINATOR: String = "type"
 
-    const val SCHEMA_DIALECT = "https://json-schema.org/draft/2020-12/schema"
+    public const val SCHEMA_DIALECT: String = "https://json-schema.org/draft/2020-12/schema"
 
     // The $id prefix. It resolves to nothing over the network; it exists so that relative $refs
     // between files ("kompot-core.schema.json#/${'$'}defs/X") have an unambiguous base for validators.
-    const val ID_PREFIX = "https://kompot.workinprogress.ru/schema/"
+    public const val ID_PREFIX: String = "https://kompot.workinprogress.ru/schema/"
 
     // The specification as it ships in the artefact, beside the schemas it describes.
-    const val SPEC_FILE_NAME = "SPEC.md"
+    public const val SPEC_FILE_NAME: String = "SPEC.md"
 
-    const val PROFILE_FILE_NAME = "kompot.profile.schema.json"
+    public const val PROFILE_FILE_NAME: String = "kompot.profile.schema.json"
 
     // The wire name of the action that performs an operation on one item. The conformance kit works on
     // JSON rather than on Kotlin types, so it has no serializer to ask — but a wire name written out
     // twice is how a rename leaves a dead string behind in the half nobody compiles. Hence the name is
     // written once here, and ToolkitSchemaGoldenTest holds it against the serial name the type really
     // carries.
-    const val ACTION_PERFORM = "perform"
+    public const val ACTION_PERFORM: String = "perform"
 
     // The definition holding a hierarchy's deployment extensions is named after the hierarchy:
     // KompotComponent -> KompotComponentExtension. One suffix, so a reader of a profile can find the
     // pair without a lookup table.
-    const val EXTENSION_SUFFIX = "Extension"
+    public const val EXTENSION_SUFFIX: String = "Extension"
 
     // The HTTP layer: addresses, status codes, headers. A file of its own rather than a section of the
     // schema, because it describes one concrete server, while the *.schema.json files describe the
     // protocol itself.
-    const val OPENAPI_FILE_NAME = "kompot.openapi.json"
+    public const val OPENAPI_FILE_NAME: String = "kompot.openapi.json"
 
     // The entry point of the reference corpus: it lists every body together with what is expected of
     // it, so a harness on any stack walks the corpus by the manifest rather than by a list of its own.
-    const val EXAMPLES_INDEX_FILE_NAME = "index.json"
+    public const val EXAMPLES_INDEX_FILE_NAME: String = "index.json"
 
-    fun fileNameFor(moduleName: String) = "$moduleName.schema.json"
+    public fun fileNameFor(moduleName: String): String = "$moduleName.schema.json"
 
     // ---- formats that cannot be derived from a Kotlin type (all of these are declared String) ----
 
@@ -56,28 +56,28 @@ object KompotProtocol {
     //
     // The rule for anything added here later: patterns stay inside the RE2 subset — no lookahead, no
     // lookbehind, no backreferences. What regex cannot say without them, schema keywords can.
-    const val DEEPLINK_PATTERN = "^[a-z][a-z0-9+.-]*://[^\\s]*${'$'}"
+    public const val DEEPLINK_PATTERN: String = "^[a-z][a-z0-9+.-]*://[^\\s]*${'$'}"
 
     // The half that used to be the lookahead: a deeplink is NOT a web address. Without it a server
     // could take the client to an external page through an ordinary navigate.
-    const val DEEPLINK_FORBIDDEN_PATTERN = "^https?:"
+    public const val DEEPLINK_FORBIDDEN_PATTERN: String = "^https?:"
 
     // The mirror image of the deeplink rule: open_url exists to LEAVE the application, so an address
     // that is not a web address has no business there — a relative path would be an ordinary screen and
     // belongs behind navigate.
-    const val EXTERNAL_URL_PATTERN = "^https?://[^\\s]+${'$'}"
+    public const val EXTERNAL_URL_PATTERN: String = "^https?://[^\\s]+${'$'}"
 
     // An address on the same host as the rest of the API — always relative.
-    const val ENDPOINT_PATTERN = "^/[^\\s#]*${'$'}"
+    public const val ENDPOINT_PATTERN: String = "^/[^\\s#]*${'$'}"
 
     // The topic of the live-update channel: a scope and, where the data is personal, a subject —
     // "home:user1", "orders:user1". The string is opaque to the client.
-    const val REALTIME_TOPIC_PATTERN = "^[a-z][a-z0-9_]*(:[A-Za-z0-9._-]+)*${'$'}"
+    public const val REALTIME_TOPIC_PATTERN: String = "^[a-z][a-z0-9_]*(:[A-Za-z0-9._-]+)*${'$'}"
 
     // Reserved rawMetadata keys: these are read by the protocol's own mechanisms rather than by
     // application code (see SPEC.md §9.7), so they must not be reused with another meaning.
-    const val METADATA_KEY_BALANCE = "balance"
-    const val METADATA_KEY_CURRENCY = "currency"
+    public const val METADATA_KEY_BALANCE: String = "balance"
+    public const val METADATA_KEY_CURRENCY: String = "currency"
 }
 
 // The serialName of a nullable descriptor ends in "?" (SerialDescriptorForNullable); without this,
@@ -105,7 +105,7 @@ internal fun memberKey(
     wireName: String,
 ) = hierarchy + pascal(wireName.withoutNullMark().substringAfterLast('.'))
 
-fun pascal(wireName: String) =
+public fun pascal(wireName: String): String =
     wireName
         .withoutNullMark()
         .split('_')

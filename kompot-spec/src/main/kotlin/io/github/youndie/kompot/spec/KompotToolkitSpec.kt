@@ -37,11 +37,11 @@ import io.github.youndie.kompot.wizard.core.WizardTransition
 // schema file per module. Order matters — whoever comes first owns a shared definition — but the list
 // is not assembled here: a build may insert its own modules between these, and only the build knows
 // where.
-object KompotToolkitSpec {
+public object KompotToolkitSpec {
     // The toolkit's own modules in their own order — the spec of a build that uses nothing but this
     // repository. An application does NOT have to reuse this list: it composes its own, inserting its
     // modules where they belong in the ownership chain (see KompotSpec.generateAll).
-    val modules: List<KompotSpecModule> =
+    public val modules: List<KompotSpecModule> =
         listOf(
             core(),
             formCore(),
@@ -58,7 +58,7 @@ object KompotToolkitSpec {
             theme(),
         )
 
-    fun core() =
+    public fun core(): KompotSpecModule =
         KompotSpecModule(
             name = "kompot-core",
             description =
@@ -115,7 +115,7 @@ object KompotToolkitSpec {
     // form-core describes a form's data — validation, values, visibility conditions — and is deliberately
     // separate from kompot-forms, which describes its UI. They are separate schema files for the same
     // reason they are separate Gradle modules: a server may serve a FormSchema without a component tree.
-    fun formCore() =
+    public fun formCore(): KompotSpecModule =
         KompotSpecModule(
             name = "form-core",
             description = "The form contracts: schema, field definitions, validation rules, values, visibility conditions",
@@ -195,7 +195,7 @@ object KompotToolkitSpec {
                 ),
         )
 
-    fun standard() =
+    public fun standard(): KompotSpecModule =
         KompotSpecModule(
             name = "kompot-standard",
             description = "The basic layout and text set: containers, text, button, table, paginated list",
@@ -238,7 +238,7 @@ object KompotToolkitSpec {
                 ),
         )
 
-    fun forms() =
+    public fun forms(): KompotSpecModule =
         KompotSpecModule(
             name = "kompot-forms",
             description = "The form UI: input components, the submit action and the form/patch response envelopes",
@@ -268,7 +268,7 @@ object KompotToolkitSpec {
     // already reproduced this declaration verbatim (issue #2).
     //
     // Right after formCore(), whose four open bases it fills in.
-    fun formStandard() =
+    public fun formStandard(): KompotSpecModule =
         KompotSpecModule(
             name = "form-standard",
             description = "The standard form fields, rules, values and conditions over form-core",
@@ -289,14 +289,14 @@ object KompotToolkitSpec {
                 ),
         )
 
-    fun wizardCore() =
+    public fun wizardCore(): KompotSpecModule =
         KompotSpecModule(
             name = "wizard-core",
             description = "A transition of a multi-step flow (Next/Back/Finish/JumpTo)",
             roots = listOf(WizardTransition.serializer().descriptor),
         )
 
-    fun images() =
+    public fun images(): KompotSpecModule =
         KompotSpecModule(
             name = "kompot-images",
             description = "A content image by URL",
@@ -305,7 +305,7 @@ object KompotToolkitSpec {
 
     // The transport is not part of the spec: this is the contract of a FRAME, not of a channel — the same
     // way :kompot-realtime itself knows nothing about any HTTP library.
-    fun realtime() =
+    public fun realtime(): KompotSpecModule =
         KompotSpecModule(
             name = "kompot-realtime",
             description = "The live-update channel: the screen envelope that names a topic, and one frame of the channel itself",
@@ -332,7 +332,7 @@ object KompotToolkitSpec {
                 ),
         )
 
-    fun wizard() =
+    public fun wizard(): KompotSpecModule =
         KompotSpecModule(
             name = "kompot-wizard",
             description = "The step screen of a flow, the Next/Back/Finish transitions and the result of a step",
@@ -340,7 +340,7 @@ object KompotToolkitSpec {
             roots = listOf(WizardResumeRequest.serializer().descriptor),
         )
 
-    fun navigation() =
+    public fun navigation(): KompotSpecModule =
         KompotSpecModule(
             name = "kompot-navigation",
             description = "The route graph of plain screens: deeplink -> endpoint",
@@ -374,7 +374,7 @@ object KompotToolkitSpec {
                 ),
         )
 
-    fun auth() =
+    public fun auth(): KompotSpecModule =
         KompotSpecModule(
             name = "kompot-auth",
             description = "The action that updates the session after a login",
@@ -384,7 +384,7 @@ object KompotToolkitSpec {
     // After formCore() in the list, and it has to be: the payload's values are FieldValue, and the
     // first module to mention a definition owns it. Ahead of form-core this would move the whole value
     // hierarchy into a file about buttons.
-    fun commands() =
+    public fun commands(): KompotSpecModule =
         KompotSpecModule(
             name = "kompot-commands",
             description = "The action that performs an operation on one item of a list, with no form around it",
@@ -419,7 +419,7 @@ object KompotToolkitSpec {
     //
     // No serializersModule: nothing here joins a polymorphic hierarchy. KompotTheme is a root of its
     // own, the way NavigationGraph and UpdateComponentMessage are.
-    fun theme() =
+    public fun theme(): KompotSpecModule =
         KompotSpecModule(
             name = "kompot-theme",
             description = "A server-driven theme: what a client resolves its design-system tokens into",
