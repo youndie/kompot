@@ -19,8 +19,8 @@ import kotlin.uuid.Uuid
 // inputs — because this context is still a KompotContainerContext; what appears is the ability to
 // declare a schema field alongside, without leaving the current level of nesting.
 @KompotDsl
-interface KompotFormContext : KompotContainerContext {
-    fun field(definition: FormFieldDefinition)
+public interface KompotFormContext : KompotContainerContext {
+    public fun field(definition: FormFieldDefinition)
 }
 
 // The glue builder: the screen and the form schema are assembled by one buildFormScreen { ... } call,
@@ -31,7 +31,7 @@ interface KompotFormContext : KompotContainerContext {
 // This is the structural answer to SPEC.md §9.2: connectivity that a rule can only ask for, a DSL can
 // make unrepresentable.
 @KompotDsl
-class KompotFormBuilder(
+public class KompotFormBuilder(
     private val formId: String,
 ) : KompotFormContext {
     private val children = mutableListOf<KompotComponent>()
@@ -39,11 +39,11 @@ class KompotFormBuilder(
     private var modifiers: List<KompotModifierNode> = emptyList()
     private var spacing: Int = 0
 
-    fun modifier(block: KompotModifierBuilder.() -> Unit) {
+    public fun modifier(block: KompotModifierBuilder.() -> Unit) {
         modifiers = KompotModifierBuilder().apply(block).build()
     }
 
-    fun spacing(dp: Int) {
+    public fun spacing(dp: Int) {
         spacing = dp
     }
 
@@ -55,7 +55,7 @@ class KompotFormBuilder(
         fields += definition
     }
 
-    fun build(): KompotFormResponse {
+    public fun build(): KompotFormResponse {
         val schema = FormSchema(formId = formId, fields = fields.toList())
         val screen =
             ColumnComponent(
@@ -68,7 +68,7 @@ class KompotFormBuilder(
     }
 }
 
-fun buildFormScreen(
+public fun buildFormScreen(
     formId: String,
     block: KompotFormBuilder.() -> Unit,
 ): KompotFormResponse = KompotFormBuilder(formId).apply(block).build()
@@ -76,7 +76,7 @@ fun buildFormScreen(
 // Counterparts of the standard column and row builders that forward field() to their parent, so the
 // bound builders work inside column { } / row { } rather than only at the top level of a form.
 @KompotDsl
-class FormColumnBuilder(
+public class FormColumnBuilder(
     private val parent: KompotFormContext,
     private val id: String?,
 ) : KompotFormContext {
@@ -84,11 +84,11 @@ class FormColumnBuilder(
     private var modifiers: List<KompotModifierNode> = emptyList()
     private var spacing: Int = 0
 
-    fun modifier(block: KompotModifierBuilder.() -> Unit) {
+    public fun modifier(block: KompotModifierBuilder.() -> Unit) {
         modifiers = KompotModifierBuilder().apply(block).build()
     }
 
-    fun spacing(dp: Int) {
+    public fun spacing(dp: Int) {
         spacing = dp
     }
 
@@ -100,11 +100,11 @@ class FormColumnBuilder(
         parent.field(definition)
     }
 
-    fun build(): ColumnComponent =
+    public fun build(): ColumnComponent =
         ColumnComponent(id = id ?: Uuid.random().toString(), modifiers = modifiers, spacing = spacing, children = children.toList())
 }
 
-fun KompotFormContext.column(
+public fun KompotFormContext.column(
     id: String? = null,
     block: FormColumnBuilder.() -> Unit,
 ) {
@@ -112,7 +112,7 @@ fun KompotFormContext.column(
 }
 
 @KompotDsl
-class FormRowBuilder(
+public class FormRowBuilder(
     private val parent: KompotFormContext,
     private val id: String?,
 ) : KompotFormContext {
@@ -120,11 +120,11 @@ class FormRowBuilder(
     private var modifiers: List<KompotModifierNode> = emptyList()
     private var spacing: Int = 0
 
-    fun modifier(block: KompotModifierBuilder.() -> Unit) {
+    public fun modifier(block: KompotModifierBuilder.() -> Unit) {
         modifiers = KompotModifierBuilder().apply(block).build()
     }
 
-    fun spacing(dp: Int) {
+    public fun spacing(dp: Int) {
         spacing = dp
     }
 
@@ -136,11 +136,11 @@ class FormRowBuilder(
         parent.field(definition)
     }
 
-    fun build(): RowComponent =
+    public fun build(): RowComponent =
         RowComponent(id = id ?: Uuid.random().toString(), modifiers = modifiers, spacing = spacing, children = children.toList())
 }
 
-fun KompotFormContext.row(
+public fun KompotFormContext.row(
     id: String? = null,
     block: FormRowBuilder.() -> Unit,
 ) {

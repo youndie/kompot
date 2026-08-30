@@ -25,7 +25,7 @@ private fun sha256Hex(bytes: ByteArray): String =
 // Wraps respondKompotComponent in a conditional response: computes an ETag over the already
 // serialised body, compares it with If-None-Match and answers 304 with no body when the client
 // already holds the current one; otherwise sends the body as usual, with an ETag header.
-suspend fun ApplicationCall.respondKompotComponentCached(
+public suspend fun ApplicationCall.respondKompotComponentCached(
     json: Json,
     component: KompotComponent,
 ) {
@@ -34,14 +34,14 @@ suspend fun ApplicationCall.respondKompotComponentCached(
 
 // The same, but for ordinary @Serializable types, which need no polymorphic-serialiser detour —
 // that exists in respondKompotComponent only for a polymorphic root.
-suspend inline fun <reified T> ApplicationCall.respondCached(
+public suspend inline fun <reified T> ApplicationCall.respondCached(
     json: Json,
     value: T,
 ) {
     respondWithETag(json.encodeToString(value))
 }
 
-suspend fun ApplicationCall.respondWithETag(body: String) {
+public suspend fun ApplicationCall.respondWithETag(body: String) {
     val etag = "\"" + sha256Hex(body.toByteArray()) + "\""
     if (request.header(HttpHeaders.IfNoneMatch) == etag) {
         response.header(HttpHeaders.ETag, etag)

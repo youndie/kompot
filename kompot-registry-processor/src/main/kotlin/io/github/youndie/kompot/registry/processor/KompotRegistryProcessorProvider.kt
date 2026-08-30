@@ -4,7 +4,7 @@ import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.processing.SymbolProcessorProvider
 
-class KompotRegistryProcessorProvider : SymbolProcessorProvider {
+public class KompotRegistryProcessorProvider : SymbolProcessorProvider {
     override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor =
         KompotRegistrySymbolProcessor(
             codeGenerator = environment.codeGenerator,

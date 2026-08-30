@@ -10,11 +10,11 @@ import androidx.compose.ui.text.input.VisualTransformation
      * raw character and every other character is a literal inserted on the fly. An OffsetMapping keeps
      * the caret in step with the mask.
  */
-class MaskVisualTransformation(
+public class MaskVisualTransformation(
     private val mask: String,
     private val placeholder: Char = '#',
 ) : VisualTransformation {
-    val rawLength: Int = mask.count { it == placeholder }
+    public val rawLength: Int = mask.count { it == placeholder }
 
     override fun filter(text: AnnotatedString): TransformedText {
         val raw = if (text.text.length > rawLength) text.text.take(rawLength) else text.text
@@ -70,7 +70,7 @@ class MaskVisualTransformation(
      * character away from where it was typed. The gap counts toward that width, which is why it is
      * this class that draws it rather than the caller pre-pending a space to the symbol.
  */
-class AmountVisualTransformation(
+public class AmountVisualTransformation(
     private val currencySuffix: String? = null,
     private val currencyPrefix: String? = null,
     private val currencySpaced: Boolean = true,

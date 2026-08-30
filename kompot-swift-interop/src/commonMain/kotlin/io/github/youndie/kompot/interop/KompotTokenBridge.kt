@@ -16,10 +16,10 @@ import io.github.youndie.kompot.standard.TextComponent
 //
 // Only the toolkit's own types are here. An application's components have tokens too, and the same
 // unwrapping belongs with them.
-fun KompotModifierNode.Background.colorKey(): String = color.key
+public fun KompotModifierNode.Background.colorKey(): String = color.key
 
-fun KompotModifierNode.Gradient.colorKeys(): List<String> = colors.map { it.key }
+public fun KompotModifierNode.Gradient.colorKeys(): List<String> = colors.map { it.key }
 
-fun TextComponent.styleKey(): String? = style?.key
+public fun TextComponent.styleKey(): String? = style?.key
 
-fun KompotImageComponent.tintKey(): String? = tint?.key
+public fun KompotImageComponent.tintKey(): String? = tint?.key

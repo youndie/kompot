@@ -12,12 +12,12 @@ import kotlinx.serialization.json.jsonObject
 // What a successful response carries: the schema of ONE value, and whether the body is a list of
 // them. Two fields rather than a schema document, because every check needs the same two questions
 // answered and a document would have each of them asking the second one for itself.
-data class TckResponseBody(
+public data class TckResponseBody(
     val ref: String,
     val isList: Boolean,
 )
 
-data class TckEndpoint(
+public data class TckEndpoint(
     val method: String,
     val path: String,
     val kind: String,
@@ -39,7 +39,7 @@ data class TckEndpoint(
     // Comparing the two literally reported a declared endpoint as undeclared, and only on the
     // comparison: the same description resolves correctly everywhere the walk FETCHES a templated
     // address, which is what makes the finding read like a server defect rather than a kit one.
-    fun matches(address: String): Boolean {
+    public fun matches(address: String): Boolean {
         val declared = path.trim('/').split('/')
         val actual = address.substringBefore('?').trim('/').split('/')
         if (declared.size != actual.size) return false
@@ -57,8 +57,8 @@ data class TckEndpoint(
     val respondsWithJson: Boolean get() = successContentType == "application/json"
 }
 
-object TckEndpoints {
-    fun fromOpenApi(document: JsonObject): List<TckEndpoint> {
+public object TckEndpoints {
+    public fun fromOpenApi(document: JsonObject): List<TckEndpoint> {
         val paths = document["paths"] as? JsonObject ?: error("The OpenAPI document has no paths")
         val documentSecurity = document["security"] as? JsonArray
 

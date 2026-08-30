@@ -14,7 +14,7 @@ import io.github.youndie.kompot.form.FormController
     // Like the analytics wrapper, this wraps a handler rather than being one, and is applied on a
     // login screen rather than in the global chain: it needs a concrete FormController, which does not
     // exist yet when the global chain is assembled.
-fun KompotActionHandler.withLoginSubmit(
+public fun KompotActionHandler.withLoginSubmit(
     scope: CoroutineScope,
     formController: FormController,
     formId: String,

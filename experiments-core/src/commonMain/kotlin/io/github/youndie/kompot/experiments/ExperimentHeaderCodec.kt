@@ -10,14 +10,14 @@ package io.github.youndie.kompot.experiments
 // the two drifting apart.
 // It does not escape "=" or "," inside ids: Experiment.id and Variant.id are always plain
 // identifiers here, and full JSON for a list of string pairs would be overkill.
-object ExperimentHeaderCodec {
+public object ExperimentHeaderCodec {
     // The HTTP header name: one constant for both ends of the transport — the server sets it, the
     // client reads it — so a typo cannot make the two sides disagree.
-    const val HEADER_NAME: String = "X-Kompot-Experiments"
+    public const val HEADER_NAME: String = "X-Kompot-Experiments"
 
-    fun encode(assignments: Map<String, String>): String = assignments.entries.joinToString(",") { (id, variant) -> "$id=$variant" }
+    public fun encode(assignments: Map<String, String>): String = assignments.entries.joinToString(",") { (id, variant) -> "$id=$variant" }
 
-    fun decode(header: String?): Map<String, String> =
+    public fun decode(header: String?): Map<String, String> =
         header
             ?.split(",")
             ?.filter { it.isNotBlank() }

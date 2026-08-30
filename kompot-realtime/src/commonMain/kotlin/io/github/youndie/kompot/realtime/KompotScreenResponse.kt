@@ -25,7 +25,7 @@ import io.github.youndie.kompot.KompotComponent
 // a screen with nothing to say about updates still travels as a bare component tree, which is also
 // what keeps §16.2 caching it as before.
 @Serializable
-data class KompotScreenResponse(
+public data class KompotScreenResponse(
     val screen: @Polymorphic KompotComponent,
     // Per response rather than per screen: the server decides it per request ("sweep:$id"), so two
     // people looking at the same screen can be on different channels. null says this particular

@@ -18,7 +18,7 @@ import io.github.youndie.kompot.form.FormController
 // which must replace that screen's own local state rather than travel the shared interceptor chain —
 // or any other action, a "the flow is over" navigation for instance, which DOES belong in the shared
 // chain. Only the calling screen can tell those apart, so the callbacks return Unit.
-fun KompotActionHandler.withWizardNavigation(
+public fun KompotActionHandler.withWizardNavigation(
     scope: CoroutineScope,
     formController: FormController,
     formId: String,

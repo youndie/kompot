@@ -13,7 +13,7 @@ import io.github.youndie.kompot.experiments.ExperimentHeaderCodec
 // This is not an ETag equivalent. Exposure must be tracked by the client on every real render, so
 // the header belongs only on non-cacheable responses; otherwise a repeat 304 would "lose" the
 // assignment for a client that never re-requests it.
-fun ApplicationCall.setExperimentHeader(assignments: Map<String, String>) {
+public fun ApplicationCall.setExperimentHeader(assignments: Map<String, String>) {
     if (assignments.isEmpty()) return
     response.header(ExperimentHeaderCodec.HEADER_NAME, ExperimentHeaderCodec.encode(assignments))
 }

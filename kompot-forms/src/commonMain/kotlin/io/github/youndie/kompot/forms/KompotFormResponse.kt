@@ -10,7 +10,7 @@ import io.github.youndie.kompot.form.FormSchema
 // (kompot-core). :kompot-forms is the natural home for this DTO, since it already describes "a form
 // as Kompot components".
 @Serializable
-data class KompotFormResponse(
+public data class KompotFormResponse(
     val schema: FormSchema,
     val screen: KompotComponent,
     // The live-update channel topic for THIS particular response — not a global constant, but a
@@ -24,7 +24,7 @@ data class KompotFormResponse(
 // client sends the form's current raw state along with the fieldId whose change triggered the
 // recalculation, and the server returns a FormPatch.
 @Serializable
-data class FormPatchRequest(
+public data class FormPatchRequest(
     val formId: String,
     val fieldId: String,
     val values: Map<String, @Polymorphic FieldValue>,

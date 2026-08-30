@@ -14,7 +14,7 @@ import io.github.youndie.kompot.realtime.KompotRealtimeSource
     // from this map for the original component before dispatching — the single integration point, and
     // no concrete renderer knows this mechanism exists. The default is an empty immutable map, so a
     // screen without a provider behaves exactly as before.
-val LocalKompotRealtimeUpdates: ProvidableCompositionLocal<Map<String, KompotComponent>> =
+public val LocalKompotRealtimeUpdates: ProvidableCompositionLocal<Map<String, KompotComponent>> =
     staticCompositionLocalOf { emptyMap() }
 
     // The subscription lives exactly as long as this node's composition: the map is created through
@@ -22,7 +22,7 @@ val LocalKompotRealtimeUpdates: ProvidableCompositionLocal<Map<String, KompotCom
     // it held, and LaunchedEffect(topic) cancels the previous subscription itself, closing the
     // connection. No separate manager with a manual clear() or scope.cancel() is needed.
 @Composable
-fun KompotRealtimeProvider(
+public fun KompotRealtimeProvider(
     topic: String,
     source: KompotRealtimeSource,
     content: @Composable () -> Unit,

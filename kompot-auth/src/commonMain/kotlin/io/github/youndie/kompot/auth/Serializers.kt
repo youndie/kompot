@@ -5,7 +5,7 @@ import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import io.github.youndie.kompot.KompotAction
 
-val kompotAuthSerializersModule =
+public val kompotAuthSerializersModule: SerializersModule =
     SerializersModule {
         polymorphic(KompotAction::class) {
             subclass(UpdateSessionAction::class)

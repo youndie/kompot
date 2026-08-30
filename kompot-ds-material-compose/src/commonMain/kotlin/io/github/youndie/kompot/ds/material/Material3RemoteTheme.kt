@@ -24,7 +24,7 @@ import io.github.youndie.kompot.theme.KompotTheme
 //
 // The result: an application hands this scheme to MaterialTheme(colorScheme = ...), and the button,
 // the input field and every other Material component are branded without a single renderer changing.
-fun KompotTheme.toMaterialColorScheme(
+public fun KompotTheme.toMaterialColorScheme(
     base: ColorScheme,
     darkMode: Boolean,
 ): ColorScheme {
@@ -62,7 +62,7 @@ fun KompotTheme.toMaterialColorScheme(
 // The entry point for an application: with no theme — or none describing dark mode — this is the
 // stock Material3 scheme for the mode in question.
 @Composable
-fun rememberMaterialColorScheme(
+public fun rememberMaterialColorScheme(
     theme: KompotTheme?,
     darkMode: Boolean = isSystemInDarkTheme(),
 ): ColorScheme =

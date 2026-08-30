@@ -15,7 +15,7 @@ import io.github.youndie.kompot.registry.KompotComponentMarker
 @Serializable
 @SerialName("image")
 @KompotComponentMarker
-data class KompotImageComponent(
+public data class KompotImageComponent(
     override val id: String,
     val url: String,
     val contentDescription: String? = null,
@@ -26,7 +26,7 @@ data class KompotImageComponent(
 ) : KompotComponent
 
 @Serializable
-enum class ImageScaleType {
+public enum class ImageScaleType {
     @SerialName("crop")
     Crop,
 

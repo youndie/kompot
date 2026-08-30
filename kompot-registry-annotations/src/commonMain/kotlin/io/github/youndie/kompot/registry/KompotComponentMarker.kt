@@ -10,4 +10,4 @@ package io.github.youndie.kompot.registry
 //   argument rather than from this annotation.
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
-annotation class KompotComponentMarker
+public annotation class KompotComponentMarker

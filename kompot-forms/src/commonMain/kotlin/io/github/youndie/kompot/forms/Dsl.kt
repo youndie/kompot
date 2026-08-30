@@ -4,7 +4,7 @@ import io.github.youndie.kompot.dsl.KompotContainerContext
 import io.github.youndie.kompot.dsl.KompotModifierBuilder
 import kotlin.uuid.Uuid
 
-fun KompotContainerContext.textInput(
+public fun KompotContainerContext.textInput(
     fieldId: String,
     label: String,
     placeholder: String? = null,
@@ -32,7 +32,7 @@ fun KompotContainerContext.textInput(
 // All three of the currency's spelling are here: the symbol, the side it goes on, and whether it
 // stands away from the number. The side arrived on the component before it arrived here, which left
 // a server writing the DSL unable to say the very thing the field had just learnt.
-fun KompotContainerContext.amountInput(
+public fun KompotContainerContext.amountInput(
     fieldId: String,
     label: String,
     currencySuffix: String? = null,
@@ -57,7 +57,7 @@ fun KompotContainerContext.amountInput(
     )
 }
 
-fun KompotContainerContext.readOnlyField(
+public fun KompotContainerContext.readOnlyField(
     label: String,
     value: String,
     helperText: String? = null,
@@ -76,7 +76,7 @@ fun KompotContainerContext.readOnlyField(
     )
 }
 
-fun KompotContainerContext.checkboxInput(
+public fun KompotContainerContext.checkboxInput(
     fieldId: String,
     label: String,
     id: String? = null,
@@ -93,7 +93,7 @@ fun KompotContainerContext.checkboxInput(
     )
 }
 
-fun KompotContainerContext.autocompleteInput(
+public fun KompotContainerContext.autocompleteInput(
     fieldId: String,
     label: String,
     dataSourceId: String,
@@ -114,7 +114,7 @@ fun KompotContainerContext.autocompleteInput(
     )
 }
 
-fun KompotContainerContext.selectInput(
+public fun KompotContainerContext.selectInput(
     fieldId: String,
     label: String,
     options: List<SelectOption>,
@@ -135,7 +135,7 @@ fun KompotContainerContext.selectInput(
     )
 }
 
-fun KompotContainerContext.radioGroup(
+public fun KompotContainerContext.radioGroup(
     fieldId: String,
     label: String,
     options: List<SelectOption>,

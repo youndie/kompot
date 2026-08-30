@@ -11,7 +11,7 @@ import io.github.youndie.kompot.form.ValidationRule
 // The serialisation "plug-in" for the standard field set. An application merges this module into its
 // own SerializersModule so that kotlinx.serialization can (de)serialise the open interfaces of
 // form-core into these concrete implementations.
-val formStandardSerializersModule =
+public val formStandardSerializersModule: SerializersModule =
     SerializersModule {
         polymorphic(FormFieldDefinition::class) {
             subclass(TextFieldDefinition::class)

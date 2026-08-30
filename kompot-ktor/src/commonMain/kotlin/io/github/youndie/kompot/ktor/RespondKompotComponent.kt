@@ -15,7 +15,7 @@ import io.github.youndie.kompot.encodeKompotComponent
 // UnknownComponent and the default deserializer). Nested children serialise fine, because they go
 // through List<@Polymorphic KompotComponent>. This helper serialises the root explicitly through
 // PolymorphicSerializer so that "type" is present there too.
-suspend fun ApplicationCall.respondKompotComponent(
+public suspend fun ApplicationCall.respondKompotComponent(
     json: Json,
     component: KompotComponent,
 ) {

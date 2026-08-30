@@ -9,7 +9,7 @@ import kotlinx.serialization.json.JsonObject
 // Not "a body and a schema" — that is the server corpus (§17), which shows what a response looks like.
 // This one shows what a client must DECIDE, which is the half nothing checked.
 @Serializable
-data class ClientCase(
+public data class ClientCase(
     val id: String,
     // The clause it holds a client to. A case without one is a case nobody can argue with.
     val clause: String,
@@ -30,35 +30,35 @@ data class ClientCase(
 )
 
 @Serializable
-sealed interface ClientStep {
+public sealed interface ClientStep {
     @Serializable
     @SerialName("set")
-    data class Set(
+    public data class Set(
         val fieldId: String,
         val value: JsonObject,
     ) : ClientStep
 
     @Serializable
     @SerialName("blur")
-    data class Blur(
+    public data class Blur(
         val fieldId: String,
     ) : ClientStep
 
     @Serializable
     @SerialName("patch")
-    data class Patch(
+    public data class Patch(
         val patch: JsonObject,
     ) : ClientStep
 
     @Serializable
     @SerialName("submit")
-    data object Submit : ClientStep
+    public data object Submit : ClientStep
 }
 
 // Every expectation is optional: a case asserts what it is about and stays silent about the rest, so
 // that a failure names one rule rather than a screenful of unrelated state.
 @Serializable
-data class ClientExpectation(
+public data class ClientExpectation(
     val visibleFields: List<String>? = null,
     val payload: JsonObject? = null,
     // true when validation must stop the submit — payload is then null rather than empty, and the
@@ -73,7 +73,7 @@ data class ClientExpectation(
 )
 
 @Serializable
-data class ClientCorpusIndex(
+public data class ClientCorpusIndex(
     val cases: List<String>,
     // The case format, described beside the cases. A runner in another language validates what it
     // parsed against this instead of inferring the vocabulary of `expect` from whichever cases happen

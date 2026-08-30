@@ -11,18 +11,18 @@ import io.github.youndie.kompot.dsl.KompotModifierBuilder
 import kotlin.uuid.Uuid
 
 @KompotDsl
-class ColumnBuilder(
+public class ColumnBuilder(
     private val id: String?,
 ) : KompotContainerContext {
     private val children = mutableListOf<KompotComponent>()
     private var modifiers: List<KompotModifierNode> = emptyList()
     private var spacing: Int = 0
 
-    fun modifier(block: KompotModifierBuilder.() -> Unit) {
+    public fun modifier(block: KompotModifierBuilder.() -> Unit) {
         modifiers = KompotModifierBuilder().apply(block).build()
     }
 
-    fun spacing(dp: Int) {
+    public fun spacing(dp: Int) {
         spacing = dp
     }
 
@@ -30,7 +30,7 @@ class ColumnBuilder(
         children.add(component)
     }
 
-    fun build(): ColumnComponent =
+    public fun build(): ColumnComponent =
         ColumnComponent(
             id = id ?: Uuid.random().toString(),
             modifiers = modifiers,
@@ -39,7 +39,7 @@ class ColumnBuilder(
         )
 }
 
-fun KompotContainerContext.column(
+public fun KompotContainerContext.column(
     id: String? = null,
     block: ColumnBuilder.() -> Unit,
 ) {
@@ -47,18 +47,18 @@ fun KompotContainerContext.column(
 }
 
 @KompotDsl
-class RowBuilder(
+public class RowBuilder(
     private val id: String?,
 ) : KompotContainerContext {
     private val children = mutableListOf<KompotComponent>()
     private var modifiers: List<KompotModifierNode> = emptyList()
     private var spacing: Int = 0
 
-    fun modifier(block: KompotModifierBuilder.() -> Unit) {
+    public fun modifier(block: KompotModifierBuilder.() -> Unit) {
         modifiers = KompotModifierBuilder().apply(block).build()
     }
 
-    fun spacing(dp: Int) {
+    public fun spacing(dp: Int) {
         spacing = dp
     }
 
@@ -66,7 +66,7 @@ class RowBuilder(
         children.add(component)
     }
 
-    fun build(): RowComponent =
+    public fun build(): RowComponent =
         RowComponent(
             id = id ?: Uuid.random().toString(),
             modifiers = modifiers,
@@ -75,14 +75,14 @@ class RowBuilder(
         )
 }
 
-fun KompotContainerContext.row(
+public fun KompotContainerContext.row(
     id: String? = null,
     block: RowBuilder.() -> Unit,
 ) {
     addComponent(RowBuilder(id).apply(block).build())
 }
 
-fun KompotContainerContext.text(
+public fun KompotContainerContext.text(
     text: String,
     style: TypographyToken? = null,
     color: ColorToken? = null,
@@ -93,7 +93,7 @@ fun KompotContainerContext.text(
     addComponent(TextComponent(id ?: Uuid.random().toString(), mods, text, style, color))
 }
 
-fun KompotContainerContext.button(
+public fun KompotContainerContext.button(
     text: String,
     action: KompotAction,
     id: String? = null,
@@ -104,20 +104,20 @@ fun KompotContainerContext.button(
 }
 
 @KompotDsl
-class TableBuilder {
+public class TableBuilder {
     private val rows = mutableListOf<TableRow>()
 
-    fun row(
+    public fun row(
         vararg cells: String,
         header: Boolean = false,
     ) {
         rows += TableRow(cells.toList(), header)
     }
 
-    fun build(): List<TableRow> = rows.toList()
+    public fun build(): List<TableRow> = rows.toList()
 }
 
-fun KompotContainerContext.table(
+public fun KompotContainerContext.table(
     id: String? = null,
     modifierBlock: (KompotModifierBuilder.() -> Unit)? = null,
     block: TableBuilder.() -> Unit,
@@ -126,7 +126,7 @@ fun KompotContainerContext.table(
     addComponent(TableComponent(id ?: Uuid.random().toString(), mods, TableBuilder().apply(block).build()))
 }
 
-fun KompotContainerContext.paginatedList(
+public fun KompotContainerContext.paginatedList(
     initialItems: List<KompotComponent>,
     loadMoreAction: LoadPageAction? = null,
     reloadUrl: String? = null,
@@ -147,4 +147,4 @@ fun KompotContainerContext.paginatedList(
     )
 }
 
-fun kompotScreen(block: ColumnBuilder.() -> Unit): ColumnComponent = ColumnBuilder(id = "root").apply(block).build()
+public fun kompotScreen(block: ColumnBuilder.() -> Unit): ColumnComponent = ColumnBuilder(id = "root").apply(block).build()

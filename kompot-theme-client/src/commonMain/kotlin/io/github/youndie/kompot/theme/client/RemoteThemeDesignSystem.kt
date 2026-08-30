@@ -24,7 +24,7 @@ import io.github.youndie.kompot.theme.parseArgbHex
 //
 // Renderers know nothing about this class: they read LocalKompotDesignSystem exactly as before, and
 // the substitution is one line at the application's composition root.
-class RemoteThemeDesignSystem(
+public class RemoteThemeDesignSystem(
     private val theme: KompotTheme,
     private val fallback: KompotDesignSystem,
     // Normally null, so the system setting decides. An explicit value is for tests and previews,
@@ -77,7 +77,7 @@ private fun TextStyle.mergeWith(overrides: KompotTextStyle): TextStyle =
 // unreachable theme endpoint does not stop the application from starting. Once the theme arrives, the
 // composition re-reads LocalKompotDesignSystem and recolours itself.
 @Composable
-fun rememberKompotDesignSystem(
+public fun rememberKompotDesignSystem(
     theme: KompotTheme?,
     fallback: KompotDesignSystem,
 ): KompotDesignSystem =

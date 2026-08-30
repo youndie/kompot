@@ -23,7 +23,7 @@ import kotlinx.serialization.Serializable
 // types a server puts in a payload must belong to the profile the client declares.
 @Serializable
 @SerialName("perform")
-data class PerformAction(
+public data class PerformAction(
     val url: String,
     val payload: Map<String, @Polymorphic FieldValue> = emptyMap(),
 ) : KompotAction

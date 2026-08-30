@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 // choice must change the SET of fields rather than only their values, the server sends a fresh
 // FormSchema and component tree instead of a patch, and the screen is redrawn.
 @Serializable
-data class FormPatch(
+public data class FormPatch(
     val updates: Map<String, @Polymorphic FieldValue> = emptyMap(),
     val clearFields: List<String> = emptyList(),
     val focusOn: String? = null,

@@ -1,5 +1,6 @@
 package io.github.youndie.kompot
 
+import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf
 
 // What a client meets that it does not know. Degradation turns a crash into a hole, and that is the
@@ -8,7 +9,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 // unobservable. "How many installs are missing this component" is the question a staged rollout is
 // decided on, and until now the only answer was a println: not a logcat tag anyone filters, nothing
 // at all on iOS, and unroutable to a deployment's own logging in either case.
-enum class KompotDegradationKind {
+public enum class KompotDegradationKind {
     // The response carried a component type the serializers module does not know, so it decoded to
     // UnknownComponent (SPEC.md §2.1).
     UNKNOWN_COMPONENT,
@@ -24,8 +25,8 @@ enum class KompotDegradationKind {
 
 // Defaulted to what the toolkit did before, so nothing changes for a deployment that does not set
 // one; a deployment that does gets its breadcrumbs, its crash context and its counters.
-fun interface KompotDegradationSink {
-    fun onUnknown(
+public fun interface KompotDegradationSink {
+    public fun onUnknown(
         kind: KompotDegradationKind,
         originalType: String,
         // Whether anything was drawn in its place. A hole and a placeholder are different facts about
@@ -34,7 +35,7 @@ fun interface KompotDegradationSink {
     )
 }
 
-val LocalKompotDegradationSink =
+public val LocalKompotDegradationSink: ProvidableCompositionLocal<KompotDegradationSink> =
     staticCompositionLocalOf {
         KompotDegradationSink { kind, originalType, drawnAsFallback ->
             println("[Kompot] $kind \"$originalType\"" + if (drawnAsFallback) " drawn through its fallback" else " skipped")

@@ -14,28 +14,28 @@ import kotlinx.serialization.json.jsonObject
 // One violation of the protocol. The checks raise nothing and accumulate findings instead: a run must
 // reach the end and show EVERY discrepancy at once — an implementation on another stack would rather
 // fix them in a batch than one per run.
-data class TckFinding(
+public data class TckFinding(
     val check: String,
     val target: String,
     val message: String,
 ) {
-    override fun toString() = "[$check] $target — $message"
+    override fun toString(): String = "[$check] $target — $message"
 }
 
 // An endpoint the walk never looked at, and why. The per-check counters cannot show this: they answer
 // "did this check have targets", and the other endpoints keep every check busy while one is quietly
 // left out. A run that is green because it skipped the hardest screen is the failure this closes.
-data class TckSkip(
+public data class TckSkip(
     val method: String,
     val path: String,
     val reason: String,
 ) {
-    override fun toString() = "$method $path ($reason)"
+    override fun toString(): String = "$method $path ($reason)"
 }
 
 // The report of a run: the findings, plus how many targets each check actually visited, plus what was
 // not visited at all.
-data class TckReport(
+public data class TckReport(
     val findings: List<TckFinding>,
     val exercised: Map<String, Int>,
     val skipped: List<TckSkip> = emptyList(),
@@ -63,7 +63,7 @@ data class TckReport(
 // Everything the kit cannot know about the server it is pointed at. Nothing here has a default that
 // belongs to one particular application: a library that ships someone's login path is a library that
 // knows an application.
-data class TckConfig(
+public data class TckConfig(
     // The spec of the build being checked: every schema file by name, including the profile. Read it
     // from the classpath with KompotSpecResources, or hand over documents assembled any other way.
     val schemas: Map<String, JsonObject>,
@@ -133,7 +133,7 @@ data class TckConfig(
     val crossReferenceKeys: Map<String, String> = emptyMap(),
 )
 
-class TckRunner(
+public class TckRunner(
     private val transport: TckTransport,
     private val config: TckConfig,
 ) {
@@ -167,7 +167,7 @@ class TckRunner(
     // would then under-report the very thing it exists to report.
     private val visited = mutableSetOf<String>()
 
-    suspend fun run(): TckReport {
+    public suspend fun run(): TckReport {
         val findings = mutableListOf<TckFinding>()
 
         findings += authenticate()

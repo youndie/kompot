@@ -16,7 +16,7 @@ import kotlin.time.ExperimentalTime
 // the screen sees the new version. On a cache miss it makes an unconditional request and caches the
 // result.
 @OptIn(ExperimentalTime::class)
-class CachedKompotScreenProvider(
+public class CachedKompotScreenProvider(
     private val store: KompotScreenCacheStore,
     private val fetcher: KompotScreenFetcher,
     private val json: Json,
@@ -24,7 +24,7 @@ class CachedKompotScreenProvider(
     // CoroutineScope of its own.
     private val scope: CoroutineScope,
 ) {
-    suspend fun getScreen(key: String): KompotComponent {
+    public suspend fun getScreen(key: String): KompotComponent {
         val cached = store.get(key)
         if (cached != null) {
             scope.launch { revalidate(key, cached.etag) }
@@ -43,7 +43,7 @@ class CachedKompotScreenProvider(
     // submitted a form which changes what this screen shows drops the entry explicitly: the next
     // getScreen for it takes the cache-miss path — a blocking unconditional request, fresh data at
     // once rather than one visit later.
-    suspend fun invalidate(key: String) {
+    public suspend fun invalidate(key: String) {
         store.clear(key)
     }
 

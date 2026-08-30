@@ -17,7 +17,7 @@ import io.github.youndie.kompot.TypographyToken
 // pushing a value class through the wire buys nothing. Typed access comes from the accessors below
 // and from the DSL (see KompotThemeDsl.kt).
 @Serializable
-data class KompotTheme(
+public data class KompotTheme(
     // A brand identifier, used only for diagnostics — which theme actually arrived. No behaviour
     // depends on it.
     val id: String,
@@ -30,18 +30,18 @@ data class KompotTheme(
     // Typography is theme-independent: one set for both light and dark.
     val typography: Map<String, KompotTextStyle> = emptyMap(),
 ) {
-    fun paletteFor(darkMode: Boolean): KompotPalette? = if (darkMode) dark else light
+    public fun paletteFor(darkMode: Boolean): KompotPalette? = if (darkMode) dark else light
 
-    fun colorFor(
+    public fun colorFor(
         token: ColorToken,
         darkMode: Boolean,
     ): Int? = paletteFor(darkMode)?.argbFor(token)
 
-    fun styleFor(token: TypographyToken): KompotTextStyle? = typography[token.key]
+    public fun styleFor(token: TypographyToken): KompotTextStyle? = typography[token.key]
 }
 
 @Serializable
-data class KompotPalette(
+public data class KompotPalette(
     // Values are hex strings (#RGB, #RRGGBB, #AARRGGBB — see parseArgbHex) rather than a packed Int:
     // themes are written and read by hand, and an Int in JSON would need explaining through signed
     // overflow.
@@ -50,14 +50,14 @@ data class KompotPalette(
     // null for both a missing and a malformed token: the caller does the same thing in either case —
     // fall back to the built-in design system — and there is nothing on the client that could act on
     // a typo in a hex value anyway.
-    fun argbFor(token: ColorToken): Int? = colors[token.key]?.let(::parseArgbHex)
+    public fun argbFor(token: ColorToken): Int? = colors[token.key]?.let(::parseArgbHex)
 }
 
 // Overrides only those text-style properties the backend actually sent; everything left null stays
 // with the built-in design system. A theme can therefore raise a heading's size without restating
 // the font family, weight and line height.
 @Serializable
-data class KompotTextStyle(
+public data class KompotTextStyle(
     val fontSizeSp: Float? = null,
     val lineHeightSp: Float? = null,
     // A numeric weight in CSS/Compose FontWeight terms (400 regular, 700 bold) rather than an enum:
@@ -81,7 +81,7 @@ data class KompotTextStyle(
 //
 // It lives here rather than in a Compose module precisely because it is the only non-trivial piece
 // of format logic, and it must be testable without a rendering pipeline.
-fun parseArgbHex(value: String): Int? {
+public fun parseArgbHex(value: String): Int? {
     val hex = value.trim().removePrefix("#")
     if (hex.isEmpty() || hex.any { it.digitToIntOrNull(16) == null }) return null
     val argb =

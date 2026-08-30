@@ -15,7 +15,7 @@ import io.github.youndie.kompot.form.FormController
 // These two are the same per-field access as plain, non-inline, non-reified functions, so they are
 // exported as they are. Casting the resulting FieldValue to a concrete subtype is Swift's business —
 // which concrete subtypes exist is not something this module knows.
-fun FormController.fieldFlow(fieldId: String): Flow<FieldState<FieldValue>> =
+public fun FormController.fieldFlow(fieldId: String): Flow<FieldState<FieldValue>> =
     fieldsState.map { it[fieldId] ?: FieldState(null) }.distinctUntilChanged()
 
-fun FormController.fieldState(fieldId: String): FieldState<FieldValue> = fieldsState.value[fieldId] ?: FieldState(null)
+public fun FormController.fieldState(fieldId: String): FieldState<FieldValue> = fieldsState.value[fieldId] ?: FieldState(null)

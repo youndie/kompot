@@ -5,7 +5,7 @@ import io.github.youndie.kompot.form.FormCondition
 import io.github.youndie.kompot.form.FormSchemaBuilder
 import io.github.youndie.kompot.form.ValidationRulesBuilder
 
-fun FormSchemaBuilder.textField(
+public fun FormSchemaBuilder.textField(
     fieldId: String,
     keyboardType: KeyboardType = KeyboardType.TEXT,
     mask: String? = null,
@@ -29,7 +29,7 @@ fun FormSchemaBuilder.textField(
 // component (amount_input.currencySuffix), and those are what renderers read. The third copy on the
 // field definition was write-only — nothing read it, while its default belonged to one particular
 // application.
-fun FormSchemaBuilder.amountField(
+public fun FormSchemaBuilder.amountField(
     fieldId: String,
     visibleIf: FormCondition? = null,
     triggersPatch: Boolean = false,
@@ -45,7 +45,7 @@ fun FormSchemaBuilder.amountField(
     )
 }
 
-fun FormSchemaBuilder.checkboxField(
+public fun FormSchemaBuilder.checkboxField(
     fieldId: String,
     visibleIf: FormCondition? = null,
     triggersPatch: Boolean = false,
@@ -61,7 +61,7 @@ fun FormSchemaBuilder.checkboxField(
     )
 }
 
-fun FormSchemaBuilder.selectionField(
+public fun FormSchemaBuilder.selectionField(
     fieldId: String,
     visibleIf: FormCondition? = null,
     triggersPatch: Boolean = false,
@@ -77,7 +77,7 @@ fun FormSchemaBuilder.selectionField(
     )
 }
 
-fun FormSchemaBuilder.autocompleteField(
+public fun FormSchemaBuilder.autocompleteField(
     fieldId: String,
     dataSourceId: String,
     visibleIf: FormCondition? = null,
@@ -97,23 +97,23 @@ fun FormSchemaBuilder.autocompleteField(
 
 // A convenience constructor for a visibleIf condition:
 //   textField("gift_message", visibleIf = equals("is_gift", BooleanValue(true)))
-fun equals(
+public fun equals(
     fieldId: String,
     expectedValue: FieldValue,
 ): FormCondition = EqualsCondition(fieldId, expectedValue)
 
 // Holds while a field is not filled in either (null != expectedValue):
 //   textField("doc_number", visibleIf = notEquals("auto_numbering", BooleanValue(true)))
-fun notEquals(
+public fun notEquals(
     fieldId: String,
     expectedValue: FieldValue,
 ): FormCondition = NotEqualsCondition(fieldId, expectedValue)
 
-fun ValidationRulesBuilder.required(errorMessage: String) {
+public fun ValidationRulesBuilder.required(errorMessage: String) {
     rule(RequiredRule(errorMessage))
 }
 
-fun ValidationRulesBuilder.regex(
+public fun ValidationRulesBuilder.regex(
     pattern: String,
     errorMessage: String,
 ) {
@@ -122,7 +122,7 @@ fun ValidationRulesBuilder.regex(
 
 // Cross-field validation:
 //   textField("gift_message") { requiredIf("is_gift", BooleanValue(true), "Write a message") }
-fun ValidationRulesBuilder.requiredIf(
+public fun ValidationRulesBuilder.requiredIf(
     targetFieldId: String,
     expectedValue: FieldValue,
     errorMessage: String,
@@ -134,7 +134,7 @@ fun ValidationRulesBuilder.requiredIf(
 // as an EntityValue, and the remaining amount sits in its rawMetadata under a key the protocol
 // reserves (see SPEC.md §9.7):
 //   amountField("amount") { maxAmountFromField("source", errorMessage = "Not enough left") }
-fun ValidationRulesBuilder.maxAmountFromField(
+public fun ValidationRulesBuilder.maxAmountFromField(
     balanceFieldId: String,
     balanceMetadataKey: String = "balance",
     errorMessage: String,

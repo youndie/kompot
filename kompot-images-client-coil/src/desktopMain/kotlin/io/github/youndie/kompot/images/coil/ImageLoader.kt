@@ -14,7 +14,7 @@ import okio.Path.Companion.toPath
 // crossfade(false) on purpose: a fade on every recomposition of an already cached image reads as
 // flicker. All three cache policies are enabled because these images are static and versioned by
 // file name on the server, so there is nothing to invalidate.
-fun createKompotImageLoader(diskCachePath: String): ImageLoader =
+public fun createKompotImageLoader(diskCachePath: String): ImageLoader =
     ImageLoader
         .Builder(PlatformContext.INSTANCE)
         .components {
