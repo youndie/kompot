@@ -234,6 +234,39 @@ from the concrete runtime class and drops the `"type"` discriminator on the ROOT
 client then receives an unknown component. Nested children are unaffected, which is what makes the
 bug so easy to miss.
 
+### 👁️ Seeing the screen you just built
+
+Writing a screen on the server is otherwise writing a tree blind: the only way to look at it is to
+run a client against it. `kompot-preview` draws the **body an endpoint returns** with the real
+renderers, and `@Preview` beside it puts that picture in the IDE next to the code that builds it.
+
+```kotlin
+@Preview
+@Composable
+fun CheckoutPreview() {
+    KompotPreview(
+        body = myJson.encodeToString(KompotFormResponse.serializer(), checkoutScreen()),
+        registry = myRegistry,
+        designSystem = myDesignSystem,
+        // A form is not one picture: empty, filled and showing every error are three.
+        state = KompotPreviewState(allFieldsChanged = true),
+        json = myJson,
+    )
+}
+```
+
+The body and not the component in hand, and that is the point rather than an inconvenience: a plain
+`call.respond` drops the `"type"` discriminator on the ROOT of a tree, so a screen that renders
+perfectly from the object in memory degrades to a placeholder in front of a person. A preview taken
+from the object photographs a working screen that does not work. For the same reason a missing
+renderer stops the preview instead of drawing the grey placeholder — recorded into a screenshot golden
+it would become the screen's expected appearance.
+
+The same call is what a screenshot test photographs, so a preview and a golden are one input and two
+checks. Note that an IDE preview renders through skiko, whose host-native half comes with
+`compose.desktop.currentOs`: it is present in an application module and cannot be in a published one,
+since it would pin the host in the POM.
+
 ### 🚫 What it does not do
 
 - **it does not ship YOUR renderers** — the Compose renderers of the standard, form, wizard and image
