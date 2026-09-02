@@ -175,7 +175,7 @@ def to_wire(node: Node) -> dict:
             out["action"] = action(a["action"])
         out["children"] = [to_wire(c) for c in node.children]
     elif node.kind == "surface":
-        for w in ("tone", "density", "align"):
+        for w in ("tone", "density", "align", "rule"):
             if w in a:
                 out[w] = a[w]
         if "spacing" in a:
@@ -240,10 +240,18 @@ DEFAULTS = {
 }
 
 
-def words(node: dict) -> dict:
-    keep = {"type", "tone", "density", "align", "style", "color", "variant", "frame", "size", "spacing", "pinned", "maxLines"}
+def load_defaults(tokens_path):
+    """The dictionary's defaults, from the product's tokens.json (`defaults` section) when given."""
+    if not tokens_path:
+        return DEFAULTS
+    with open(tokens_path, encoding="utf-8") as f:
+        return json.load(f).get("defaults", DEFAULTS)
+
+
+def words(node: dict, defaults: dict = DEFAULTS) -> dict:
+    keep = {"type", "tone", "density", "align", "rule", "style", "color", "variant", "frame", "size", "spacing", "pinned", "maxLines"}
     out = {k: v for k, v in node.items() if k in keep}
-    for k, v in DEFAULTS.get(node.get("type"), {}).items():
+    for k, v in defaults.get(node.get("type"), {}).items():
         out.setdefault(k, v)
     text = node.get("text") or node.get("glyph") or node.get("caption")
     if node.get("spans"):
@@ -266,7 +274,7 @@ def words(node: dict) -> dict:
     return out
 
 
-def compare(canvas: dict, recorded: dict) -> list:
+def compare(canvas: dict, recorded: dict, defaults: dict = DEFAULTS) -> list:
     rows = []
     a, b = index(canvas), index(recorded)
     for nid in a:
@@ -278,7 +286,7 @@ def compare(canvas: dict, recorded: dict) -> list:
     for nid in a:
         if nid not in b:
             continue
-        wa, wb = words(a[nid][0]), words(b[nid][0])
+        wa, wb = words(a[nid][0], defaults), words(b[nid][0], defaults)
         for key in sorted(set(wa) | set(wb)):
             if wa.get(key) != wb.get(key):
                 rows.append(("DIFF", nid, key, f"canvas {wa.get(key)!r} · wire {wb.get(key)!r}"))
@@ -291,7 +299,9 @@ def main() -> int:
     parser.add_argument("--artboard", help="id (or data-artboard) of the element holding the screen; default: the whole document")
     parser.add_argument("--out", help="write the wire tree here")
     parser.add_argument("--compare", help="a recorded wire tree to diff against")
+    parser.add_argument("--tokens", help="the product's tokens.json, for the dictionary's defaults (`defaults` section)")
     args = parser.parse_args()
+    defaults = load_defaults(args.tokens)
     with open(args.html, encoding="utf-8") as f:
         walker = Walker(args.artboard)
         walker.feed(f.read())
@@ -309,7 +319,7 @@ def main() -> int:
     if args.compare:
         with open(args.compare, encoding="utf-8") as f:
             recorded = json.load(f)
-        rows = compare(tree, recorded)
+        rows = compare(tree, recorded, defaults)
         print("| status | id | field | detail |")
         print("| --- | --- | --- | --- |")
         for r in rows:

@@ -29,6 +29,9 @@ tokens.json:
                   "overline": {"size": 26, "weight": 800, "letterSpacing": 2, "lineHeight": 30}},
      "surfaces": {"card": {"radius": 44, "padding": [24, 28]}, "chip": {"radius": "pill", "padding": [22, 36]}}}
 
+A `families` section names the faces (`"base"` plus others, e.g. `"narrow"`); a type entry with
+`"family": "narrow"` is set in that face, and `typography()` takes one FontFamily parameter per
+family. `"decoration": "line-through"` puts a strike through a style (an old price).
 `hex` may carry an alpha as `#RRGGBB@NN` (percent). `m3` on a colour is one Material role or a
 list of them (the canvas's paper is `background` and `onPrimary`); the shared token is the first. `padding` is CSS order: one value, [vertical,
 horizontal], [top, horizontal, bottom] or [top, right, bottom, left]. `radius` is a number, "pill"
@@ -132,15 +135,23 @@ def client_palette(tokens: dict, package: str, prefix: str, head: str) -> str:
 def client_type_scale(tokens: dict, package: str, prefix: str, head: str) -> str:
     types = tokens.get("type", {})
     lines = [head, f"package {package}", "", "import androidx.compose.material3.Typography", "import androidx.compose.ui.text.TextStyle",
-             "import androidx.compose.ui.text.font.FontFamily", "import androidx.compose.ui.text.font.FontWeight", "import androidx.compose.ui.unit.sp",
+             "import androidx.compose.ui.text.font.FontFamily", "import androidx.compose.ui.text.font.FontWeight",
+             "import androidx.compose.ui.text.style.TextDecoration", "import androidx.compose.ui.unit.sp",
              "import io.github.youndie.kompot.TypographyToken", ""]
+    families = tokens.get("families", {"base": None})
+    extra_families = [f for f in families if f != "base"]
+    params = ["family: FontFamily = FontFamily.Default"] + [f"{snake_to_camel(f)}: FontFamily = family" for f in extra_families]
     lines += [f"object {prefix}TypeScale {{",
               "    private fun style(", "        family: FontFamily,", "        size: Int,", "        weight: FontWeight,", "        lineHeight: Int,", "        letterSpacing: Float,",
+              "        decoration: TextDecoration? = null,",
               "    ): TextStyle =", "        TextStyle(", "            fontFamily = family,", "            fontSize = size.sp,", "            fontWeight = weight,",
-              "            lineHeight = lineHeight.sp,", "            letterSpacing = letterSpacing.sp,", "        )", ""]
-    lines += ["    // The Material slots, in the product's sizes. The family is a parameter so a screenshot",
-              "    // fixture can pass the pinned face and record goldens that travel between machines.",
-              "    fun typography(family: FontFamily = FontFamily.Default): Typography =", "        Typography("]
+              "            lineHeight = lineHeight.sp,", "            letterSpacing = letterSpacing.sp,", "            textDecoration = decoration,", "        )", ""]
+    lines += ["    // The Material slots, in the product's sizes. The families are parameters so a screenshot",
+              "    // fixture can pass the pinned face and record goldens that travel between machines" +
+              (";" if extra_families else ".")]
+    if extra_families:
+        lines.append("    // " + ", ".join(f"`{snake_to_camel(f)}` is the canvas's {families[f]}" for f in extra_families) + ", falling back to the base family.")
+    lines += ["    fun typography(", *[f"        {p}," for p in params], "    ): Typography =", "        Typography("]
     by_slot = {entry["m3"]: (name, entry) for name, entry in types.items() if entry.get("m3")}
     for slot in M3_TYPE_SLOTS:
         if slot in by_slot:
@@ -149,14 +160,21 @@ def client_type_scale(tokens: dict, package: str, prefix: str, head: str) -> str
     lines += ["        )", ""]
     extras = [(name, e) for name, e in types.items() if not e.get("m3")]
     for name, e in extras:
+        # an extra style inherits the family of a Material slot in the same family, so the fixture's
+        # pinned face reaches it too
+        donor = next((slot for slot in M3_TYPE_SLOTS if slot in by_slot and by_slot[slot][1].get("family") == e.get("family")), "bodyMedium")
         lines += [f"    // `{name}`: derived from the scale so it inherits the family the scale was built with.",
                   f"    fun {snake_to_camel(name)}(base: Typography): TextStyle =",
-                  f"        base.bodyMedium.copy(",
+                  f"        base.{donor}.copy(",
                   f"            fontSize = {e['size']}.sp,",
                   f"            fontWeight = FontWeight.{WEIGHTS[int(e['weight'])]},",
                   f"            lineHeight = {int(e.get('lineHeight', round(e['size'] * 1.2)))}.sp,",
-                  f"            letterSpacing = {float(e.get('letterSpacing', 0))}f.sp,",
-                  f"        )", ""]
+                  f"            letterSpacing = {float(e.get('letterSpacing', 0))}f.sp,"]
+        if e.get("decoration") == "line-through":
+            lines.append("            textDecoration = TextDecoration.LineThrough,")
+        elif e.get("decoration") == "underline":
+            lines.append("            textDecoration = TextDecoration.Underline,")
+        lines += [f"        )", ""]
     lines += ["    // The product's own styles, by the token the server sends; null for a Material one.", "    fun resolve(", "        token: TypographyToken,", "        base: Typography,", "    ): TextStyle? =", "        when (token.key) {"]
     for name, _ in extras:
         lines.append(f'            "{name}" -> {snake_to_camel(name)}(base)')
@@ -166,7 +184,9 @@ def client_type_scale(tokens: dict, package: str, prefix: str, head: str) -> str
 
 def style_call(e: dict) -> str:
     line = int(e.get("lineHeight", round(e["size"] * 1.2)))
-    return f"style(family, {e['size']}, FontWeight.{WEIGHTS[int(e['weight'])]}, {line}, {float(e.get('letterSpacing', 0))}f)"
+    family = snake_to_camel(e["family"]) if e.get("family") and e["family"] != "base" else "family"
+    deco = {"line-through": ", TextDecoration.LineThrough", "underline": ", TextDecoration.Underline"}.get(e.get("decoration"), "")
+    return f"style({family}, {e['size']}, FontWeight.{WEIGHTS[int(e['weight'])]}, {line}, {float(e.get('letterSpacing', 0))}f{deco})"
 
 
 def client_surfaces(tokens: dict, package: str, prefix: str, head: str) -> str:

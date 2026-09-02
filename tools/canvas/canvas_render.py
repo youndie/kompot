@@ -28,7 +28,7 @@ import sys
 
 # The wire leaves a default out; the canvas says it out loud, because the kit's CSS keys on the
 # attribute and a card without `data-density="card"` is a card without its inset.
-from canvas_tree import DEFAULTS
+from canvas_tree import DEFAULTS, load_defaults
 
 
 def esc(s) -> str:
@@ -60,10 +60,10 @@ def attrs_of(node: dict) -> dict:
     return a
 
 
-def render(node: dict, depth: int = 0) -> str:
+def render(node: dict, depth: int = 0, defaults: dict = DEFAULTS) -> str:
     pad = "  " * depth
     kind = node["type"]
-    node = {**DEFAULTS.get(kind, {}), **node}
+    node = {**defaults.get(kind, {}), **node}
     a = {"data-kompot": kind, "data-id": node.get("id", "")}
     a.update(attrs_of(node))
     inner = ""
@@ -73,16 +73,16 @@ def render(node: dict, depth: int = 0) -> str:
             del a["data-weight"]
         if node.get("spacing"):
             a["data-spacing"] = str(node["spacing"])
-        inner = "".join(render(c, depth + 1) for c in node.get("children", []))
+        inner = "".join(render(c, depth + 1, defaults) for c in node.get("children", []))
     elif kind == "surface":
-        for w in ("tone", "density", "align"):
+        for w in ("tone", "density", "align", "rule"):
             if w in node:
                 a[f"data-{w}"] = node[w]
         if node.get("spacing"):
             a["data-spacing"] = str(node["spacing"])
         if node.get("pinned"):
             a["data-pinned"] = ""
-        inner = "".join(render(c, depth + 1) for c in node.get("children", []))
+        inner = "".join(render(c, depth + 1, defaults) for c in node.get("children", []))
     elif kind == "text":
         for w in ("style", "color"):
             if w in node:
@@ -130,7 +130,7 @@ def render(node: dict, depth: int = 0) -> str:
     return f"{pad}<div {attr}></div>\n"
 
 
-def artboard(name: str, caption: str, tree: dict) -> str:
+def artboard(name: str, caption: str, tree: dict, defaults: dict = DEFAULTS) -> str:
     return (
         f'    <div id="{esc(name)}-board" style="display:flex; flex-direction:column; gap:20px">\n'
         f'      <div style="display:flex; align-items:center; gap:16px">\n'
@@ -138,7 +138,7 @@ def artboard(name: str, caption: str, tree: dict) -> str:
         f'        <div style="font-size:30px; font-weight:600; color:#221510">{esc(caption)}</div>\n'
         f'      </div>\n'
         f'      <div class="k-screen" id="{esc(name)}" data-artboard="{esc(name)}" style="border-radius:56px; box-shadow:0 40px 80px -20px rgba(59,10,0,.45)">\n'
-        + render(tree, 4)
+        + render(tree, 4, defaults)
         + "      </div>\n    </div>\n"
     )
 
@@ -169,7 +169,9 @@ def main() -> int:
     parser.add_argument("--title", default="kompot")
     parser.add_argument("--caption", action="append", default=[], help='name="caption" (repeatable)')
     parser.add_argument("--out", required=True, help="the .dc.html to write")
+    parser.add_argument("--tokens", help="the product's tokens.json, for the dictionary's defaults and the font link")
     args = parser.parse_args()
+    defaults = load_defaults(args.tokens)
     captions = dict(c.split("=", 1) for c in args.caption)
     files = [f for pattern in args.recordings for f in sorted(glob.glob(pattern))]
     boards = []
@@ -177,7 +179,7 @@ def main() -> int:
         name = os.path.splitext(os.path.basename(path))[0]
         with open(path, encoding="utf-8") as f:
             tree = json.load(f)
-        boards.append(artboard(name, captions.get(name, name), tree))
+        boards.append(artboard(name, captions.get(name, name), tree, defaults))
     out_dir = os.path.dirname(os.path.abspath(args.out))
     os.makedirs(out_dir, exist_ok=True)
     with open(args.out, "w", encoding="utf-8") as f:
