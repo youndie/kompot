@@ -38,6 +38,15 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
         }
 
+        // The IDE-preview experiment (#109) and nothing else. Desktop only, because an IntelliJ
+        // preview renders through the desktop target whatever the file's source set says.
+        val desktopMain by getting {
+            dependencies {
+                implementation(libs.compose.ui.tooling.preview)
+                implementation(libs.compose.material3)
+            }
+        }
+
         val desktopTest by getting {
             dependencies {
                 implementation(kotlin("test"))
