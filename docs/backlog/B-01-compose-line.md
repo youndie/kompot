@@ -1,7 +1,7 @@
 ---
 id: B-01
 title: "Одна линия Compose: kompot, viddik, Jewel в libs.versions.toml"
-status: open
+status: done
 priority: infra
 size: S
 stage: upstream
@@ -33,3 +33,18 @@ kompot собран против Compose Multiplatform 1.11.1 и material3 1.11.
   `libs.versions.toml` содержит `jewel` с комментарием о линии; `./gradlew build` зелёный.
 - Якоря: `gradle/libs.versions.toml`, `kompot-ds-material-compose/build.gradle.kts`,
   `skills/kompot-layout/SKILL.md` (п. 6 «The toolkit's Compose line»).
+
+## Итог
+
+`jewel = "0.40.0-262.10315.125"` в `[versions]` рядом с `viddik`, два модуля в `[libraries]`
+(`jewel-int-ui-standalone`, `jewel-int-ui-decorated-window`). Проверено по метаданным на Maven
+Central: `jewel-foundation` 0.40.0 объявляет `org.jetbrains.compose.foundation:foundation-desktop`
+**1.11.0** — та же линия, что `compose-multiplatform = 1.11.1` в каталоге; 0.41 переехал на 1.12.
+`com.jetbrains.intellij.platform:icons-api`, которого требует standalone-вариант, лежит на Maven
+Central — отдельный репозиторий IntelliJ не нужен, и `settings.gradle.kts` не тронут.
+
+Исключение Material 2 живёт не здесь: каталог называет координату, а `exclude` — свойство
+потребителя (B-08), иначе исключение уехало бы в метаданные каждого, кто возьмёт запись.
+
+Про линию дописано в `skills/kompot-layout/SKILL.md` п. 6: правило было про один screenshot-инструмент,
+а стало общим — всё, что делит композицию на десктопе, пинится рядом с версией Compose.

@@ -15,6 +15,13 @@ compose-multiplatform = "1.11.1"
 compose-material3 = "1.11.0-alpha07"
 coil3 = "3.5.0"
 viddik = "0.1.1.8"
+# The studio's IDE-style shell. The version carries the IntelliJ build it was cut from
+# (`0.40.0-262.10315.125`), which is why it cannot be a plain three-number bump: what has to match is
+# the Compose line, not the IJ build. 0.40 is compiled against Compose Multiplatform 1.11.0 — the
+# same line as `compose-multiplatform` above; 0.41 moved to 1.12. Mixing lines resolves cleanly and
+# then throws NoSuchMethodError on the first frame, inside a renderer, so this number moves only
+# together with `compose-multiplatform` and `viddik`.
+jewel = "0.40.0-262.10315.125"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -54,6 +61,13 @@ coil3-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil3" }
 viddik-annotations = { module = "ru.workinprogress:viddik-annotations", version.ref = "viddik" }
 viddik-testing-core = { module = "ru.workinprogress:viddik-testing-core", version.ref = "viddik" }
 viddik-processor = { module = "ru.workinprogress:viddik-processor", version.ref = "viddik" }
+
+# Jewel, the standalone (non-IDE) flavour: the tree, the split panes and the decorated window the
+# studio's shell is made of. It pulls Compose Material 2 for its own theming, and the toolkit's
+# renderers read material3 — the consumer of this entry excludes the former, per Jewel's own
+# instructions, so that two Material generations do not sit in one classpath.
+jewel-int-ui-standalone = { module = "org.jetbrains.jewel:jewel-int-ui-standalone", version.ref = "jewel" }
+jewel-int-ui-decorated-window = { module = "org.jetbrains.jewel:jewel-int-ui-decorated-window", version.ref = "jewel" }
 
 ksp-symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }

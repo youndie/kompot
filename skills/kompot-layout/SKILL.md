@@ -45,7 +45,9 @@ The dictionary is the project's, not the toolkit's. Find, in this order:
    modules are compiled against one Compose Multiplatform line and a material3 of that line; a
    newer foundation beside them fails at *runtime*, inside a renderer, not at resolution. The
    screenshot tool (viddik) moves lines on its own — take the last version on the toolkit's line,
-   not the newest.
+   not the newest. The same holds for every desktop-side library that shares the composition: the
+   screenshot tool and the shell of a preview tool are pinned in the version catalogue beside the
+   Compose version, and the three move in one commit or not at all.
 
 Project conventions beat this skill. This skill says what is the same everywhere.
 

@@ -37,7 +37,7 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (23)
+## Открыто (22)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
@@ -63,9 +63,12 @@
 | [B-21](backlog/B-21-inspector.md) `[ ]` | Инспектор свойств по схеме | v3-builder | P2 | L | B-06, B-16 |
 | [B-22](backlog/B-22-palette-dnd.md) `[ ]` | Палитра типов и drag-and-drop в дереве | v3-builder | P3 | L | B-21 |
 | [B-23](backlog/B-23-dsl-export.md) `[ ]` | Экспорт DSL-черновика из тела | v3-builder | P3 | M | B-07 |
-| [B-01](backlog/B-01-compose-line.md) `[ ]` | Одна линия Compose: kompot, viddik, Jewel в libs.versions.toml | upstream | infra | S | — |
 
-## Сделано (0)
+## Сделано (1)
+
+**Швы в toolkit'е**
+
+- [B-01](backlog/B-01-compose-line.md) — Одна линия Compose: kompot, viddik, Jewel в libs.versions.toml
 
 <!-- END INDEX -->
 
