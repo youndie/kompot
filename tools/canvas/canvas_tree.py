@@ -25,7 +25,7 @@ import json
 import sys
 from html.parser import HTMLParser
 
-TYPES = {"column", "row", "surface", "text", "button", "glyph", "photo", "screen_header", "spacer"}
+TYPES = {"column", "row", "surface", "text", "button", "glyph", "photo", "screen_header", "spacer", "table"}
 WORDS = {
     "surface": ("tone", "density", "align"),
     "text": ("style", "color"),
@@ -42,6 +42,10 @@ class Node:
         self.children = []
         self.text = []
         self.spans = []
+        self.rows = []  # table: [{"cells": [...], "header": bool}]
+
+
+VOID = {"br", "img", "hr", "meta", "link", "input", "wbr", "source"}
 
 
 class Walker(HTMLParser):
@@ -53,6 +57,7 @@ class Walker(HTMLParser):
         self.inside = artboard is None
         self.depth_in = None
         self.span = None
+        self.cell = None
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -60,16 +65,29 @@ class Walker(HTMLParser):
             if a.get("id") == self.artboard or a.get("data-artboard") == self.artboard:
                 self.inside = True
                 self.depth_in = len(self.stack)
-            self.stack.append((None, tag))
+            if tag not in VOID:
+                self.stack.append((None, tag))
             return
         kind = a.get("data-kompot")
         parent = next((n for n, _ in reversed(self.stack) if n is not None), None)
+        if parent is not None and parent.kind == "table":
+            if "data-row" in a:
+                parent.rows.append({"cells": [], "header": "data-header" in a})
+            elif "data-cell" in a and parent.rows:
+                parent.rows[-1]["cells"].append("")
+                self.cell = parent
+            self.stack.append((None, tag))
+            return
         if tag == "span" and parent is not None and parent.kind == "text":
             self.span = {"text": "", "style": a.get("data-style"), "color": a.get("data-color"), "action": a.get("data-action")}
             self.stack.append((None, tag))
             return
         if tag == "br" and parent is not None:
             parent.text.append("\n")
+        if tag in VOID:
+            # A void element has no end tag: it must not enter the stack, or the depth bookkeeping
+            # that decides where an artboard ends is off by one for the rest of the document.
+            return
         if kind in TYPES:
             node = Node(kind, {k[5:]: v for k, v in a.items() if k.startswith("data-")})
             if parent is None:
@@ -81,10 +99,12 @@ class Walker(HTMLParser):
             self.stack.append((None, tag))
 
     def handle_endtag(self, tag):
-        if tag == "br":
+        if tag in VOID:
             return
         if self.stack:
             node, _ = self.stack.pop()
+            if self.cell is not None and node is None and tag == "span":
+                self.cell = None
             if tag == "span" and self.span is not None:
                 parent = next((n for n, _ in reversed(self.stack) if n is not None), None)
                 if parent is not None and parent.kind == "text":
@@ -98,6 +118,9 @@ class Walker(HTMLParser):
             return
         if self.span is not None:
             self.span["text"] += data
+            return
+        if self.cell is not None:
+            self.cell.rows[-1]["cells"][-1] += data
             return
         node = next((n for n, _ in reversed(self.stack) if n is not None), None)
         if node is not None and node.kind in ("text", "button", "glyph", "photo"):
@@ -191,6 +214,8 @@ def to_wire(node: Node) -> dict:
             out["size"] = a["size"]
     elif node.kind == "screen_header":
         out["backAction"] = action(a.get("action")) or {"type": "navigate", "deeplink": "?"}
+    elif node.kind == "table":
+        out["rows"] = [{"cells": [c.strip() for c in r["cells"]], **({"header": True} if r["header"] else {})} for r in node.rows]
     return out
 
 
@@ -223,6 +248,8 @@ def words(node: dict) -> dict:
     text = node.get("text") or node.get("glyph") or node.get("caption")
     if node.get("spans"):
         text = "".join(s.get("text", "") for s in node["spans"])
+    if node.get("rows"):
+        text = " | ".join(("# " if r.get("header") else "") + " · ".join(r.get("cells", [])) for r in node["rows"])
     if text is not None:
         out["text"] = " ".join(text.split())
     a = node.get("action") or node.get("backAction")

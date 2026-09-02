@@ -31,6 +31,7 @@ The markup contract (what `canvas_tree.py` reads):
     photo           data-size="thumb|tile|square|hero"; the text is the caption
     screen_header   data-action (the way back)
     spacer          an empty column with weight 1
+    table           <div data-row [data-header]><span data-cell>…</span>…</div> per row
 
     data-action is a deeplink; `data-id` must be unique on the screen (the conformance walk checks it).
 """
@@ -100,7 +101,15 @@ def build_css(tokens: dict, prefix: str) -> str:
         "/* the screen: a kiosk artboard */",
         f".k-screen {{ width: 1080px; height: 1920px; overflow: hidden; background: {var.get('background', var.get('paper', '#fff'))}; color: {var.get('on_background', '#000')}; font-family: 'Roboto Flex', Roboto, system-ui, sans-serif; position: relative; }}",
         ".k-screen > [data-kompot=column] { height: 100%; }",
-        "[data-kompot=screen_header] { position: absolute; top: 48px; left: 48px; }",
+        "[data-kompot=screen_header] { position: absolute; top: 48px; left: 48px; z-index: 1; }",
+        "[data-kompot=table] { display: flex; flex-direction: column; width: 100%; border: 1px solid var(--k-outline_variant, #ddd); border-radius: 12px; overflow: hidden; font-size: 28px; }",
+        "[data-kompot=table] [data-row] { display: flex; padding: 12px 16px; border-top: 1px solid var(--k-outline_variant, #ddd); }",
+        "[data-kompot=table] [data-row]:first-child { border-top: none; }",
+        "[data-kompot=table] [data-row][data-header] { font-weight: 800; background: var(--k-surface_variant, #eee); }",
+        "[data-kompot=table] [data-cell] { flex: 1 1 0; }",
+        "[data-kompot=unknown] { border: 2px dashed #B00020; color: #B00020; padding: 12px; font-size: 24px; }",
+        "/* a row whose children ALL carry a weight is a grid row: its cells are as tall as the tallest */",
+        "[data-kompot=row]:not(:has(> :not([data-weight]))) { align-items: stretch; }",
         "[data-pinned] { margin-top: auto; }",
         "",
         "/* tones: what a surface is painted with */",
@@ -144,6 +153,15 @@ def build_css(tokens: dict, prefix: str) -> str:
         t = tokens["type"].get(b["type"], {})
         weight = 600 if b.get("size") else t.get("weight", 700)
         lines.append(f"[data-kompot=button][data-variant={variant}] {{ background: {var[b['container']]}; color: {var[b['content']]}; border-radius: {radius_css(s['radius'])};{size}{border} font-size: {t.get('size', 30)}px; font-weight: {weight}; }}")
+    card_pad = surfaces.get("card", {}).get("padding", [0])
+    cp = card_pad if isinstance(card_pad, list) else [card_pad]
+    top, side = (cp[0], cp[1] if len(cp) > 1 else cp[0])
+    lines += ["", "/* a leading tile photo on a card bleeds to the card's edge, as the client draws it */",
+              f"[data-density=card] > [data-kompot=photo][data-size=tile]:first-child {{ margin: -{top}px -{side}px 0; width: calc(100% + {2 * side}px); }}"]
+    back = tokens.get("buttons", {}).get("back")
+    if back:
+        bs = surfaces[back["surface"]]
+        lines += ["", f"[data-kompot=screen_header] {{ display: flex; align-items: center; justify-content: center; width: {back['size']}px; height: {back['size']}px; border-radius: {radius_css(bs['radius'])}; background: {var[back['container']]}; color: {var[back['content']]}; font-size: 44px; font-weight: 600;" + (f" border: 2px solid {var[back['outline']]};" if back.get("outline") else "") + " }"]
     lines += ["", "/* photos: slots the kiosk has not loaded */", f"[data-kompot=photo] {{ display: flex; align-items: center; justify-content: center; background: {var.get('sand', '#eee')}; color: {var.get('on_surface_variant', '#666')}; font-size: 28px; font-weight: 700; text-align: center; flex: none; overflow: hidden; }}"]
     for word, p in tokens.get("photos", {}).items():
         w = f"width: {p['width']}px;" if p.get("width") else "width: 100%;"
@@ -259,6 +277,7 @@ def build_readme(tokens: dict, title: str) -> str:
 | `photo` | `data-size="thumb\\|tile\\|square\\|hero"`; текст — подпись |
 | `screen_header` | `data-action` — путь назад; оболочка рисует его поверх содержимого |
 | `spacer` | пустая колонка с весом 1: то, что раздвигает соседей на фиксированном экране |
+| `table` | `<div data-row [data-header]><span data-cell>…</span></div>` на строку — стандартная таблица kompot |
 
 **Слова.** Тона: {tones}. Плотности: {densities}. Стили: {styles}.
 Цвета: {colors}. Варианты кнопок: {variants}.
