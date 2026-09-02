@@ -1,8 +1,12 @@
 package io.github.youndie.kompot
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import kotlin.jvm.JvmInline
 
 // What a renderer draws for ITSELF — the shape of a button, the fill behind a field, whether a border
@@ -64,4 +68,29 @@ public data class KompotSurface(
     // button asks for "the button's surface" and gets everything about it at once, variant included.
     // null keeps the ambient LocalTextStyle, which is what the control provided before.
     val textStyle: TextStyle? = null,
+    // How big the control is, which was the one thing about a control's look that stayed the
+    // toolkit's. A design system could round a button into a pill and paint it and still get
+    // Material's own height, so a canvas drawing 56-point controls had two ways out: fork a standard
+    // renderer to change one number, or ship the wrong height.
+    //
+    // Unspecified/null mean the control's own default, so a design system that says nothing gets
+    // exactly what it drew before. Nothing here travels: size is resolved from a role, client-side,
+    // the same way the shape is.
+    //
+    // Read by the controls that HAVE the corresponding knob. Every control drawn from a surface
+    // honours minHeight; contentPadding is a button's, because Material's text fields do not take one
+    // in the overload the field renderers use — the field asks for its height and gets it, and asking
+    // for its padding is not silently half-obeyed.
+    val minHeight: Dp = Dp.Unspecified,
+    val contentPadding: PaddingValues? = null,
 )
+
+// The floor a surface names, applied to a control's modifier. Here rather than inline in each
+// renderer because a deployment writing a renderer of its own is exactly who needs a control to obey
+// the design system, and reading the size off the surface by hand is how one of them ends up not.
+//
+// defaultMinSize rather than height: the design system names a minimum and the control may still be
+// taller — a button whose label wraps, a field carrying an error under it. Unspecified changes
+// nothing at all.
+public fun Modifier.minHeightOf(surface: KompotSurface): Modifier =
+    if (surface.minHeight == Dp.Unspecified) this else this.defaultMinSize(minHeight = surface.minHeight)
