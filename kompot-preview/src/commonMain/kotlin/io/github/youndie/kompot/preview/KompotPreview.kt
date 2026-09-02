@@ -102,8 +102,21 @@ private fun failOnDegradation(
 ): Nothing =
     error(
         "$kind: \"$originalType\". A preview draws with the registry and the serializers module it was given, " +
-            "so this is a renderer or a registration missing from THEM, not a screen degrading in the field.",
+            "so this is a renderer or a registration missing from THEM, not a screen degrading in the field." +
+            if (originalType == NO_DISCRIMINATOR) NO_DISCRIMINATOR_HINT else "",
     )
+
+// The type a node decodes to when the body named none at all: the open hierarchy's default
+// deserializer is handed a null class name and passes this through. It is worth telling apart from an
+// unregistered type, because the cause is different and specific — and because it is the mistake this
+// module exists to catch, so a preview that merely says "unknown" would be sending the reader looking
+// for a missing registration that is not missing.
+private const val NO_DISCRIMINATOR = "unknown"
+
+private const val NO_DISCRIMINATOR_HINT =
+    " The body carried no \"type\" on that node, which is what a CONCRETE serialiser writes for the root " +
+        "it is handed — call.respond(component), or encodeToString(MyComponent.serializer(), ...). Encode the " +
+        "root polymorphically and the discriminator comes back."
 
 private class DecodedBody(
     val screen: KompotComponent,

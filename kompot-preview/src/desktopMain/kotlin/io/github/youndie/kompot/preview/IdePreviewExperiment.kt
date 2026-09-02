@@ -5,12 +5,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import io.github.youndie.kompot.ColorToken
+import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.KompotDesignSystem
 import io.github.youndie.kompot.KompotRegistry
 import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.kompotCoreRenderers
 import io.github.youndie.kompot.kompotJson
 import io.github.youndie.kompot.kompotStandardRenderers
+import kotlinx.serialization.PolymorphicSerializer
 import io.github.youndie.kompot.standard.ButtonComponent
 import io.github.youndie.kompot.standard.CloseAction
 import io.github.youndie.kompot.standard.ColumnComponent
@@ -59,7 +61,13 @@ public fun KompotTreeIdePreview() {
         KompotPreview(
             // Through the wire, exactly as anywhere else this harness is used: the preview is of the
             // body, and encoding it here is the caller's step rather than the harness's.
-            body = kompotJson().encodeToString(ColumnComponent.serializer(), screen),
+            //
+            // PolymorphicSerializer and not ColumnComponent.serializer(), which is the mistake this
+            // file made on its first run: a concrete serialiser writes no discriminator for the root
+            // it is handed, the root decodes to UnknownComponent, and the preview stopped and said so.
+            // Which is the whole argument for previewing the body rather than the object, met here by
+            // the file that exists to argue it.
+            body = kompotJson().encodeToString(PolymorphicSerializer(KompotComponent::class), screen),
             registry = previewRegistry,
             designSystem = previewDesignSystem,
         )
