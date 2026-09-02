@@ -61,6 +61,9 @@ consumer starts from.
 shape the metadata cannot tell apart from the correct case — on `wasmJs`, for instance, where a jvm
 consumer build cannot confirm what the metadata suspects.
 
+From this side the same question is asked by the compiler: every module is built with `explicitApi`,
+so a declaration reaches you because somebody wrote `public`, not because nobody wrote anything.
+
 ### 📦 Modules
 
 | module | what for | depends on |
@@ -127,8 +130,8 @@ rules["9.4.3"] // "Ошибка, поднятая до того, как поле
 ```
 
 The closed list of types is a property of a **build**, not of the toolkit: an application assembles
-its own spec from these modules plus its own, and gets its own profile. The ten toolkit files come
-out byte-identical either way.
+its own spec from these modules plus its own, and gets its own profile. The thirteen toolkit schemas
+and the profile beside them come out byte-identical either way.
 
 ```kotlin
 val schemas = KompotSpec.generateAll(KompotToolkitSpec.modules + myComponentsSpecModule())
@@ -295,8 +298,15 @@ the missing runtime, not the code. Either install one through Xcode, or skip tho
 ./gradlew build -x iosSimulatorArm64Test -x iosX64Test
 ```
 
-Java 25 for every module at once — not tidiness but a Gradle requirement: it tags variants with the
-`org.gradle.jvm.version` attribute and refuses to build a module on 21 against a dependency on 25.
+Java 17 — both the toolchain the modules compile against and the floor their metadata declares, so a
+consumer on 17 gets a build that resolves rather than an `UnsupportedClassVersionError` at class
+loading. It is 17 for every module at once, and that part is a Gradle requirement rather than
+tidiness: where `org.gradle.jvm.version` is present, a module on 17 cannot be built against a
+dependency on 25, so it is all of them or none.
+
+A toolchain rather than `jvmTarget` alone, for the same reason: `jvmTarget` asks for older bytecode
+while still compiling against the newest JDK's class library, so a call to something added in 21
+compiles and then fails on a 17 runtime.
 
 ### 📄 License
 
