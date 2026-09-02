@@ -1,6 +1,7 @@
 # tools/canvas — эталон из макета, а не «по глазам»
 
-Три утилиты, независимые от kompot и друг от друга по формату: JSON с боксами `{text, l, t, w, h}`.
+Пять утилит, независимых от kompot и друг от друга по формату: JSON с боксами `{text, l, t, w, h, style}`.
+Три сверяют геометрию, две ведут токены.
 Макет Claude Design (`.dc.html`) рендерит браузер, экран — Compose; сравнивается **геометрия текста**:
 строка, которую прислал сервер, и есть строка, которую показывает макет, поэтому у каждого текстового
 листа макета должен быть двойник в кадре примерно там же и примерно того же размера. Контейнеры не
@@ -11,7 +12,9 @@
 | --- | --- | --- |
 | `canvas_frame.py` | `.dc.html` (+ `support.js`, `image-slot.js` рядом), id артборда | `<id>.png` и `<id>.boxes.json` — боксы DOM относительно артборда с вычисленным стилем (кегль, начертание, цвет, фон, радиус, отступ) |
 | `compose_boxes.py` | дамп `onRoot(useUnmergedTree = true).printToString()` | `<name>.compose.json` — боксы узлов с текстом |
-| `canvas_diff.py` | оба JSON | таблица: `ok` / `OFF` (сдвиг больше допуска) / `ZERO` (узел без высоты — раздавлен, тап уходит в никуда) / `MISSING` / `EXTRA`; код возврата 1, если есть что чинить |
+| `canvas_diff.py` | оба JSON | таблица: `ok` / `OFF` (сдвиг больше допуска) / `PART` (вхождение: спаны, метка с иконкой) / `ZERO` (узел без высоты — раздавлен, тап уходит в никуда) / `MISSING` / `EXTRA`; код возврата 1, если есть что чинить |
+| `canvas_tokens.py` | `*.boxes.json` | инвентарь: все цвета, стили текста и поверхности макета с местами использования (`--report`), черновик `tokens.json` с автоименами (`--draft`); `--check tokens.json` падает на значениях макета, у которых нет имени |
+| `canvas_generate.py` | именованный `tokens.json` | Kotlin для обеих сторон: `<Prefix>Tokens.kt` (словарь `ColorToken`/`TypographyToken`, `m3`-роли → токены Material), `<Prefix>Palette.kt` (hex, `ColorScheme`, `resolve`), `<Prefix>TypeScale.kt` (`typography(family)`, свои стили, `resolve`), `<Prefix>Surfaces.kt` (форма и отступ на слово); в заголовке sha256 источника |
 
 ```bash
 pip install playwright && playwright install chromium          # один раз
@@ -20,6 +23,12 @@ tools/canvas/canvas_frame.py design/kiosk.dc.html --artboard 1a --out build/canv
 tools/canvas/compose_boxes.py client/build/semantics/welcome.txt --out build/canvas/welcome.compose.json
 tools/canvas/canvas_diff.py build/canvas/1a.boxes.json build/canvas/welcome.compose.json --tolerance 24
 ```
+
+Цикл токенов: `canvas_frame.py` → `canvas_tokens.py --draft` → человек переименовывает ключи, ставит
+`m3`-роли и записывает в `absorbs` значения макета, которые продукт намеренно сливает (30/600 и 30/700 —
+одна подпись; тёмный декоративный круг — не красится) → `canvas_generate.py` → тест в потребителе сверяет
+sha256 в заголовках с файлом → `canvas_tokens.py --check` держит макет. Проверено на boulab: сгенерированная
+дизайн-система дала те же голдены, что рукописная.
 
 Что здесь важно:
 
@@ -30,7 +39,9 @@ tools/canvas/canvas_diff.py build/canvas/1a.boxes.json build/canvas/welcome.comp
   и рамкой); иначе `--frame` с селектором.
 - **CSS px при масштабе 1 = dp при плотности 1** — кадр Compose снимается на размере продукта
   (`runDesktopComposeUiTest(width, height)`), а не в окне раннера 1024×768.
-- Дамп стиля в `boxes.json` — сырьё для следующего шага, инвентаря токенов; здесь он не используется.
+- Эмодзи-листья в инвентарь не попадают: их цвет и кегль рисует платформенный шрифт, а не макет.
+- `radius` в `tokens.json` — число, `"pill"` или четыре числа; генератор берёт максимум и скругляет
+  симметрично: на проводе формы нет, одна форма на слово, асимметричный угол макета — записанное отличие.
 - Инструмент находит **строку**, а не причину: `dy=+870` у «В зале» — это «распорки схлопнулись»,
   но сказать это должен человек, прочитав кадр.
 
