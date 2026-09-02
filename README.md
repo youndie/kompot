@@ -112,6 +112,19 @@ infrastructure. `kompot-realtime-redis` is the bus for the multi-instance case, 
 without delivery guarantees on purpose: a component update is a thing you can afford to lose, since
 the client gets current state with its next screen request anyway.
 
+### 🧭 Laying out a screen, and reading it against a canvas
+
+[`skills/kompot-layout/SKILL.md`](skills/kompot-layout/SKILL.md) is the method: what travels on the
+wire and what stays in the client, how a screen is built on the server and drawn through the
+registry, how goldens and fixtures are kept honest, and the loop — measure before looking — that
+takes a screen from a canvas to the wire. It is written as a Claude Code skill; link it into
+`~/.claude/skills/kompot-layout` to have it load when a screen is being laid out.
+
+[`tools/canvas`](tools/canvas/README.md) are the measuring instruments: render a canvas artboard
+and diff its text geometry against a Compose frame, inventory a canvas's tokens and generate the
+design system from the named file, draw a server's recorded screens as a canvas in the wire's own
+vocabulary and read such a canvas back into a tree.
+
 ### 📐 The wire specification
 
 `kompot-spec` generates a JSON Schema for every protocol module out of the very SerialDescriptors
