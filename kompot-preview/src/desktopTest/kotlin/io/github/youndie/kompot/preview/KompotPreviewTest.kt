@@ -157,6 +157,15 @@ class KompotPreviewTest {
                 "UNKNOWN_COMPONENT" in (failure?.message ?: ""),
                 "expected the preview to report a root it could not recognise, got: ${failure?.message}",
             )
+            // And to name the cause rather than only the symptom. "unknown" as the type is not an
+            // unregistered component — it is a node the body named nothing for, which is a different
+            // mistake with a different fix, and a reader sent looking for a missing registration
+            // looks for something that is not missing. Written after making exactly this mistake in
+            // the IDE-preview experiment and reading my own message.
+            assertTrue(
+                "polymorphically" in (failure?.message ?: ""),
+                "expected the preview to name the concrete-serialiser cause, got: ${failure?.message}",
+            )
         }
 
     // Loud by default: a missing renderer draws a grey placeholder on a real screen, which is right

@@ -38,6 +38,15 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
         }
 
+        // @Preview, for the example this module ships. Desktop only: an IntelliJ preview renders
+        // through the desktop target whatever the file's source set says.
+        val desktopMain by getting {
+            dependencies {
+                implementation(libs.compose.ui.tooling.preview)
+                implementation(libs.compose.material3)
+            }
+        }
+
         val desktopTest by getting {
             dependencies {
                 implementation(kotlin("test"))

@@ -39,6 +39,10 @@ compose-material3 = { module = "org.jetbrains.compose.material3:material3", vers
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-multiplatform" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
 compose-components-ui-tooling-preview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "compose-multiplatform" }
+# The current home of @Preview. components-ui-tooling-preview above still resolves and its annotation
+# is deprecated in favour of this one — the compiler says so by name, which is how this line came to
+# exist rather than by reading a migration note.
+compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose-multiplatform" }
 ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "compose-multiplatform" }
 
 coil3-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
