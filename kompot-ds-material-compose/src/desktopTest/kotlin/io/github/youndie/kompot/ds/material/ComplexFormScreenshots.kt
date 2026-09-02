@@ -1,8 +1,7 @@
 package io.github.youndie.kompot.ds.material
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import io.github.youndie.kompot.LocalKompotRegistry
+import io.github.youndie.kompot.forms.KompotFormResponse
 import io.github.youndie.kompot.forms.SelectOption
 import io.github.youndie.kompot.forms.SubmitFormAction
 import io.github.youndie.kompot.forms.standard.boundAmountInput
@@ -16,12 +15,15 @@ import io.github.youndie.kompot.forms.standard.row
 import io.github.youndie.kompot.material3.*
 import io.github.youndie.kompot.standard.button
 import io.github.youndie.kompot.standard.text
-import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.standard.AmountValue
 import io.github.youndie.kompot.form.standard.EntityValue
 import io.github.youndie.kompot.form.standard.KeyboardType
 import io.github.youndie.kompot.form.standard.TextValue
+import io.github.youndie.kompot.form.standard.formStandardSerializersModule
 import io.github.youndie.kompot.form.standard.required
+import io.github.youndie.kompot.kompotJson
+import io.github.youndie.kompot.preview.KompotPreview
+import io.github.youndie.kompot.preview.KompotPreviewState
 import ru.workinprogress.viddik.annotations.ViddikScreenshot
 
 // Unlike RendererScreenshots.kt, which photographs one renderer at a time, these shots assemble a
@@ -32,6 +34,19 @@ import ru.workinprogress.viddik.annotations.ViddikScreenshot
 //
 // The capture window is deliberately larger than the default: a multi-field form is taller than a
 // single renderer and would be cropped.
+//
+// They go through :kompot-preview rather than calling RenderNode directly, which puts them on exactly
+// the path a deployment's own previews take: the BODY is what is rendered, not the object that
+// produced it, and the state of the form is a parameter rather than a controller built by hand. The
+// round trip is not ceremony — an object and the bytes on the wire can disagree, and a shot taken
+// from the object is a picture of a screen the client may not be able to decode.
+
+// The same Json on both sides, and the same one an application would pass: the engine's module does
+// not carry form-standard's field definitions, so a preview that decoded them anyway would be reading
+// a schema the application's own client refuses.
+private val previewJson = kompotJson(formStandardSerializersModule)
+
+private fun body(response: KompotFormResponse): String = previewJson.encodeToString(KompotFormResponse.serializer(), response)
 
 @ViddikScreenshot(name = "Checkout form - filled, ready to submit", group = "ComplexForm", width = 400, height = 480)
 @Composable
@@ -62,21 +77,22 @@ fun P2pTransferFormFilledScreenshot() {
             button(text = "Place order", action = SubmitFormAction(formId = "checkout"), modifierBlock = { fillMaxWidth() })
         }
 
-    val controller =
-        remember {
-            FormController(
-                schema = response.schema,
-                initialValues =
-                    mapOf(
-                        "recipient" to EntityValue(id = "user2", title = "user2"),
-                        "amount" to AmountValue(100L),
-                        "otp" to TextValue("1234"),
-                    ),
-            )
-        }
-
     RendererScreenshotTheme {
-        LocalKompotRegistry.current.RenderNode(response.screen, recordingActionHandler(), controller)
+        KompotPreview(
+            body = body(response),
+            registry = registry,
+            designSystem = Material3DesignSystem(),
+            state =
+                KompotPreviewState(
+                    values =
+                        mapOf(
+                            "recipient" to EntityValue(id = "user2", title = "user2"),
+                            "amount" to AmountValue(100L),
+                            "otp" to TextValue("1234"),
+                        ),
+                ),
+            json = previewJson,
+        )
     }
 }
 
@@ -112,11 +128,15 @@ fun P2pTransferFormErrorsScreenshot() {
             button(text = "Place order", action = SubmitFormAction(formId = "checkout"), modifierBlock = { fillMaxWidth() })
         }
 
-    val controller = remember { FormController(schema = response.schema) }
-    controller.markAllAsChanged()
-
     RendererScreenshotTheme {
-        LocalKompotRegistry.current.RenderNode(response.screen, recordingActionHandler(), controller)
+        KompotPreview(
+            body = body(response),
+            registry = registry,
+            designSystem = Material3DesignSystem(),
+            // What the form says when somebody submits it blank, without a faked tap on the button.
+            state = KompotPreviewState(allFieldsChanged = true),
+            json = previewJson,
+        )
     }
 }
 
@@ -161,22 +181,23 @@ fun TemplateFormFilledScreenshot() {
             button(text = "Save as a template", action = SubmitFormAction(formId = "payment_template"), modifierBlock = { fillMaxWidth() })
         }
 
-    val controller =
-        remember {
-            FormController(
-                schema = response.schema,
-                initialValues =
-                    mapOf(
-                        "template_name" to TextValue("Monthly plan"),
-                        "beneficiary" to EntityValue(id = "b1", title = "Acme Ltd"),
-                        "amount" to AmountValue(500_000L),
-                        "purpose_code" to TextValue("412"),
-                        "schedule" to EntityValue(id = "monthly", title = "Monthly"),
-                    ),
-            )
-        }
-
     RendererScreenshotTheme {
-        LocalKompotRegistry.current.RenderNode(response.screen, recordingActionHandler(), controller)
+        KompotPreview(
+            body = body(response),
+            registry = registry,
+            designSystem = Material3DesignSystem(),
+            state =
+                KompotPreviewState(
+                    values =
+                        mapOf(
+                            "template_name" to TextValue("Monthly plan"),
+                            "beneficiary" to EntityValue(id = "b1", title = "Acme Ltd"),
+                            "amount" to AmountValue(500_000L),
+                            "purpose_code" to TextValue("412"),
+                            "schedule" to EntityValue(id = "monthly", title = "Monthly"),
+                        ),
+                ),
+            json = previewJson,
+        )
     }
 }
