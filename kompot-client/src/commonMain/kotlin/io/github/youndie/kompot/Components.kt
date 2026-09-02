@@ -214,7 +214,10 @@ public class ButtonRenderer : KompotComponentRenderer<ButtonComponent> {
                     }
                 },
             border = if (surface.outline == Color.Unspecified) null else BorderStroke(1.dp, surface.outline),
-            modifier = component.modifiers.toComposeModifier(),
+                // defaultMinSize rather than height: the design system names a floor, and a button
+                // whose label wraps to two lines is still allowed to be taller than it.
+            contentPadding = surface.contentPadding ?: ButtonDefaults.ContentPadding,
+            modifier = component.modifiers.toComposeModifier().minHeightOf(surface),
         ) {
                 // The label goes through the design system too. Without it a button's words are set in
                 // the platform's fallback font: Material's own typography names no family, and the

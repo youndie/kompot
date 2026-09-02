@@ -73,7 +73,7 @@ public class ReadOnlyFieldRenderer : KompotComponentRenderer<ReadOnlyFieldCompon
                 // should look like instead belongs to the deployment, so it asks by role.
             shape = surface.shape ?: OutlinedTextFieldDefaults.shape,
             colors = outlinedColorsFor(surface),
-            modifier = component.modifiers.toComposeModifier().fillMaxWidth(),
+            modifier = component.modifiers.toComposeModifier().fillMaxWidth().minHeightOf(surface),
         )
     }
 }
@@ -152,7 +152,7 @@ public class TextInputRenderer : KompotComponentRenderer<TextInputComponent> {
             shape = fieldSurface.shape ?: OutlinedTextFieldDefaults.shape,
             colors = outlinedColorsFor(fieldSurface),
             modifier =
-                component.modifiers.toComposeModifier().fillMaxWidth().onFocusChanged { focusState ->
+                component.modifiers.toComposeModifier().fillMaxWidth().minHeightOf(fieldSurface).onFocusChanged { focusState ->
                     if (wasFocused && !focusState.isFocused) {
                         formController.onFieldBlurred(component.fieldId)
                     }
