@@ -97,6 +97,7 @@ so a declaration reaches you because somebody wrote `public`, not because nobody
 | `kompot-client` | the Compose client: a registry keyed by wire type, the core renderers, live updates, impression tracking | core, standard, forms |
 | `kompot-forms-client`, `kompot-wizard-client`, `kompot-images-client-coil` | the renderers of the form, wizard and image plug-ins | kompot-client |
 | `kompot-theme-client`, `kompot-ds-material-compose` | the Compose side of a server-driven theme, and the Material3 design system tokens resolve through | kompot-client, kompot-theme |
+| `kompot-preview` | a response body drawn by the real renderers, so a server can see the screen it built | kompot-client, kompot-forms |
 | `kompot-client-cache` | offline-first screen cache: the store contract and a cache-first provider with ETag revalidation | core |
 | `kompot-analytics` | tracking contracts for screens, actions and form outcomes | — |
 

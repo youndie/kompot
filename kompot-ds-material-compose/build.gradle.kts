@@ -76,6 +76,10 @@ kotlin {
                 // Скриншот-тестер вынесен в отдельный проект viddik (соседний репозиторий) —
                 // потребляется как внешняя библиотека из reposilite (см. комментарий у viddik-*
                 // в libs.versions.toml), а не project(...).
+                // The preview harness, so the whole-screen shots below go through the same path a
+                // deployment's do — body in, real renderers, state as a parameter. Test scope: this
+                // module publishes a design system, not a preview.
+                implementation(projects.kompotPreview)
                 implementation(libs.viddik.annotations)
                 implementation(libs.viddik.testing.core)
             }

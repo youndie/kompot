@@ -155,6 +155,11 @@ include(":kompot-theme-client")
 include(":kompot-images-client-coil")
 include(":kompot-ds-material-compose")
 
+// The preview harness: a response body, rendered by the real renderers, so a server can see the
+// screen it just built without a device or a client release in the loop. It photographs nothing
+// itself — the screenshot tester does that, and the goldens are the deployment's.
+include(":kompot-preview")
+
 // Offline-first screen cache: the store contract plus a cache-first provider with ETag
 // revalidation. The concrete storage backend is the application's.
 include(":kompot-client-cache")
