@@ -32,6 +32,9 @@ kotlin {
                 implementation(projects.kompotThemeClient)
                 implementation(projects.kompotStandard)
                 implementation(projects.kompotPreview)
+                // The graph an HTTP source reads its screen list from. Not `api`: a consumer names a
+                // ScreenSource.Http with a path, never a NavigationGraph.
+                implementation(projects.kompotNavigation)
                 // The design system the renderers resolve tokens through. A real one rather than a
                 // two-line stub: the question this spike asks about Material is only meaningful with
                 // the Material design system in the composition.
@@ -43,6 +46,8 @@ kotlin {
                 implementation(libs.compose.material3)
                 // Json and JsonObject are both in the configuration's signature.
                 api(libs.kotlinx.serialization.json)
+                // StateFlow is in the signature of a source session, which a consumer can implement.
+                api(libs.kotlinx.coroutines.core)
                 // The frame is a @Composable typealias, so a consumer writing one needs the runtime.
                 api(libs.compose.runtime)
                 // One call: JBR.isAvailable(), the condition DecoratedWindow refuses on.
@@ -61,6 +66,7 @@ kotlin {
                 // currentOs as api — test scope, never main.
                 implementation(libs.viddik.testing.core)
                 implementation(compose.desktop.currentOs)
+                implementation(libs.kotlinx.coroutines.test)
             }
         }
     }

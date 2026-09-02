@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import io.github.youndie.kompot.KompotRegistry
 import io.github.youndie.kompot.kompotJson
 import io.github.youndie.kompot.spec.KompotSpecResources
+import io.github.youndie.kompot.studio.source.ScreenSource
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 
@@ -35,6 +36,10 @@ public class KompotStudioConfig(
     // component modules. The default is the toolkit's, read from the classpath the way a consumer
     // reads them, so a studio with no configuration still lints against a closed list of types.
     public val schemas: Map<String, JsonObject> = toolkitSchemas(),
+    // Where the bodies are: recordings on disk, a directory of them, a running server with its own
+    // NavigationGraph. Empty means the window opens on the body it was handed and watches nothing —
+    // which is what the toolkit's own demo does, having no deployment to read from.
+    public val sources: List<ScreenSource> = emptyList(),
     // Wire types a DEPLOYMENT adds on top of the profile. Declared ones pass the check without their
     // shape being validated — safe, because an unfamiliar type degrades by protocol; undeclared ones
     // stay violations, or the check would stop meaning anything.

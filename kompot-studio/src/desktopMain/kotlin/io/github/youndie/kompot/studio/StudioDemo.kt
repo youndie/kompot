@@ -3,6 +3,9 @@ package io.github.youndie.kompot.studio
 import io.github.youndie.kompot.KompotRegistry
 import io.github.youndie.kompot.kompotCoreRenderers
 import io.github.youndie.kompot.kompotStandardRenderers
+import io.github.youndie.kompot.studio.source.ScreenSource
+import java.nio.file.Path
+import kotlin.io.path.isDirectory
 
 // THE STUDIO WITHOUT A CONSUMER: the toolkit's own renderers, the toolkit's own schemas, the default
 // frame. It is what `./gradlew :kompot-studio:run` opens, and it is also the shortest possible
@@ -57,6 +60,23 @@ internal fun sample(name: String): String =
 
 internal val SAMPLE_BODY: String get() = sample("sample-screen.json")
 
-public fun main() {
-    kompotStudio(KompotStudioConfig(registry = toolkitRegistry))
+// Arguments, because the demo is also how the sources are looked at by hand:
+//
+//     ./gradlew :kompot-studio:run --args=path/to/recordings
+//     ./gradlew :kompot-studio:run --args=https://staging.example.com,/navigation
+//
+// A path becomes a File or a Directory source by asking the file system rather than by a flag: the
+// answer is already there, and a flag would be a second place for it to be wrong.
+public fun main(args: Array<String>) {
+    kompotStudio(KompotStudioConfig(registry = toolkitRegistry, sources = args.map(::sourceFor)))
+}
+
+private fun sourceFor(argument: String): ScreenSource {
+    if (argument.startsWith("http://") || argument.startsWith("https://")) {
+        val (baseUrl, graphPath) = argument.split(',', limit = 2).let { it[0] to it.getOrNull(1) }
+        return ScreenSource.Http(baseUrl = baseUrl, graphPath = graphPath)
+    }
+
+    val path = Path.of(argument)
+    return if (path.isDirectory()) ScreenSource.Directory(path) else ScreenSource.File(path)
 }

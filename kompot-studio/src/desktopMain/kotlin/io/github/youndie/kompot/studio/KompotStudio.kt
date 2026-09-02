@@ -10,10 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +38,9 @@ import org.jetbrains.jewel.intui.standalone.theme.darkThemeDefinition
 import org.jetbrains.jewel.intui.standalone.theme.lightThemeDefinition
 import org.jetbrains.jewel.intui.window.decoratedWindow
 import org.jetbrains.jewel.ui.ComponentStyling
+import io.github.youndie.kompot.studio.source.ScreenRef
+import io.github.youndie.kompot.studio.source.ScreenSourceSession
+import io.github.youndie.kompot.studio.source.open
 import org.jetbrains.jewel.ui.component.CheckboxRow
 import org.jetbrains.jewel.ui.component.HorizontalSplitLayout
 import org.jetbrains.jewel.ui.component.RadioButtonRow
@@ -50,9 +57,9 @@ import org.jetbrains.jewel.window.newFullscreenControls
 // Blocking, like every Compose Desktop `application`: it returns when the last window closes.
 public fun kompotStudio(
     config: KompotStudioConfig,
-    // The body the window opens with. A stand-in until B-10 gives the studio real sources — a file, a
-    // directory it watches, an endpoint with an ETag — at which point the window opens on a source
-    // rather than on a string somebody passed.
+    // The body the window opens with, before anything is selected. A configuration with sources
+    // replaces it the moment somebody picks a screen; one without sources — the toolkit's own demo —
+    // never does, and this is all it ever shows.
     body: String = SAMPLE_BODY,
     title: String = "kompot studio",
 ) {
@@ -101,11 +108,15 @@ private fun StudioWindowContent(
     onBrandChange: (String?) -> Unit,
     onDarkChange: (Boolean) -> Unit,
 ) {
-    val body = bodyState.text.toString()
+    val opened = rememberOpenSources(config)
+    var selected by remember(opened) { mutableStateOf<SelectedScreen?>(null) }
 
-    // Keyed on the body, so a fixed mistake stops being reported without anybody clearing anything.
-    // The list is written to from inside composition, which is what a render-time degradation is: the
-    // writes are deduplicated, so the invalidation they cause settles after one extra pass.
+    // The status line, and it is where the sources pay for themselves: "polled 42, changed 1" is what
+    // a working ETag looks like, and "polled 42, changed 42" is a server that ignores If-None-Match.
+    // Both draw the same screen, so nothing else in this window can tell them apart.
+    val status = SelectedBody(opened, selected, bodyState)
+
+    val body = bodyState.text.toString()
     val degradations = remember(body, brand, dark) { mutableStateListOf<String>() }
     val findings = remember(config, body) { diagnose(config, body) }
 
@@ -124,27 +135,37 @@ private fun StudioWindowContent(
                     RadioButtonRow(text = name, selected = brand == name, onClick = { onBrandChange(name) })
                 }
             }
+
+            if (status.isNotEmpty()) Text(status)
         }
 
         HorizontalSplitLayout(
             first = {
-                TextArea(state = bodyState, modifier = Modifier.fillMaxSize().padding(8.dp))
+                ScreensPane(opened, selected) { selected = it }
             },
             second = {
-                StudioRenderPane(
-                    config = config,
-                    body = body,
-                    brand = brand,
-                    dark = dark,
+                HorizontalSplitLayout(
+                    first = { TextArea(state = bodyState, modifier = Modifier.fillMaxSize().padding(8.dp)) },
+                    second = {
+                        StudioRenderPane(
+                            config = config,
+                            body = body,
+                            brand = brand,
+                            dark = dark,
+                            modifier = Modifier.fillMaxSize(),
+                        ) { kind, type ->
+                            val line = "$kind: $type"
+                            if (line !in degradations) degradations += line
+                        }
+                    },
                     modifier = Modifier.fillMaxSize(),
-                ) { kind, type ->
-                    val line = "$kind: $type"
-                    if (line !in degradations) degradations += line
-                }
+                    firstPaneMinWidth = 280.dp,
+                    secondPaneMinWidth = 280.dp,
+                )
             },
             modifier = Modifier.fillMaxWidth().weight(1f),
-            firstPaneMinWidth = 320.dp,
-            secondPaneMinWidth = 320.dp,
+            firstPaneMinWidth = 180.dp,
+            secondPaneMinWidth = 560.dp,
         )
 
         Column(
@@ -154,6 +175,74 @@ private fun StudioWindowContent(
             val lines =
                 findings.map { "${it.layer}: ${it.message}" } + degradations.map { "degradation: $it" }
             if (lines.isEmpty()) Text("No findings.") else lines.forEach { Text(it) }
+        }
+    }
+}
+
+// One screen of one source, which is what a selection has to be: two sources can offer the same
+// endpoint, and a ref alone would not say which session to ask.
+private data class SelectedScreen(val source: Int, val ref: ScreenRef)
+
+private class OpenSource(val name: String, val session: ScreenSourceSession)
+
+// Opened once per configuration and closed with the window. The scope is the composition's, so a
+// window that goes away takes its polling with it rather than leaving a thread reading a file nobody
+// is looking at.
+@Composable
+private fun rememberOpenSources(config: KompotStudioConfig): List<OpenSource> {
+    val scope = rememberCoroutineScope()
+    val opened = remember(config, scope) { config.sources.map { OpenSource(it.name, it.open(scope)) } }
+    DisposableEffect(opened) { onDispose { opened.forEach { it.session.close() } } }
+    return opened
+}
+
+// Reads the selected body and pushes it into the editor when — and only when — it has actually
+// changed. Keyed on the revision counter rather than on the text: keying on the text would overwrite
+// whatever somebody is typing on every poll, and keying on nothing at all would never pick up the
+// rewrite that is the whole point of watching a file.
+@Composable
+private fun SelectedBody(
+    opened: List<OpenSource>,
+    selected: SelectedScreen?,
+    bodyState: TextFieldState,
+): String {
+    if (selected == null) return if (opened.isEmpty()) "" else "no screen selected"
+
+    val state by opened[selected.source].session.body(selected.ref).collectAsState()
+
+    LaunchedEffect(selected, state.revisions) {
+        state.text?.let { bodyState.setTextAndPlaceCursorAtEnd(it) }
+    }
+
+    val counts = "polled ${state.checks}, changed ${state.revisions}"
+    return state.error?.let { "$counts — $it" } ?: counts
+}
+
+@Composable
+private fun ScreensPane(
+    opened: List<OpenSource>,
+    selected: SelectedScreen?,
+    onSelect: (SelectedScreen) -> Unit,
+) {
+    Column(
+        Modifier.fillMaxSize().padding(8.dp).verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        if (opened.isEmpty()) {
+            Text("No sources configured.")
+            return@Column
+        }
+
+        opened.forEachIndexed { index, source ->
+            val screens by source.session.screens.collectAsState()
+            Text(source.name)
+            screens.forEach { ref ->
+                RadioButtonRow(
+                    text = if (ref.kind == "screen") ref.title else "${ref.title} · ${ref.kind}",
+                    selected = selected?.source == index && selected.ref == ref,
+                    onClick = { onSelect(SelectedScreen(index, ref)) },
+                )
+            }
         }
     }
 }
