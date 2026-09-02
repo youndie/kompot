@@ -134,7 +134,8 @@ def build_css(tokens: dict, prefix: str) -> str:
             continue
         fill = "width: 100%;" if word in ("screen", "band", "body", "card", "tile", "plain") else ""
         grow = " display: flex; flex-direction: column; height: 100%;" if word in ("screen", "body") else " display: flex; flex-direction: column;"
-        lines.append(f"[data-kompot=surface][data-density={word}] {{ border-radius: {radius_css(s['radius'])}; padding: {padding_css(s['padding'])}; {fill}{grow} }}")
+        clip = " overflow: hidden;" if s.get("outline") == "soft" else ""  # a card clips the photo that bleeds to its edge
+        lines.append(f"[data-kompot=surface][data-density={word}] {{ border-radius: {radius_css(s['radius'])}; padding: {padding_css(s['padding'])}; {fill}{grow}{clip} }}")
     lines += ["[data-kompot=surface][data-align=center] { align-items: center; text-align: center; }",
               "/* data-spacing, data-max-width, data-width, data-height are numbers on the node: kompot.js applies them */"]
     lines += ["", "/* type: the scale and the product's own styles */"]
