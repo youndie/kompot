@@ -27,8 +27,21 @@ import androidx.compose.ui.tooling.preview.Preview
 // does to them — is downstream of that answer and not worth designing before it exists.
 //
 // So this file is deliberately the smallest thing that can answer it: the toolkit's own renderers, a
-// design system of two lines, and a tree that could not be simpler. If the picture appears, the next
-// questions are worth asking. If it does not, this file is deleted and #108 stands on its own.
+// design system of two lines, and a tree that could not be simpler. The answer is yes — IntelliJ
+// composes it and draws the screen.
+//
+// WHAT A PREVIEW NEEDS ON ITS CLASSPATH, because it cost an hour to learn and the failure names
+// nothing useful. The IDE renders through skiko, and skiko's HOST-NATIVE half arrives with
+// compose.desktop.currentOs — which cannot live in a published source set, since it would pin the
+// host in this module's POM. So this source set has skiko-awt and not skiko-awt-runtime-<host>, and
+// the preview renders here only because the native library is already in ~/.skiko from something
+// else on the machine. Copy this file into a module of your own — an application module, where
+// currentOs is present anyway — and it renders on a clean machine too.
+//
+// The failure when it is missing is worth recognising: "Could not initialize class
+// org.jetbrains.skia.Surface". And it is sticky — a static initialiser that fails once leaves the
+// class broken for the life of that JVM, so every later frame repeats it and the preview process has
+// to be restarted before anything can work again.
 
 private val previewRegistry = KompotRegistry(kompotCoreRenderers + kompotStandardRenderers)
 
@@ -50,7 +63,7 @@ private val screen =
         children =
             listOf(
                 TextComponent(id = "title", text = "Catalogue"),
-                ButtonComponent(id = "buy", text = "Buy", action = CloseAction),
+                ButtonComponent(id = "buy", text = "Buy this", action = CloseAction),
             ),
     )
 
