@@ -163,7 +163,7 @@ repositories {
     maven("https://reposilite.kotlin.website/snapshots")
 }
 
-val kompotVersion = "0.35.0.103"
+val kompotVersion = "0.36.0.107"
 
 dependencies {
     implementation(platform("io.github.youndie:kompot-bom:$kompotVersion"))
