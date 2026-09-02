@@ -132,7 +132,7 @@ def build_css(tokens: dict, prefix: str) -> str:
     for word, s in surfaces.items():
         if word.startswith("button_") or word.startswith("glyph_"):
             continue
-        fill = "width: 100%;" if word in ("screen", "band", "body", "card", "tile", "plain") else ""
+        fill = "width: 100%;" if word in ("screen", "band", "body", "card", "row", "tile", "cell", "pay_bar") else ""
         grow = " display: flex; flex-direction: column; height: 100%;" if word in ("screen", "body") else " display: flex; flex-direction: column;"
         clip = " overflow: hidden;" if s.get("outline") == "soft" else ""  # a card clips the photo that bleeds to its edge
         lines.append(f"[data-kompot=surface][data-density={word}] {{ border-radius: {radius_css(s['radius'])}; padding: {padding_css(s['padding'])}; {fill}{grow}{clip} }}")
@@ -153,8 +153,10 @@ def build_css(tokens: dict, prefix: str) -> str:
         lines += ["", "/* rules: hairlines and the accent edge, words on a surface */",
                   f"[data-rule=above] {{ border-top: {lw}px solid {line_c}; }}",
                   f"[data-rule=below] {{ border-bottom: {lw}px solid {line_c}; }}",
-                  f"[data-rule=around] {{ border-top: {lw}px solid {line_c}; border-bottom: {lw}px solid {line_c}; }}",
-                  f"[data-rule=start] {{ border-left: {lw}px solid {line_c}; }}",
+                  f"[data-rule=across] {{ border-top: {lw}px solid {line_c}; border-bottom: {lw}px solid {line_c}; }}",
+                  f"[data-rule=around] {{ border: {lw}px solid {var.get('outline', line_c)}; }}",
+                  f"[data-rule=start] {{ border-left: {lw}px solid {line_c}; padding-left: {rules.get('startInset', 36)}px; }}",
+                  f"[data-rule=end] {{ border-right: {lw}px solid {line_c}; }}",
                   f"[data-rule=accent] {{ border-left: {aw}px solid {acc_c}; }}",
                   f"[data-rule=between] > [data-kompot]:not(:first-child) {{ border-top: {lw}px solid {line_c}; }}",
                   f"[data-rule=dashed] {{ border: {lw}px dashed {var.get('outline', line_c)}; }}"]
@@ -178,8 +180,14 @@ def build_css(tokens: dict, prefix: str) -> str:
     if back:
         bs = surfaces[back["surface"]]
         lines += ["", f"[data-kompot=screen_header] {{ display: flex; align-items: center; justify-content: center; width: {back['size']}px; height: {back['size']}px; border-radius: {radius_css(bs['radius'])}; background: {var[back['container']]}; color: {var[back['content']]}; font-size: 44px; font-weight: 600;" + (f" border: 2px solid {var[back['outline']]};" if back.get("outline") else "") + " }"]
-    lines += ["", "/* photos: slots the kiosk has not loaded */", f"[data-kompot=photo] {{ display: flex; align-items: center; justify-content: center; background: {var.get('sand', '#eee')}; color: {var.get('on_surface_variant', '#666')}; font-size: 28px; font-weight: 700; text-align: center; flex: none; overflow: hidden; }}"]
-    for word, p in tokens.get("photos", {}).items():
+    photos = tokens.get("photos", {})
+    tint = var.get(photos.get("tint", "surface_variant"), var.get("surface_variant", "#eee"))
+    caption = var.get(photos.get("caption", "on_surface_variant"), "#666")
+    lines += ["", "/* photos: slots the product has not loaded; tint and caption colour from the tokens' photos section */",
+              f"[data-kompot=photo] {{ display: flex; align-items: center; justify-content: center; background: {tint}; color: {caption}; font-size: 24px; font-weight: 500; text-align: center; flex: none; overflow: hidden; }}"]
+    for word, p in photos.items():
+        if not isinstance(p, dict):
+            continue
         w = f"width: {p['width']}px;" if p.get("width") else "width: 100%;"
         lines.append(f"[data-kompot=photo][data-size={word}] {{ {w} height: {p['height']}px; border-radius: {p.get('radius', 0)}px; }}")
     lines += ["", "/* glyphs: a mark or an emoji in a frame */", "[data-kompot=glyph] { display: inline-flex; align-items: center; justify-content: center; font-weight: 900; flex: none; }"]
