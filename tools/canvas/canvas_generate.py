@@ -11,7 +11,9 @@ keeps, under the name both ends use. From it this writes:
   * for the CLIENT — `<Prefix>Palette.kt` (the hex values, the Material `ColorScheme` built from
     the `m3` roles, and `resolve(token)` for the product's own colours), `<Prefix>TypeScale.kt`
     (`typography(family)` filling the Material slots, one function per extra style, and
-    `resolve(token, base)`), `<Prefix>Surfaces.kt` (radius and inset per surface word).
+    `resolve(token, base)`), `<Prefix>Surfaces.kt` (radius and inset per surface word), and — when
+    the file has a `tones` section — `<Prefix>Tones.kt` (tone × density → container, content,
+    outline; a surface word carries `"outline": "strong"|"soft"` to say whether it draws one).
 
 Every file starts with the sha256 of the tokens file it came from, so a test can refuse a build
 whose generated code is older than its source. Run it again after every edit of tokens.json:
@@ -204,6 +206,39 @@ def padding_of(padding) -> str:
     return f"PaddingValues(start = {p[3]}.dp, top = {p[0]}.dp, end = {p[1]}.dp, bottom = {p[2]}.dp)"
 
 
+def client_tones(tokens: dict, package: str, prefix: str, head: str) -> str:
+    """Tone × density → paint. A tone names its container and content colours and, if it has one,
+    its outline; a surface word says whether it draws an outline at all (`strong`, `soft`, none).
+    """
+    tones = tokens.get("tones", {})
+    surfaces = tokens.get("surfaces", {})
+    lines = [head, f"package {package}", "", "import androidx.compose.ui.graphics.Color", ""]
+    lines += ["// What a tone is painted with. `Color.Unspecified` content means: inherit what is around.",
+              "data class TonePaint(", "    val container: Color,", "    val content: Color,", "    val outline: Color,", ")", "",
+              f"object {prefix}Tones {{",
+              "    private val strong = setOf(" + ", ".join(f'"{w}"' for w, e in surfaces.items() if e.get("outline") == "strong") + ")",
+              "    private val soft = setOf(" + ", ".join(f'"{w}"' for w, e in surfaces.items() if e.get("outline") == "soft") + ")",
+              "", "    // null for a tone this file does not know: the caller draws the neutral thing.", "    fun paint(", "        tone: String,", "        density: String,", "    ): TonePaint? {",
+              "        val outlined = density in strong || density in soft", "        return when (tone) {"]
+    for name, e in tones.items():
+        if "container" not in e:
+            lines.append(f'            "{name}" -> TonePaint(Color.Transparent, Color.Unspecified, Color.Transparent)')
+            continue
+        container = f"{prefix}Palette.{snake_to_pascal(e['container'])}"
+        content = f"{prefix}Palette.{snake_to_pascal(e['content'])}"
+        outline = e.get("outline")
+        soft = e.get("outlineSoft")
+        if outline and soft:
+            out = f"if (!outlined) Color.Transparent else if (density in soft) {prefix}Palette.{snake_to_pascal(soft)} else {prefix}Palette.{snake_to_pascal(outline)}"
+        elif outline:
+            out = f"if (outlined) {prefix}Palette.{snake_to_pascal(outline)} else Color.Transparent"
+        else:
+            out = "Color.Transparent"
+        lines.append(f'            "{name}" -> TonePaint({container}, {content}, {out})')
+    lines += ["            else -> null", "        }", "    }", "}", ""]
+    return "\n".join(lines)
+
+
 def write(path: str, content: str) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
@@ -231,6 +266,8 @@ def main() -> int:
         write(os.path.join(args.client_out, f"{args.prefix}Palette.kt"), client_palette(tokens, args.client_package, args.prefix, head))
         write(os.path.join(args.client_out, f"{args.prefix}TypeScale.kt"), client_type_scale(tokens, args.client_package, args.prefix, head))
         write(os.path.join(args.client_out, f"{args.prefix}Surfaces.kt"), client_surfaces(tokens, args.client_package, args.prefix, head))
+        if tokens.get("tones"):
+            write(os.path.join(args.client_out, f"{args.prefix}Tones.kt"), client_tones(tokens, args.client_package, args.prefix, head))
     print(f"tokens sha256 {digest[:12]}…")
     return 0
 

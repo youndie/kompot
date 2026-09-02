@@ -1,7 +1,7 @@
 # tools/canvas — эталон из макета, а не «по глазам»
 
-Пять утилит, независимых от kompot и друг от друга по формату: JSON с боксами `{text, l, t, w, h, style}`.
-Три сверяют геометрию, две ведут токены.
+Семь утилит, независимых от kompot и друг от друга по формату: JSON с боксами `{text, l, t, w, h, style}`
+и JSON-дерево провода. Три сверяют геометрию, две ведут токены, две — словарь на канвасе.
 Макет Claude Design (`.dc.html`) рендерит браузер, экран — Compose; сравнивается **геометрия текста**:
 строка, которую прислал сервер, и есть строка, которую показывает макет, поэтому у каждого текстового
 листа макета должен быть двойник в кадре примерно там же и примерно того же размера. Контейнеры не
@@ -14,6 +14,8 @@
 | `compose_boxes.py` | дамп `onRoot(useUnmergedTree = true).printToString()` | `<name>.compose.json` — боксы узлов с текстом |
 | `canvas_diff.py` | оба JSON | таблица: `ok` / `OFF` (сдвиг больше допуска) / `PART` (вхождение: спаны, метка с иконкой) / `ZERO` (узел без высоты — раздавлен, тап уходит в никуда) / `MISSING` / `EXTRA`; код возврата 1, если есть что чинить |
 | `canvas_tokens.py` | `*.boxes.json` | инвентарь: все цвета, стили текста и поверхности макета с местами использования (`--report`), черновик `tokens.json` с автоименами (`--draft`); `--check tokens.json` падает на значениях макета, у которых нет имени |
+| `canvas_kit.py` | именованный `tokens.json`, каталог примеров | кит для Claude Design: `kompot.css` (класс на слово: `[data-kompot=surface][data-tone=brand]`, `[data-density=card]`, `[data-style=display_large]`, `[data-variant=pay]`…), `kompot.js` (числа узла — `data-spacing`, `data-max-width`, `data-width/height` — в стили), карточки `@dsCard` (цвета, шкала, тон×плотность, кнопки, фото/глиф), README с контрактом разметки, примеры |
+| `canvas_tree.py` | HTML в словаре (`data-kompot="…"`, `data-id`, слова атрибутами) | JSON-дерево kompot — черновик серверного ответа; `--compare recorded.json` — диф по id: тип, слова, текст, действие, порядок детей, с умолчаниями словаря с обеих сторон |
 | `canvas_generate.py` | именованный `tokens.json` | Kotlin для обеих сторон: `<Prefix>Tokens.kt` (словарь `ColorToken`/`TypographyToken`, `m3`-роли → токены Material), `<Prefix>Palette.kt` (hex, `ColorScheme`, `resolve`), `<Prefix>TypeScale.kt` (`typography(family)`, свои стили, `resolve`), `<Prefix>Surfaces.kt` (форма и отступ на слово); в заголовке sha256 источника |
 
 ```bash
@@ -29,6 +31,13 @@ tools/canvas/canvas_diff.py build/canvas/1a.boxes.json build/canvas/welcome.comp
 одна подпись; тёмный декоративный круг — не красится) → `canvas_generate.py` → тест в потребителе сверяет
 sha256 в заголовках с файлом → `canvas_tokens.py --check` держит макет. Проверено на boulab: сгенерированная
 дизайн-система дала те же голдены, что рукописная.
+
+Цикл словаря: `canvas_kit.py` → кит заливается в проект дизайн-системы Claude Design (`DesignSync`:
+`create_project` → `finalize_plan` → `write_files`) → дизайнер рисует экран атрибутами `data-kompot` →
+`canvas_tree.py --compare` говорит, чем макет отличается от того, что шлёт сервер, по id и по словам.
+На boulab артборд приветствия в словаре дал **0 расхождений** с записью сервера на 30 узлах, а его
+рендер через `kompot.css` разошёлся с кадром Compose одной строкой: браузер и Skia считают высоту
+трёх строк по 182 px на 30 px по-разному.
 
 Что здесь важно:
 

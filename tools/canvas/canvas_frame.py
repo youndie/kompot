@@ -126,7 +126,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("html", help="the .dc.html file; support.js and image-slot.js beside it")
     parser.add_argument("--artboard", action="append", required=True, help="id of an artboard wrapper (repeatable)")
-    parser.add_argument("--frame", help="CSS selector of the frame inside the wrapper, instead of the largest child")
+    parser.add_argument("--frame", help="CSS selector of the frame inside the wrapper, or `self` when the id is on the frame")
     parser.add_argument("--out", default="build/canvas", help="where the png and boxes go")
     parser.add_argument("--settle", type=int, default=1500, help="ms to wait after fonts are ready, for the runtime to draw")
     args = parser.parse_args()
@@ -148,8 +148,10 @@ def main() -> int:
         failures = 0
         for board in args.artboard:
             if args.frame:
-                frame = page.locator(f"#{board} {args.frame}").first
-                size = frame.evaluate("el => { el.setAttribute('data-canvas-frame', 'x'); const r = el.getBoundingClientRect(); return {width: r.width, height: r.height}; }")
+                # `self`: the element with the id IS the frame; otherwise a selector inside it.
+                wrapper = page.locator(f"[id='{board}']").first
+                frame = wrapper if args.frame == "self" else wrapper.locator(args.frame).first
+                size = frame.evaluate("el => { const r = el.getBoundingClientRect(); return {width: r.width, height: r.height}; }")
             else:
                 size = page.evaluate(FRAME_JS, board)
                 frame = page.locator(f"[data-canvas-frame='{board}']").first
