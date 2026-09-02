@@ -7,6 +7,8 @@ import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import io.github.youndie.kompot.standard.ButtonComponent
+import io.github.youndie.kompot.standard.TextComponent
 import java.io.File
 import javax.imageio.ImageIO
 import kotlin.test.Test
@@ -27,8 +29,18 @@ class IdePreviewRendersTest {
         runDesktopComposeUiTest(width = 320, height = 160) {
             setContent { KompotTreeIdePreview() }
 
-            onNodeWithText("Catalogue").assertIsDisplayed()
-            onNodeWithText("Buy").assertIsDisplayed()
+            // Read off the tree rather than repeated here: the assertion is "what the example says is
+            // what it drew", and a copy of the strings would only pin the copy — and fail the build on
+            // a retyped label, which is a thing that happens to an example on purpose.
+            previewScreen.children.forEach { child ->
+                val label =
+                    when (child) {
+                        is TextComponent -> child.text
+                        is ButtonComponent -> child.text
+                        else -> error("the example grew a component this test does not know how to read: $child")
+                    }
+                onNodeWithText(label).assertIsDisplayed()
+            }
 
             val out = File("build/preview/ide-preview.png")
             out.parentFile.mkdirs()

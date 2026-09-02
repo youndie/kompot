@@ -38,8 +38,8 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
         }
 
-        // The IDE-preview experiment (#109) and nothing else. Desktop only, because an IntelliJ
-        // preview renders through the desktop target whatever the file's source set says.
+        // @Preview, for the example this module ships. Desktop only: an IntelliJ preview renders
+        // through the desktop target whatever the file's source set says.
         val desktopMain by getting {
             dependencies {
                 implementation(libs.compose.ui.tooling.preview)

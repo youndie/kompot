@@ -30,18 +30,24 @@ import androidx.compose.ui.tooling.preview.Preview
 // design system of two lines, and a tree that could not be simpler. The answer is yes — IntelliJ
 // composes it and draws the screen.
 //
-// WHAT A PREVIEW NEEDS ON ITS CLASSPATH, because it cost an hour to learn and the failure names
-// nothing useful. The IDE renders through skiko, and skiko's HOST-NATIVE half arrives with
-// compose.desktop.currentOs — which cannot live in a published source set, since it would pin the
-// host in this module's POM. So this source set has skiko-awt and not skiko-awt-runtime-<host>, and
-// the preview renders here only because the native library is already in ~/.skiko from something
-// else on the machine. Copy this file into a module of your own — an application module, where
-// currentOs is present anyway — and it renders on a clean machine too.
+// TWO THINGS ABOUT THE CLASSPATH AND SKIKO, learnt the long way and worth separating, because they
+// look like one problem and are not.
 //
-// The failure when it is missing is worth recognising: "Could not initialize class
-// org.jetbrains.skia.Surface". And it is sticky — a static initialiser that fails once leaves the
-// class broken for the life of that JVM, so every later frame repeats it and the preview process has
-// to be restarted before anything can work again.
+// The first is real and permanent: an IDE preview renders through skiko, whose HOST-NATIVE half
+// arrives with compose.desktop.currentOs — and currentOs cannot live in a published source set, since
+// it would pin the host in this module's POM. So this source set carries skiko-awt without
+// skiko-awt-runtime-<host>, and the preview finds the library only where a machine already has it
+// cached in ~/.skiko. Copying this file into a module of your own — an application module has
+// currentOs anyway — is the intended use and renders on a clean machine too.
+//
+// The second looks like the first and is not caused by it: "Could not initialize class
+// org.jetbrains.skia.Surface", under it a FileLockInterruptionException from skiko's library loader.
+// Moving this file to a source set that DOES have currentOs changed nothing, which is what rules the
+// classpath out. That exception is also thrown when the calling thread's interrupt flag was already
+// set, and the preview host renders on one long-lived thread — so one cancelled frame poisons every
+// later one, and the class stays broken for the life of that JVM. It reads as "the preview stopped
+// working" when what happened is "it failed once". The cure is restarting the preview process, not
+// changing anything here.
 
 private val previewRegistry = KompotRegistry(kompotCoreRenderers + kompotStandardRenderers)
 
@@ -57,7 +63,11 @@ private val previewDesignSystem =
         override fun resolveTypography(token: TypographyToken): TextStyle = MaterialTheme.typography.bodyLarge
     }
 
-private val screen =
+// internal rather than private: the test beside this file asserts that what the tree SAYS is what got
+// drawn, and derives the strings from here rather than repeating them. The label of a button in an
+// example is exactly the kind of thing somebody retypes — to watch the preview redraw, say — and a
+// test that pinned a copy of it would fail on a cosmetic edit and teach people to ignore it.
+internal val previewScreen =
     ColumnComponent(
         id = "root",
         children =
@@ -80,7 +90,7 @@ public fun KompotTreeIdePreview() {
             // it is handed, the root decodes to UnknownComponent, and the preview stopped and said so.
             // Which is the whole argument for previewing the body rather than the object, met here by
             // the file that exists to argue it.
-            body = kompotJson().encodeToString(PolymorphicSerializer(KompotComponent::class), screen),
+            body = kompotJson().encodeToString(PolymorphicSerializer(KompotComponent::class), previewScreen),
             registry = previewRegistry,
             designSystem = previewDesignSystem,
         )
