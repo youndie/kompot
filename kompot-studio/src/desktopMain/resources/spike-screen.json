@@ -1,0 +1,30 @@
+{
+  "type": "column",
+  "id": "root",
+  "spacing": 12,
+  "modifiers": [
+    { "type": "padding", "all": 16 }
+  ],
+  "children": [
+    {
+      "type": "text",
+      "id": "title",
+      "text": "The body is the source of truth",
+      "style": "headline_small",
+      "color": "on_surface"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "text": "Edit the JSON on the left. The frame on the right is drawn by the same renderers a client ships.",
+      "style": "body_medium",
+      "color": "on_surface_variant"
+    },
+    {
+      "type": "button",
+      "id": "cta",
+      "text": "A Material button",
+      "action": { "type": "close" }
+    }
+  ]
+}

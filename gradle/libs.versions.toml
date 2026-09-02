@@ -22,6 +22,11 @@ viddik = "0.1.1.8"
 # then throws NoSuchMethodError on the first frame, inside a renderer, so this number moves only
 # together with `compose-multiplatform` and `viddik`.
 jewel = "0.40.0-262.10315.125"
+# The JetBrains Runtime's own API, and the studio compiles against it for ONE call: the same
+# `JBR.isAvailable()` Jewel's DecoratedWindow tests before refusing to open. It arrives transitively
+# with Jewel anyway; naming it is what lets code ask the question rather than guess at it from
+# `java.vendor` — which on a JBR reads "Oracle Corporation", exactly like the JDK it is not.
+jbrApi = "1.9.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -68,6 +73,7 @@ viddik-processor = { module = "ru.workinprogress:viddik-processor", version.ref 
 # instructions, so that two Material generations do not sit in one classpath.
 jewel-int-ui-standalone = { module = "org.jetbrains.jewel:jewel-int-ui-standalone", version.ref = "jewel" }
 jewel-int-ui-decorated-window = { module = "org.jetbrains.jewel:jewel-int-ui-decorated-window", version.ref = "jewel" }
+jbr-api = { module = "org.jetbrains.runtime:jbr-api", version.ref = "jbrApi" }
 
 ksp-symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }

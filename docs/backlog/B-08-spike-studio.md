@@ -1,7 +1,7 @@
 ---
 id: B-08
 title: "Spike :kompot-studio: Jewel + KompotPreview + Hot Reload в одном окне"
-status: open
+status: done
 priority: P0
 size: M
 stage: spike
@@ -41,3 +41,29 @@ IntelliJ рисует» стоило отдельного эксперимент
 - Якоря: `settings.gradle.kts`, `kompot-studio/build.gradle.kts` (новый),
   `kompot-preview/src/desktopMain/.../IdePreviewExperiment.kt` (образец эксперимента),
   `kompot-ds-material-compose/build.gradle.kts` (как подключён viddik).
+
+## Итог
+
+Модуль `:kompot-studio` (`jvm("desktop")`, не публикуется) собирается и запускается; три теста
+(`SpikeCaptureTest` ×2, `JetBrainsRuntimeTest`) зелёные.
+
+**Четыре ответа из пяти — «да», пятый открыт.** Полностью, по пунктам, они записаны в шапке
+`kompot-studio/src/desktopMain/.../Spike.kt`; сюда — то, из-за чего пришлось менять решения.
+
+- **§5.5 ошибалась: `DecoratedWindow` не деградирует на не-JBR**, а бросает — `if (!JBR.isAvailable())
+  error(...)` первой строкой. В студии развилка, и условие в ней — тот же `JBR.isAvailable()`.
+  Приблизительная проверка по `java.vendor` не работает: **на JetBrains Runtime `java.vendor` равен
+  `Oracle Corporation`**, и первая версия файла уводила студию на недекорированную ветку ровно на том
+  рантайме, ради которого ветка и заводилась. Найдено запуском — окно само напечатало, кто оно.
+- **Рантайм берётся toolchain'ом** (`JvmVendorSpec.JETBRAINS`, 21), а не «должен быть установлен».
+  Лениво: `executable` ставится в `configureEach` под проверкой имени, поэтому `./gradlew build`
+  ничего не скачивает. Два тупика по дороге: `tasks.named("run")` падает на конфигурации (Compose
+  регистрирует `run` в своём `afterEvaluate`), а `javaLauncher` конфликтует с `executable`, который
+  плагин уже выставил.
+- **`:kompot-bom` требовал публикацию от каждого модуля.** Сторож правильный — «ноль публикаций»
+  раньше значило «прочитан до конфигурации». Теперь у него явный список `notPublished` и проверка
+  **в обе стороны**: незаявленный молчун валит сборку, и устаревшее исключение тоже.
+- **Hot Reload остался непроверенным.** Задачи `hotRunDesktop`/`reload` регистрируются сами, рантайм
+  подходит — не хватает сеанса с экраном. Записано открытым; §5.5 ресёрча исправлена по обоим пунктам.
+- Тела-образцы — свои, в ресурсах модуля: `kompot-client-tck/corpus/` (якорь из AC) хранит пары
+  «форма → шаги → исход», а не тела экранов, и для `KompotPreview` не годится.

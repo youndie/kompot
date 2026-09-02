@@ -37,11 +37,10 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (22)
+## Открыто (21)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-08](backlog/B-08-spike-studio.md) `[ ]` | Spike :kompot-studio: Jewel + KompotPreview + Hot Reload в одном окне | spike | P0 | M | B-01 |
 | [B-09](backlog/B-09-studio-config-frame.md) `[ ]` | KompotStudioConfig и frame; дефолтный frame из файлов KompotTheme | v1-viewer | P0 | M | B-08 |
 | [B-10](backlog/B-10-sources.md) `[ ]` | Источники тела: файл, каталог с watch, HTTP с ETag и NavigationGraph | v1-viewer | P0 | M | B-08 |
 | [B-11](backlog/B-11-tree-from-schema.md) `[ ]` | Дерево экрана из JSON по слотам схемы (Jewel LazyTree) | v1-viewer | P0 | M | B-05, B-08 |
@@ -64,11 +63,15 @@
 | [B-22](backlog/B-22-palette-dnd.md) `[ ]` | Палитра типов и drag-and-drop в дереве | v3-builder | P3 | L | B-21 |
 | [B-23](backlog/B-23-dsl-export.md) `[ ]` | Экспорт DSL-черновика из тела | v3-builder | P3 | M | B-07 |
 
-## Сделано (1)
+## Сделано (2)
 
 **Швы в toolkit'е**
 
 - [B-01](backlog/B-01-compose-line.md) — Одна линия Compose: kompot, viddik, Jewel в libs.versions.toml
+
+**Spike**
+
+- [B-08](backlog/B-08-spike-studio.md) — Spike :kompot-studio: Jewel + KompotPreview + Hot Reload в одном окне
 
 <!-- END INDEX -->
 

@@ -197,3 +197,9 @@ include(":kompot-bom")
 // :kompot-standard so that a profile of "core + standard" keeps its promise of needing no form
 // vocabulary at all.
 include(":kompot-commands")
+
+// The screen editor. The one module here that is an application rather than a library, and the only
+// one with a single target: it draws a screen through the CONSUMER's renderers, which puts it in the
+// consumer's classpath and on the desktop JVM. It is not published yet — B-08 asks whether the window
+// can exist at all, and publishing it is the next question, not this one.
+include(":kompot-studio")

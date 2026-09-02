@@ -16,6 +16,16 @@ plugins {
 // configured before some of the others, their publications do not exist yet and their `version` still
 // reads "unspecified" — and none of that fails anything: the first attempt produced a perfectly valid
 // BOM with 69 of 97 coordinates, several of them pinned to a version by that name.
+
+// The modules this build does NOT publish, named one by one rather than derived from "contributed
+// nothing". The difference is the whole point of the guard below: a module that publishes nothing
+// because it is an application looks exactly like a module that publishes nothing because the BOM
+// read it too early, and a rule that lets the first through lets the second through with it.
+//
+// Adding a line here is a decision somebody makes and a reviewer sees. The guard checks the list in
+// both directions, so a name that stops being true stops the build rather than sitting here.
+val notPublished = setOf(":kompot-studio")
+
 val published =
     rootProject.subprojects
         .filter { it.path != path }
@@ -53,7 +63,21 @@ dependencies {
 // situation it exists for and passed a nineteen-coordinate BOM.
 val silent = contributed.filterValues { it == 0 }.keys.sorted()
 require(contributed.isNotEmpty()) { "the BOM found no module at all — it would ship empty and green" }
-require(silent.isEmpty()) {
-    "these modules registered no publication when the BOM read them, which means they were read before they were " +
-        "configured: $silent"
+require(silent.toSet() == notPublished) {
+    val unexpected = silent - notPublished
+    val stale = notPublished - silent.toSet()
+    buildString {
+        if (unexpected.isNotEmpty()) {
+            append(
+                "these modules registered no publication when the BOM read them, which means they were read before " +
+                    "they were configured — or they are applications and belong in `notPublished`: $unexpected. ",
+            )
+        }
+        if (stale.isNotEmpty()) {
+            append(
+                "`notPublished` names modules that DO publish (or no longer exist): $stale — an exemption nobody " +
+                    "needs is an exemption that will one day cover something.",
+            )
+        }
+    }
 }

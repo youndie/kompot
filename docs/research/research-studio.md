@@ -383,8 +383,16 @@ Compose-нарисованный тайтлбар, но в стиле IDE и н�
   **material3** — конфликта быть не должно, но рендер-панель обязана жить внутри `MaterialTheme`
   потребителя (рендереры читают `MaterialTheme.colorScheme`), а хром — внутри `IntUiTheme`.
   Граница — `frame` из §5.2, ровно там, где она и так нужна.
-- `DecoratedWindow` рассчитан на JetBrains Runtime — тот же JBR, что нужен Compose Hot Reload;
-  на другом JDK он деградирует до обычного окна. Приемлемо.
+- ~~`DecoratedWindow` рассчитан на JetBrains Runtime — тот же JBR, что нужен Compose Hot Reload;
+  на другом JDK он деградирует до обычного окна. Приемлемо.~~
+  **Неверно, исправлено спайком B-08 (03.09.2026).** `DecoratedWindow` не деградирует: первая его
+  строка — `if (!JBR.isAvailable()) error("DecoratedWindow can only be used on JetBrainsRuntime")`.
+  На не-JBR студия падала бы на старте с сообщением про Jewel. Развилка живёт в самой студии,
+  и условие в ней — тот же `JBR.isAvailable()`, а не догадка по `java.vendor`: **на JBR
+  `java.vendor` равен `Oracle Corporation`**, и приблизительная проверка уводила студию на
+  недекорированную ветку ровно на том рантайме, ради которого ветка и заводилась.
+  Рантайм больше не «должен быть установлен»: `:kompot-studio` берёт его toolchain'ом
+  (`JvmVendorSpec.JETBRAINS`, 21) — лениво, только на запуске и на тестах.
 - Версия Jewel привязана к билду IJP (`0.40.0-262.10315.125`); её фиксируем в
   `libs.versions.toml` рядом с viddik и не поднимаем отдельно от линии Compose.
 
@@ -423,6 +431,12 @@ Compose-нарисованный тайтлбар, но в стиле IDE и н�
 ---
 
 ## 7. План
+
+**Spike — сделан (B-08, 03.09.2026); один вопрос из пяти остался открытым.** Hot Reload в окне
+студии **не проверен**: задачи `hotRunDesktop`/`hotReloadDesktopMain`/`reload` регистрируются
+Compose-плагином сами, рантайм теперь JBR, но подтвердить «правка `ButtonRenderer` меняет кадр без
+перезапуска» может только сеанс с экраном. Остальные четыре подтверждены запуском и тестами
+(`SpikeCaptureTest`, `JetBrainsRuntimeTest`). Исходный план спайка:
 
 **Spike (1–2 дня).** `:kompot-studio` с `jvm("desktop")`, `main` на `kompotStandardRenderers`:
 Jewel `DecoratedWindow` + `HorizontalSplitLayout`, файл → `KompotPreview` во `frame` по умолчанию,
