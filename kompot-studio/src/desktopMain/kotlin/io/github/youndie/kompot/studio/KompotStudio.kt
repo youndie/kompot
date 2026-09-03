@@ -27,7 +27,14 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import io.github.youndie.kompot.studio.ui.installMagnification
+import androidx.compose.ui.input.pointer.isCtrlPressed
+import androidx.compose.ui.input.pointer.isMetaPressed
+import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.input.pointer.PointerEventType
+import kotlin.math.roundToInt
 import org.jetbrains.jewel.ui.component.TextField
 import io.github.youndie.kompot.studio.tree.kindFor
 import io.github.youndie.kompot.studio.tree.DropKind
@@ -143,7 +150,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.github.youndie.kompot.studio.palette.paletteFor
+import io.github.youndie.kompot.studio.ui.HRule
 import io.github.youndie.kompot.studio.ui.Icon
+import io.github.youndie.kompot.studio.ui.VRule
 import io.github.youndie.kompot.studio.ui.SmallSegmented
 import io.github.youndie.kompot.studio.ui.StudioIcon
 import io.github.youndie.kompot.studio.ui.studioColors
@@ -205,6 +214,8 @@ public fun kompotStudio(
             // produced.
             val shortcuts = remember { arrayOfNulls<(androidx.compose.ui.input.key.KeyEvent) -> Boolean>(1) }
             val onKey: (androidx.compose.ui.input.key.KeyEvent) -> Boolean = { shortcuts[0]?.invoke(it) == true }
+            // The same shape for the trackpad pinch: the window's root hears it, the preview acts on it.
+            val magnify = remember { arrayOfNulls<(Double) -> Unit>(1) }
 
             if (JBR.isAvailable()) {
                 DecoratedWindow(
@@ -214,8 +225,9 @@ public fun kompotStudio(
                     onKeyEvent = onKey,
                 ) {
                     ReportWindow(window, decorated = true)
+                    InstallPinch(window) { magnify[0]?.invoke(it) }
                     TitleBar(Modifier.newFullscreenControls()) { Text(title) }
-                    StudioWindowContent(config, bodyState, brand, dark, { brand = it }, { dark = it }) {
+                    StudioWindowContent(config, bodyState, brand, dark, { brand = it }, { dark = it }, { magnify[0] = it }) {
                         shortcuts[0] = it
                     }
                 }
@@ -227,7 +239,8 @@ public fun kompotStudio(
                     onKeyEvent = onKey,
                 ) {
                     ReportWindow(window, decorated = false)
-                    StudioWindowContent(config, bodyState, brand, dark, { brand = it }, { dark = it }) {
+                    InstallPinch(window) { magnify[0]?.invoke(it) }
+                    StudioWindowContent(config, bodyState, brand, dark, { brand = it }, { dark = it }, { magnify[0] = it }) {
                         shortcuts[0] = it
                     }
                 }
@@ -236,6 +249,7 @@ public fun kompotStudio(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun StudioWindowContent(
     config: KompotStudioConfig,
@@ -244,6 +258,8 @@ private fun StudioWindowContent(
     dark: Boolean,
     onBrandChange: (String?) -> Unit,
     onDarkChange: (Boolean) -> Unit,
+    // The pinch, the same way: the window hears it, the content says what it zooms.
+    onMagnify: ((Double) -> Unit) -> Unit = {},
     // The window owns the key events and the content owns the state they act on, so the content hands
     // a handler back up rather than the window reaching down for a history it does not have.
     onShortcuts: ((androidx.compose.ui.input.key.KeyEvent) -> Boolean) -> Unit = {},
@@ -285,6 +301,18 @@ private fun StudioWindowContent(
     val paletteCount = remember(config) { paletteFor(config).size }
 
     var device by remember { mutableStateOf(DEVICE_PRESETS.first()) }
+    // Null is "fit": the frame scales to the pane, and the number under the frame says what that
+    // came to. Reset with the device, because a zoom chosen for a phone means nothing on a tablet.
+    var zoom by remember(device) { mutableStateOf<Float?>(null) }
+    var shownScale by remember { mutableStateOf(1f) }
+    // Whether the pointer is over the preview: a pinch anywhere else in the window is not about it.
+    var previewHovered by remember { mutableStateOf(false) }
+
+    fun zoomBy(factor: Float) {
+        zoom = ((zoom ?: shownScale) * factor).coerceIn(MIN_ZOOM, MAX_ZOOM)
+    }
+    // Registered on every composition, like the shortcuts: the handler closes over the current state.
+    onMagnify { amount -> if (previewHovered) zoomBy((1 + amount).toFloat()) }
     var formState by remember { mutableStateOf(FormState.EMPTY) }
     val actions = remember(body) { mutableStateListOf<LoggedAction>() }
 
@@ -419,8 +447,11 @@ private fun StudioWindowContent(
     // Asked once. Everything that can be wrong with the reflective binding is wrong at construction,
     // so the window either has these buttons for its whole life or never shows them.
     val capture = remember { frameCaptureOrNull() }
-    var comparison by remember(body, brand, dark) { mutableStateOf<Comparison?>(null) }
-    var captureStatus by remember(body, brand, dark) { mutableStateOf("") }
+    // Reset with the device and the screen too: a result is about one picture, and the picture on
+    // screen is no longer the one it was about. The screen is named although its body follows a
+    // moment later: the band goes the instant another screen is picked, not when it has loaded.
+    var comparison by remember(body, brand, dark, device, screen) { mutableStateOf<Comparison?>(null) }
+    var captureStatus by remember(body, brand, dark, device, screen) { mutableStateOf("") }
     // Whether the question about a stubbed frame is on screen. Reset with the body: the question is
     // about THIS screen, and carrying it across an edit would make the second capture the unguarded
     // one.
@@ -457,10 +488,14 @@ private fun StudioWindowContent(
         return if (diff.mismatchedPixels == 0) Comparison.Matches else Comparison.Differs(expected, actual, diff)
     }
 
+    // THE GOLDEN'S SIZE, whatever the preview is set to. A golden is one file per screen, brand and
+    // theme, named by the consumer, and the name has no room for a size: a frame taken at 768x1024
+    // and written under it replaced the 393x852 golden, and the next compare at 393 was against a
+    // tablet. The preview's device is for looking; the golden's device is the golden's.
     fun snap(): BufferedImage? {
         val engine = capture ?: return null
-        val width = device.width ?: GOLDEN_WIDTH
-        val height = device.height ?: GOLDEN_HEIGHT
+        val width = GOLDEN_WIDTH
+        val height = GOLDEN_HEIGHT
 
         // The SAME composition the window draws, taken through the same function — a picture assembled
         // beside it would be a picture of the copy. No viddik composition local is provided: the frame
@@ -473,7 +508,9 @@ private fun StudioWindowContent(
                 brand = brand,
                 dark = dark,
                 state = previewState,
-                device = device,
+                // The window preset: the frame fills the capture exactly, and no device edge or
+                // corner ends up in a file viddik would compare against a frameless picture.
+                device = DEVICE_PRESETS.first(),
             ) { _, _ -> }
         }
     }
@@ -598,7 +635,7 @@ private fun StudioWindowContent(
                     }
                 },
         )
-        Divider(Orientation.Horizontal)
+        HRule()
 
         HorizontalSplitLayout(
             first = {
@@ -659,6 +696,8 @@ private fun StudioWindowContent(
                 ) { selectedPath = it.path }
             },
             second = {
+                Row(Modifier.fillMaxSize()) {
+                VRule()
                 Column(Modifier.fillMaxSize()) {
                     HorizontalSplitLayout(
                         first = {
@@ -667,7 +706,10 @@ private fun StudioWindowContent(
                                     state = bodyState,
                                     lexed = lexed,
                                     errorOffset = findings.firstOrNull { it.layer == "syntax" }?.offset,
-                                    modifier = Modifier.fillMaxWidth().weight(1f).padding(8.dp),
+                                    // On the field ground, not the panel's: the text is the one
+                                    // thing in the window that is typed into, and it sits a shade
+                                    // deeper than the panels around it, the way every editor's does.
+                                    modifier = Modifier.fillMaxWidth().weight(1f).background(studioColors().field).padding(8.dp),
                                     selectedRange = selected?.path?.let { lexed.spans[it] },
                                 )
 
@@ -680,7 +722,7 @@ private fun StudioWindowContent(
                                 // nowhere.
                                 val node = selected?.takeIf { parsed != null }
                                 if (node != null) {
-                                    Divider(Orientation.Horizontal)
+                                    HRule()
                                     InspectorPane(
                                         config = config,
                                         node = node,
@@ -696,10 +738,33 @@ private fun StudioWindowContent(
                             }
                         },
                         second = {
+                            Row(Modifier.fillMaxSize()) {
+                            VRule()
                             val colors = studioColors()
-                            Column(Modifier.fillMaxSize().background(if (JewelTheme.isDark) colors.field else colors.hover).padding(16.dp, 16.dp, 16.dp, 10.dp)) {
+                            Column(
+                                Modifier
+                                    .fillMaxSize()
+                                    .background(if (JewelTheme.isDark) colors.field else colors.hover)
+                                    .onPointerEvent(PointerEventType.Enter) { previewHovered = true }
+                                    .onPointerEvent(PointerEventType.Exit) { previewHovered = false }
+                                    // Cmd (or Ctrl) and the wheel, for a mouse and for anybody whose
+                                    // runtime has no pinch to offer.
+                                    .onPointerEvent(PointerEventType.Scroll) { event ->
+                                        if (event.keyboardModifiers.isMetaPressed || event.keyboardModifiers.isCtrlPressed) {
+                                            val dy = event.changes.firstOrNull()?.scrollDelta?.y ?: 0f
+                                            if (dy != 0f) zoomBy(1 - dy * WHEEL_ZOOM)
+                                        }
+                                    }
+                                    .padding(16.dp, 16.dp, 16.dp, 10.dp),
+                            ) {
                             val subject =
-                                listOfNotNull(screen?.ref?.title, brand, if (dark) "dark" else "light").joinToString(" · ")
+                                listOfNotNull(
+                                    screen?.ref?.title,
+                                    brand,
+                                    if (dark) "dark" else "light",
+                                    // Said only when it is not what is on screen.
+                                    if (device.width == GOLDEN_WIDTH && device.height == GOLDEN_HEIGHT) null else "captured at ${GOLDEN_WIDTH}×$GOLDEN_HEIGHT",
+                                ).joinToString(" · ")
                             var frames by remember { mutableStateOf(true) }
                             comparison?.let { result ->
                                 ComparisonBand(
@@ -735,7 +800,7 @@ private fun StudioWindowContent(
                                 if (picked != null) {
                                     // Inside the consumer's frame like anything else: a fixture drawn
                                     // outside the brand would be a picture of a composition nobody ships.
-                                    DeviceFrame(device, Modifier.weight(1f).fillMaxSize()) {
+                                    DeviceFrame(device, Modifier.weight(1f).fillMaxSize(), zoom, { shownScale = it }) {
                                         config.frame(brand, dark) { picked.content() }
                                     }
                                 } else {
@@ -749,6 +814,8 @@ private fun StudioWindowContent(
                                         dropId = dropHover?.id,
                                         state = previewState,
                                         device = device,
+                                        zoom = zoom,
+                                        onScale = { shownScale = it },
                                         actionHandler =
                                             KompotActionHandler { action ->
                                                 actions += LoggedAction(LocalTime.now().format(CLOCK), action)
@@ -771,7 +838,18 @@ private fun StudioWindowContent(
                             Row(Modifier.fillMaxWidth().padding(top = 4.dp).height(22.dp), verticalAlignment = Alignment.CenterVertically) {
                                 Mono(device.label.lowercase(), colors.dim)
                                 Spacer(Modifier.weight(1f))
+                                // Stepping from the zoom that is SET when one is, and from the
+                                // drawn scale only when fitting: the drawn scale arrives a frame
+                                // late, and two quick clicks from it are one step, not two.
+                                ZoomControl(
+                                    scale = zoom ?: shownScale,
+                                    fitted = zoom == null,
+                                    onZoom = { zoom = it },
+                                    onReset = { zoom = null },
+                                )
+                                Spacer(Modifier.weight(1f))
                                 Mono(listOfNotNull(brand, if (dark) "dark" else "light").joinToString(" · "), colors.dim)
+                            }
                             }
                             }
                         },
@@ -781,7 +859,7 @@ private fun StudioWindowContent(
                         state = mainSplit,
                     )
 
-                    Divider(Orientation.Horizontal)
+                    HRule()
                     Drawer(
                         findings = findings + degradations,
                         actions = actions,
@@ -798,6 +876,7 @@ private fun StudioWindowContent(
                         onOffset = { offset -> bodyState.edit { selection = TextRange(offset.coerceIn(0, length)) } },
                         onNavigate = { screen = it },
                     )
+                }
                 }
             },
             modifier = Modifier.fillMaxWidth().weight(1f),
@@ -1037,6 +1116,44 @@ private fun RowScope.Frame(
         Mono(caption, studioColors().dim, Modifier.padding(top = 4.dp))
     }
 }
+
+// Minus, the percentage, plus. The percentage is the reset: it says what the frame is drawn at, and
+// clicking it goes back to fitting the pane — "fit" beside the number when that is already the case.
+@Composable
+private fun ZoomControl(
+    scale: Float,
+    fitted: Boolean,
+    onZoom: (Float) -> Unit,
+    onReset: () -> Unit,
+) {
+    val colors = studioColors()
+    Row(horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
+        ZoomButton(StudioIcon.MINUS) { onZoom((scale / ZOOM_STEP).coerceAtLeast(MIN_ZOOM)) }
+        Mono(
+            "${(scale * 100).roundToInt()}%" + if (fitted) " · fit" else "",
+            colors.dim,
+            Modifier.focusProperties { canFocus = false }.clickable(onClick = onReset).padding(horizontal = 4.dp),
+        )
+        ZoomButton(StudioIcon.ADD) { onZoom((scale * ZOOM_STEP).coerceAtMost(MAX_ZOOM)) }
+    }
+}
+
+@Composable
+private fun ZoomButton(
+    icon: StudioIcon,
+    onClick: () -> Unit,
+) {
+    Icon(
+        icon,
+        studioColors().dim,
+        Modifier.focusProperties { canFocus = false }.clickable(onClick = onClick).padding(2.dp),
+    )
+}
+
+private const val ZOOM_STEP = 1.25f
+private const val WHEEL_ZOOM = 0.05f
+private const val MIN_ZOOM = 0.25f
+private const val MAX_ZOOM = 4f
 
 // The line under the text when the text does not parse: where, and what the rest of the window is
 // showing meanwhile. The parser's own words after it, for whoever wants them.
@@ -1299,9 +1416,9 @@ private fun Sidebar(
                     modifier = Modifier.fillMaxWidth().heightIn(max = SCREENS_MAX_HEIGHT),
                 )
             }
-            Divider(Orientation.Horizontal)
         }
 
+        HRule()
         SectionHeader("Structure", trailing = tree?.flatten()?.size?.let { "$it nodes" })
         ScreenTreePane(
             root = tree,
@@ -1325,7 +1442,7 @@ private fun Sidebar(
         pending()
         edits()
 
-        Divider(Orientation.Horizontal)
+        HRule()
         SectionHeader("Palette", trailing = "$paletteCount types", expanded = paletteOpen, onToggle = { paletteOpen = !paletteOpen })
         if (paletteOpen) palette()
     }
@@ -1598,7 +1715,7 @@ private fun Drawer(
             SmallSegmented(LAYER_FILTERS, layer) { layer = it }
         }
     }
-    Divider(Orientation.Horizontal)
+    HRule()
 
     if (!open) return
 
@@ -1805,5 +1922,23 @@ private fun ReportWindow(
 }
 
 private const val ACCESSIBILITY_PROPERTY = "compose.accessibility.enable"
+// Whether the pinch is there is printed beside the window report, because its absence is silent
+// otherwise: the listener is reached by reflection into a package the JDK does not export, and a
+// launch without `--add-exports java.desktop/com.apple.eawt.event=ALL-UNNAMED` has a preview that
+// simply does not respond to the trackpad.
+@Composable
+private fun InstallPinch(
+    window: ComposeWindow,
+    onMagnify: (Double) -> Unit,
+) {
+    LaunchedEffect(window) {
+        val installed = installMagnification(window.rootPane, onMagnify)
+        println(
+            "kompot studio: trackpad pinch " +
+                if (installed) "on" else "off — launch with --add-exports java.desktop/com.apple.eawt.event=ALL-UNNAMED on a JetBrains Runtime",
+        )
+    }
+}
+
 private const val SHOW_TIMEOUT_MS = 10_000L
 private const val POLL_MS = 100L

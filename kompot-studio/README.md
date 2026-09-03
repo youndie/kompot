@@ -88,3 +88,9 @@ maven("https://www.jetbrains.com/intellij-repository/releases") {
 автоматизации, — когда из дерева удаляется узел, на котором оказался фокус доступности, а
 редактор удаляет узлы постоянно: закрыл попап, выбрал другой узел, отфильтровал список.
 Включить обратно: `-Dcompose.accessibility.enable=true`.
+
+Щипок на трекпаде масштабирует превью. Жест приходит через `com.apple.eawt.event` — пакет, который
+`java.desktop` не экспортирует, — поэтому задача `kompotStudio` и `:kompot-studio:run` запускают JVM
+с `--add-exports java.desktop/com.apple.eawt.event=ALL-UNNAMED`. Кто запускает jar сам, добавляет
+этот флаг; без него студия пишет `trackpad pinch off` при старте, и превью масштабируется только
+кнопками под ним и `Cmd`+колесом.

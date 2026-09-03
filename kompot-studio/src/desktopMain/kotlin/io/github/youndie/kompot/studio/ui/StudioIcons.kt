@@ -54,6 +54,7 @@ internal enum class StudioIcon(
     COMPARE(listOf("M3.5 3.5h9a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11V5a1.5 1.5 0 0 1 1.5-1.5z", "M8 3.5v9M4.5 8h2M9.5 8h2")),
     KOTLIN(listOf("M3 3.5l5 4.5-5 4.5M9 12.5h4")),
     JSON(listOf("M6 3c-1.4 0-2 .7-2 2v1.4c0 .9-.5 1.4-1.4 1.6.9.2 1.4.7 1.4 1.6V11c0 1.3.6 2 2 2M10 3c1.4 0 2 .7 2 2v1.4c0 .9.5 1.4 1.4 1.6-.9.2-1.4.7-1.4 1.6V11c0 1.3-.6 2-2 2")),
+    MINUS(listOf("M3.5 8h9")),
     ADD(listOf("M8 3.5v9M3.5 8h9")),
     REMOVE(listOf("M4.5 4.5l7 7M11.5 4.5l-7 7")),
     DRAG_HANDLE(emptyList(), fills = listOf(dot(6f, 4f, 1f), dot(10f, 4f, 1f), dot(6f, 8f, 1f), dot(10f, 8f, 1f), dot(6f, 12f, 1f), dot(10f, 12f, 1f))),
