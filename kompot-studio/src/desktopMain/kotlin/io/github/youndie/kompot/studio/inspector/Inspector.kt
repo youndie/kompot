@@ -22,7 +22,7 @@ import io.github.youndie.kompot.studio.tree.ScreenNode
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import org.jetbrains.jewel.ui.component.CheckboxRow
-import org.jetbrains.jewel.ui.component.RadioButtonRow
+import org.jetbrains.jewel.ui.component.ListComboBox
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextField
 
@@ -98,22 +98,23 @@ private fun PropertyRow(
                 )
 
             FieldKind.CHOICE ->
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    if (field.options.isEmpty()) {
-                        Text("no values declared for this field")
-                    } else {
-                        field.options.forEach { option ->
-                            RadioButtonRow(
-                                text = option,
-                                selected = raw?.trim('"') == option,
-                                onClick = { onWrite("\"$option\"") },
-                            )
-                        }
-                    }
+                if (field.options.isEmpty()) {
+                    Text("no values declared for this field")
+                } else {
+                    // A list, not a row of radio buttons: a typography scale has a dozen tokens, and
+                    // a dozen buttons in the inspector's width squeezed the last of them to a column
+                    // of letters. The first entry is "unset", because a property that is optional
+                    // needs a way back to nothing.
+                    val options = listOf(UNSET) + field.options
+                    val current = raw?.trim('"')
+                    ListComboBox(
+                        items = options,
+                        selectedIndex = options.indexOf(current).coerceAtLeast(0),
+                        onSelectedItemChange = { index ->
+                            onWrite(if (index == 0) null else "\"${options[index]}\"")
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                 }
 
             // Text for everything else, INCLUDING what has no editor: a raw JSON value typed by hand
@@ -189,3 +190,5 @@ private fun elementAt(
     }
     return current as? JsonObject
 }
+
+private const val UNSET = "— unset —"
