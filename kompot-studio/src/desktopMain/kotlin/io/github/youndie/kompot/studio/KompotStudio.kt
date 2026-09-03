@@ -957,19 +957,24 @@ private fun ComparisonBand(
 ) {
     val colors = studioColors()
     when (result) {
+        // Two lines where the design has one: the preview column is half the width of the
+        // designer's frame, and a button squeezed to its first letter is not a button.
         is Comparison.Differs ->
-            Row(
-                Modifier.fillMaxWidth().padding(bottom = GAP),
-                horizontalArrangement = Arrangement.spacedBy(GAP),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(StudioIcon.COMPARE, colors.error)
-                Text("Differs from golden")
-                Mono("${"%.2f".format(result.diff.mismatchPercent)}% · ${result.diff.mismatchedPixels} px", colors.error)
-                Dim("· $subject", Modifier.weight(1f, fill = false))
-                Spacer(Modifier.weight(1f))
-                SmallSegmented(listOf(FRAMES, MASK), if (frames) FRAMES else MASK) { onFrames(it == FRAMES) }
-                OutlinedButton(onClick = onAccept) { Text("Accept as golden") }
+            Column(Modifier.fillMaxWidth().padding(bottom = GAP), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(GAP), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(StudioIcon.COMPARE, colors.error)
+                    Text("Differs from golden")
+                    Mono("${"%.2f".format(result.diff.mismatchPercent)}% · ${result.diff.mismatchedPixels} px", colors.error)
+                    Dim("· $subject", Modifier.weight(1f))
+                }
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(GAP, Alignment.End),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    SmallSegmented(listOf(FRAMES, MASK), if (frames) FRAMES else MASK) { onFrames(it == FRAMES) }
+                    OutlinedButton(onClick = onAccept) { Text("Accept as golden") }
+                }
             }
 
         Comparison.Matches ->
@@ -980,8 +985,7 @@ private fun ComparisonBand(
             ) {
                 Icon(StudioIcon.OK, colors.ok)
                 Text("Matches golden")
-                Dim("· $subject", Modifier.weight(1f, fill = false))
-                Spacer(Modifier.weight(1f))
+                Dim("· $subject", Modifier.weight(1f))
                 OutlinedButton(onClick = onHide) { Text("Hide") }
             }
 
