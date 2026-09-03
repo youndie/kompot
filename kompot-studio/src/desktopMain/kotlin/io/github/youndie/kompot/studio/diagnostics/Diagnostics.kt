@@ -38,6 +38,9 @@ internal data class Finding(
     val path: String?,
     val message: String,
     val severity: Severity,
+    // Where in the TEXT, for the one layer that has an offset and no node: a body that does not parse
+    // has no tree to point at, and the character the parser gave up on is the only place there is.
+    val offset: Int? = null,
 )
 
 // Layers 1 to 3, over the text. Layer 4 arrives from the render and is folded in by the window.
@@ -123,7 +126,7 @@ private fun syntaxFinding(
     val line = before.count { it == '\n' } + 1
     val column = offset - before.lastIndexOf('\n')
 
-    return Finding("syntax", null, "line $line, column $column: $message", Severity.ERROR)
+    return Finding("syntax", null, "line $line, column $column: $message", Severity.ERROR, offset = offset)
 }
 
 // Built per configuration and cached against it: a validator is expensive to assemble and the

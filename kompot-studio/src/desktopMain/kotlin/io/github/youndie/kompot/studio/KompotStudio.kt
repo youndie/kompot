@@ -50,9 +50,13 @@ import io.github.youndie.kompot.studio.diagnostics.diagnose
 import io.github.youndie.kompot.studio.source.ScreenRef
 import io.github.youndie.kompot.studio.source.ScreenSourceSession
 import io.github.youndie.kompot.studio.source.open
+import io.github.youndie.kompot.studio.editor.BodyEditor
+import io.github.youndie.kompot.studio.editor.lexJson
 import io.github.youndie.kompot.studio.tree.ScreenNode
 import io.github.youndie.kompot.studio.tree.ScreenTreePane
 import io.github.youndie.kompot.studio.tree.screenTree
+import androidx.compose.ui.text.TextRange
+import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
@@ -62,7 +66,6 @@ import org.jetbrains.jewel.ui.component.CheckboxRow
 import org.jetbrains.jewel.ui.component.HorizontalSplitLayout
 import org.jetbrains.jewel.ui.component.RadioButtonRow
 import org.jetbrains.jewel.ui.component.Text
-import org.jetbrains.jewel.ui.component.TextArea
 import org.jetbrains.jewel.window.DecoratedWindow
 import org.jetbrains.jewel.window.TitleBar
 import org.jetbrains.jewel.window.newFullscreenControls
@@ -148,8 +151,32 @@ private fun StudioWindowContent(
     // Null when the body does not parse, which is most keystrokes: the tree then keeps showing
     // nothing rather than flickering between half-typed shapes, and the syntax finding below says why.
     val parsed: JsonElement? = remember(body) { runCatching { Json.parseToJsonElement(body) }.getOrNull() }
+
+    // What the frame is drawn from: the last text that PARSED, and only after the typing has stopped.
+    // Two separate reasons, and both are about the half-typed state being the normal one. Re-rendering
+    // per keystroke redraws a screen nobody has finished describing; rendering a body that does not
+    // parse cannot be done at all, and blanking the frame while somebody deletes a comma would make
+    // the studio unusable exactly where it is meant to help.
+    var rendered by remember { mutableStateOf(body) }
+    LaunchedEffect(body) {
+        if (parsed == null) return@LaunchedEffect
+        delay(RENDER_DEBOUNCE_MS)
+        rendered = body
+    }
+
     val tree = remember(parsed, slots) { parsed?.let { screenTree(it, slots) } }
     var selected by remember(tree) { mutableStateOf<ScreenNode?>(null) }
+
+    // One walk of the text answers both "what colour is this" and "where is that node", so the caret
+    // cannot land somewhere the colours disagree with.
+    val lexed = remember(body) { lexJson(body) }
+
+    // Selecting a node — in the tree, or by clicking a finding — puts the caret on the word that names
+    // it. The join is the path, which the tree, the findings and the lexer all print the same way.
+    LaunchedEffect(selected, lexed) {
+        val range = selected?.path?.let { lexed.nodes[it] } ?: return@LaunchedEffect
+        bodyState.edit { selection = TextRange(range.first, (range.last + 1).coerceAtMost(length)) }
+    }
 
     val previewState = remember(formState, parsed) { previewState(formState, parsed) }
 
@@ -194,11 +221,18 @@ private fun StudioWindowContent(
             },
             second = {
                 HorizontalSplitLayout(
-                    first = { TextArea(state = bodyState, modifier = Modifier.fillMaxSize().padding(8.dp)) },
+                    first = {
+                        BodyEditor(
+                            state = bodyState,
+                            lexed = lexed,
+                            errorOffset = findings.firstOrNull { it.layer == "syntax" }?.offset,
+                            modifier = Modifier.fillMaxSize().padding(8.dp),
+                        )
+                    },
                     second = {
                         StudioRenderPane(
                             config = config,
-                            body = body,
+                            body = rendered,
                             brand = brand,
                             dark = dark,
                             modifier = Modifier.fillMaxSize(),
@@ -316,6 +350,11 @@ private fun routeFor(
 }
 
 private val ACTION_LOG_HEIGHT = 120.dp
+
+// Long enough that a burst of keystrokes is one redraw and short enough that a pause reads as
+// immediate. The frame is a whole composition of somebody else's renderers — this is not a text field
+// repainting itself.
+private const val RENDER_DEBOUNCE_MS = 150L
 
 // Wall-clock and not a monotonic counter: two taps a second apart and two taps in the same frame look
 // different in a log, and which of the two happened is the question somebody is asking.
