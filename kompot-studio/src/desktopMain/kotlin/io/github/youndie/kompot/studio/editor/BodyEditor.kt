@@ -37,6 +37,7 @@ internal fun BodyEditor(
 ) {
     val palette = if (JewelTheme.isDark) DarkPalette else LightPalette
     val selectionTint = studioColors().selection
+    val errorTint = studioColors().error.copy(alpha = 0.12f)
 
     BasicTextField(
         state = state,
@@ -49,7 +50,7 @@ internal fun BodyEditor(
             ),
         cursorBrush = SolidColor(palette.plain),
         outputTransformation =
-            remember(lexed, errorOffset, palette, selectedRange, selectionTint) {
+            remember(lexed, errorOffset, palette, selectedRange, selectionTint, errorTint) {
                 OutputTransformation {
                     if (selectedRange != null) {
                         val start = selectedRange.first.coerceIn(0, length)
@@ -68,6 +69,14 @@ internal fun BodyEditor(
                     if (errorOffset != null) {
                         val start = errorOffset.coerceIn(0, length)
                         val end = (errorOffset + 1).coerceIn(start, length)
+                        // The whole line tinted and the one character underlined: the tint is what
+                        // the eye finds from across the window, the underline is where to type.
+                        val text = asCharSequence()
+                        var lineStart = start
+                        while (lineStart > 0 && text[lineStart - 1] != '\n') lineStart--
+                        var lineEnd = start
+                        while (lineEnd < length && text[lineEnd] != '\n') lineEnd++
+                        if (lineEnd > lineStart) addStyle(SpanStyle(background = errorTint), lineStart, lineEnd)
                         if (end > start) addStyle(palette.error, start, end)
                     }
                 }

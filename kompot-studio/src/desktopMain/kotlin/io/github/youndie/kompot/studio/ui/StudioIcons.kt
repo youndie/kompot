@@ -64,6 +64,13 @@ internal enum class StudioIcon(
     WARNING(listOf("M8 2.5l6 11H2z", "M8 6.5v3.2"), fills = listOf(dot(8f, 11.6f, 0.6f))),
     OK(listOf(circle(8f, 8f, 5.5f), "M5.5 8.2l1.8 1.8 3.4-3.6")),
     INFO(listOf(circle(8f, 8f, 5.5f), "M8 7.5v3.5"), fills = listOf(dot(8f, 5.4f, 0.6f))),
+    DRAFT(listOf("M8 5v3.5"), fills = listOf(dot(8f, 11f, 0.6f)), dashed = listOf(circle(8f, 8f, 5.5f))),
+    SCREEN(listOf("M5.5 1.5h5a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 13V3a1.5 1.5 0 0 1 1.5-1.5z", "M7 12.5h2")),
+    STORY(listOf("M3 4h10M3 8h10M3 12h6"), fills = listOf("M11.5 10.5l2 1.5-2 1.5z")),
+    DROP_HERE(listOf("M2.5 8h11M10 5l3.5 3-3.5 3"), dashed = listOf("M2.5 3.5v9")),
+    NO_DROP(listOf(circle(8f, 8f, 5.5f), "M4.2 4.2l7.6 7.6")),
+    SLOT_REPLACE(listOf("M8 6.5v3M6.5 8h3"), dashed = listOf("M4 4.5h8a1.5 1.5 0 0 1 1.5 1.5v4a1.5 1.5 0 0 1-1.5 1.5H4A1.5 1.5 0 0 1 2.5 10V6A1.5 1.5 0 0 1 4 4.5z")),
+    COPY(listOf("M7 5.5h5a1.5 1.5 0 0 1 1.5 1.5v5a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 12V7A1.5 1.5 0 0 1 7 5.5z", "M3.5 10.5v-7a1 1 0 0 1 1-1h7")),
     NAVIGATE(listOf("M4.5 11.5l7-7M6 4.5h5.5V10")),
     OPEN_URL(listOf("M7 9l2-2M5.5 10.5l-1 1a1.8 1.8 0 0 1-2.5-2.5l2-2a1.8 1.8 0 0 1 2.5 0M10.5 5.5l1-1a1.8 1.8 0 0 1 2.5 2.5l-2 2a1.8 1.8 0 0 1-2.5 0")),
 }

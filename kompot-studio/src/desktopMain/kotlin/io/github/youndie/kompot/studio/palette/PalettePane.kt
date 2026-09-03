@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.unit.dp
 import io.github.youndie.kompot.studio.KompotStudioConfig
+import io.github.youndie.kompot.studio.ui.EmptyState
 import io.github.youndie.kompot.studio.ui.Icon
 import io.github.youndie.kompot.studio.ui.StudioIcon
 import io.github.youndie.kompot.studio.ui.studioColors
@@ -39,7 +40,12 @@ internal fun PalettePane(
     if (entries.isEmpty()) {
         // No profile means no closed list, and inventing one from the samples would offer a palette
         // that is silently a third of the truth.
-        Text("No profile: the palette needs one to know what this build accepts.", modifier.padding(12.dp), color = colors.dim)
+        EmptyState(
+            StudioIcon.MODULE,
+            "No build profile",
+            "The palette lists the types this build accepts, and a profile is what says which.",
+            modifier,
+        )
         return
     }
 

@@ -24,6 +24,8 @@ internal class StudioColors(
     val badgeText: Color,
     val warningBanner: Color,
     val warningBannerLine: Color,
+    // What a popup card stands on: white on the light theme, the int-ui panel grey on the dark one.
+    val popup: Color,
 )
 
 private val LIGHT =
@@ -43,6 +45,7 @@ private val LIGHT =
         badgeText = Color(0xFF1E1F22),
         warningBanner = Color(0xFFFBF1DF),
         warningBannerLine = Color(0xFFE2C48A),
+        popup = Color.White,
     )
 
 private val DARK =
@@ -62,6 +65,7 @@ private val DARK =
         badgeText = Color(0xFFDFE1E5),
         warningBanner = Color(0xFF3D3223),
         warningBannerLine = Color(0xFF826A41),
+        popup = Color(0xFF2B2D30),
     )
 
 @Composable

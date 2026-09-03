@@ -65,6 +65,7 @@ internal fun StudioRenderPane(
     // renderer is wrapped at all — a preview that always went through a decorator would be a preview
     // of a slightly different composition than the one a golden photographs.
     selectedId: String? = null,
+    dropId: String? = null,
     // Which of a form's three pictures is being looked at. Default empty, which is what a screen that
     // is not a form is anyway.
     state: KompotPreviewState = KompotPreviewState(),
@@ -100,10 +101,10 @@ internal fun StudioRenderPane(
                 // decorated, or the frame would quietly opt out of the highlight.
                 val registry =
                     LocalKompotRegistry.current.let { installed ->
-                        if (selectedId == null) {
+                        if (selectedId == null && dropId == null) {
                             installed
                         } else {
-                            installed.decorated { it.withSelectionBorder(selectedId) }
+                            installed.decorated { it.withSelectionBorder(selectedId, dropId) }
                         }
                     }
 
