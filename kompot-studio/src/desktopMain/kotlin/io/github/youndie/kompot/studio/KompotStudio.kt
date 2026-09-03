@@ -27,7 +27,13 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import io.github.youndie.kompot.studio.ui.installMagnification
+import androidx.compose.ui.input.pointer.isCtrlPressed
+import androidx.compose.ui.input.pointer.isMetaPressed
+import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.input.pointer.PointerEventType
 import kotlin.math.roundToInt
 import org.jetbrains.jewel.ui.component.TextField
 import io.github.youndie.kompot.studio.tree.kindFor
@@ -208,6 +214,8 @@ public fun kompotStudio(
             // produced.
             val shortcuts = remember { arrayOfNulls<(androidx.compose.ui.input.key.KeyEvent) -> Boolean>(1) }
             val onKey: (androidx.compose.ui.input.key.KeyEvent) -> Boolean = { shortcuts[0]?.invoke(it) == true }
+            // The same shape for the trackpad pinch: the window's root hears it, the preview acts on it.
+            val magnify = remember { arrayOfNulls<(Double) -> Unit>(1) }
 
             if (JBR.isAvailable()) {
                 DecoratedWindow(
@@ -217,8 +225,9 @@ public fun kompotStudio(
                     onKeyEvent = onKey,
                 ) {
                     ReportWindow(window, decorated = true)
+                    LaunchedEffect(window) { installMagnification(window.rootPane) { magnify[0]?.invoke(it) } }
                     TitleBar(Modifier.newFullscreenControls()) { Text(title) }
-                    StudioWindowContent(config, bodyState, brand, dark, { brand = it }, { dark = it }) {
+                    StudioWindowContent(config, bodyState, brand, dark, { brand = it }, { dark = it }, { magnify[0] = it }) {
                         shortcuts[0] = it
                     }
                 }
@@ -230,7 +239,8 @@ public fun kompotStudio(
                     onKeyEvent = onKey,
                 ) {
                     ReportWindow(window, decorated = false)
-                    StudioWindowContent(config, bodyState, brand, dark, { brand = it }, { dark = it }) {
+                    LaunchedEffect(window) { installMagnification(window.rootPane) { magnify[0]?.invoke(it) } }
+                    StudioWindowContent(config, bodyState, brand, dark, { brand = it }, { dark = it }, { magnify[0] = it }) {
                         shortcuts[0] = it
                     }
                 }
@@ -239,6 +249,7 @@ public fun kompotStudio(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun StudioWindowContent(
     config: KompotStudioConfig,
@@ -247,6 +258,8 @@ private fun StudioWindowContent(
     dark: Boolean,
     onBrandChange: (String?) -> Unit,
     onDarkChange: (Boolean) -> Unit,
+    // The pinch, the same way: the window hears it, the content says what it zooms.
+    onMagnify: ((Double) -> Unit) -> Unit = {},
     // The window owns the key events and the content owns the state they act on, so the content hands
     // a handler back up rather than the window reaching down for a history it does not have.
     onShortcuts: ((androidx.compose.ui.input.key.KeyEvent) -> Boolean) -> Unit = {},
@@ -292,6 +305,14 @@ private fun StudioWindowContent(
     // came to. Reset with the device, because a zoom chosen for a phone means nothing on a tablet.
     var zoom by remember(device) { mutableStateOf<Float?>(null) }
     var shownScale by remember { mutableStateOf(1f) }
+    // Whether the pointer is over the preview: a pinch anywhere else in the window is not about it.
+    var previewHovered by remember { mutableStateOf(false) }
+
+    fun zoomBy(factor: Float) {
+        zoom = ((zoom ?: shownScale) * factor).coerceIn(MIN_ZOOM, MAX_ZOOM)
+    }
+    // Registered on every composition, like the shortcuts: the handler closes over the current state.
+    onMagnify { amount -> if (previewHovered) zoomBy((1 + amount).toFloat()) }
     var formState by remember { mutableStateOf(FormState.EMPTY) }
     val actions = remember(body) { mutableStateListOf<LoggedAction>() }
 
@@ -711,7 +732,22 @@ private fun StudioWindowContent(
                             Row(Modifier.fillMaxSize()) {
                             VRule()
                             val colors = studioColors()
-                            Column(Modifier.fillMaxSize().background(if (JewelTheme.isDark) colors.field else colors.hover).padding(16.dp, 16.dp, 16.dp, 10.dp)) {
+                            Column(
+                                Modifier
+                                    .fillMaxSize()
+                                    .background(if (JewelTheme.isDark) colors.field else colors.hover)
+                                    .onPointerEvent(PointerEventType.Enter) { previewHovered = true }
+                                    .onPointerEvent(PointerEventType.Exit) { previewHovered = false }
+                                    // Cmd (or Ctrl) and the wheel, for a mouse and for anybody whose
+                                    // runtime has no pinch to offer.
+                                    .onPointerEvent(PointerEventType.Scroll) { event ->
+                                        if (event.keyboardModifiers.isMetaPressed || event.keyboardModifiers.isCtrlPressed) {
+                                            val dy = event.changes.firstOrNull()?.scrollDelta?.y ?: 0f
+                                            if (dy != 0f) zoomBy(1 - dy * WHEEL_ZOOM)
+                                        }
+                                    }
+                                    .padding(16.dp, 16.dp, 16.dp, 10.dp),
+                            ) {
                             val subject =
                                 listOfNotNull(screen?.ref?.title, brand, if (dark) "dark" else "light").joinToString(" · ")
                             var frames by remember { mutableStateOf(true) }
@@ -1100,6 +1136,7 @@ private fun ZoomButton(
 }
 
 private const val ZOOM_STEP = 1.25f
+private const val WHEEL_ZOOM = 0.05f
 private const val MIN_ZOOM = 0.25f
 private const val MAX_ZOOM = 4f
 
