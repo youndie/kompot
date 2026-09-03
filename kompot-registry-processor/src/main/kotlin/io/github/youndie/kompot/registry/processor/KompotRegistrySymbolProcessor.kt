@@ -53,6 +53,13 @@ private data class RendererEntry(
 // <Tag> comes from the KSP option kompotModuleTag, unique per consuming module (see
 // KompotRegistryProcessorProvider): otherwise several modules would generate files and objects of
 // the same name in one package and collide in the consumer's build.
+//
+// A COMPONENT AND ITS RENDERER NEED NOT SHARE A MODULE, and for anything with a server they should
+// not: a renderer needs Compose and a server does not have it, so a component declared beside its
+// renderer is a component the server cannot construct. The split works because the two halves are
+// found differently — a component is found by its own module's run of this processor, and a renderer
+// carries the component in its type argument, resolved through the compile classpath. :kompot-forms
+// and :kompot-forms-client are exactly that pair and the registration they generate is the proof.
 // Internal: KSP reaches this module through the provider named in META-INF/services and nowhere
 // else, and the provider hands back a SymbolProcessor. Nobody constructs this class, and a
 // consumer who could would be configuring the processor around KSP rather than through it.
@@ -102,11 +109,22 @@ internal class KompotRegistrySymbolProcessor(
 
                 rendererSuperType != null -> {
                     val componentType = rendererSuperType.arguments.firstOrNull()?.type?.resolve()
-                    val componentClassName = componentType?.toClassNameOrNull()
+                    // isError, and it is the whole point of this branch reading the way it does. An
+                    // unresolved type still answers with a declaration — carrying the REFERENCE's
+                    // package rather than the real one — so without this the processor writes a
+                    // plausible-looking name into generated code and the failure arrives as
+                    // "Unresolved reference '<ERROR TYPE: Foo>'" in a file nobody wrote. That reads as
+                    // "the processor cannot see components from other modules", which is not what
+                    // happened and sends the reader to rearrange their modules.
+                    val componentClassName = componentType?.takeUnless { it.isError }?.toClassNameOrNull()
                     if (componentClassName == null) {
                         logger.error(
-                            "Could not resolve the KompotComponent type argument of KompotComponentRenderer<T> on " +
-                                "${symbol.qualifiedName?.asString()}",
+                            "Could not resolve the component type of KompotComponentRenderer<T> on " +
+                                "${symbol.qualifiedName?.asString()}. A renderer MAY be declared in a different module " +
+                                "from its component, and for a server-driven toolkit that is the point: the component is " +
+                                "a wire contract a headless server has to be able to build, the renderer is a platform. " +
+                                "What is required is that the module declaring the component is on THIS module's compile " +
+                                "classpath, and that it runs the processor itself for its own registration.",
                             symbol,
                         )
                     } else {

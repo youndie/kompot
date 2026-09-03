@@ -176,7 +176,7 @@ repositories {
     maven("https://reposilite.kotlin.website/snapshots")
 }
 
-val kompotVersion = "0.36.1.111"
+val kompotVersion = "0.36.2.115"
 
 dependencies {
     implementation(platform("io.github.youndie:kompot-bom:$kompotVersion"))
@@ -213,6 +213,26 @@ The tag must be unique because generated files land in one package: two modules 
 generate objects of the same name and collide in the consumer's build. The generated code compiles
 into the declaring module's own artifact, so **a consumer never applies KSP** — it just imports
 `generatedCatalogueSerializersModule`.
+
+**A component and its renderer belong in different modules once you have a server.** A renderer needs
+Compose and a server does not have it, so a component declared beside its renderer is a component the
+server cannot construct — which is the one thing a server-driven component exists for. Declare the
+component in a module both sides depend on, the renderer in the Compose one, and give each its own
+tag; the renderer carries its component in its type argument, so the generated registry pairs them
+across the module boundary:
+
+```kotlin
+// :catalogue-wire — no Compose, and the server depends on it
+@Serializable @SerialName("product_card") @KompotComponentMarker
+data class ProductCardComponent(override val id: String, val title: String) : KompotComponent
+
+// :catalogue-ui — ksp { arg("kompotModuleTag", "CatalogueUi") }
+@KompotComponentMarker
+class ProductCardRenderer : KompotComponentRenderer<ProductCardComponent> { … }
+```
+
+`kompot-forms` and `kompot-forms-client` are that pair, which is why the split is exercised on every
+build of this repository rather than only described here.
 
 ### ✍️ What it looks like
 
