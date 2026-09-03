@@ -68,7 +68,16 @@ internal val SAMPLE_BODY: String get() = sample("sample-screen.json")
 // A path becomes a File or a Directory source by asking the file system rather than by a flag: the
 // answer is already there, and a flag would be a second place for it to be wrong.
 public fun main(args: Array<String>) {
-    kompotStudio(KompotStudioConfig(registry = toolkitRegistry, sources = args.map(::sourceFor)))
+    kompotStudio(
+        KompotStudioConfig(
+            registry = toolkitRegistry,
+            sources = args.map(::sourceFor),
+            // A property rather than another argument: the arguments are sources, and a directory that
+            // means something else among them is the kind of thing nobody remembers the order of.
+            snapshotsDirectory = System.getProperty("kompot.studio.snapshots")?.let(Path::of),
+            recordingsDirectory = System.getProperty("kompot.studio.recordings")?.let(Path::of),
+        ),
+    )
 }
 
 private fun sourceFor(argument: String): ScreenSource {

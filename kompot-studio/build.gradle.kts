@@ -151,6 +151,10 @@ val studioRuntime: Configuration by configurations.creating
 
 dependencies {
     studioRuntime(compose.desktop.currentOs)
+    // The screenshot tester, on the RUN classpath only — which is exactly how a consumer adds it
+    // (`runtimeOnly`), and why the studio reaches it by reflection rather than by naming it: it
+    // carries currentOs and JUnit as `api`, and a published tool must carry neither.
+    studioRuntime(libs.viddik.testing.core)
 }
 
 // afterEvaluate, and it is the only place that works. The Compose plugin builds its `run` task inside
@@ -166,6 +170,13 @@ afterEvaluate {
     tasks.named<JavaExec>("run") {
         setExecutable(jetBrainsRuntime.get().executablePath.asFile.absolutePath)
         classpath += studioRuntime
+
+        // Two directories the demo can be pointed at, forwarded from the command line: -D on a Gradle
+        // invocation reaches the GRADLE jvm, not this one, which is the sort of thing that reads as
+        // "the flag does nothing".
+        listOf("kompot.studio.snapshots", "kompot.studio.recordings").forEach { key ->
+            (project.findProperty(key) as? String)?.let { systemProperty(key, it) }
+        }
     }
 }
 

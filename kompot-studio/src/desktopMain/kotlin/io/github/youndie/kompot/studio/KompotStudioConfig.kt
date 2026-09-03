@@ -51,6 +51,14 @@ public class KompotStudioConfig(
     // having because a recording is what a screenshot test replays. Null means an HTTP body cannot be
     // saved: there is nowhere to put it, and inventing a directory would scatter fixtures.
     public val recordingsDirectory: Path? = null,
+    // Where this build keeps its goldens. viddik's convention is a `snapshots` directory beside the
+    // tests that record them, and the studio only ever READS from it plus writes where asked — it does
+    // not run viddikVerify and does not decide for a deployment what its expected picture is.
+    public val snapshotsDirectory: Path? = null,
+    // What a golden is called. The consumer's, for the same reason `frame` is: viddik names a file
+    // "<group>_<name>.png" and only the deployment knows what its groups are — konekt's `brand-a` is
+    // `Brand_A.png`, and no rule this module could invent would guess that.
+    public val goldenName: (brand: String?, dark: Boolean, screen: String) -> String = ::defaultGoldenName,
     // Where a form's rules and conditions keep the fieldId they point at, by the wire type that
     // carries them: "required_if" to "fieldId", and whatever a deployment adds beside them. The
     // toolkit cannot know — a rule type is a deployment's to invent — so an empty map means the
@@ -66,6 +74,23 @@ public class KompotStudioConfig(
 // able to ask for a brand without knowing what a brand is made of.
 public typealias KompotStudioFrame =
     @Composable (brand: String?, dark: Boolean, content: @Composable () -> Unit) -> Unit
+
+// Screen_Home.png, Screen_Home_Dark.png, BrandA_Home.png. A shape rather than a convention: it is
+// what a project with no golden naming of its own gets, and it is visible in the window so that a
+// mismatch with an existing file is obvious before anybody clicks compare.
+public fun defaultGoldenName(
+    brand: String?,
+    dark: Boolean,
+    screen: String,
+): String {
+    fun camel(text: String) =
+        text.split('-', '_', ' ', '/', '.')
+            .filter { it.isNotEmpty() }
+            .joinToString("") { part -> part.replaceFirstChar { it.uppercaseChar() } }
+
+    val group = brand?.let(::camel)?.ifEmpty { null } ?: "Screen"
+    return "${group}_${camel(screen)}${if (dark) "_Dark" else ""}.png"
+}
 
 // Read from the jar rather than from a checkout: that is how a consumer's build reads them too, and a
 // default that read them off disk would work only in this repository.

@@ -50,6 +50,9 @@ import io.github.youndie.kompot.studio.diagnostics.diagnose
 import io.github.youndie.kompot.studio.source.ScreenRef
 import io.github.youndie.kompot.studio.source.ScreenSourceSession
 import io.github.youndie.kompot.studio.source.open
+import io.github.youndie.kompot.studio.capture.FrameCapture
+import io.github.youndie.kompot.studio.capture.FrameDiff
+import io.github.youndie.kompot.studio.capture.frameCaptureOrNull
 import io.github.youndie.kompot.studio.edit.EditHistory
 import io.github.youndie.kompot.studio.edit.JsonEdits
 import io.github.youndie.kompot.studio.editor.BodyEditor
@@ -68,9 +71,13 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.toComposeImageBitmap
+import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalTime
+import javax.imageio.ImageIO
 import java.time.format.DateTimeFormatter
 import org.jetbrains.jewel.ui.component.CheckboxRow
 import org.jetbrains.jewel.ui.component.HorizontalSplitLayout
@@ -229,6 +236,38 @@ private fun StudioWindowContent(
         if (text != null) bodyState.setTextAndPlaceCursorAtEnd(text)
     }
 
+    // Asked once. Everything that can be wrong with the reflective binding is wrong at construction,
+    // so the window either has these buttons for its whole life or never shows them.
+    val capture = remember { frameCaptureOrNull() }
+    var comparison by remember(body, brand, dark) { mutableStateOf<FrameDiff?>(null) }
+    var captureStatus by remember(body, brand, dark) { mutableStateOf("") }
+
+    val goldenFile: Path? =
+        config.snapshotsDirectory?.resolve(
+            config.goldenName(brand, dark, screen?.ref?.title ?: "screen"),
+        )
+
+    fun snap(): BufferedImage? {
+        val engine = capture ?: return null
+        val width = device.width ?: GOLDEN_WIDTH
+        val height = device.height ?: GOLDEN_HEIGHT
+
+        // The SAME composition the window draws, taken through the same function — a picture assembled
+        // beside it would be a picture of the copy. No viddik composition local is provided: the frame
+        // already takes `dark` as a parameter, and a second, hidden channel for the same fact is how
+        // the two come to disagree.
+        return engine.capture(width, height, emptyList()) {
+            StudioRenderPane(
+                config = config,
+                body = rendered,
+                brand = brand,
+                dark = dark,
+                state = previewState,
+                device = device,
+            ) { _, _ -> }
+        }
+    }
+
     val saveTo: Path? = saveTarget(config, opened, screen)
 
     fun save() {
@@ -284,6 +323,36 @@ private fun StudioWindowContent(
                 }
             }
 
+            if (capture != null && goldenFile != null) {
+                OutlinedButton(onClick = {
+                    val image = snap()
+                    if (image == null) {
+                        captureStatus = "nothing to capture"
+                    } else {
+                        Files.createDirectories(goldenFile.parent)
+                        ImageIO.write(image, "png", goldenFile.toFile())
+                        comparison = null
+                        captureStatus = "wrote ${goldenFile.fileName}"
+                    }
+                }) { Text("Capture") }
+
+                OutlinedButton(onClick = {
+                    val actual = snap()
+                    val expected = goldenFile.takeIf { Files.isRegularFile(it) }?.let { ImageIO.read(it.toFile()) }
+                    when {
+                        actual == null -> captureStatus = "nothing to capture"
+                        expected == null -> captureStatus = "no golden at ${goldenFile.fileName}"
+                        else -> {
+                            val diff = capture.diff(expected, actual)
+                            comparison = diff
+                            captureStatus = "${goldenFile.fileName}: ${"%.2f".format(diff.mismatchPercent)}% differ"
+                        }
+                    }
+                }) { Text("Compare") }
+
+                if (captureStatus.isNotEmpty()) Text(captureStatus)
+            }
+
             if (status.isNotEmpty()) Text(status)
         }
 
@@ -318,25 +387,37 @@ private fun StudioWindowContent(
                         )
                     },
                     second = {
-                        StudioRenderPane(
-                            config = config,
-                            body = rendered,
-                            brand = brand,
-                            dark = dark,
-                            modifier = Modifier.fillMaxSize(),
-                            selectedId = selected?.id,
-                            state = previewState,
-                            device = device,
-                            actionHandler =
-                                KompotActionHandler { action ->
-                                    actions += LoggedAction(LocalTime.now().format(CLOCK), action)
-                                },
-                        ) { kind, type ->
-                            val finding = degradationFinding(kind, type)
-                            // Deduplicated because this is called from inside composition, once per
-                            // node per pass: without it the list grows for as long as the window is
-                            // open, and the writes never settle.
-                            if (degradations.none { it.message == finding.message }) degradations += finding
+                        // Beside the frame rather than instead of it: what a golden disagrees about is
+                        // only readable next to what the screen actually draws.
+                        Row(Modifier.fillMaxSize()) {
+                            comparison?.let { diff ->
+                                Image(
+                                    bitmap = diff.image.toComposeImageBitmap(),
+                                    contentDescription = "the pixels a golden disagrees about",
+                                    modifier = Modifier.weight(1f),
+                                )
+                            }
+
+                            StudioRenderPane(
+                                config = config,
+                                body = rendered,
+                                brand = brand,
+                                dark = dark,
+                                modifier = Modifier.weight(1f).fillMaxSize(),
+                                selectedId = selected?.id,
+                                state = previewState,
+                                device = device,
+                                actionHandler =
+                                    KompotActionHandler { action ->
+                                        actions += LoggedAction(LocalTime.now().format(CLOCK), action)
+                                    },
+                            ) { kind, type ->
+                                val finding = degradationFinding(kind, type)
+                                // Deduplicated because this is called from inside composition, once per
+                                // node per pass: without it the list grows for as long as the window is
+                                // open, and the writes never settle.
+                                if (degradations.none { it.message == finding.message }) degradations += finding
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxSize(),
@@ -438,6 +519,12 @@ private fun routeFor(
 }
 
 private val ACTION_LOG_HEIGHT = 120.dp
+
+// The canvas size design work is done at, used when nothing narrower was chosen: a golden has to have
+// SOME size, and taking the pane's would make the picture depend on how wide somebody dragged a
+// divider.
+private const val GOLDEN_WIDTH = 393
+private const val GOLDEN_HEIGHT = 852
 
 // Long enough that a burst of keystrokes is one redraw and short enough that a pause reads as
 // immediate. The frame is a whole composition of somebody else's renderers — this is not a text field
