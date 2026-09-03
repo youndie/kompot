@@ -41,7 +41,7 @@
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-14](backlog/B-14-konekt-pilot.md) `[ ]` | Пилот на konekt: записи и brand-a/b дают кадры голденов | v1-viewer | P0 | S | B-09, B-10, B-12 |
+| [B-14](backlog/B-14-konekt-pilot.md) `[?]` | Пилот на konekt: записи и brand-a/b дают кадры голденов | v1-viewer | P0 | S | B-09, B-10, B-12 |
 | [B-03](backlog/B-03-remember-design-system-dark.md) `[ ]` | rememberKompotDesignSystem пробрасывает darkMode | upstream | P1 | XS | — |
 | [B-13](backlog/B-13-switches-and-action-log.md) `[ ]` | Бренд, тема, размер устройства, состояния формы, лог действий | v1-viewer | P1 | S/M | B-09 |
 | [B-15](backlog/B-15-text-editor.md) `[ ]` | Редактор текста с подсветкой JSON и синхронизацией каретка ↔ узел | v2-editor | P1 | L | B-11 |
