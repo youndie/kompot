@@ -39,6 +39,9 @@ import org.jetbrains.jewel.intui.standalone.theme.darkThemeDefinition
 import org.jetbrains.jewel.intui.standalone.theme.lightThemeDefinition
 import org.jetbrains.jewel.intui.window.decoratedWindow
 import org.jetbrains.jewel.ui.ComponentStyling
+import io.github.youndie.kompot.KompotActionHandler
+import io.github.youndie.kompot.preview.KompotBodyShape
+import io.github.youndie.kompot.preview.kompotBodyShape
 import io.github.youndie.kompot.spec.childSlots
 import io.github.youndie.kompot.studio.diagnostics.Finding
 import io.github.youndie.kompot.studio.diagnostics.Severity
@@ -51,6 +54,10 @@ import io.github.youndie.kompot.studio.tree.ScreenNode
 import io.github.youndie.kompot.studio.tree.ScreenTreePane
 import io.github.youndie.kompot.studio.tree.screenTree
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import org.jetbrains.jewel.ui.component.CheckboxRow
 import org.jetbrains.jewel.ui.component.HorizontalSplitLayout
 import org.jetbrains.jewel.ui.component.RadioButtonRow
@@ -133,14 +140,18 @@ private fun StudioWindowContent(
     val degradations = remember(body, brand, dark) { mutableStateListOf<Finding>() }
     val findings = remember(config, body) { diagnose(config, body) }
 
+    var device by remember { mutableStateOf(DEVICE_PRESETS.first()) }
+    var formState by remember { mutableStateOf(FormState.EMPTY) }
+    val actions = remember(body) { mutableStateListOf<LoggedAction>() }
+
     val slots = remember(config) { childSlots(config.schemas) }
     // Null when the body does not parse, which is most keystrokes: the tree then keeps showing
     // nothing rather than flickering between half-typed shapes, and the syntax finding below says why.
-    val tree =
-        remember(body, slots) {
-            runCatching { screenTree(Json.parseToJsonElement(body), slots) }.getOrNull()
-        }
+    val parsed: JsonElement? = remember(body) { runCatching { Json.parseToJsonElement(body) }.getOrNull() }
+    val tree = remember(parsed, slots) { parsed?.let { screenTree(it, slots) } }
     var selected by remember(tree) { mutableStateOf<ScreenNode?>(null) }
+
+    val previewState = remember(formState, parsed) { previewState(formState, parsed) }
 
     Column(Modifier.fillMaxSize()) {
         Row(
@@ -155,6 +166,22 @@ private fun StudioWindowContent(
             if (config.brands.size > 1) {
                 config.brands.forEach { name ->
                     RadioButtonRow(text = name, selected = brand == name, onClick = { onBrandChange(name) })
+                }
+            }
+
+            DEVICE_PRESETS.forEach { preset ->
+                RadioButtonRow(text = preset.label, selected = device == preset, onClick = { device = preset })
+            }
+
+            // Only for a body that IS a form. On a screen the three states are one picture, and three
+            // controls that all draw the same thing teach a reader to ignore them.
+            if (parsed is JsonObject && kompotBodyShape(parsed) == KompotBodyShape.FORM) {
+                FormState.entries.forEach { candidate ->
+                    RadioButtonRow(
+                        text = candidate.name.lowercase(),
+                        selected = formState == candidate,
+                        onClick = { formState = candidate },
+                    )
                 }
             }
 
@@ -176,6 +203,12 @@ private fun StudioWindowContent(
                             dark = dark,
                             modifier = Modifier.fillMaxSize(),
                             selectedId = selected?.id,
+                            state = previewState,
+                            device = device,
+                            actionHandler =
+                                KompotActionHandler { action ->
+                                    actions += LoggedAction(LocalTime.now().format(CLOCK), action)
+                                },
                         ) { kind, type ->
                             val finding = degradationFinding(kind, type)
                             // Deduplicated because this is called from inside composition, once per
@@ -193,6 +226,12 @@ private fun StudioWindowContent(
             firstPaneMinWidth = 200.dp,
             secondPaneMinWidth = 560.dp,
         )
+
+        if (actions.isNotEmpty()) {
+            ActionLogPane(actions, opened, Modifier.fillMaxWidth().height(ACTION_LOG_HEIGHT)) { target ->
+                screen = target
+            }
+        }
 
         DiagnosticsPane(findings + degradations, Modifier.fillMaxWidth().height(180.dp)) { finding ->
             // Clicking a finding selects the node it is about — the two carry the same notation, so
@@ -241,6 +280,46 @@ private fun SelectedBody(
     val counts = "polled ${state.checks}, changed ${state.revisions}"
     return state.error?.let { "$counts — $it" } ?: counts
 }
+
+// The log, and the one line in it the studio can act on: a navigate names a deeplink, and an HTTP
+// source has already read the graph that maps deeplinks to endpoints. Clicking it opens that screen.
+@Composable
+private fun ActionLogPane(
+    actions: List<LoggedAction>,
+    opened: List<OpenSource>,
+    modifier: Modifier = Modifier,
+    onNavigate: (SelectedScreen) -> Unit,
+) {
+    Column(
+        modifier.padding(horizontal = 12.dp).verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        actions.asReversed().forEach { logged ->
+            val target = logged.deeplink?.let { deeplink -> routeFor(opened, deeplink) }
+            Text(
+                text = if (target == null) logged.text else "${logged.text}  ↗",
+                modifier = if (target == null) Modifier else Modifier.clickable { onNavigate(target) },
+            )
+        }
+    }
+}
+
+private fun routeFor(
+    opened: List<OpenSource>,
+    deeplink: String,
+): SelectedScreen? {
+    opened.forEachIndexed { index, source ->
+        val ref = source.session.screens.value.firstOrNull { it.deeplink == deeplink }
+        if (ref != null) return SelectedScreen(index, ref)
+    }
+    return null
+}
+
+private val ACTION_LOG_HEIGHT = 120.dp
+
+// Wall-clock and not a monotonic counter: two taps a second apart and two taps in the same frame look
+// different in a log, and which of the two happened is the question somebody is asking.
+private val CLOCK: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
 
 @Composable
 private fun DiagnosticsPane(

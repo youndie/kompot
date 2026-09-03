@@ -58,7 +58,12 @@ internal class HttpSourceSession(
                 loaded.onSuccess { navigation ->
                     _screens.value =
                         navigation.routes.map { route ->
-                            ScreenRef(id = route.endpoint, title = route.title ?: route.deeplink, kind = route.kind)
+                            ScreenRef(
+                                id = route.endpoint,
+                                title = route.title ?: route.deeplink,
+                                kind = route.kind,
+                                deeplink = route.deeplink,
+                            )
                         }
                 }
             }

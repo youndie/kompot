@@ -33,6 +33,11 @@ kotlin {
                 // api, not implementation: KompotPageLoader is a parameter of KompotStudioConfig.
                 api(projects.kompotStandard)
                 implementation(projects.kompotPreview)
+                // The standard field set, for the one thing the studio does with values: filling a
+                // form with plausible ones. A deployment with its own value types still gets the empty
+                // and errors pictures, which need none.
+                implementation(projects.formStandard)
+                implementation(projects.formCore)
                 // The graph an HTTP source reads its screen list from. Not `api`: a consumer names a
                 // ScreenSource.Http with a path, never a NavigationGraph.
                 implementation(projects.kompotNavigation)
@@ -68,6 +73,9 @@ kotlin {
                 implementation(libs.viddik.testing.core)
                 implementation(compose.desktop.currentOs)
                 implementation(libs.kotlinx.coroutines.test)
+                // A real click on a real button: the action log's whole claim is that a tap reaches
+                // the handler, and nothing short of pressing one proves it.
+                implementation(libs.ui.test)
             }
         }
     }

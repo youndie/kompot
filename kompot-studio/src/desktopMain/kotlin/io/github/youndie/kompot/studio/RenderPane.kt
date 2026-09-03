@@ -4,11 +4,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import io.github.youndie.kompot.KompotActionHandler
 import io.github.youndie.kompot.KompotDegradationKind
 import io.github.youndie.kompot.LocalKompotDesignSystem
 import io.github.youndie.kompot.LocalKompotRegistry
 import io.github.youndie.kompot.ds.material.Material3DesignSystem
 import io.github.youndie.kompot.preview.KompotPreview
+import io.github.youndie.kompot.preview.KompotPreviewState
 import io.github.youndie.kompot.studio.tree.withSelectionBorder
 
 // THE RENDER PANE, and it is a file of its own for one reason: the window and the capture tests have
@@ -32,9 +34,18 @@ internal fun StudioRenderPane(
     // renderer is wrapped at all — a preview that always went through a decorator would be a preview
     // of a slightly different composition than the one a golden photographs.
     selectedId: String? = null,
+    // Which of a form's three pictures is being looked at. Default empty, which is what a screen that
+    // is not a form is anyway.
+    state: KompotPreviewState = KompotPreviewState(),
+    // The size the screen is being looked at, so that a fixed-height design meets a short window HERE
+    // rather than on somebody's phone.
+    device: DevicePreset = DEVICE_PRESETS.first(),
+    // Where a tap goes. Nowhere, by default — the same nothing a preview has always done — and the
+    // window passes one that writes the action down.
+    actionHandler: KompotActionHandler = KompotActionHandler {},
     onDegraded: (KompotDegradationKind, String) -> Unit,
 ) {
-    Box(modifier) {
+    DeviceFrame(device, modifier) {
         CompositionLocalProvider(
             LocalKompotRegistry provides config.registry,
             // A floor rather than a choice: LocalKompotDesignSystem errors when nobody provides it,
@@ -59,7 +70,9 @@ internal fun StudioRenderPane(
                     body = body,
                     registry = registry,
                     designSystem = designSystem,
+                    state = state,
                     json = config.json,
+                    actionHandler = actionHandler,
                     // Collecting rather than the default, which throws. The default is right for a
                     // golden and wrong for a window somebody is typing into: a half-written body
                     // degrades on every keystroke, and a preview that dies on the first one cannot be

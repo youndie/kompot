@@ -57,6 +57,10 @@ public data class ScreenRef(
     // because a file cannot know better — the body's own shape decides how it decodes anyway, which is
     // what KompotPreview does with it.
     val kind: String = "screen",
+    // The deeplink a graph route answers to, where there is a graph. It is what a navigate action in
+    // the log carries, and matching the two is the only way the studio can follow one — a file on
+    // disk has no deeplink and gets null, which is why this is not the id.
+    val deeplink: String? = null,
 )
 
 // What the window knows about one screen's body at a moment.
