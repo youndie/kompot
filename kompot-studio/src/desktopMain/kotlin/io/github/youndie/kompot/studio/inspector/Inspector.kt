@@ -25,6 +25,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -227,11 +233,7 @@ private fun FieldEditor(
         FieldKind.NUMBER -> {
             val state = remember(field.name, raw) { TextFieldState(raw.orEmpty()) }
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
-                TextField(
-                    state = state,
-                    modifier = Modifier.width(88.dp),
-                    onKeyboardAction = { onWrite(state.text.toString().takeIf { it.isNotBlank() }) },
-                )
+                CommittingField(state, Modifier.width(88.dp)) { onWrite(it.takeIf { it.isNotBlank() }) }
                 // Density-independent pixels are what every extent on the wire is measured in.
                 if (field.name in DP_NAMES) Text("dp", color = colors.dim)
             }
@@ -245,12 +247,9 @@ private fun FieldEditor(
             // a text box cannot say by itself.
             val blank = field.required && (raw == null || raw == "\"\"")
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                TextField(
-                    state = state,
-                    modifier = Modifier.fillMaxWidth(),
-                    outline = if (blank) Outline.Error else Outline.None,
-                    onKeyboardAction = { onWrite(state.text.toString().takeIf { it.isNotBlank() }) },
-                )
+                CommittingField(state, Modifier.fillMaxWidth(), outline = if (blank) Outline.Error else Outline.None) {
+                    onWrite(it.takeIf { it.isNotBlank() })
+                }
                 if (blank) {
                     Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
                         Icon(StudioIcon.ERROR, colors.error)
@@ -491,9 +490,9 @@ private fun androidx.compose.foundation.layout.RowScope.ModifierControls(
 
         "weight" -> {
             val state = remember(modifier) { TextFieldState((modifier["value"] as? JsonPrimitive)?.content ?: "1.0") }
-            TextField(state = state, modifier = Modifier.width(64.dp), onKeyboardAction = {
-                state.text.toString().toFloatOrNull()?.let { onChange(with("value" to JsonPrimitive(it))) }
-            })
+            CommittingField(state, Modifier.width(64.dp)) { text ->
+                text.toFloatOrNull()?.let { onChange(with("value" to JsonPrimitive(it))) }
+            }
         }
 
         "background" -> {
@@ -507,9 +506,9 @@ private fun androidx.compose.foundation.layout.RowScope.ModifierControls(
                 ) { written -> onChange(with("color" to written?.let { JsonPrimitive(it.trim('"')) })) }
             }
             val role = remember(modifier) { TextFieldState((modifier["role"] as? JsonPrimitive)?.content.orEmpty()) }
-            TextField(state = role, modifier = Modifier.width(78.dp), placeholder = { Text("role", color = colors.dim) }, onKeyboardAction = {
-                onChange(with("role" to role.text.toString().takeIf { it.isNotBlank() }?.let(::JsonPrimitive)))
-            })
+            CommittingField(role, Modifier.width(78.dp), placeholder = { Text("role", color = colors.dim) }) { text ->
+                onChange(with("role" to text.takeIf { it.isNotBlank() }?.let(::JsonPrimitive)))
+            }
         }
 
         else -> Mono(modifier.toString(), colors.dim, Modifier.weight(1f))
@@ -555,9 +554,7 @@ private fun DpField(
     val state = remember(value) { TextFieldState(value.toString()) }
     Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
         if (label != null) Text(label, color = colors.dim, fontSize = 12.sp)
-        TextField(state = state, modifier = Modifier.width(64.dp), onKeyboardAction = {
-            state.text.toString().toIntOrNull()?.let(onChange)
-        })
+        CommittingField(state, Modifier.width(64.dp)) { text -> text.toIntOrNull()?.let(onChange) }
     }
 }
 
@@ -645,6 +642,43 @@ private fun NestedForm(
             }
         }
     }
+}
+
+
+// A text field that WRITES on Enter and on leaving the field. The keyboard-action callback is the
+// IME's and never fires from a desktop keyboard's Return, so a value typed into the inspector stayed
+// in the box and never reached the body — the panel looked editable and was not.
+@Composable
+private fun CommittingField(
+    state: TextFieldState,
+    modifier: Modifier = Modifier,
+    outline: Outline = Outline.None,
+    placeholder: (@Composable () -> Unit)? = null,
+    onCommit: (String) -> Unit,
+) {
+    var last by remember(state) { mutableStateOf(state.text.toString()) }
+    fun commit() {
+        val now = state.text.toString()
+        if (now != last) {
+            last = now
+            onCommit(now)
+        }
+    }
+    TextField(
+        state = state,
+        modifier =
+            modifier
+                .onPreviewKeyEvent { event ->
+                    if (event.type == KeyEventType.KeyDown && (event.key == Key.Enter || event.key == Key.NumPadEnter)) {
+                        commit()
+                        true
+                    } else {
+                        false
+                    }
+                }.onFocusChanged { if (!it.isFocused) commit() },
+        outline = outline,
+        placeholder = placeholder,
+    )
 }
 
 @Composable
