@@ -23,6 +23,34 @@ import io.github.youndie.kompot.studio.tree.withSelectionBorder
 // stock Material design system. Reading them back rather than passing the configuration's straight to
 // KompotPreview is the difference between "the frame decides what a brand looks like" and "the frame
 // decorates something the studio already decided".
+// THE STUDIO'S RENDER, OFFERED TO A TEST. Public because the studio's central claim — that it draws
+// what the client draws — is only checkable from outside: a consumer captures this composable and
+// diffs it against the golden its own screenshot suite recorded. Without it the claim could only be
+// looked at, in a window, by whoever was looking.
+//
+// It is the SAME function the window uses, not a second one shaped like it. A screen assembled for
+// tests beside the one the window draws would answer a question about the copy.
+@Composable
+public fun KompotStudioScreen(
+    config: KompotStudioConfig,
+    body: String,
+    brand: String? = null,
+    dark: Boolean = false,
+    state: KompotPreviewState = KompotPreviewState(),
+    modifier: Modifier = Modifier,
+    onDegraded: (KompotDegradationKind, String) -> Unit = { _, _ -> },
+) {
+    StudioRenderPane(
+        config = config,
+        body = body,
+        brand = brand,
+        dark = dark,
+        modifier = modifier,
+        state = state,
+        onDegraded = onDegraded,
+    )
+}
+
 @Composable
 internal fun StudioRenderPane(
     config: KompotStudioConfig,

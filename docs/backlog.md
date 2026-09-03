@@ -37,13 +37,14 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (10)
+## Открыто (11)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-14](backlog/B-14-konekt-pilot.md) `[?]` | Пилот на konekt: записи и brand-a/b дают кадры голденов | v1-viewer | P0 | S | B-09, B-10, B-12 |
 | [B-03](backlog/B-03-remember-design-system-dark.md) `[ ]` | rememberKompotDesignSystem пробрасывает darkMode | upstream | P1 | XS | — |
 | [B-17](backlog/B-17-goldens.md) `[ ]` | Снять кадр и сравнить с голденом через viddik | v2-editor | P1 | M | B-09 |
+| [B-24](backlog/B-24-stubbed-pagination-is-not-a-golden.md) `[ ]` | Кадр, снятый с заглушкой пагинации, не голден — и должен об этом говорить | v2-editor | P1 | S | B-17 |
 | [B-06](backlog/B-06-kdoc-to-schema.md) `[ ]` | KSP переносит KDoc компонента и свойств в description схемы | upstream | P2 | M | — |
 | [B-07](backlog/B-07-deterministic-dsl-ids.md) `[ ]` | DSL: детерминированный id вместо Uuid.random() при пропуске | upstream | P2 | S | — |
 | [B-19](backlog/B-19-project-vocabulary-lint.md) `[ ]` | Слой словаря проекта: открытые слова и токены кита | v2-editor | P2 | S/M | B-12 |
