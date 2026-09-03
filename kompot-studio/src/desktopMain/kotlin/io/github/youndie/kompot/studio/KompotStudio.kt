@@ -447,8 +447,10 @@ private fun StudioWindowContent(
     // Asked once. Everything that can be wrong with the reflective binding is wrong at construction,
     // so the window either has these buttons for its whole life or never shows them.
     val capture = remember { frameCaptureOrNull() }
-    var comparison by remember(body, brand, dark) { mutableStateOf<Comparison?>(null) }
-    var captureStatus by remember(body, brand, dark) { mutableStateOf("") }
+    // Reset with the device too: a result is about one picture, and the picture on screen is no
+    // longer the one it was about.
+    var comparison by remember(body, brand, dark, device) { mutableStateOf<Comparison?>(null) }
+    var captureStatus by remember(body, brand, dark, device) { mutableStateOf("") }
     // Whether the question about a stubbed frame is on screen. Reset with the body: the question is
     // about THIS screen, and carrying it across an edit would make the second capture the unguarded
     // one.
@@ -485,10 +487,14 @@ private fun StudioWindowContent(
         return if (diff.mismatchedPixels == 0) Comparison.Matches else Comparison.Differs(expected, actual, diff)
     }
 
+    // THE GOLDEN'S SIZE, whatever the preview is set to. A golden is one file per screen, brand and
+    // theme, named by the consumer, and the name has no room for a size: a frame taken at 768x1024
+    // and written under it replaced the 393x852 golden, and the next compare at 393 was against a
+    // tablet. The preview's device is for looking; the golden's device is the golden's.
     fun snap(): BufferedImage? {
         val engine = capture ?: return null
-        val width = device.width ?: GOLDEN_WIDTH
-        val height = device.height ?: GOLDEN_HEIGHT
+        val width = GOLDEN_WIDTH
+        val height = GOLDEN_HEIGHT
 
         // The SAME composition the window draws, taken through the same function — a picture assembled
         // beside it would be a picture of the copy. No viddik composition local is provided: the frame
@@ -501,7 +507,9 @@ private fun StudioWindowContent(
                 brand = brand,
                 dark = dark,
                 state = previewState,
-                device = device,
+                // The window preset: the frame fills the capture exactly, and no device edge or
+                // corner ends up in a file viddik would compare against a frameless picture.
+                device = DEVICE_PRESETS.first(),
             ) { _, _ -> }
         }
     }
@@ -749,7 +757,13 @@ private fun StudioWindowContent(
                                     .padding(16.dp, 16.dp, 16.dp, 10.dp),
                             ) {
                             val subject =
-                                listOfNotNull(screen?.ref?.title, brand, if (dark) "dark" else "light").joinToString(" · ")
+                                listOfNotNull(
+                                    screen?.ref?.title,
+                                    brand,
+                                    if (dark) "dark" else "light",
+                                    // Said only when it is not what is on screen.
+                                    if (device.width == GOLDEN_WIDTH && device.height == GOLDEN_HEIGHT) null else "captured at ${GOLDEN_WIDTH}×$GOLDEN_HEIGHT",
+                                ).joinToString(" · ")
                             var frames by remember { mutableStateOf(true) }
                             comparison?.let { result ->
                                 ComparisonBand(
