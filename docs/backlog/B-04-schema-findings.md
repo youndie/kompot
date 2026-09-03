@@ -1,7 +1,7 @@
 ---
 id: B-04
 title: "JsonSchemaValidator: структурированная ошибка вместо String"
-status: open
+status: done
 priority: P1
 size: S
 stage: upstream
@@ -33,3 +33,27 @@ epic: research-studio
   ожиданий.
 - Якоря: `kompot-spec/src/main/kotlin/io/github/youndie/kompot/spec/JsonSchemaValidator.kt`,
   `kompot-tck/src/main/kotlin/io/github/youndie/kompot/tck/TckRunner.kt` (`SCREEN_SCHEMA`, проверка `schema`).
+
+## Итог
+
+`JsonSchemaValidator.validate` возвращает `List<SchemaFinding>`; `JsonPath` (сегменты `Name`/`Index`),
+`keyword` (`required`, `type`, `pattern`, `discriminator`, `oneOf`, `enum`, `const`, `not`,
+`additionalProperties`). `toString()` печатает прежнюю строку. Четыре теста в `SchemaFindingTest`;
+`kompot-tck` зелёный (11 классов) **без правки ожиданий**; три аудита публикации зелёные.
+
+- **Путь перестал вычисляться и выбрасываться.** Он и раньше считался при спуске — просто вклеивался
+  в начало предложения. Теперь по дереву спускается `JsonPath`, а строка получается из него, а не
+  наоборот: одно представление, два вида.
+- **Сегменты типизированы**, а не `List<Any>` из строк и чисел, как в формулировке AC. Смешанный
+  список делает кастом каждое использование; утверждение в тесте стало
+  `listOf(Name("screen"), Name("children"), Index(0))` — то же самое, только называет себя.
+- **Сторож на схождение двух нотаций.** Отдельный тест требует, чтобы `finding.path.toString()` был
+  среди путей `walkJsonObjects` того же тела: студия сшивает находки со строками дерева по строке,
+  и если нотации разойдутся, сшивка станет пустой — молча.
+- **Контроль «чистое тело не даёт находок»** рядом: без него все утверждения выше проходят и у
+  валидатора, который ругается на всё.
+- **TCK печатает ровно ту же строку** — `.map { it.toString() }` в двух местах. Замеченная по дороге
+  кривизна (`"[$index]$it"` даёт `[0]$.foo`, что не JSONPath) **не тронута**: это текст отчёта для
+  человека, задача его явно выводила за рамки, и менять его значило бы двигать ожидания, которые AC
+  просил не двигать.
+- В студии `StudioFinding` получил `path` и `keyword` — их читателя даёт B-12.

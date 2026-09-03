@@ -10,7 +10,15 @@ import kotlinx.serialization.json.Json
 // by the TCK), layer 4 (degradations of the real render) and layer 5 (a project's own vocabulary) are
 // B-12 and B-19. Layer 4's findings already arrive — from the render rather than from a check — which
 // is why the window collects them separately.
-internal data class StudioFinding(val layer: String, val message: String)
+// The path travels with the finding now (B-04): the tree row a schema complaint belongs to is
+// `finding.path.toString()`, which is the notation ScreenNode already carries. Nothing parses a
+// prefix out of a sentence.
+internal data class StudioFinding(
+    val layer: String,
+    val message: String,
+    val path: String? = null,
+    val keyword: String? = null,
+)
 
 // Syntax first and alone: a body that does not parse has no tree to check against a schema, and a
 // validator handed a half-typed object reports the absence of everything that was going to be typed
@@ -26,7 +34,14 @@ internal fun diagnose(
             return listOf(StudioFinding("syntax", e.message ?: "the body is not JSON"))
         }
 
-    return validatorFor(config).validate(element, COMPONENT_REF).map { StudioFinding("schema", it) }
+    return validatorFor(config).validate(element, COMPONENT_REF).map { finding ->
+        StudioFinding(
+            layer = "schema",
+            message = finding.message,
+            path = finding.path.toString(),
+            keyword = finding.keyword,
+        )
+    }
 }
 
 internal const val COMPONENT_REF: String = "${KompotProtocol.PROFILE_FILE_NAME}#/\$defs/KompotComponent"

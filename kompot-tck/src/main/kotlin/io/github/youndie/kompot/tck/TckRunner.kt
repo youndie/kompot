@@ -286,7 +286,10 @@ public class TckRunner(
         body: TckResponseBody,
     ): List<String> =
         when {
-            !body.isList -> validator.validate(element, body.ref)
+            // toString(), which prints exactly the line this report has always carried. The validator
+            // keeps the path structured now, and a report a person reads has no use for it — the
+            // consumer that does is a tool pointing at a node, and this is not one.
+            !body.isList -> validator.validate(element, body.ref).map { it.toString() }
             element !is JsonArray -> listOf("$: the endpoint declares a list of ${body.ref}, and the body is not an array")
             else ->
                 element.flatMapIndexed { index, item ->
@@ -491,7 +494,7 @@ public class TckRunner(
                                 } else {
                                     validator
                                         .validate(payload, UPDATE_FRAME_SCHEMA)
-                                        .map { TckFinding("updates", at, it) }
+                                        .map { TckFinding("updates", at, it.toString()) }
                                 }
                         }
                     }

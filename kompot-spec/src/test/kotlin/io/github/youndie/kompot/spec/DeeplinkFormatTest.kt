@@ -19,7 +19,7 @@ class DeeplinkFormatTest {
     private fun errorsFor(
         deeplink: String,
         ref: String,
-    ): List<String> = validator.validate(json(deeplink), ref)
+    ): List<String> = validator.validate(json(deeplink), ref).map { it.toString() }
 
     private fun json(deeplink: String): JsonElement =
         Json.parseToJsonElement("""{"type":"navigate","deeplink":${Json.encodeToString(String.serializer(), deeplink)}}""")
