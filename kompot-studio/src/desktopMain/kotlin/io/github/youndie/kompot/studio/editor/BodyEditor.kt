@@ -6,6 +6,17 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.SpanStyle
@@ -36,12 +47,38 @@ internal fun BodyEditor(
     selectedRange: IntRange? = null,
 ) {
     val palette = if (JewelTheme.isDark) DarkPalette else LightPalette
-    val selectionTint = studioColors().selection
-    val errorTint = studioColors().error.copy(alpha = 0.12f)
+    val colors = studioColors()
+    val errorTint = colors.error.copy(alpha = 0.12f)
+
+    // THE SELECTED NODE, as a band behind its lines rather than a tint on its characters: a tint the
+    // width of the text is what a text selection looks like, and a person who has both on screen
+    // cannot tell which one the keyboard will act on. The band is drawn from the layout, offset by
+    // the field's own scroll, so it sits behind the lines wherever they have scrolled to.
+    var layoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
+    val scroll = rememberScrollState()
+    val band = colors.selection.copy(alpha = 0.45f)
+    val accent = colors.accent
 
     BasicTextField(
         state = state,
-        modifier = modifier,
+        modifier =
+            // Clipped, because the band is as tall as the node and a node can run past the bottom
+            // of the field: unclipped, it painted over the inspector under the text.
+            modifier.clipToBounds().drawBehind {
+                val layout = layoutResult ?: return@drawBehind
+                val range = selectedRange ?: return@drawBehind
+                val length = layout.layoutInput.text.length
+                val start = range.first.coerceIn(0, length)
+                val end = range.last.coerceIn(start, length)
+                val top = layout.getLineTop(layout.getLineForOffset(start))
+                val bottom = layout.getLineBottom(layout.getLineForOffset(end))
+                translate(top = -scroll.value.toFloat()) {
+                    drawRect(band, Offset(0f, top), Size(size.width, bottom - top))
+                    drawRect(accent, Offset(0f, top), Size(2.dp.toPx(), bottom - top))
+                }
+            },
+        scrollState = scroll,
+        onTextLayout = { result -> layoutResult = result() },
         textStyle =
             TextStyle(
                 fontFamily = FontFamily.Monospace,
@@ -50,14 +87,8 @@ internal fun BodyEditor(
             ),
         cursorBrush = SolidColor(palette.plain),
         outputTransformation =
-            remember(lexed, errorOffset, palette, selectedRange, selectionTint, errorTint) {
+            remember(lexed, errorOffset, palette, errorTint) {
                 OutputTransformation {
-                    if (selectedRange != null) {
-                        val start = selectedRange.first.coerceIn(0, length)
-                        val end = (selectedRange.last + 1).coerceIn(start, length)
-                        if (end > start) addStyle(SpanStyle(background = selectionTint), start, end)
-                    }
-
                     // Coerced against THIS buffer's length, not the lexed text's: a keystroke between
                     // the lex and the draw is the normal case, and a span past the end throws.
                     lexed.tokens.forEach { token ->

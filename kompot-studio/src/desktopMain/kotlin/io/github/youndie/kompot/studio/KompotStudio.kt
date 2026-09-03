@@ -362,11 +362,13 @@ private fun StudioWindowContent(
     // cannot land somewhere the colours disagree with.
     val lexed = remember(body) { lexJson(body) }
 
-    // Selecting a node — in the tree, or by clicking a finding — puts the caret on the word that names
+    // Selecting a node — in the tree, or by clicking a finding — puts the caret at the word that names
     // it. The join is the path, which the tree, the findings and the lexer all print the same way.
+    // A caret and not a selection of the word: the band behind the node's lines already says which
+    // node it is, and a selected word beside it looked like a second, competing selection.
     LaunchedEffect(selected, lexed) {
         val range = selected?.path?.let { lexed.nodes[it] } ?: return@LaunchedEffect
-        bodyState.edit { selection = TextRange(range.first, (range.last + 1).coerceAtMost(length)) }
+        bodyState.edit { selection = TextRange(range.first.coerceAtMost(length)) }
     }
 
     val previewState = remember(formState, parsed) { previewState(formState, parsed) }
