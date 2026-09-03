@@ -639,7 +639,9 @@ private fun SelectedBody(
     selected: SelectedScreen?,
     bodyState: TextFieldState,
 ): String {
-    if (selected == null) return if (opened.isEmpty()) "" else "no screen selected"
+    // Nothing, rather than "no screen selected": the toolbar title already says so, and the same
+    // words twice one above the other read as a stutter.
+    if (selected == null) return ""
 
     val state by opened[selected.source].session.body(selected.ref).collectAsState()
 

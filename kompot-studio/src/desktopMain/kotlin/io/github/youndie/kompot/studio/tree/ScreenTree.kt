@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.jetbrains.jewel.ui.component.Text
 
@@ -102,9 +103,13 @@ private fun TreeRow(
         }
         // A marker rather than a colour: a type the profile does not carry is the single most useful
         // thing this panel can say, and it has to survive a screenshot and a colour-blind reader.
+        // One line per node, however long an id is: a row that wraps is two rows to the eye, and the
+        // eye counts rows to find a node.
         Text(
             if (node.known) node.label else "⚠ ${node.label}",
             drag.background(if (node.known) Color.Transparent else Color(0x22FF0000)),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
