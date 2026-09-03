@@ -1,6 +1,15 @@
 package io.github.youndie.kompot.spec
 
+import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.standard.column
+import io.github.youndie.kompot.standard.kompotScreen
+import io.github.youndie.kompot.standard.row
+import io.github.youndie.kompot.standard.text
+import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.EmptySerializersModule
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.overwriteWith
 import kotlinx.serialization.json.JsonObject
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -102,6 +111,38 @@ class BodyRulesTest {
         // complained about a screen would make the other two unusable in a studio.
         val screen = """{"type":"column","id":"root","children":[]}"""
         assertEquals(emptyList(), BodyRules.formFields(parse(screen)))
+    }
+
+    @Test
+    fun `a tree the DSL built without a single explicit id satisfies the id rule`() {
+        // The two halves of B-07 meeting: the DSL names an unnamed node by its path, and the rule that
+        // an id must be non-empty and unique in the tree is what that naming has to keep true. A
+        // counter reset per container, or a path that forgot its depth, would collide here.
+        val screen =
+            kompotScreen {
+                text("first")
+                column {
+                    text("nested")
+                    row { text("deeper") }
+                }
+                column {
+                    text("nested")
+                    row { text("deeper") }
+                }
+            }
+
+        // The engine's own Json, assembled from the spec modules this test already has: kompotJson()
+        // lives in :kompot-client, and a schema module has no business depending on a Compose client.
+        val json =
+            Json {
+                serializersModule =
+                    KompotToolkitSpec.modules.fold(EmptySerializersModule()) { all: SerializersModule, module ->
+                        all.overwriteWith(module.serializersModule)
+                    }
+            }
+        val body = json.encodeToString(PolymorphicSerializer(KompotComponent::class), screen)
+
+        assertEquals(emptyList(), BodyRules.componentIds(parse(body), componentTypes))
     }
 
     @Test

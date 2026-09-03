@@ -7,7 +7,6 @@ import io.github.youndie.kompot.TypographyToken
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
-import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -32,12 +31,49 @@ class DslTest {
     }
 
     @Test
-    fun `column without an explicit id generates a random one — different each time`() {
-        val a = kompotScreen { column { text("a") } }.children.single() as ColumnComponent
-        val b = kompotScreen { column { text("b") } }.children.single() as ColumnComponent
+    fun `a node nobody named is named by where it sits, so two builds agree`() {
+        // This test used to assert the OPPOSITE — that two builds produce different ids — and the
+        // behaviour it pinned is what B-07 removed. A random id met the one rule an id has (unique in
+        // the tree) and quietly failed three things: a diff by id read a one-word edit as every node
+        // being replaced, a regenerated fixture differed from itself, and a live update, which
+        // addresses a node BY id, could not address one at all.
+        val first = kompotScreen { column { text("a") } }
+        val second = kompotScreen { column { text("a") } }
 
-        assertNotEquals(a.id, b.id)
-        assertTrue(a.id.isNotBlank())
+        assertEquals(first, second)
+        assertEquals("root/0", (first.children.single() as ColumnComponent).id)
+    }
+
+    @Test
+    fun `the path counts position, so siblings and depth are told apart`() {
+        val screen =
+            kompotScreen {
+                text("first")
+                column {
+                    text("nested")
+                    row { text("deeper") }
+                }
+            }
+
+        val column = screen.children[1] as ColumnComponent
+        val row = column.children[1] as RowComponent
+
+        assertEquals("root/0", (screen.children[0] as TextComponent).id)
+        assertEquals("root/1", column.id)
+        assertEquals("root/1/0", (column.children[0] as TextComponent).id)
+        assertEquals("root/1/1", row.id)
+        assertEquals("root/1/1/0", (row.children[0] as TextComponent).id)
+    }
+
+    @Test
+    fun `a named node lends its name to the paths below it`() {
+        // So that naming a subtree stops its children's ids from moving when a sibling is inserted
+        // above it — which is most of the value of naming one.
+        val screen = kompotScreen { column(id = "card") { text("a") } }
+        val card = screen.children.single() as ColumnComponent
+
+        assertEquals("card", card.id)
+        assertEquals("card/0", (card.children.single() as TextComponent).id)
     }
 
     @Test

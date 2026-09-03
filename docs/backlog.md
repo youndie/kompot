@@ -37,21 +37,20 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (9)
+## Открыто (8)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-03](backlog/B-03-remember-design-system-dark.md) `[ ]` | rememberKompotDesignSystem пробрасывает darkMode | upstream | P1 | XS | — |
 | [B-17](backlog/B-17-goldens.md) `[ ]` | Снять кадр и сравнить с голденом через viddik | v2-editor | P1 | M | B-09 |
 | [B-24](backlog/B-24-stubbed-pagination-is-not-a-golden.md) `[ ]` | Кадр, снятый с заглушкой пагинации, не голден — и должен об этом говорить | v2-editor | P1 | S | B-17 |
-| [B-07](backlog/B-07-deterministic-dsl-ids.md) `[ ]` | DSL: детерминированный id вместо Uuid.random() при пропуске | upstream | P2 | S | — |
 | [B-19](backlog/B-19-project-vocabulary-lint.md) `[ ]` | Слой словаря проекта: открытые слова и токены кита | v2-editor | P2 | S/M | B-12 |
 | [B-20](backlog/B-20-gradle-task.md) `[ ]` | Gradle-задача kompotStudio | v2-editor | P2 | S | B-09 |
 | [B-21](backlog/B-21-inspector.md) `[ ]` | Инспектор свойств по схеме | v3-builder | P2 | L | B-06, B-16 |
 | [B-22](backlog/B-22-palette-dnd.md) `[ ]` | Палитра типов и drag-and-drop в дереве | v3-builder | P3 | L | B-21 |
 | [B-23](backlog/B-23-dsl-export.md) `[ ]` | Экспорт DSL-черновика из тела | v3-builder | P3 | M | B-07 |
 
-## Сделано (15)
+## Сделано (16)
 
 **Швы в toolkit'е**
 
@@ -60,6 +59,7 @@
 - [B-04](backlog/B-04-schema-findings.md) — JsonSchemaValidator: структурированная ошибка вместо String
 - [B-05](backlog/B-05-child-slots-from-schema.md) — childSlots(schemas): дочерние слоты компонента из $ref схемы
 - [B-06](backlog/B-06-kdoc-to-schema.md) — KSP переносит KDoc компонента и свойств в description схемы
+- [B-07](backlog/B-07-deterministic-dsl-ids.md) — DSL: детерминированный id вместо Uuid.random() при пропуске
 
 **Spike**
 
