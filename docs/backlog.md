@@ -37,15 +37,14 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (3)
+## Открыто (2)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-17](backlog/B-17-goldens.md) `[ ]` | Снять кадр и сравнить с голденом через viddik | v2-editor | P1 | M | B-09 |
-| [B-22](backlog/B-22-palette-dnd.md) `[ ]` | Палитра типов и drag-and-drop в дереве | v3-builder | P3 | L | B-21 |
 | [B-23](backlog/B-23-dsl-export.md) `[ ]` | Экспорт DSL-черновика из тела | v3-builder | P3 | M | B-07 |
 
-## Сделано (21)
+## Сделано (22)
 
 **Швы в toolkit'е**
 
@@ -82,6 +81,7 @@
 **v3 — собирать**
 
 - [B-21](backlog/B-21-inspector.md) — Инспектор свойств по схеме
+- [B-22](backlog/B-22-palette-dnd.md) — Палитра типов и drag-and-drop в дереве
 
 <!-- END INDEX -->
 

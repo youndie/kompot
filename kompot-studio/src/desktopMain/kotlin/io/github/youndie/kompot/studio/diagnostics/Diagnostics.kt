@@ -9,8 +9,10 @@ import io.github.youndie.kompot.spec.paginatingTypes
 import io.github.youndie.kompot.spec.walkJsonObjects
 import io.github.youndie.kompot.studio.KompotStudioConfig
 import kotlinx.serialization.SerializationException
+import io.github.youndie.kompot.studio.palette.definitionOf
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonPrimitive
 
 // FOUR SOURCES, ONE RECORD. "A screen ships without a client release" means the compiler never sees
@@ -75,7 +77,8 @@ internal fun diagnose(
                 Finding("rules:${finding.rule}", finding.path.toString(), finding.message, Severity.ERROR)
             }
 
-    return schemaFindings + ruleFindings + vocabularyFindings(config, element) + stubbedPagination(config, element)
+    return schemaFindings + ruleFindings + vocabularyFindings(config, element) +
+        stubbedPagination(config, element) + unfilledFields(config, element)
 }
 
 // A LIST DRAWN WITH A STUBBED LOADER IS NOT A GOLDEN, and nothing else on the frame says so.
@@ -108,6 +111,41 @@ internal fun stubbedPagination(
             )
         }.toList()
 }
+
+// A NODE THAT WAS ADDED AND NOT YET FILLED IN.
+//
+// The palette writes a new component's required properties and nothing more, so a fresh `text` has an
+// empty string where its words go. Nothing below this line calls that wrong — an empty string IS a
+// string, so the schema layer is satisfied, and a server is free to send one — which is exactly why
+// it needs saying here: the studio is where somebody is building the screen, and a required field
+// left blank is the unfinished half of the drop they just made rather than a body defect.
+//
+// A warning, not an error, and only for properties the schema calls required: an optional caption
+// somebody deliberately blanked is their business.
+internal fun unfilledFields(
+    config: KompotStudioConfig,
+    body: JsonElement,
+): List<Finding> =
+    walkJsonObjects(body)
+        .flatMap { node ->
+            val wireType = (node.value[DISCRIMINATOR] as? JsonPrimitive)?.content ?: return@flatMap emptySequence()
+            val definition = definitionOf(config, wireType) ?: return@flatMap emptySequence()
+            val required = (definition["required"] as? JsonArray).orEmpty().map { (it as JsonPrimitive).content }
+
+            required
+                .asSequence()
+                .filter { name -> (node.value[name] as? JsonPrimitive)?.takeIf { it.isString }?.content?.isBlank() == true }
+                .map { name ->
+                    Finding(
+                        layer = "draft",
+                        path = node.path.toString(),
+                        message = "\"$name\" is required and empty — this node was added but not filled in",
+                        severity = Severity.WARNING,
+                    )
+                }
+        }.toList()
+
+private fun JsonArray?.orEmpty(): List<JsonElement> = this ?: emptyList()
 
 internal fun capturingIsSafe(
     config: KompotStudioConfig,

@@ -21,6 +21,7 @@ import org.jetbrains.jewel.ui.component.Text
 internal fun ScreenTreePane(
     root: ScreenNode?,
     modifier: Modifier = Modifier,
+    onDrop: (payload: String, targetPath: String) -> Unit = { _, _ -> },
     onSelect: (ScreenNode) -> Unit,
 ) {
     if (root == null) {
@@ -39,7 +40,17 @@ internal fun ScreenTreePane(
         onElementClick = { element -> onSelect(element.data) },
     ) { element ->
         val node = element.data
-        Row(Modifier.padding(vertical = 2.dp)) {
+        // Every row is both ends of a drag: a node can be picked up and a node can be dropped on.
+        // The payload is the PATH rather than the node, so the drop is resolved against the body as it
+        // is when the mouse comes up — a tree rebuilt mid-drag would otherwise hand over an index
+        // measured on a screen that no longer exists.
+        val target = rememberDropTarget(node.path) { payload -> onDrop(payload, node.path) }
+        Row(
+            Modifier
+                .padding(vertical = 2.dp)
+                .dragPayload(Dragged.MOVE + node.path)
+                .dropZone(target),
+        ) {
             // A marker rather than a colour: a type the profile does not carry is the single most
             // useful thing this panel can say, and it has to survive a screenshot and a colour-blind
             // reader.

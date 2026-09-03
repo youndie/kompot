@@ -126,6 +126,115 @@ internal object JsonEdits {
         }
     }
 
+    // ADDING A NODE TO A SLOT, which is what a palette does and what a drag ends in.
+    //
+    // The slot is named rather than guessed: which properties hold components is the schema's answer
+    // (childSlots), and a splice that looked for "the first array" would put a text node among a
+    // table's rows.
+    fun insertInto(
+        text: String,
+        parentPath: String,
+        slot: String,
+        index: Int,
+        node: String,
+        many: Boolean,
+    ): String? {
+        // A slot with room for one is written, not appended to. Getting this from the schema rather
+        // than from the shape already in the document matters on the empty case: an absent
+        // `emptyState` and an absent `children` look identical in the text, and only one of them
+        // should become a list.
+        if (!many) return setProperty(text, parentPath, slot, node)
+
+        val lexed = lexJson(text)
+        val slotSpan = lexed.spans["$parentPath.$slot"]
+
+        // A slot that is not there yet — an empty `children` a server omitted — is written as a list
+        // of one rather than refused: the alternative is a palette that works only on containers
+        // somebody has already filled.
+        if (slotSpan == null) return setProperty(text, parentPath, slot, "[$node]")
+
+        val existing = childSpans(lexed, parentPath, slot)
+        if (existing.isEmpty()) {
+            // An empty array: replace it whole, which is the only case with no separator to copy.
+            return text.take(slotSpan.first) + "[$node]" + text.drop(slotSpan.last + 1)
+        }
+
+        val at = index.coerceIn(0, existing.size)
+        return if (at == existing.size) {
+            val last = existing.last()
+            val separator = separatorBetween(text, existing) ?: ", "
+            text.take(last.last + 1) + separator + node + text.drop(last.last + 1)
+        } else {
+            val target = existing[at]
+            val separator = separatorBetween(text, existing) ?: ", "
+            text.take(target.first) + node + separator + text.drop(target.first)
+        }
+    }
+
+    // MOVING ONE, which is a removal and an insertion and has to be in that order: the second reads
+    // offsets, and offsets taken before the first are wrong by the length of what left.
+    fun moveInto(
+        text: String,
+        from: String,
+        parentPath: String,
+        slot: String,
+        index: Int,
+        many: Boolean,
+    ): String? {
+        val span = lexJson(text).spans[from] ?: return null
+        val node = text.substring(span.first, span.last + 1)
+
+        // Refused rather than attempted: a node cannot be dropped inside itself, and the result would
+        // be a document that parses and describes an infinite screen.
+        if (parentPath == from || parentPath.startsWith("$from.") || parentPath.startsWith("$from[")) return null
+
+        val without = delete(text, from) ?: return null
+
+        // TAKING A NODE OUT RENUMBERS ITS LATER SIBLINGS, and the destination was named before it
+        // left. Dropping the first child of a column onto the second means inserting into a node whose
+        // path is now `[0]` — inserting into `[1]` puts it somewhere else, or nowhere, and the caller
+        // has no way to know that because it named a target that was correct when it named it.
+        val marker = from.substringBeforeLast('[', "")
+        val removed = from.substringAfterLast('[', "").removeSuffix("]").toIntOrNull()
+        val shifted = if (removed == null) parentPath else shiftAfterRemoval(parentPath, marker, removed)
+        val at =
+            if (removed != null && marker == "$parentPath.$slot" && index > removed) index - 1 else index
+
+        return insertInto(without, shifted, slot, at, node, many)
+    }
+
+    private fun shiftAfterRemoval(
+        path: String,
+        marker: String,
+        removed: Int,
+    ): String {
+        if (!path.startsWith("$marker[")) return path
+        val rest = path.removePrefix("$marker[")
+        val position = rest.substringBefore(']').toIntOrNull() ?: return path
+        return if (position <= removed) path else "$marker[${position - 1}]" + rest.substringAfter(']')
+    }
+
+    private fun childSpans(
+        lexed: LexedJson,
+        parentPath: String,
+        slot: String,
+    ): List<IntRange> =
+        generateSequence(0) { it + 1 }
+            .map { lexed.spans["$parentPath.$slot[$it]"] }
+            .takeWhile { it != null }
+            .filterNotNull()
+            .toList()
+
+    // The document's own separator, read from between two elements it already has, so a file written
+    // one-per-line stays one-per-line.
+    private fun separatorBetween(
+        text: String,
+        spans: List<IntRange>,
+    ): String? {
+        if (spans.size < 2) return null
+        return text.substring(spans[0].last + 1, spans[1].first)
+    }
+
     private fun swap(
         text: String,
         path: String,

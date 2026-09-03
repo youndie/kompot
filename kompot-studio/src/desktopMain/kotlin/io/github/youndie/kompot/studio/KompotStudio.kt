@@ -64,7 +64,14 @@ import io.github.youndie.kompot.studio.editor.BodyEditor
 import io.github.youndie.kompot.studio.editor.lexJson
 import io.github.youndie.kompot.studio.inspector.InspectorPane
 import io.github.youndie.kompot.studio.tree.ScreenNode
+import io.github.youndie.kompot.studio.palette.PaletteColumn
+import io.github.youndie.kompot.studio.palette.newNode
+import io.github.youndie.kompot.studio.tree.DropTarget
+import io.github.youndie.kompot.studio.tree.Dragged
 import io.github.youndie.kompot.studio.tree.ScreenTreePane
+import io.github.youndie.kompot.studio.tree.canMove
+import io.github.youndie.kompot.studio.tree.dragPayload
+import io.github.youndie.kompot.studio.tree.dropTargetFor
 import io.github.youndie.kompot.studio.tree.screenTree
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
@@ -244,6 +251,46 @@ private fun StudioWindowContent(
         bodyState.setTextAndPlaceCursorAtEnd(edited)
     }
 
+    // A drop into a slot with room for one OVERWRITES, and that is the single edit here somebody
+    // cannot see coming from the gesture. It waits for a yes. Reset with the body, for the same reason
+    // the capture confirmation is: a yes is about one drop and must not carry to the next.
+    var pendingDrop by remember(body) { mutableStateOf<PendingDrop?>(null) }
+
+    fun performDrop(
+        payload: String,
+        target: DropTarget,
+    ) {
+        val many = !target.replacing
+        Dragged.path(payload)?.let { from ->
+            // Refused silently rather than reported: dragging a container into itself is a slip of the
+            // hand, and the node staying where it was says so more clearly than a message would.
+            if (canMove(from, target)) {
+                apply(JsonEdits.moveInto(body, from, target.parentPath, target.slot, target.index, many))
+            }
+            return
+        }
+        val wireType = Dragged.type(payload) ?: return
+        val node = newNode(config, wireType, nextNodeId(body, wireType))
+        apply(JsonEdits.insertInto(body, target.parentPath, target.slot, target.index, node, many))
+    }
+
+    fun drop(
+        payload: String,
+        targetPath: String,
+    ) {
+        val node = tree?.flatten()?.firstOrNull { it.path == targetPath } ?: return
+        val target = dropTargetFor(node, slots) ?: return
+        if (target.replacing) pendingDrop = PendingDrop(payload, target, node.label) else performDrop(payload, target)
+    }
+
+    // The palette's other gesture. A drag is the one the item is about, but a list of types that can
+    // only be dragged is unusable with a trackpad and untestable by anybody without a mouse; the click
+    // ends in exactly the same edit.
+    fun add(wireType: String) {
+        val node = selected ?: return
+        drop(Dragged.NEW + wireType, node.path)
+    }
+
     fun undoOrRedo(text: String?) {
         if (text != null) bodyState.setTextAndPlaceCursorAtEnd(text)
     }
@@ -401,6 +448,28 @@ private fun StudioWindowContent(
                         }
                     },
                     onFixture = { fixture = it },
+                    onDrop = ::drop,
+                    palette = {
+                        PaletteColumn(
+                            config = config,
+                            modifier = Modifier.fillMaxWidth().height(PALETTE_HEIGHT),
+                            onAdd = ::add,
+                            dragModifier = { wireType -> Modifier.dragPayload(Dragged.NEW + wireType) },
+                        )
+                    },
+                    pending = {
+                        val drop = pendingDrop
+                        if (drop != null) {
+                            ReplaceRow(
+                                label = drop.targetLabel,
+                                onReplace = {
+                                    performDrop(drop.payload, drop.target)
+                                    pendingDrop = null
+                                },
+                                onCancel = { pendingDrop = null },
+                            )
+                        }
+                    },
                     edits = {
                         EditRow(
                             enabled = selected != null,
@@ -685,6 +754,9 @@ private fun ScreensAndTree(
     onScreen: (SelectedScreen) -> Unit,
     onStory: (Story) -> Unit,
     onFixture: (ViddikStory) -> Unit,
+    onDrop: (payload: String, targetPath: String) -> Unit,
+    palette: @Composable () -> Unit,
+    pending: @Composable () -> Unit,
     edits: @Composable () -> Unit,
     onNode: (ScreenNode) -> Unit,
 ) {
@@ -701,12 +773,43 @@ private fun ScreensAndTree(
                 modifier = Modifier.fillMaxWidth().height(SOURCES_HEIGHT),
             )
         }
-        ScreenTreePane(tree, Modifier.fillMaxWidth().weight(1f), onNode)
+        ScreenTreePane(tree, Modifier.fillMaxWidth().weight(1f), onDrop, onNode)
+        palette()
+        pending()
         edits()
     }
 }
 
 private val SOURCES_HEIGHT = 200.dp
+private val PALETTE_HEIGHT = 180.dp
+
+// A drop that has not happened yet because it would overwrite something.
+private data class PendingDrop(
+    val payload: String,
+    val target: DropTarget,
+    val targetLabel: String,
+)
+
+@Composable
+private fun ReplaceRow(
+    label: String,
+    onReplace: () -> Unit,
+    onCancel: () -> Unit,
+) {
+    Row(Modifier.padding(8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text("Replace $label?")
+        OutlinedButton(onClick = onReplace) { Text("Replace") }
+        OutlinedButton(onClick = onCancel) { Text("Cancel") }
+    }
+}
+
+// An id nothing else in the body carries. Read out of the text rather than counted off the tree: a
+// body can hold ids the tree does not reach — a form's fields, a type outside the profile — and an id
+// that collides is a node the studio's own path notation can no longer tell apart.
+private fun nextNodeId(
+    body: String,
+    wireType: String,
+): String = generateSequence(1) { it + 1 }.first { !body.contains("\"${wireType}_$it\"") }.let { "${wireType}_$it" }
 
 @Composable
 private fun ScreensPane(
