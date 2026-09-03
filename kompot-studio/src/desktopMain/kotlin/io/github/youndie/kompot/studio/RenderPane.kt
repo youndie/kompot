@@ -1,6 +1,9 @@
 package io.github.youndie.kompot.studio
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import io.github.youndie.kompot.ColorToken
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -82,6 +85,16 @@ internal fun StudioRenderPane(
         ) {
             config.frame(brand, dark) {
                 val designSystem = LocalKompotDesignSystem.current
+
+                // THE SCREEN'S GROUND, painted here and not left to the frame. A brand frame paints
+                // what its screenshots need and nothing more; under a window whose own theme is dark
+                // the unpainted parts of a light screen came through dark, which is a picture of no
+                // device anybody ships. The colour is the design system's own background token —
+                // every system this toolkit ships answers it, and answers an unknown token with a
+                // colour and a warning rather than an exception, which is the contract this relies on.
+                val ground = designSystem.resolveColor(BACKGROUND)
+
+                Box(Modifier.fillMaxSize().background(ground)) {
                 // Read back from inside the frame and decorated HERE rather than above it: a frame
                 // that installs its own registry — konekt's does — must be the one that gets
                 // decorated, or the frame would quietly opt out of the highlight.
@@ -108,7 +121,11 @@ internal fun StudioRenderPane(
                     onDegraded = onDegraded,
                     pageLoader = config.pageLoader,
                 )
+                }
             }
         }
     }
 }
+
+// The token every design system this toolkit ships resolves to its page colour.
+private val BACKGROUND = ColorToken("background")
