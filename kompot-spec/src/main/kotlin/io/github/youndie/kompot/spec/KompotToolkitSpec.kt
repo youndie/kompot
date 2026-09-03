@@ -17,6 +17,7 @@ import io.github.youndie.kompot.forms.FormPatchRequest
 import io.github.youndie.kompot.forms.kompotFormsSerializersModule
 import io.github.youndie.kompot.generated.generatedFormsSerializersModule
 import io.github.youndie.kompot.generated.generatedImagesSerializersModule
+import io.github.youndie.kompot.generated.generatedStandardDocs
 import io.github.youndie.kompot.generated.generatedStandardSerializersModule
 import io.github.youndie.kompot.generated.generatedWizardSerializersModule
 import io.github.youndie.kompot.navigation.NavigationGraph
@@ -201,6 +202,9 @@ public object KompotToolkitSpec {
             description = "The basic layout and text set: containers, text, button, table, paginated list",
             serializersModule = kompotStandardSerializersModule + generatedStandardSerializersModule,
             roots = listOf(KompotPageResponse.serializer().descriptor),
+            // The prose KSP carried out of the KDoc beside each type. Empty for a module whose types
+            // carry none, which is most of them today: this is opt-in and adopted a sentence at a time.
+            docs = generatedStandardDocs,
             annotations =
                 mapOf(
                     "KompotActionNavigate" to

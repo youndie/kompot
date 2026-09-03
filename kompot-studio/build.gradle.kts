@@ -32,7 +32,10 @@ kotlin {
                 implementation(projects.kompotThemeClient)
                 // api, not implementation: KompotPageLoader is a parameter of KompotStudioConfig.
                 api(projects.kompotStandard)
-                implementation(projects.kompotPreview)
+                // api, and the audit is what said so: KompotStudioScreen takes a KompotPreviewState,
+                // so a consumer writing a golden test against the studio cannot name the parameter
+                // without this. The same shape as #70, caught by the check that exists for it.
+                api(projects.kompotPreview)
                 // The standard field set, for the one thing the studio does with values: filling a
                 // form with plausible ones. A deployment with its own value types still gets the empty
                 // and errors pictures, which need none.

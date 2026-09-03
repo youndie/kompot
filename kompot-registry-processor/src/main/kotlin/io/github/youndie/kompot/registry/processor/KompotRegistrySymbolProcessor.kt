@@ -1,6 +1,7 @@
 package io.github.youndie.kompot.registry.processor
 
 import com.google.devtools.ksp.getAllSuperTypes
+import com.google.devtools.ksp.getDeclaredProperties
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
@@ -17,6 +18,7 @@ import com.squareup.kotlinpoet.MAP
 import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.WildcardTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
 
@@ -24,6 +26,12 @@ private const val KOMPOT_COMPONENT_MARKER_FQN = "io.github.youndie.kompot.regist
 private const val KOMPOT_COMPONENT_FQN = "io.github.youndie.kompot.KompotComponent"
 private const val KOMPOT_COMPONENT_RENDERER_FQN = "io.github.youndie.kompot.KompotComponentRenderer"
 private const val GENERATED_PACKAGE = "io.github.youndie.kompot.generated"
+
+// The prose of one type, on its way from a KDoc to a schema.
+private data class DocEntry(
+    val summary: String?,
+    val properties: Map<String, String>,
+)
 
 private data class ComponentEntry(
     val className: ClassName,
@@ -63,6 +71,7 @@ internal class KompotRegistrySymbolProcessor(
         if (annotated.isEmpty()) return emptyList()
 
         val components = mutableListOf<ComponentEntry>()
+        val docs = mutableListOf<Pair<String, DocEntry>>()
         val renderers = mutableListOf<RendererEntry>()
         val sourceFiles = mutableListOf<KSFile>()
 
@@ -87,6 +96,7 @@ internal class KompotRegistrySymbolProcessor(
 
                 implementsComponent -> {
                     components += ComponentEntry(ClassName(symbol.packageName.asString(), symbol.simpleName.asString()))
+                    documentationOf(symbol)?.let { docs += it }
                     symbol.containingFile?.let { sourceFiles += it }
                 }
 
@@ -121,7 +131,7 @@ internal class KompotRegistrySymbolProcessor(
 
         if (components.isNotEmpty() || renderers.isNotEmpty()) {
             val dependencies = Dependencies(aggregating = true, *sourceFiles.toTypedArray())
-            generateRegistration(components, renderers, dependencies)
+            generateRegistration(components, renderers, docs, dependencies)
         }
 
         return emptyList()
@@ -132,9 +142,68 @@ internal class KompotRegistrySymbolProcessor(
         return ClassName(declaration.packageName.asString(), declaration.simpleName.asString())
     }
 
+    // WHAT A TYPE MEANS, read from its KDoc and from nowhere else.
+    //
+    // `docString` is KDoc only: the `//` comments this toolkit is written in are invisible here, and
+    // that is the design rather than a limitation met. Those comments explain the CODE — why a property
+    // exists, what broke before it, which order a fallback happens in — and a schema that carried them
+    // would be longer and harder to read for the one audience it has: somebody implementing this wire
+    // on another stack. Writing a KDoc is therefore an explicit act meaning "this sentence is for the
+    // schema".
+    //
+    // Keyed by @SerialName where there is one, because that is what the descriptor will call the type
+    // and therefore the only name both sides of this carry agree on.
+    private fun documentationOf(symbol: KSClassDeclaration): Pair<String, DocEntry>? {
+        val summary = symbol.docString?.let(::oneParagraph)
+
+        val properties =
+            symbol.primaryConstructor
+                ?.parameters
+                .orEmpty()
+                .mapNotNull { parameter ->
+                    val name = parameter.name?.asString() ?: return@mapNotNull null
+                    // The KDoc of the PROPERTY the parameter declares, which is where a data class's
+                    // documentation is actually written; a parameter carries none of its own.
+                    val property =
+                        symbol.getDeclaredProperties().firstOrNull { it.simpleName.asString() == name }
+                    val sentence = property?.docString?.let(::oneParagraph) ?: return@mapNotNull null
+                    name to sentence
+                }.toMap()
+
+        if (summary == null && properties.isEmpty()) return null
+        return serialNameOf(symbol) to DocEntry(summary, properties)
+    }
+
+    // The @SerialName a type carries, or its qualified name — exactly what kotlinx puts in a
+    // descriptor's serialName, so the schema generator can look it up without a second convention.
+    private fun serialNameOf(symbol: KSClassDeclaration): String {
+        val serialName =
+            symbol.annotations
+                .firstOrNull { it.shortName.asString() == "SerialName" }
+                ?.arguments
+                ?.firstOrNull()
+                ?.value as? String
+        return serialName ?: symbol.qualifiedName?.asString().orEmpty()
+    }
+
+    // One paragraph, tags dropped. A KDoc's `@param`/`@return` describe a call, and a schema has
+    // neither; a blank line means the author moved on to a second thought, and a description is one
+    // sentence or it is not read at all.
+    private fun oneParagraph(doc: String): String? =
+        doc
+            .lines()
+            .map { it.trim().removePrefix("*").trim() }
+            .takeWhile { !it.startsWith("@") }
+            .joinToString("\n") { it }
+            .substringBefore("\n\n")
+            .replace("\n", " ")
+            .trim()
+            .takeIf { it.isNotEmpty() }
+
     private fun generateRegistration(
         components: List<ComponentEntry>,
         renderers: List<RendererEntry>,
+        docs: List<Pair<String, DocEntry>>,
         dependencies: Dependencies,
     ) {
         val fileName = "Generated${moduleTag}KompotRegistration"
@@ -145,6 +214,9 @@ internal class KompotRegistrySymbolProcessor(
         }
         if (renderers.isNotEmpty()) {
             fileSpec.addProperty(renderersProperty(renderers))
+        }
+        if (docs.isNotEmpty()) {
+            fileSpec.addProperty(docsProperty(docs))
         }
 
         fileSpec.build().writeTo(codeGenerator, dependencies)
@@ -172,6 +244,38 @@ internal class KompotRegistrySymbolProcessor(
 
         return PropertySpec
             .builder("generated${moduleTag}SerializersModule", serializersModuleClass)
+            .initializer(initializer.build())
+            .build()
+    }
+
+    private fun docsProperty(docs: List<Pair<String, DocEntry>>): PropertySpec {
+        val docClass = ClassName("io.github.youndie.kompot.registry", "KompotComponentDoc")
+        val mapType = MAP.parameterizedBy(STRING, docClass)
+
+        val initializer = CodeBlock.builder()
+        initializer.add("mapOf(\n")
+        initializer.indent()
+        docs.sortedBy { it.first }.forEach { (serialName, entry) ->
+            initializer.add("%S to %T(\n", serialName, docClass)
+            initializer.indent()
+            entry.summary?.let { initializer.add("summary = %S,\n", it) }
+            if (entry.properties.isNotEmpty()) {
+                initializer.add("properties = mapOf(\n")
+                initializer.indent()
+                entry.properties.toSortedMap().forEach { (name, sentence) ->
+                    initializer.add("%S to %S,\n", name, sentence)
+                }
+                initializer.unindent()
+                initializer.add("),\n")
+            }
+            initializer.unindent()
+            initializer.add("),\n")
+        }
+        initializer.unindent()
+        initializer.add(")")
+
+        return PropertySpec
+            .builder("generated${moduleTag}Docs", mapType)
             .initializer(initializer.build())
             .build()
     }

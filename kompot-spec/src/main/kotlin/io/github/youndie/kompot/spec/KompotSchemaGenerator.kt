@@ -218,6 +218,10 @@ public class KompotSchemaGenerator(
     ): JsonObject {
         val required = mutableListOf<String>()
 
+        // The prose for this type, if somebody wrote any. Looked up by serialName, which is what both
+        // sides of the carry — the processor's @SerialName and the descriptor's — really hold.
+        val doc = module.docs[descriptor.serialName.withoutNullMark()]
+
         val properties =
             buildJsonObject {
                 if (wireName != null) {
@@ -227,13 +231,26 @@ public class KompotSchemaGenerator(
                 for (i in 0 until descriptor.elementsCount) {
                     val name = descriptor.getElementName(i)
                     if (!descriptor.isElementOptional(i)) required += name
-                    put(name, propertySchema(descriptor.getElementDescriptor(i)))
+                    val schema = propertySchema(descriptor.getElementDescriptor(i))
+                    val sentence = doc?.properties?.get(name)
+                    // Added rather than merged over: a property schema this generator prints never
+                    // carries a description of its own, and one written by hand in `annotations` is
+                    // applied later and therefore wins.
+                    put(
+                        name,
+                        if (sentence == null) {
+                            schema
+                        } else {
+                            JsonObject(schema + ("description" to JsonPrimitive(sentence)))
+                        },
+                    )
                 }
             }
 
         return buildJsonObject {
             put("x-kompot-kind", if (wireName != null) "variant" else "object")
             if (wireName != null) put("x-kompot-wire-type", wireName)
+            doc?.summary?.let { put("description", it) }
             put("type", "object")
             put("properties", properties)
             put("required", JsonArray(required.map { JsonPrimitive(it) }))

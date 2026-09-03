@@ -14,6 +14,10 @@ dependencies {
     // that travel on the wire. There is no second source of truth for the schema by design, so the
     // dependency is on the protocol modules themselves rather than on a copy of them.
     api(projects.kompotCore)
+    // KompotComponentDoc: the prose a KSP processor carries from a type's KDoc to its schema. `api`
+    // because it stands in KompotSpecModule's own signature — a build assembling a spec has to be able
+    // to name it.
+    api(projects.kompotRegistryAnnotations)
     implementation(projects.kompotStandard)
     implementation(projects.kompotForms)
     implementation(projects.formCore)
