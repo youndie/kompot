@@ -166,6 +166,16 @@ public fun kompotStudio(
     body: String = SAMPLE_BODY,
     title: String = "kompot studio",
 ) {
+    // Compose's desktop accessibility is switched OFF unless somebody asked for it, and the reason
+    // is a crash rather than taste. With an assistive client attached — a screen reader, a window
+    // manager, an automation tool — Compose 1.11 answers the removal of a focused node by moving
+    // the accessibility focus to an arbitrary node at the bottom of the tree, and the removal of
+    // THAT node, whenever it comes, takes the window down inside the accessibility sync (an NPE in
+    // ComposeSceneAccessibility.defaultAccessibilityFocusTarget). An editor removes nodes all day:
+    // closing a popup, selecting another node, filtering a list. Reproduced three times, by three
+    // routes, before this line. `-Dcompose.accessibility.enable=true` turns it back on.
+    if (System.getProperty(ACCESSIBILITY_PROPERTY) == null) System.setProperty(ACCESSIBILITY_PROPERTY, "false")
+
     application {
         // Two darks, and they are different questions. The PREVIEW's is the screen being edited —
         // a switch in the toolbar, because the point is to look at both. The STUDIO's is the
@@ -1790,5 +1800,6 @@ private fun ReportWindow(
     }
 }
 
+private const val ACCESSIBILITY_PROPERTY = "compose.accessibility.enable"
 private const val SHOW_TIMEOUT_MS = 10_000L
 private const val POLL_MS = 100L
