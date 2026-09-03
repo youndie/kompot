@@ -143,7 +143,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.github.youndie.kompot.studio.palette.paletteFor
+import io.github.youndie.kompot.studio.ui.HRule
 import io.github.youndie.kompot.studio.ui.Icon
+import io.github.youndie.kompot.studio.ui.VRule
 import io.github.youndie.kompot.studio.ui.SmallSegmented
 import io.github.youndie.kompot.studio.ui.StudioIcon
 import io.github.youndie.kompot.studio.ui.studioColors
@@ -598,7 +600,7 @@ private fun StudioWindowContent(
                     }
                 },
         )
-        Divider(Orientation.Horizontal)
+        HRule()
 
         HorizontalSplitLayout(
             first = {
@@ -659,6 +661,8 @@ private fun StudioWindowContent(
                 ) { selectedPath = it.path }
             },
             second = {
+                Row(Modifier.fillMaxSize()) {
+                VRule()
                 Column(Modifier.fillMaxSize()) {
                     HorizontalSplitLayout(
                         first = {
@@ -683,7 +687,7 @@ private fun StudioWindowContent(
                                 // nowhere.
                                 val node = selected?.takeIf { parsed != null }
                                 if (node != null) {
-                                    Divider(Orientation.Horizontal)
+                                    HRule()
                                     InspectorPane(
                                         config = config,
                                         node = node,
@@ -699,6 +703,8 @@ private fun StudioWindowContent(
                             }
                         },
                         second = {
+                            Row(Modifier.fillMaxSize()) {
+                            VRule()
                             val colors = studioColors()
                             Column(Modifier.fillMaxSize().background(if (JewelTheme.isDark) colors.field else colors.hover).padding(16.dp, 16.dp, 16.dp, 10.dp)) {
                             val subject =
@@ -777,6 +783,7 @@ private fun StudioWindowContent(
                                 Mono(listOfNotNull(brand, if (dark) "dark" else "light").joinToString(" · "), colors.dim)
                             }
                             }
+                            }
                         },
                         modifier = Modifier.fillMaxWidth().weight(1f),
                         firstPaneMinWidth = 320.dp,
@@ -784,7 +791,7 @@ private fun StudioWindowContent(
                         state = mainSplit,
                     )
 
-                    Divider(Orientation.Horizontal)
+                    HRule()
                     Drawer(
                         findings = findings + degradations,
                         actions = actions,
@@ -801,6 +808,7 @@ private fun StudioWindowContent(
                         onOffset = { offset -> bodyState.edit { selection = TextRange(offset.coerceIn(0, length)) } },
                         onNavigate = { screen = it },
                     )
+                }
                 }
             },
             modifier = Modifier.fillMaxWidth().weight(1f),
@@ -1302,9 +1310,9 @@ private fun Sidebar(
                     modifier = Modifier.fillMaxWidth().heightIn(max = SCREENS_MAX_HEIGHT),
                 )
             }
-            Divider(Orientation.Horizontal)
         }
 
+        HRule()
         SectionHeader("Structure", trailing = tree?.flatten()?.size?.let { "$it nodes" })
         ScreenTreePane(
             root = tree,
@@ -1328,7 +1336,7 @@ private fun Sidebar(
         pending()
         edits()
 
-        Divider(Orientation.Horizontal)
+        HRule()
         SectionHeader("Palette", trailing = "$paletteCount types", expanded = paletteOpen, onToggle = { paletteOpen = !paletteOpen })
         if (paletteOpen) palette()
     }
@@ -1601,7 +1609,7 @@ private fun Drawer(
             SmallSegmented(LAYER_FILTERS, layer) { layer = it }
         }
     }
-    Divider(Orientation.Horizontal)
+    HRule()
 
     if (!open) return
 
