@@ -37,17 +37,16 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (5)
+## Открыто (4)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-17](backlog/B-17-goldens.md) `[ ]` | Снять кадр и сравнить с голденом через viddik | v2-editor | P1 | M | B-09 |
-| [B-24](backlog/B-24-stubbed-pagination-is-not-a-golden.md) `[ ]` | Кадр, снятый с заглушкой пагинации, не голден — и должен об этом говорить | v2-editor | P1 | S | B-17 |
 | [B-21](backlog/B-21-inspector.md) `[ ]` | Инспектор свойств по схеме | v3-builder | P2 | L | B-06, B-16 |
 | [B-22](backlog/B-22-palette-dnd.md) `[ ]` | Палитра типов и drag-and-drop в дереве | v3-builder | P3 | L | B-21 |
 | [B-23](backlog/B-23-dsl-export.md) `[ ]` | Экспорт DSL-черновика из тела | v3-builder | P3 | M | B-07 |
 
-## Сделано (19)
+## Сделано (20)
 
 **Швы в toolkit'е**
 
@@ -79,6 +78,7 @@
 - [B-18](backlog/B-18-stories.md) — Истории: образцы словаря, состояния формы, GeneratedViddikRegistry
 - [B-19](backlog/B-19-project-vocabulary-lint.md) — Слой словаря проекта: открытые слова и токены кита
 - [B-20](backlog/B-20-gradle-task.md) — Gradle-задача kompotStudio
+- [B-24](backlog/B-24-stubbed-pagination-is-not-a-golden.md) — Кадр, снятый с заглушкой пагинации, не голден — и должен об этом говорить
 
 <!-- END INDEX -->
 

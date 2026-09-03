@@ -45,6 +45,7 @@ import io.github.youndie.kompot.preview.kompotBodyShape
 import io.github.youndie.kompot.spec.childSlots
 import io.github.youndie.kompot.studio.diagnostics.Finding
 import io.github.youndie.kompot.studio.diagnostics.Severity
+import io.github.youndie.kompot.studio.diagnostics.capturingIsSafe
 import io.github.youndie.kompot.studio.diagnostics.degradationFinding
 import io.github.youndie.kompot.studio.diagnostics.diagnose
 import io.github.youndie.kompot.studio.source.ScreenRef
@@ -251,6 +252,9 @@ private fun StudioWindowContent(
     val capture = remember { frameCaptureOrNull() }
     var comparison by remember(body, brand, dark) { mutableStateOf<FrameDiff?>(null) }
     var captureStatus by remember(body, brand, dark) { mutableStateOf("") }
+    // Reset with the body: a confirmation is about THIS screen, and carrying one across an edit would
+    // make the second capture the unguarded one.
+    var captureConfirmed by remember(body) { mutableStateOf(false) }
 
     val goldenFile: Path? =
         config.snapshotsDirectory?.resolve(
@@ -334,7 +338,20 @@ private fun StudioWindowContent(
             }
 
             if (capture != null && goldenFile != null) {
+                val safe = remember(config, body) { capturingIsSafe(config, body) }
+
                 OutlinedButton(onClick = {
+                    // The frame this would write is drawn with a stubbed page loader, so it shows a
+                    // list ending where it does not. Refusing outright would be wrong — somebody may
+                    // want the picture anyway — but writing it silently is how a stub becomes a
+                    // golden nobody remembers agreeing to.
+                    if (!safe && !captureConfirmed) {
+                        captureConfirmed = true
+                        captureStatus =
+                            "this frame is drawn with a stubbed page loader — press again to write it anyway"
+                        return@OutlinedButton
+                    }
+
                     val image = snap()
                     if (image == null) {
                         captureStatus = "nothing to capture"
@@ -344,7 +361,7 @@ private fun StudioWindowContent(
                         comparison = null
                         captureStatus = "wrote ${goldenFile.fileName}"
                     }
-                }) { Text("Capture") }
+                }) { Text(if (safe || captureConfirmed) "Capture" else "Capture…") }
 
                 OutlinedButton(onClick = {
                     val actual = snap()

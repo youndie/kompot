@@ -5,9 +5,13 @@ import io.github.youndie.kompot.spec.BodyRules
 import io.github.youndie.kompot.spec.JsonSchemaValidator
 import io.github.youndie.kompot.spec.KompotProtocol
 import io.github.youndie.kompot.spec.childSlots
+import io.github.youndie.kompot.spec.paginatingTypes
+import io.github.youndie.kompot.spec.walkJsonObjects
 import io.github.youndie.kompot.studio.KompotStudioConfig
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 
 // FOUR SOURCES, ONE RECORD. "A screen ships without a client release" means the compiler never sees
 // the screen — so everything that would have been a compile error has to be somebody's check, and
@@ -71,8 +75,52 @@ internal fun diagnose(
                 Finding("rules:${finding.rule}", finding.path.toString(), finding.message, Severity.ERROR)
             }
 
-    return schemaFindings + ruleFindings + vocabularyFindings(config, element)
+    return schemaFindings + ruleFindings + vocabularyFindings(config, element) + stubbedPagination(config, element)
 }
+
+// A LIST DRAWN WITH A STUBBED LOADER IS NOT A GOLDEN, and nothing else on the frame says so.
+//
+// KompotPreview refuses to draw a paginated list without a page loader on purpose: a quietly supplied
+// empty page photographs a list ending where it does not, and the golden then passes for as long as
+// the loader is missing. A studio, though, has to open the screen — half a real application's screens
+// are lists — so a consumer passes a stub, and takes on the very hazard the default guards against.
+// The Capture button turns that hazard into a file.
+//
+// So the frame says it. Structural rather than counted: a list short enough to fit asks for nothing,
+// so "the loader was called" is silent in exactly the case a person is most likely to photograph.
+internal fun stubbedPagination(
+    config: KompotStudioConfig,
+    body: JsonElement,
+): List<Finding> {
+    if (config.pageLoader == null) return emptyList()
+    val paginating = paginatingTypesFor(config)
+
+    return walkJsonObjects(body)
+        .filter { (it.value[DISCRIMINATOR] as? JsonPrimitive)?.content in paginating }
+        .map { node ->
+            Finding(
+                layer = "render",
+                path = node.path.toString(),
+                message =
+                    "this list is drawn with a stubbed page loader — the next page was never asked " +
+                        "for, so a captured frame is not a golden",
+                severity = Severity.WARNING,
+            )
+        }.toList()
+}
+
+internal fun capturingIsSafe(
+    config: KompotStudioConfig,
+    body: String,
+): Boolean =
+    runCatching { stubbedPagination(config, Json.parseToJsonElement(body)).isEmpty() }.getOrDefault(true)
+
+private const val DISCRIMINATOR = "type"
+
+private val paginating = mutableMapOf<KompotStudioConfig, Set<String>>()
+
+private fun paginatingTypesFor(config: KompotStudioConfig): Set<String> =
+    paginating.getOrPut(config) { paginatingTypes(config.schemas) }
 
 // Layer 4: what the real render reported while drawing this body.
 internal fun degradationFinding(

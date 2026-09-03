@@ -111,6 +111,34 @@ public fun childSlots(
     }
 }
 
+// WHICH TYPES CAN ASK FOR MORE OF THEMSELVES: the wire types whose definition names the page-load
+// action somewhere in its properties.
+//
+// Derived rather than the one name everybody knows, and for the reason the child slots are: a
+// deployment may put a list of its own beside the standard one, and it will reuse this action because
+// that is the only thing a client's list renderer knows how to call. A hard-coded "paginated_list"
+// would be right until the day it is not, and it would be wrong silently.
+public fun paginatingTypes(
+    schemas: Map<String, JsonObject>,
+    hierarchy: String = KompotProtocol.COMPONENT_HIERARCHY,
+): Set<String> {
+    val profile = schemas[KompotProtocol.PROFILE_FILE_NAME] ?: return emptySet()
+    val base = (profile["\$defs"] as? JsonObject)?.get(hierarchy)?.jsonObject ?: return emptySet()
+    val mapping = (base["discriminator"] as? JsonObject)?.get("mapping")?.jsonObject ?: return emptySet()
+
+    return mapping.entries
+        .filter { (_, reference) ->
+            val definition = resolve((reference as JsonPrimitive).content, schemas)
+            // The whole definition as text: the reference may sit under `anyOf` for a nullable
+            // property or under `items` for a list of them, and the question here is only whether the
+            // type mentions it at all.
+            LOAD_PAGE in definition.toString()
+        }.map { it.key }
+        .toSet()
+}
+
+private const val LOAD_PAGE = "\$defs/LoadPage"
+
 private fun slotFor(
     name: String,
     property: JsonObject,
