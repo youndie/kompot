@@ -24,6 +24,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import org.jetbrains.jewel.ui.component.Divider
+import org.jetbrains.jewel.ui.Orientation
+import androidx.compose.ui.window.PopupProperties
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.key.Key
@@ -48,6 +69,7 @@ import io.github.youndie.kompot.studio.editor.lexJson
 import io.github.youndie.kompot.studio.tree.ScreenNode
 import io.github.youndie.kompot.studio.tree.iconFor
 import io.github.youndie.kompot.studio.ui.Icon
+import io.github.youndie.kompot.studio.ui.SmallSegmented
 import io.github.youndie.kompot.studio.ui.StudioIcon
 import io.github.youndie.kompot.studio.ui.studioColors
 import io.github.youndie.kompot.theme.KompotTheme
@@ -94,7 +116,7 @@ internal fun InspectorPane(
         val fields = remember(config, node.wireType) { fieldsOf(config, node.wireType) }
         val values = remember(body, node.path) { valuesAt(body, node.path) }
         val theme = config.themes[brand] ?: config.themes.values.firstOrNull()
-        val resolver = remember(theme, dark) { TokenResolver(theme, dark) }
+        val resolver = remember(theme, dark, brand) { TokenResolver(theme, dark, brand) }
 
         Row(
             Modifier.fillMaxWidth().height(28.dp).padding(horizontal = 12.dp),
@@ -301,30 +323,214 @@ private fun TokenPicker(
         }
 
         if (open) {
-            Popup(onDismissRequest = { open = false }) {
-                Column(
-                    Modifier
-                        .width(POPUP_WIDTH)
-                        .background(if (colors.field == Color.White) Color.White else Color(0xFF2B2D30), RoundedCornerShape(8.dp))
-                        .border(1.dp, colors.controlLine, RoundedCornerShape(8.dp))
-                        .padding(vertical = 6.dp),
-                ) {
-                    PopupRow(colors, selected = current == null, onClick = { onWrite(null); open = false }) {
-                        Text(UNSET, color = colors.dim)
-                    }
-                    field.options.forEach { option ->
-                        PopupRow(colors, selected = option == current, onClick = { onWrite("\"$option\""); open = false }) {
-                            if (colour) Swatch(resolver.colour(option), colors) else TypeSample(colors)
-                            Mono(option, colors.text, Modifier.weight(1f))
-                            val detail = if (colour) resolver.hex(option) else resolver.metrics(option)
-                            if (detail != null) Mono(detail, colors.dim)
-                        }
-                    }
-                }
-            }
+            TokenPopup(
+                field = field,
+                current = current,
+                resolver = resolver,
+                colour = colour,
+                onPick = { picked ->
+                    onWrite(picked?.let { "\"$it\"" })
+                    open = false
+                },
+                onClose = { open = false },
+            )
         }
     }
 }
+
+// THE LIST, with a search in focus from the first frame: a dictionary of twenty-three colour names is
+// not scrolled, it is typed into. What is typed that the dictionary does not have can still be taken
+// — as a custom value, named as such, which the vocabulary layer will then report — because the
+// dictionary is the profile's and the body is the person's.
+@Composable
+private fun TokenPopup(
+    field: PropertyField,
+    current: String?,
+    resolver: TokenResolver,
+    colour: Boolean,
+    onPick: (String?) -> Unit,
+    onClose: () -> Unit,
+) {
+    val colors = studioColors()
+    val query = rememberTextFieldState()
+    val focus = remember { FocusRequester() }
+    val text = query.text.toString()
+    val matches = remember(text, field.options) { field.options.filter { it.contains(text, ignoreCase = true) } }
+    val custom = text.isNotEmpty() && field.options.none { it == text }
+    // Everything the arrow keys walk, in the order it is drawn: "unset" while nothing is typed, the
+    // matches, and the custom value when there is one. Null is the unset row.
+    val choices: List<String?> =
+        buildList {
+            if (text.isEmpty()) add(null)
+            addAll(matches)
+            if (custom) add(text)
+        }
+    var cursor by remember(text) { mutableStateOf(choices.indexOf(current).coerceAtLeast(0)) }
+
+    Popup(onDismissRequest = onClose, properties = PopupProperties(focusable = true)) {
+        Column(
+            Modifier
+                .width(TOKEN_POPUP_WIDTH)
+                .shadow(12.dp, RoundedCornerShape(8.dp))
+                .background(colors.popup, RoundedCornerShape(8.dp))
+                .border(1.dp, colors.controlLine, RoundedCornerShape(8.dp))
+                .padding(vertical = 6.dp)
+                .onPreviewKeyEvent { event ->
+                    if (event.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+                    when (event.key) {
+                        Key.DirectionUp -> {
+                            cursor = (cursor - 1).coerceAtLeast(0)
+                            true
+                        }
+
+                        Key.DirectionDown -> {
+                            cursor = (cursor + 1).coerceAtMost(choices.lastIndex)
+                            true
+                        }
+
+                        Key.Enter, Key.NumPadEnter -> {
+                            if (choices.isNotEmpty()) onPick(choices[cursor.coerceIn(choices.indices)])
+                            true
+                        }
+
+                        Key.Escape -> {
+                            onClose()
+                            true
+                        }
+
+                        else -> false
+                    }
+                },
+        ) {
+            Row(
+                Modifier
+                    .padding(horizontal = 6.dp)
+                    .padding(bottom = 4.dp)
+                    .fillMaxWidth()
+                    .height(28.dp)
+                    .background(colors.field, RoundedCornerShape(6.dp))
+                    .border(1.dp, colors.accent, RoundedCornerShape(6.dp))
+                    .padding(horizontal = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(StudioIcon.SEARCH, colors.dim)
+                BasicTextField(
+                    state = query,
+                    modifier = Modifier.weight(1f).focusRequester(focus),
+                    textStyle = TextStyle(fontFamily = FontFamily.Monospace, fontSize = 12.sp, color = colors.text),
+                    cursorBrush = SolidColor(colors.text),
+                    lineLimits = TextFieldLineLimits.SingleLine,
+                )
+                Text("${matches.size} of ${field.options.size}", color = colors.dim, fontSize = 11.sp)
+            }
+
+            GroupCaption("${resolver.brand ?: "dictionary"} · ${if (colour) "color" else "typography"}", colors)
+
+            Column(Modifier.heightIn(max = TOKEN_LIST_HEIGHT).verticalScroll(rememberScrollState())) {
+                if (text.isEmpty()) {
+                    PopupRow(colors, selected = cursor == 0, onClick = { onPick(null) }) {
+                        Text(UNSET, color = colors.dim)
+                    }
+                }
+                val offset = if (text.isEmpty()) 1 else 0
+                matches.forEachIndexed { index, option ->
+                    PopupRow(colors, selected = cursor == index + offset, onClick = { onPick(option) }) {
+                        if (colour) Swatch(resolver.colour(option), colors) else TypeSample(colors)
+                        Text(
+                            highlighted(option, text, colors.accent),
+                            Modifier.weight(1f),
+                            fontFamily = FontFamily.Monospace,
+                            fontSize = 12.sp,
+                            maxLines = 1,
+                        )
+                        val detail = if (colour) resolver.hex(option) else resolver.metrics(option)
+                        if (detail != null) Mono(detail, colors.dim)
+                        if (option == current) Icon(StudioIcon.OK, colors.text)
+                    }
+                }
+                if (matches.isEmpty() && !custom) {
+                    Text("Nothing in the dictionary matches.", Modifier.padding(horizontal = 12.dp, vertical = 4.dp), color = colors.dim)
+                }
+            }
+
+            if (custom) {
+                Divider(Orientation.Horizontal, Modifier.padding(vertical = 4.dp))
+                PopupRow(colors, selected = cursor == choices.lastIndex, onClick = { onPick(text) }) {
+                    Box(Modifier.size(14.dp).dashedBorder(colors.controlLine))
+                    Mono("Use “$text” as a custom value", colors.dim, Modifier.weight(1f))
+                    Text("not in dictionary", color = colors.dim, fontSize = 11.sp)
+                }
+            }
+
+            Divider(Orientation.Horizontal, Modifier.padding(top = 4.dp))
+            Row(
+                Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(top = 6.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                KeyHint("↑↓", "move", colors)
+                KeyHint("Enter", "pick", colors)
+                KeyHint("Esc", "close", colors)
+                Spacer(Modifier.weight(1f))
+                if (!resolver.hasKit) Text("Swatches only — no kit", color = colors.dim, fontSize = 11.sp, maxLines = 1)
+            }
+        }
+        LaunchedEffect(Unit) { focus.requestFocus() }
+    }
+}
+
+@Composable
+private fun GroupCaption(
+    text: String,
+    colors: io.github.youndie.kompot.studio.ui.StudioColors,
+) {
+    Row(
+        Modifier.fillMaxWidth().height(24.dp).padding(horizontal = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(text.uppercase(), color = colors.dim, fontSize = 11.sp, letterSpacing = 0.04.em, maxLines = 1)
+        Divider(Orientation.Horizontal, Modifier.weight(1f))
+    }
+}
+
+@Composable
+private fun KeyHint(
+    key: String,
+    meaning: String,
+    colors: io.github.youndie.kompot.studio.ui.StudioColors,
+) {
+    Mono(key, colors.dim)
+    Text(meaning, color = colors.dim, fontSize = 11.sp)
+}
+
+// The typed part of a name in the accent colour, so that "on_" in "on_surface" is what the eye lands
+// on: the match is what the list is filtered by, and a list that did not show why a row is in it
+// would look unsorted.
+private fun highlighted(
+    option: String,
+    query: String,
+    accent: Color,
+): AnnotatedString {
+    val start = if (query.isEmpty()) -1 else option.indexOf(query, ignoreCase = true)
+    return buildAnnotatedString {
+        append(option)
+        if (start >= 0) addStyle(SpanStyle(color = accent), start, start + query.length)
+    }
+}
+
+private fun Modifier.dashedBorder(colour: Color): Modifier =
+    drawBehind {
+        drawRoundRect(
+            colour,
+            cornerRadius = CornerRadius(3.dp.toPx()),
+            style = Stroke(1.dp.toPx(), pathEffect = PathEffect.dashPathEffect(floatArrayOf(3f, 2f))),
+        )
+    }
+
+private val TOKEN_POPUP_WIDTH = 361.dp
+private val TOKEN_LIST_HEIGHT = 240.dp
 
 @Composable
 private fun PopupRow(
@@ -558,32 +764,6 @@ private fun DpField(
     }
 }
 
-@Composable
-private fun SmallSegmented(
-    options: List<String>,
-    selected: String,
-    onSelect: (String) -> Unit,
-) {
-    val colors = studioColors()
-    Row(
-        Modifier.border(1.dp, colors.controlLine, RoundedCornerShape(6.dp)).padding(1.dp),
-        horizontalArrangement = Arrangement.spacedBy(1.dp),
-    ) {
-        options.forEach { option ->
-            val on = option == selected
-            Text(
-                option,
-                Modifier
-                    .background(if (on) colors.hover else Color.Transparent, RoundedCornerShape(4.dp))
-                    .focusProperties { canFocus = false }
-                    .clickable { onSelect(option) }
-                    .padding(horizontal = 8.dp, vertical = 2.dp),
-                fontSize = 12.sp,
-            )
-        }
-    }
-}
-
 // AN ACTION, AS A FORM: its type from the hierarchy the profile declares, and the fields of that
 // type below it — the same machinery as the node's own form, one level down.
 @Composable
@@ -727,7 +907,13 @@ private fun Mono(
 private class TokenResolver(
     private val theme: KompotTheme?,
     private val dark: Boolean,
+    // The brand the kit belongs to, for the popup to say whose tokens it is listing.
+    val brand: String?,
 ) {
+    // Whether there is a kit at all — the popup says "swatches only" when there is not, so that the
+    // absence of a hex is read as the deployment's choice and not as a token nobody defined.
+    val hasKit: Boolean get() = theme != null
+
     fun colour(token: String): Color? = theme?.colorFor(ColorToken(token), dark)?.let { Color(it) }
 
     fun hex(token: String): String? = theme?.colorFor(ColorToken(token), dark)?.let { "#%06X".format(it and 0xFFFFFF) }

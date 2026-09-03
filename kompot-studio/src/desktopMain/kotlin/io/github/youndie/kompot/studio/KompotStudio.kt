@@ -2,6 +2,7 @@ package io.github.youndie.kompot.studio
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,10 +23,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import org.jetbrains.jewel.ui.component.TextField
+import io.github.youndie.kompot.studio.tree.kindFor
+import io.github.youndie.kompot.studio.tree.DropKind
+import io.github.youndie.kompot.studio.ui.EmptyState
+import io.github.youndie.kompot.studio.ui.ConfirmPopup
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -83,6 +103,8 @@ import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.TextRange
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
 import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
@@ -104,6 +126,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.Divider
@@ -121,6 +144,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.github.youndie.kompot.studio.palette.paletteFor
 import io.github.youndie.kompot.studio.ui.Icon
+import io.github.youndie.kompot.studio.ui.SmallSegmented
 import io.github.youndie.kompot.studio.ui.StudioIcon
 import io.github.youndie.kompot.studio.ui.studioColors
 import org.jetbrains.jewel.ui.component.DefaultButton
@@ -142,6 +166,16 @@ public fun kompotStudio(
     body: String = SAMPLE_BODY,
     title: String = "kompot studio",
 ) {
+    // Compose's desktop accessibility is switched OFF unless somebody asked for it, and the reason
+    // is a crash rather than taste. With an assistive client attached — a screen reader, a window
+    // manager, an automation tool — Compose 1.11 answers the removal of a focused node by moving
+    // the accessibility focus to an arbitrary node at the bottom of the tree, and the removal of
+    // THAT node, whenever it comes, takes the window down inside the accessibility sync (an NPE in
+    // ComposeSceneAccessibility.defaultAccessibilityFocusTarget). An editor removes nodes all day:
+    // closing a popup, selecting another node, filtering a list. Reproduced three times, by three
+    // routes, before this line. `-Dcompose.accessibility.enable=true` turns it back on.
+    if (System.getProperty(ACCESSIBILITY_PROPERTY) == null) System.setProperty(ACCESSIBILITY_PROPERTY, "false")
+
     application {
         // Two darks, and they are different questions. The PREVIEW's is the screen being edited —
         // a switch in the toolbar, because the point is to look at both. The STUDIO's is the
@@ -278,13 +312,22 @@ private fun StudioWindowContent(
         if (failure == null) rendered = body
     }
 
-    val tree = remember(parsed, slots) { parsed?.let { screenTree(it, slots) } }
+    // The tree of the LAST BODY THAT PARSED. A keystroke in the middle of a string leaves the text
+    // unparseable for as long as it takes to type the closing quote, and a tree that vanished for
+    // that long — taking the selection and the inspector with it — would punish typing. The editor's
+    // own strip says the body does not parse; the structure keeps showing what it last was.
+    val parsedTree = remember(parsed, slots) { parsed?.let { screenTree(it, slots) } }
+    val lastGoodTree = remember { mutableStateOf<ScreenNode?>(null) }
+    SideEffect { if (parsedTree != null) lastGoodTree.value = parsedTree }
+    val tree = parsedTree ?: lastGoodTree.value
     // The selection is a PATH, and the node is looked up in whatever tree the body has now. Keyed on
     // the tree it was a node, and every edit — the inspector's own included — rebuilt the tree and
     // dropped it, so the panel a person was typing into vanished under their caret. Under an
     // assistive client that was also a crash: Compose's accessibility sync cannot survive the
     // focused node being removed. A path outlives the edit; a node that is gone selects nothing.
     var selectedPath by remember(opened) { mutableStateOf<String?>(null) }
+    // The node a drag is over, while it is: the preview frames it the way the tree tints it.
+    var dropHover by remember { mutableStateOf<ScreenNode?>(null) }
     val selected = remember(tree, selectedPath) { selectedPath?.let { path -> tree?.flatten()?.firstOrNull { it.path == path } } }
 
     // One walk of the text answers both "what colour is this" and "where is that node", so the caret
@@ -344,9 +387,21 @@ private fun StudioWindowContent(
         payload: String,
         targetPath: String,
     ) {
+        // The tree may be the last good one; an edit against text that does not parse has nothing
+        // to land in.
+        if (parsed == null) return
         val node = tree?.flatten()?.firstOrNull { it.path == targetPath } ?: return
         val target = dropTargetFor(node, slots) ?: return
-        if (target.replacing) pendingDrop = PendingDrop(payload, target, node.label) else performDrop(payload, target)
+        if (!target.replacing) {
+            performDrop(payload, target)
+            return
+        }
+        val incoming =
+            Dragged.type(payload)
+                ?: Dragged.path(payload)?.let { from -> tree.flatten().firstOrNull { it.path == from }?.label }
+                ?: return
+        val parent = tree.flatten().firstOrNull { it.path == target.parentPath }
+        pendingDrop = PendingDrop(payload, target, parentLabel = parent?.label ?: target.parentPath, outgoing = node.label, incoming = incoming)
     }
 
     // The palette's other gesture. A drag is the one the item is about, but a list of types that can
@@ -364,16 +419,43 @@ private fun StudioWindowContent(
     // Asked once. Everything that can be wrong with the reflective binding is wrong at construction,
     // so the window either has these buttons for its whole life or never shows them.
     val capture = remember { frameCaptureOrNull() }
-    var comparison by remember(body, brand, dark) { mutableStateOf<FrameDiff?>(null) }
+    var comparison by remember(body, brand, dark) { mutableStateOf<Comparison?>(null) }
     var captureStatus by remember(body, brand, dark) { mutableStateOf("") }
-    // Reset with the body: a confirmation is about THIS screen, and carrying one across an edit would
-    // make the second capture the unguarded one.
-    var captureConfirmed by remember(body) { mutableStateOf(false) }
+    // Whether the question about a stubbed frame is on screen. Reset with the body: the question is
+    // about THIS screen, and carrying it across an edit would make the second capture the unguarded
+    // one.
+    var captureAsk by remember(body) { mutableStateOf(false) }
 
     val goldenFile: Path? =
         config.snapshotsDirectory?.resolve(
             config.goldenName(brand, dark, screen?.ref?.title ?: "screen"),
         )
+
+    fun writeGolden(image: BufferedImage?) {
+        val file = goldenFile ?: return
+        if (image == null) {
+            captureStatus = "nothing to capture"
+            return
+        }
+        Files.createDirectories(file.parent)
+        ImageIO.write(image, "png", file.toFile())
+        comparison = null
+        captureStatus = "wrote ${file.fileName}"
+    }
+
+    // Null when there was nothing to compare — no engine, no golden directory, no frame; the status
+    // line says which. A missing golden is a RESULT, not an absence: the band offers to write one.
+    fun compareToGolden(actual: BufferedImage?): Comparison? {
+        val engine = capture ?: return null
+        val file = goldenFile ?: return null
+        if (actual == null) {
+            captureStatus = "nothing to capture"
+            return null
+        }
+        val expected = file.takeIf { Files.isRegularFile(it) }?.let { ImageIO.read(it.toFile()) } ?: return Comparison.NoGolden
+        val diff = engine.diff(expected, actual)
+        return if (diff.mismatchedPixels == 0) Comparison.Matches else Comparison.Differs(expected, actual, diff)
+    }
 
     fun snap(): BufferedImage? {
         val engine = capture ?: return null
@@ -468,7 +550,13 @@ private fun StudioWindowContent(
             dirty = dirty,
             onSave = ::save,
             onExport = ::exportKotlin,
-            note = listOf(if (dirty) "unsaved" else "", captureStatus, exported).filter { it.isNotEmpty() }.joinToString(" · "),
+            note =
+                listOf(
+                    if (opened.isEmpty()) "demo · no sources — see the README for how to connect" else "",
+                    if (dirty) "unsaved" else "",
+                    captureStatus,
+                    exported,
+                ).filter { it.isNotEmpty() }.joinToString(" · "),
             capture =
                 if (capture == null || goldenFile == null) {
                     null
@@ -476,42 +564,36 @@ private fun StudioWindowContent(
                     {
                         val safe = remember(config, body) { capturingIsSafe(config, body) }
 
-                        OutlinedButton(onClick = {
-                            // The frame this would write is drawn with a stubbed page loader, so it
-                            // shows a list ending where it does not. Refusing outright would be wrong
-                            // — somebody may want the picture anyway — but writing it silently is how
-                            // a stub becomes a golden nobody remembers agreeing to.
-                            if (!safe && !captureConfirmed) {
-                                captureConfirmed = true
-                                captureStatus =
-                                    "this frame is drawn with a stubbed page loader — press again to write it anyway"
-                                return@OutlinedButton
-                            }
+                        Box {
+                            OutlinedButton(onClick = {
+                                // The frame this would write is drawn with a stubbed page loader, so
+                                // it shows a list ending where it does not. Refusing outright would
+                                // be wrong — somebody may want the picture anyway — but writing it
+                                // silently is how a stub becomes a golden nobody remembers agreeing
+                                // to. So: a question, at the button.
+                                if (!safe) captureAsk = true else writeGolden(snap())
+                            }) { IconLabel(StudioIcon.CAPTURE, if (safe) "Capture" else "Capture…") }
 
-                            val image = snap()
-                            if (image == null) {
-                                captureStatus = "nothing to capture"
-                            } else {
-                                Files.createDirectories(goldenFile.parent)
-                                ImageIO.write(image, "png", goldenFile.toFile())
-                                comparison = null
-                                captureStatus = "wrote ${goldenFile.fileName}"
+                            if (captureAsk) {
+                                ConfirmPopup(
+                                    title = AnnotatedString("Capture with a stubbed page loader?"),
+                                    body =
+                                        AnnotatedString(
+                                            "The list in this frame ends where the stub ends, not where the " +
+                                                "screen would. A frame like that shouldn't stand as the golden.",
+                                        ),
+                                    confirm = "Capture anyway",
+                                    onConfirm = {
+                                        captureAsk = false
+                                        writeGolden(snap())
+                                    },
+                                    onCancel = { captureAsk = false },
+                                    alignment = Alignment.BottomStart,
+                                )
                             }
-                        }) { IconLabel(StudioIcon.CAPTURE, if (safe || captureConfirmed) "Capture" else "Capture…") }
+                        }
 
-                        OutlinedButton(onClick = {
-                            val actual = snap()
-                            val expected = goldenFile.takeIf { Files.isRegularFile(it) }?.let { ImageIO.read(it.toFile()) }
-                            when {
-                                actual == null -> captureStatus = "nothing to capture"
-                                expected == null -> captureStatus = "no golden at ${goldenFile.fileName}"
-                                else -> {
-                                    val diff = capture.diff(expected, actual)
-                                    comparison = diff
-                                    captureStatus = "${goldenFile.fileName}: ${"%.2f".format(diff.mismatchPercent)}% differ"
-                                }
-                            }
-                        }) { IconLabel(StudioIcon.COMPARE, "Compare") }
+                        OutlinedButton(onClick = { comparison = compareToGolden(snap()) }) { IconLabel(StudioIcon.COMPARE, "Compare") }
                         Divider(Orientation.Vertical, Modifier.height(20.dp))
                     }
                 },
@@ -536,6 +618,9 @@ private fun StudioWindowContent(
                     },
                     onFixture = { fixture = it },
                     onDrop = ::drop,
+                    dropKindOf = { node -> dropTargetFor(node, slots)?.kindFor(node) },
+                    onHover = { dropHover = it },
+                    onDemo = { apply(SAMPLE_BODY) },
                     selectedPath = selected?.path,
                     marks = marks,
                     paletteCount = paletteCount,
@@ -550,9 +635,11 @@ private fun StudioWindowContent(
                     pending = {
                         val drop = pendingDrop
                         if (drop != null) {
-                            ReplaceRow(
-                                label = drop.targetLabel,
-                                onReplace = {
+                            ConfirmPopup(
+                                title = replaceTitle(drop),
+                                body = replaceBody(drop),
+                                confirm = "Replace",
+                                onConfirm = {
                                     performDrop(drop.payload, drop.target)
                                     pendingDrop = null
                                 },
@@ -562,7 +649,7 @@ private fun StudioWindowContent(
                     },
                     edits = {
                         EditRow(
-                            enabled = selected != null,
+                            enabled = selected != null && parsed != null,
                             onMoveUp = { apply(JsonEdits.moveUp(body, selected!!.path)) },
                             onMoveDown = { apply(JsonEdits.moveDown(body, selected!!.path)) },
                             onDuplicate = { apply(JsonEdits.duplicate(body, selected!!.path)) },
@@ -584,9 +671,14 @@ private fun StudioWindowContent(
                                     selectedRange = selected?.path?.let { lexed.spans[it] },
                                 )
 
+                                findings.firstOrNull { it.layer == "syntax" }?.let { ParseErrorStrip(it) }
+
                                 // Under the text and not under the whole window: it is about one node
                                 // of this body, and it takes its height from nothing that stretches.
-                                val node = selected
+                                // Only over a body that parses — the tree may be showing the last good
+                                // one, and a field edited against text with no such node writes
+                                // nowhere.
+                                val node = selected?.takeIf { parsed != null }
                                 if (node != null) {
                                     Divider(Orientation.Horizontal)
                                     InspectorPane(
@@ -606,12 +698,34 @@ private fun StudioWindowContent(
                         second = {
                             val colors = studioColors()
                             Column(Modifier.fillMaxSize().background(if (JewelTheme.isDark) colors.field else colors.hover).padding(16.dp, 16.dp, 16.dp, 10.dp)) {
-                            // Beside the frame rather than instead of it: what a golden disagrees about
-                            // is only readable next to what the screen actually draws.
-                            Row(Modifier.fillMaxWidth().weight(1f)) {
-                                comparison?.let { diff ->
+                            val subject =
+                                listOfNotNull(screen?.ref?.title, brand, if (dark) "dark" else "light").joinToString(" · ")
+                            var frames by remember { mutableStateOf(true) }
+                            comparison?.let { result ->
+                                ComparisonBand(
+                                    result = result,
+                                    subject = subject,
+                                    frames = frames,
+                                    onFrames = { frames = it },
+                                    onHide = { comparison = null },
+                                    onAccept = { writeGolden((result as? Comparison.Differs)?.actual) },
+                                    onCapture = { writeGolden(snap()) },
+                                )
+                            }
+                            val differs = comparison as? Comparison.Differs
+                            Row(Modifier.fillMaxWidth().weight(1f), horizontalArrangement = Arrangement.spacedBy(GAP)) {
+                                if (differs != null && frames) {
+                                    // Three pictures instead of the live frame: what was expected,
+                                    // what is drawn, and where they disagree.
+                                    Frame("golden", differs.expected)
+                                    Frame("current", differs.actual)
+                                    Frame("mask", differs.diff.image)
+                                } else {
+                                // Beside the frame rather than instead of it: what a golden disagrees
+                                // about is only readable next to what the screen actually draws.
+                                if (differs != null) {
                                     Image(
-                                        bitmap = diff.image.toComposeImageBitmap(),
+                                        bitmap = differs.diff.image.toComposeImageBitmap(),
                                         contentDescription = "the pixels a golden disagrees about",
                                         modifier = Modifier.weight(1f),
                                     )
@@ -632,6 +746,7 @@ private fun StudioWindowContent(
                                         dark = dark,
                                         modifier = Modifier.weight(1f).fillMaxSize(),
                                         selectedId = selected?.id,
+                                        dropId = dropHover?.id,
                                         state = previewState,
                                         device = device,
                                         actionHandler =
@@ -647,6 +762,7 @@ private fun StudioWindowContent(
                                             degradations += finding
                                         }
                                     }
+                                }
                                 }
                             }
                             // What is being looked at, in the caption's own words: the size and the
@@ -670,6 +786,8 @@ private fun StudioWindowContent(
                         findings = findings + degradations,
                         actions = actions,
                         opened = opened,
+                        labels = remember(tree) { tree?.flatten()?.associate { it.path to it.label } ?: emptyMap() },
+                        brand = brand,
                         onFinding = { finding ->
                             // Clicking a finding selects the node it is about — the two carry the same
                             // notation, so the join is an equality rather than a parse. A finding with
@@ -677,6 +795,7 @@ private fun StudioWindowContent(
                             // nothing rather than guessing.
                             finding.path?.let { selectedPath = it }
                         },
+                        onOffset = { offset -> bodyState.edit { selection = TextRange(offset.coerceIn(0, length)) } },
                         onNavigate = { screen = it },
                     )
                 }
@@ -782,8 +901,159 @@ private fun saveTarget(
 private data class PendingDrop(
     val payload: String,
     val target: DropTarget,
-    val targetLabel: String,
+    val parentLabel: String,
+    val outgoing: String,
+    val incoming: String,
 )
+
+// The question, with the names in the reading colour and the sentence around them in the dim one:
+// what goes and what comes are the two things the answer depends on.
+private fun replaceTitle(drop: PendingDrop): AnnotatedString =
+    buildAnnotatedString {
+        append("Replace the node in ")
+        withStyle(SpanStyle(fontFamily = FontFamily.Monospace, fontSize = 12.sp, fontWeight = FontWeight.Normal)) {
+            append("${drop.parentLabel} › ${drop.target.slot}")
+        }
+        append("?")
+    }
+
+@Composable
+private fun replaceBody(drop: PendingDrop): AnnotatedString {
+    val named = SpanStyle(color = studioColors().text)
+    return buildAnnotatedString {
+        append("This slot holds one node. ")
+        withStyle(named) { append(drop.outgoing) }
+        append(" will be removed; ")
+        withStyle(named) { append(drop.incoming) }
+        append(" takes its place. Cmd+Z undoes.")
+    }
+}
+
+// WHAT A COMPARE FOUND. Three answers and not a number: a number is what the band prints for one of
+// them, and the other two — "the same" and "nothing to compare against" — each have their own move.
+private sealed interface Comparison {
+    class Differs(
+        val expected: BufferedImage,
+        val actual: BufferedImage,
+        val diff: FrameDiff,
+    ) : Comparison
+
+    data object Matches : Comparison
+
+    data object NoGolden : Comparison
+}
+
+// The result, above the frame it is about, with the one thing to do about it at the right end:
+// accept the current frame, write the first golden, or put the band away.
+@Composable
+private fun ComparisonBand(
+    result: Comparison,
+    subject: String,
+    frames: Boolean,
+    onFrames: (Boolean) -> Unit,
+    onHide: () -> Unit,
+    onAccept: () -> Unit,
+    onCapture: () -> Unit,
+) {
+    val colors = studioColors()
+    when (result) {
+        // Two lines where the design has one: the preview column is half the width of the
+        // designer's frame, and a button squeezed to its first letter is not a button.
+        is Comparison.Differs ->
+            Column(Modifier.fillMaxWidth().padding(bottom = GAP), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(GAP), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(StudioIcon.COMPARE, colors.error)
+                    Text("Differs from golden")
+                    Mono("${"%.2f".format(result.diff.mismatchPercent)}% · ${result.diff.mismatchedPixels} px", colors.error)
+                    Dim("· $subject", Modifier.weight(1f))
+                }
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(GAP, Alignment.End),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    SmallSegmented(listOf(FRAMES, MASK), if (frames) FRAMES else MASK) { onFrames(it == FRAMES) }
+                    OutlinedButton(onClick = onAccept) { Text("Accept as golden") }
+                }
+            }
+
+        Comparison.Matches ->
+            Row(
+                Modifier.fillMaxWidth().padding(bottom = GAP),
+                horizontalArrangement = Arrangement.spacedBy(GAP),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(StudioIcon.OK, colors.ok)
+                Text("Matches golden")
+                Dim("· $subject", Modifier.weight(1f))
+                OutlinedButton(onClick = onHide) { Text("Hide") }
+            }
+
+        Comparison.NoGolden ->
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = GAP)
+                    .drawBehind {
+                        drawRoundRect(
+                            colors.controlLine,
+                            cornerRadius = CornerRadius(8.dp.toPx()),
+                            style = Stroke(1.dp.toPx(), pathEffect = PathEffect.dashPathEffect(floatArrayOf(6f, 4f))),
+                        )
+                    }
+                    .padding(horizontal = GUTTER, vertical = GAP),
+                horizontalArrangement = Arrangement.spacedBy(GAP),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(StudioIcon.DRAFT, colors.dim)
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text("No golden yet")
+                    Dim("Capture the current frame to make it the golden for $subject.")
+                }
+                DefaultButton(onClick = onCapture) { Text("Capture as golden") }
+                OutlinedButton(onClick = onHide) { Text("Hide") }
+            }
+    }
+}
+
+private const val FRAMES = "3 frames"
+private const val MASK = "mask"
+
+// One of the three pictures a difference is made of, with its name under it. Fit rather than
+// stretched: three frames side by side are narrower than one, and a picture with a different
+// aspect from its neighbours is a picture of a different screen.
+@Composable
+private fun RowScope.Frame(
+    caption: String,
+    image: BufferedImage,
+) {
+    Column(Modifier.weight(1f).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Image(
+            bitmap = image.toComposeImageBitmap(),
+            contentDescription = caption,
+            modifier = Modifier.fillMaxWidth().weight(1f),
+            contentScale = ContentScale.Fit,
+        )
+        Mono(caption, studioColors().dim, Modifier.padding(top = 4.dp))
+    }
+}
+
+// The line under the text when the text does not parse: where, and what the rest of the window is
+// showing meanwhile. The parser's own words after it, for whoever wants them.
+@Composable
+private fun ParseErrorStrip(finding: Finding) {
+    val colors = studioColors()
+    Row(
+        Modifier.fillMaxWidth().background(colors.error.copy(alpha = 0.12f)).padding(horizontal = GUTTER, vertical = 5.dp),
+        horizontalArrangement = Arrangement.spacedBy(GAP),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(StudioIcon.ERROR, colors.error)
+        val where = finding.offset?.let { " at offset $it" } ?: ""
+        Text("Body doesn't parse$where — tree and preview show the last good body.", maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Dim(finding.message, Modifier.weight(1f))
+    }
+}
 
 // An id nothing else in the body carries. Read out of the text rather than counted off the tree: a
 // body can hold ids the tree does not reach — a form's fields, a type outside the profile — and an id
@@ -910,8 +1180,9 @@ private fun IconLabel(
 private fun Mono(
     text: String,
     color: androidx.compose.ui.graphics.Color,
+    modifier: Modifier = Modifier,
 ) {
-    Text(text, color = color, fontFamily = FontFamily.Monospace, fontSize = 11.sp, maxLines = 1)
+    Text(text, modifier, color = color, fontFamily = FontFamily.Monospace, fontSize = 11.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
 }
 
 @Composable
@@ -929,6 +1200,7 @@ private fun SectionHeader(
     title: String,
     detail: String? = null,
     trailing: String? = null,
+    action: (@Composable () -> Unit)? = null,
     expanded: Boolean? = null,
     onToggle: (() -> Unit)? = null,
 ) {
@@ -948,6 +1220,7 @@ private fun SectionHeader(
         if (detail != null) Dim(detail, Modifier.weight(1f, fill = false))
         Spacer(Modifier.weight(1f))
         if (trailing != null) Dim(trailing)
+        action?.invoke()
     }
 }
 
@@ -966,6 +1239,9 @@ private fun Sidebar(
     onStory: (Story) -> Unit,
     onFixture: (ViddikStory) -> Unit,
     onDrop: (payload: String, targetPath: String) -> Unit,
+    dropKindOf: (ScreenNode) -> DropKind?,
+    onHover: (ScreenNode?) -> Unit,
+    onDemo: () -> Unit,
     selectedPath: String?,
     marks: Map<String, Severity>,
     paletteCount: Int,
@@ -974,18 +1250,49 @@ private fun Sidebar(
     edits: @Composable () -> Unit,
     onNode: (ScreenNode) -> Unit,
 ) {
+    val colors = studioColors()
     var screensOpen by remember { mutableStateOf(true) }
     var paletteOpen by remember { mutableStateOf(true) }
+    var searching by remember { mutableStateOf(false) }
+    val query = rememberTextFieldState()
 
     Column(Modifier.fillMaxSize()) {
-        if (opened.isNotEmpty() || stories.isNotEmpty() || fixtures.isNotEmpty()) {
-            SectionHeader("Screens", expanded = screensOpen, onToggle = { screensOpen = !screensOpen })
+        val recorded = opened.map { source -> source.session.screens.collectAsState().value }
+        val total = recorded.sumOf { it.size } + stories.size + fixtures.size
+        if (total > 0) {
+            SectionHeader(
+                "Screens",
+                trailing = total.toString(),
+                action = {
+                    // A filter, opened by the glyph and closed by it: a list of forty recorded screens
+                    // is scrolled once and searched every time after.
+                    Icon(
+                        StudioIcon.SEARCH,
+                        if (searching) colors.text else colors.dim,
+                        Modifier.focusProperties { canFocus = false }.clickable {
+                            searching = !searching
+                            if (!searching) query.clearText()
+                        },
+                    )
+                },
+                expanded = screensOpen,
+                onToggle = { screensOpen = !screensOpen },
+            )
             if (screensOpen) {
+                if (searching) {
+                    TextField(
+                        state = query,
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = GUTTER, vertical = 4.dp),
+                        placeholder = { Text("Filter screens") },
+                    )
+                }
                 ScreensPane(
                     opened = opened,
+                    recorded = recorded,
                     selected = screen,
                     stories = stories,
                     fixtures = fixtures,
+                    query = query.text.toString(),
                     onSelect = onScreen,
                     onStory = onStory,
                     onFixture = onFixture,
@@ -996,7 +1303,25 @@ private fun Sidebar(
         }
 
         SectionHeader("Structure", trailing = tree?.flatten()?.size?.let { "$it nodes" })
-        ScreenTreePane(tree, Modifier.fillMaxWidth().weight(1f), selectedPath, marks, onDrop, onNode)
+        ScreenTreePane(
+            root = tree,
+            modifier = Modifier.fillMaxWidth().weight(1f),
+            selectedPath = selectedPath,
+            marks = marks,
+            onDrop = onDrop,
+            dropKindOf = dropKindOf,
+            onHover = onHover,
+            empty = {
+                EmptyState(
+                    StudioIcon.COLUMN,
+                    "No screen selected",
+                    "Pick one in Screens above, or open the toolkit demo.",
+                    action = "Open demo screen",
+                    onAction = onDemo,
+                )
+            },
+            onSelect = onNode,
+        )
         pending()
         edits()
 
@@ -1046,29 +1371,18 @@ private fun EditButton(
     }
 }
 
-@Composable
-private fun ReplaceRow(
-    label: String,
-    onReplace: () -> Unit,
-    onCancel: () -> Unit,
-) {
-    Row(
-        Modifier.padding(horizontal = GUTTER, vertical = 6.dp),
-        horizontalArrangement = Arrangement.spacedBy(GAP),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text("Replace $label?")
-        OutlinedButton(onClick = onReplace) { Text("Replace") }
-        OutlinedButton(onClick = onCancel) { Text("Cancel") }
-    }
-}
-
+// The lists on the left, one group per kind of body: what a deployment recorded, what the profile's
+// samples say a component looks like, what viddik draws for a screenshot. Five rows of each and a
+// "N more" after them, because the group somebody is not looking for should take five lines, not
+// forty.
 @Composable
 private fun ScreensPane(
     opened: List<OpenSource>,
+    recorded: List<List<ScreenRef>>,
     selected: SelectedScreen?,
     stories: List<Story>,
     fixtures: List<ViddikStory>,
+    query: String,
     onSelect: (SelectedScreen) -> Unit,
     onStory: (Story) -> Unit,
     onFixture: (ViddikStory) -> Unit,
@@ -1076,30 +1390,83 @@ private fun ScreensPane(
 ) {
     Column(modifier.verticalScroll(rememberScrollState()).padding(bottom = 4.dp)) {
         opened.forEachIndexed { index, source ->
-            val screens by source.session.screens.collectAsState()
-            if (opened.size > 1) Dim(source.name, Modifier.padding(horizontal = GUTTER, vertical = 2.dp))
-            screens.forEach { ref ->
-                ListRow(
-                    text = if (ref.kind == "screen") ref.title else "${ref.title} · ${ref.kind}",
-                    selected = selected?.source == index && selected.ref == ref,
-                ) { onSelect(SelectedScreen(index, ref)) }
-            }
+            val rows =
+                recorded[index].filter { it.title.contains(query, ignoreCase = true) }.map { ref ->
+                    ScreenRow(
+                        icon = StudioIcon.SCREEN,
+                        text = if (ref.kind == "screen") ref.title else "${ref.title} · ${ref.kind}",
+                        selected = selected?.source == index && selected.ref == ref,
+                    ) { onSelect(SelectedScreen(index, ref)) }
+                }
+            ScreenGroup(if (opened.size > 1) source.name else "Recorded", rows)
         }
 
-        if (stories.isNotEmpty()) Dim("Stories", Modifier.padding(horizontal = GUTTER, vertical = 2.dp))
-        stories.forEach { story ->
-            // A story with no body is listed and does nothing: the gap is the message, and a row that
-            // vanished would answer "which component has nobody drawn" with silence.
-            ListRow(
-                text = "${story.group} · ${story.name}" + if (story.body == null) "  (no sample)" else "",
-                selected = false,
-                onClick = if (story.body == null) null else ({ onStory(story) }),
-            )
-        }
+        // A story with no body is listed and does nothing: the gap is the message, and a row that
+        // vanished would answer "which component has nobody drawn" with silence.
+        ScreenGroup(
+            "Stories",
+            stories.filter { "${it.group} ${it.name}".contains(query, ignoreCase = true) }.map { story ->
+                ScreenRow(
+                    icon = StudioIcon.STORY,
+                    text = "${story.group} · ${story.name}" + if (story.body == null) "  (no sample)" else "",
+                    selected = false,
+                    onClick = if (story.body == null) null else ({ onStory(story) }),
+                )
+            },
+        )
 
-        if (fixtures.isNotEmpty()) Dim("Screenshot fixtures", Modifier.padding(horizontal = GUTTER, vertical = 2.dp))
-        fixtures.forEach { story ->
-            ListRow(text = "${story.group}_${story.name}", selected = false) { onFixture(story) }
+        ScreenGroup(
+            "Fixtures",
+            fixtures.filter { "${it.group}_${it.name}".contains(query, ignoreCase = true) }.map { story ->
+                ScreenRow(StudioIcon.CAPTURE, "${story.group}_${story.name}", selected = false) { onFixture(story) }
+            },
+        )
+    }
+}
+
+private class ScreenRow(
+    val icon: StudioIcon,
+    val text: String,
+    val selected: Boolean,
+    val onClick: (() -> Unit)?,
+)
+
+@Composable
+private fun ScreenGroup(
+    title: String,
+    rows: List<ScreenRow>,
+) {
+    if (rows.isEmpty()) return
+    var all by remember(title) { mutableStateOf(false) }
+    val colors = studioColors()
+
+    Row(
+        Modifier.fillMaxWidth().height(24.dp).padding(horizontal = GUTTER),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(title.uppercase(), color = colors.dim, fontSize = 11.sp, letterSpacing = 0.04.em)
+        Text(rows.size.toString(), color = colors.dim, fontSize = 11.sp)
+    }
+
+    // The selected row is always among the shown: a list that hid what is picked would make the
+    // highlight in the preview point at nothing on the left.
+    val picked = rows.indexOfFirst { it.selected }
+    val shown = if (all || rows.size <= VISIBLE_ROWS + 1 || picked >= VISIBLE_ROWS) rows else rows.take(VISIBLE_ROWS)
+    shown.forEach { ListRow(it) }
+    if (shown.size < rows.size) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .height(24.dp)
+                .focusProperties { canFocus = false }
+                .clickable { all = true }
+                .padding(start = ROW_INDENT, end = GUTTER),
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text("${rows.size - shown.size} more", color = colors.dim)
+            Icon(StudioIcon.CHEVRON_RIGHT, colors.dim)
         }
     }
 }
@@ -1107,24 +1474,80 @@ private fun ScreensPane(
 // One row for every list on the left, so a screen, a story and a fixture are picked the same way and
 // look picked the same way.
 @Composable
-private fun ListRow(
-    text: String,
-    selected: Boolean,
-    onClick: (() -> Unit)?,
-) {
-    Text(
-        text,
+private fun ListRow(row: ScreenRow) {
+    val colors = studioColors()
+    Row(
         Modifier
             .fillMaxWidth()
-            .then(if (selected) Modifier.background(JewelTheme.globalColors.outlines.focused.copy(alpha = 0.18f)) else Modifier)
-            .then(if (onClick == null) Modifier else Modifier.clickable(onClick = onClick))
-            .padding(horizontal = GUTTER, vertical = 3.dp),
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-    )
+            .height(24.dp)
+            .then(if (row.selected) Modifier.background(colors.selection) else Modifier)
+            .focusProperties { canFocus = false }
+            .then(if (row.onClick == null) Modifier else Modifier.clickable(onClick = row.onClick))
+            .padding(start = ROW_INDENT, end = GUTTER),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(row.icon, if (row.selected) colors.text else colors.dim)
+        Text(
+            row.text,
+            Modifier.weight(1f),
+            color = if (row.onClick == null) colors.dim else colors.text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        if (row.selected) Box(Modifier.size(6.dp).background(colors.accent, CircleShape))
+    }
 }
 
+private const val VISIBLE_ROWS = 5
+private val ROW_INDENT = 30.dp
+
 private enum class DrawerTab { FINDINGS, ACTIONS }
+
+// The layers a finding can come from, as the filter names them. `rules:<name>` folds into "rules":
+// the rule's own name is on the row, and a filter per rule would be a list as long as the profile.
+private val LAYER_FILTERS = listOf("all", "schema", "rules", "vocabulary", "render", "draft")
+
+private fun layerGroup(layer: String): String = layer.substringBefore(':')
+
+// One row of the findings list. Mostly a finding as it came, except for drafts: a node added from the
+// palette raises one "required and empty" per field, and five rows that all say "you have not filled
+// this in yet" about one node are one row's worth of information.
+private data class DrawerEntry(
+    val path: String?,
+    val message: String,
+    val layer: String,
+    val severity: Severity,
+    val draft: Boolean,
+    val offset: Int?,
+    val finding: Finding,
+) {
+    val key: String get() = "$layer|$path|$message"
+}
+
+private val REQUIRED_FIELD = Regex("\"([^\"]+)\" is required")
+
+private fun entriesOf(findings: List<Finding>): List<DrawerEntry> {
+    val (drafts, rest) = findings.partition { it.layer == "draft" }
+    val plain =
+        rest.map { DrawerEntry(it.path, it.message, it.layer, it.severity, draft = false, offset = it.offset, finding = it) }
+    val grouped =
+        drafts.groupBy { it.path }.map { (path, group) ->
+            val names = group.mapNotNull { REQUIRED_FIELD.find(it.message)?.groupValues?.get(1) }
+            val message =
+                if (names.size == group.size && names.isNotEmpty()) {
+                    val fields = if (names.size == 1) "field" else "fields"
+                    "${names.size} required $fields empty: ${names.joinToString(", ")} — node added but not filled in"
+                } else {
+                    group.joinToString("; ") { it.message }
+                }
+            DrawerEntry(path, message, "draft", group.first().severity, draft = true, offset = null, finding = group.first())
+        }
+    // Errors, then warnings, then drafts: a degradation is the protocol working as designed, and a
+    // page of them above the one line that says the body is malformed buries it; a draft is not even
+    // a defect yet.
+    return (plain + grouped).sortedWith(compareBy({ it.draft }, { it.severity.ordinal }))
+}
 
 // What the tool has to say, in one place at the bottom, with counts on the tabs so a closed drawer
 // still says whether there is anything in it. Findings first: an action is something that happened,
@@ -1134,14 +1557,21 @@ private fun Drawer(
     findings: List<Finding>,
     actions: List<LoggedAction>,
     opened: List<OpenSource>,
+    labels: Map<String, String>,
+    brand: String?,
     onFinding: (Finding) -> Unit,
+    onOffset: (Int) -> Unit,
     onNavigate: (SelectedScreen) -> Unit,
 ) {
     val colors = studioColors()
     var tab by remember { mutableStateOf(DrawerTab.FINDINGS) }
     var open by remember { mutableStateOf(true) }
-    val errors = findings.count { it.severity == Severity.ERROR }
-    val warnings = findings.size - errors
+    var layer by remember { mutableStateOf("all") }
+    var expanded by remember { mutableStateOf<String?>(null) }
+    val entries = remember(findings) { entriesOf(findings) }
+    val errors = entries.count { it.severity == Severity.ERROR }
+    val drafts = entries.count { it.draft }
+    val warnings = entries.size - errors - drafts
 
     Row(
         Modifier.fillMaxWidth().height(32.dp).padding(start = GAP, end = GUTTER),
@@ -1153,12 +1583,19 @@ private fun Drawer(
             colors.dim,
             Modifier.focusProperties { canFocus = false }.clickable { open = !open },
         )
+        // Three weights on one tab, in the order the list has them: what is wrong, what draws badly,
+        // what is not filled in yet.
         DrawerTabLabel("Findings", tab == DrawerTab.FINDINGS, onClick = { tab = DrawerTab.FINDINGS; open = true }) {
             if (errors > 0) Badge(errors.toString(), colors.error, androidx.compose.ui.graphics.Color.White)
-            if (warnings > 0) Badge(warnings.toString(), androidx.compose.ui.graphics.Color(0xFFF2D48A), androidx.compose.ui.graphics.Color(0xFF1E1F22))
+            if (warnings > 0) Badge(warnings.toString(), colors.warning, androidx.compose.ui.graphics.Color(0xFF1E1F22))
+            if (drafts > 0) Badge(drafts.toString(), colors.badge, colors.badgeText)
         }
         DrawerTabLabel("Actions", tab == DrawerTab.ACTIONS, onClick = { tab = DrawerTab.ACTIONS; open = true }) {
             if (actions.isNotEmpty()) Badge(actions.size.toString(), colors.badge, colors.badgeText)
+        }
+        Spacer(Modifier.weight(1f))
+        if (tab == DrawerTab.FINDINGS && entries.isNotEmpty()) {
+            SmallSegmented(LAYER_FILTERS, layer) { layer = it }
         }
     }
     Divider(Orientation.Horizontal)
@@ -1170,24 +1607,32 @@ private fun Drawer(
     ) {
         when (tab) {
             DrawerTab.FINDINGS -> {
-                if (findings.isEmpty()) {
+                val shown = if (layer == "all") entries else entries.filter { layerGroup(it.layer) == layer }
+                if (entries.isEmpty()) {
                     DrawerRow(StudioIcon.OK, colors.ok) {
-                        Text("No findings — the body is what this build's profile expects.", color = colors.dim)
+                        Text("No findings — the body is what ${brand ?: "this build's profile"} expects.", color = colors.dim)
+                    }
+                } else if (shown.isEmpty()) {
+                    DrawerRow(StudioIcon.INFO, colors.dim) {
+                        Text("Nothing from the $layer layer — ${entries.size} elsewhere.", color = colors.dim)
                     }
                 }
-                // Errors first, and only then the warnings: a degradation is the protocol working as
-                // designed, and a page of them above the one line that says the body is malformed
-                // buries it.
-                findings.sortedBy { it.severity.ordinal }.forEach { finding ->
-                    val error = finding.severity == Severity.ERROR
-                    DrawerRow(
-                        if (error) StudioIcon.ERROR else StudioIcon.WARNING,
-                        if (error) colors.error else colors.warning,
-                        Modifier.clickable { onFinding(finding) },
-                    ) {
-                        Mono(finding.path ?: "—", colors.dim)
-                        Text(finding.message, Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                        Dim(finding.layer)
+                // Keyed, so that a filter removes the rows it removes and leaves the others' nodes
+                // alone: positional reuse would turn "the render row went away" into "every row
+                // below it was torn down and rebuilt", and a row torn down under an assistive
+                // client's focus is the crash the tree rows were made non-focusable for.
+                shown.forEach { entry ->
+                    key(entry.key) {
+                        FindingRow(
+                        entry = entry,
+                        label = entry.path?.let { labels[it] },
+                        expanded = expanded == entry.key,
+                        onClick = {
+                            expanded = if (expanded == entry.key) null else entry.key
+                            onFinding(entry.finding)
+                        },
+                        onOffset = onOffset,
+                        )
                     }
                 }
             }
@@ -1195,7 +1640,7 @@ private fun Drawer(
             DrawerTab.ACTIONS -> {
                 if (actions.isEmpty()) {
                     DrawerRow(StudioIcon.INFO, colors.dim) {
-                        Text("Nothing tapped yet — actions the frame raises are listed here.", color = colors.dim)
+                        Text("Nothing tapped yet — tap a button in the preview to log its action.", color = colors.dim)
                     }
                 }
                 // The one line in the log the studio can act on: a navigate names a deeplink, and an
@@ -1215,6 +1660,68 @@ private fun Drawer(
         }
     }
 }
+
+// A finding as one line — glyph, where, what, which layer — and, once clicked, the same line with the
+// whole message under it and the two things there are to do with one. Expanded in place rather than
+// in a tooltip: a message long enough to be cut is one somebody will want to copy.
+@Composable
+private fun FindingRow(
+    entry: DrawerEntry,
+    label: String?,
+    expanded: Boolean,
+    onClick: () -> Unit,
+    onOffset: (Int) -> Unit,
+) {
+    val colors = studioColors()
+    val (icon, tint) =
+        when {
+            entry.draft -> StudioIcon.DRAFT to colors.dim
+            entry.severity == Severity.ERROR -> StudioIcon.ERROR to colors.error
+            else -> StudioIcon.WARNING to colors.warning
+        }
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .then(if (expanded) Modifier.background(colors.selection) else Modifier)
+            .focusProperties { canFocus = false }
+            .clickable(onClick = onClick),
+    ) {
+        Row(
+            Modifier.fillMaxWidth().height(24.dp).padding(horizontal = GUTTER),
+            horizontalArrangement = Arrangement.spacedBy(GAP),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(icon, tint)
+            val where = listOfNotNull(entry.path, label).joinToString(" · ").ifEmpty { "—" }
+            Mono(where, colors.dim, Modifier.width(FINDING_PATH_WIDTH))
+            Text(entry.message, Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(entry.layer, Modifier.width(FINDING_LAYER_WIDTH), color = colors.dim, textAlign = TextAlign.End, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        }
+        if (expanded) {
+            Column(
+                Modifier.fillMaxWidth().padding(start = GUTTER + 16.dp + GAP, end = GUTTER, bottom = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                Text(entry.message)
+                Row(horizontalArrangement = Arrangement.spacedBy(GAP)) {
+                    if (entry.offset != null) {
+                        OutlinedButton(onClick = { onOffset(entry.offset) }) { Text("Go to offset ${entry.offset}") }
+                    }
+                    OutlinedButton(onClick = { copyToClipboard(entry.message) }) { Text("Copy message") }
+                }
+            }
+        }
+    }
+}
+
+// AWT's clipboard rather than Compose's: the Compose one is a suspend API behind a deprecation
+// notice, and copying a line of text is not an operation that needs a coroutine.
+private fun copyToClipboard(text: String) {
+    Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(text), null)
+}
+
+private val FINDING_PATH_WIDTH = 168.dp
+private val FINDING_LAYER_WIDTH = 72.dp
 
 @Composable
 private fun DrawerTabLabel(
@@ -1297,5 +1804,6 @@ private fun ReportWindow(
     }
 }
 
+private const val ACCESSIBILITY_PROPERTY = "compose.accessibility.enable"
 private const val SHOW_TIMEOUT_MS = 10_000L
 private const val POLL_MS = 100L

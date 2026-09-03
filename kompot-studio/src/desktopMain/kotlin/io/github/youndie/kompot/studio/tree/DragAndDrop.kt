@@ -14,6 +14,21 @@ internal data class DropTarget(
     val replacing: Boolean,
 )
 
+// What a drop on a node WOULD do, as the tree draws it while the drag is still in the air: go inside
+// (the container's subtree is the target), go after (a line under the row), or overwrite (the row
+// turns the colour of the question that is coming).
+internal enum class DropKind { INTO, AFTER, REPLACE }
+
+internal fun DropTarget.kindFor(target: ScreenNode): DropKind =
+    when {
+        replacing -> DropKind.REPLACE
+        parentPath == target.path -> DropKind.INTO
+        else -> DropKind.AFTER
+    }
+
+// A node cannot be dropped into itself or into anything it contains.
+internal fun String.isWithin(ancestor: String): Boolean = this == ancestor || startsWith("$ancestor.") || startsWith("$ancestor[")
+
 // A drop ON a node means two different things and both are what somebody expects:
 //
 //   - onto a container — put it inside, at the end;
@@ -54,4 +69,4 @@ internal fun dropTargetFor(
 internal fun canMove(
     from: String,
     into: DropTarget,
-): Boolean = into.parentPath != from && !into.parentPath.startsWith("$from.") && !into.parentPath.startsWith("$from[")
+): Boolean = !into.parentPath.isWithin(from)

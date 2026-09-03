@@ -1,10 +1,11 @@
 package io.github.youndie.kompot.studio.tree
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -31,15 +32,23 @@ import io.github.youndie.kompot.form.FormController
 // around every renderer, drawing a border when the component's id is the selected one. The registry a
 // consumer handed over is decorated rather than rebuilt (KompotRegistry.decorated), because a tool is
 // given a finished registry and has no business asking for its parts.
-internal fun RenderersMap.withSelectionBorder(selectedId: String?): RenderersMap =
+//
+// The same wrapper draws the DROP target while a drag is in the air — dashed, with "drop here" in
+// the tag — so the container the tree tints and the container the preview frames are one node by
+// construction.
+internal fun RenderersMap.withSelectionBorder(
+    selectedId: String?,
+    dropId: String? = null,
+): RenderersMap =
     mapValues { (_, renderer) ->
         @Suppress("UNCHECKED_CAST") // the same unchecked cast the registry's own dispatch does
-        SelectionBorderRenderer(renderer as KompotComponentRenderer<KompotComponent>, selectedId)
+        SelectionBorderRenderer(renderer as KompotComponentRenderer<KompotComponent>, selectedId, dropId)
     }
 
 private class SelectionBorderRenderer<T : KompotComponent>(
     private val delegate: KompotComponentRenderer<T>,
     private val selectedId: String?,
+    private val dropId: String?,
 ) : KompotComponentRenderer<T> {
     @Composable
     override fun Render(
@@ -47,7 +56,8 @@ private class SelectionBorderRenderer<T : KompotComponent>(
         actionHandler: KompotActionHandler,
         formController: FormController,
     ) {
-        if (component.id != selectedId) {
+        val dropping = dropId != null && component.id == dropId
+        if (component.id != selectedId && !dropping) {
             delegate.Render(component, actionHandler, formController)
             return
         }
@@ -59,13 +69,18 @@ private class SelectionBorderRenderer<T : KompotComponent>(
         // The id as a tag above the outline, in the outline's colour: which node is framed is the
         // question, and the frame alone answers it only when nothing else on the screen is that shape.
         val measurer = rememberTextMeasurer()
-        val label = component.id
+        val label = if (dropping) "${component.id} · drop here" else component.id
         Box(
             modifier =
                 Modifier
-                    .border(SELECTION_WIDTH, SELECTION_COLOUR)
                     .drawWithContent {
                         drawContent()
+                        // Over the content, not under it: a frame is the one thing here that has to
+                        // win against whatever the node paints.
+                        drawRect(
+                            SELECTION_COLOUR,
+                            style = Stroke(SELECTION_WIDTH.toPx(), pathEffect = if (dropping) DASHED_EFFECT else null),
+                        )
                         val layout = measurer.measure(label, TAG_STYLE)
                         val pad = 4.dp.toPx()
                         val height = layout.size.height + 2.dp.toPx()
@@ -86,5 +101,6 @@ private class SelectionBorderRenderer<T : KompotComponent>(
 internal const val SELECTION_RGB: Int = 0x3574F0
 internal val SELECTION_COLOUR: Color = Color(0xFF000000 or SELECTION_RGB.toLong())
 private val SELECTION_WIDTH = 1.dp
+private val DASHED_EFFECT = PathEffect.dashPathEffect(floatArrayOf(6f, 4f))
 
 private val TAG_STYLE = TextStyle(fontSize = 10.sp, fontFamily = FontFamily.Monospace)
