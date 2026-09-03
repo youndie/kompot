@@ -37,11 +37,10 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (15)
+## Открыто (14)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-12](backlog/B-12-diagnostics.md) `[ ]` | Диагностика: синтаксис, схема, правила тела, деградации | v1-viewer | P0 | L | B-02, B-04 |
 | [B-14](backlog/B-14-konekt-pilot.md) `[ ]` | Пилот на konekt: записи и brand-a/b дают кадры голденов | v1-viewer | P0 | S | B-09, B-10, B-12 |
 | [B-03](backlog/B-03-remember-design-system-dark.md) `[ ]` | rememberKompotDesignSystem пробрасывает darkMode | upstream | P1 | XS | — |
 | [B-13](backlog/B-13-switches-and-action-log.md) `[ ]` | Бренд, тема, размер устройства, состояния формы, лог действий | v1-viewer | P1 | S/M | B-09 |
@@ -57,7 +56,7 @@
 | [B-22](backlog/B-22-palette-dnd.md) `[ ]` | Палитра типов и drag-and-drop в дереве | v3-builder | P3 | L | B-21 |
 | [B-23](backlog/B-23-dsl-export.md) `[ ]` | Экспорт DSL-черновика из тела | v3-builder | P3 | M | B-07 |
 
-## Сделано (8)
+## Сделано (9)
 
 **Швы в toolkit'е**
 
@@ -75,6 +74,7 @@
 - [B-09](backlog/B-09-studio-config-frame.md) — KompotStudioConfig и frame; дефолтный frame из файлов KompotTheme
 - [B-10](backlog/B-10-sources.md) — Источники тела: файл, каталог с watch, HTTP с ETag и NavigationGraph
 - [B-11](backlog/B-11-tree-from-schema.md) — Дерево экрана из JSON по слотам схемы (Jewel LazyTree)
+- [B-12](backlog/B-12-diagnostics.md) — Диагностика: синтаксис, схема, правила тела, деградации
 
 <!-- END INDEX -->
 

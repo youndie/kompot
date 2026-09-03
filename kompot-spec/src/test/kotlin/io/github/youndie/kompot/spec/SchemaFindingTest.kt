@@ -75,7 +75,7 @@ class SchemaFindingTest {
 
         // walkJsonObjects prints the same string for the same node, which is what lets a studio join
         // findings to rows without either side parsing the other.
-        val paths = walkJsonObjects(Json.parseToJsonElement(body)).map { it.path }.toSet()
+        val paths = walkJsonObjects(Json.parseToJsonElement(body)).map { it.path.toString() }.toSet()
         assertTrue(findings.isNotEmpty(), "an invented type produced no finding at all")
         findings.forEach { finding ->
             assertTrue(

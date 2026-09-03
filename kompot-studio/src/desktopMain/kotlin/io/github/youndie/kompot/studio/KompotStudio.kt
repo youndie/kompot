@@ -1,5 +1,6 @@
 package io.github.youndie.kompot.studio
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +40,10 @@ import org.jetbrains.jewel.intui.standalone.theme.lightThemeDefinition
 import org.jetbrains.jewel.intui.window.decoratedWindow
 import org.jetbrains.jewel.ui.ComponentStyling
 import io.github.youndie.kompot.spec.childSlots
+import io.github.youndie.kompot.studio.diagnostics.Finding
+import io.github.youndie.kompot.studio.diagnostics.Severity
+import io.github.youndie.kompot.studio.diagnostics.degradationFinding
+import io.github.youndie.kompot.studio.diagnostics.diagnose
 import io.github.youndie.kompot.studio.source.ScreenRef
 import io.github.youndie.kompot.studio.source.ScreenSourceSession
 import io.github.youndie.kompot.studio.source.open
@@ -122,7 +127,10 @@ private fun StudioWindowContent(
     val status = SelectedBody(opened, screen, bodyState)
 
     val body = bodyState.text.toString()
-    val degradations = remember(body, brand, dark) { mutableStateListOf<String>() }
+    // Keyed on everything that can change what the render reports: a brand whose kit lacks a token
+    // and a body whose node lacks a renderer degrade for different reasons, and neither should be
+    // read off a stale list.
+    val degradations = remember(body, brand, dark) { mutableStateListOf<Finding>() }
     val findings = remember(config, body) { diagnose(config, body) }
 
     val slots = remember(config) { childSlots(config.schemas) }
@@ -169,8 +177,11 @@ private fun StudioWindowContent(
                             modifier = Modifier.fillMaxSize(),
                             selectedId = selected?.id,
                         ) { kind, type ->
-                            val line = "$kind: $type"
-                            if (line !in degradations) degradations += line
+                            val finding = degradationFinding(kind, type)
+                            // Deduplicated because this is called from inside composition, once per
+                            // node per pass: without it the list grows for as long as the window is
+                            // open, and the writes never settle.
+                            if (degradations.none { it.message == finding.message }) degradations += finding
                         }
                     },
                     modifier = Modifier.fillMaxSize(),
@@ -183,13 +194,11 @@ private fun StudioWindowContent(
             secondPaneMinWidth = 560.dp,
         )
 
-        Column(
-            Modifier.fillMaxWidth().height(180.dp).padding(12.dp).verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            val lines =
-                findings.map { "${it.layer}: ${it.message}" } + degradations.map { "degradation: $it" }
-            if (lines.isEmpty()) Text("No findings.") else lines.forEach { Text(it) }
+        DiagnosticsPane(findings + degradations, Modifier.fillMaxWidth().height(180.dp)) { finding ->
+            // Clicking a finding selects the node it is about — the two carry the same notation, so
+            // the join is an equality rather than a parse. A finding with no node (a syntax error, a
+            // degradation that names only a type) selects nothing rather than guessing.
+            selected = finding.path?.let { path -> tree?.flatten()?.firstOrNull { it.path == path } } ?: selected
         }
     }
 }
@@ -231,6 +240,34 @@ private fun SelectedBody(
 
     val counts = "polled ${state.checks}, changed ${state.revisions}"
     return state.error?.let { "$counts — $it" } ?: counts
+}
+
+@Composable
+private fun DiagnosticsPane(
+    findings: List<Finding>,
+    modifier: Modifier = Modifier,
+    onSelect: (Finding) -> Unit,
+) {
+    Column(
+        modifier.padding(12.dp).verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        if (findings.isEmpty()) {
+            Text("No findings.")
+            return@Column
+        }
+
+        // Errors first, and only then the warnings: a degradation is the protocol working as designed,
+        // and a page of them above the one line that says the body is malformed buries it.
+        findings.sortedBy { it.severity.ordinal }.forEach { finding ->
+            val marker = if (finding.severity == Severity.ERROR) "×" else "⚠"
+            val where = finding.path?.let { " $it" }.orEmpty()
+            Text(
+                text = "$marker ${finding.layer}$where — ${finding.message}",
+                modifier = Modifier.clickable { onSelect(finding) },
+            )
+        }
+    }
 }
 
 // The left column holds both lists, and they are different questions: which BODY to look at, and

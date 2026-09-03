@@ -45,6 +45,11 @@ public class KompotStudioConfig(
     // so loudly rather than showing a list that ends where it does not. A deployment that wants to
     // scroll one in the window passes its own, or a stub answering an empty page.
     public val pageLoader: KompotPageLoader? = null,
+    // Where a form's rules and conditions keep the fieldId they point at, by the wire type that
+    // carries them: "required_if" to "fieldId", and whatever a deployment adds beside them. The
+    // toolkit cannot know — a rule type is a deployment's to invent — so an empty map means the
+    // cross-reference half of the form check simply does not run.
+    public val crossReferenceKeys: Map<String, String> = emptyMap(),
     // Wire types a DEPLOYMENT adds on top of the profile. Declared ones pass the check without their
     // shape being validated — safe, because an unfamiliar type degrades by protocol; undeclared ones
     // stay violations, or the check would stop meaning anything.

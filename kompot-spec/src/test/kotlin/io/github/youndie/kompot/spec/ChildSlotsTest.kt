@@ -87,7 +87,7 @@ class ChildSlotsTest {
             )
             assertEquals(
                 withPaths.size,
-                withPaths.map { it.path }.toSet().size,
+                withPaths.map { it.path.toString() }.toSet().size,
                 "${file.name}: two objects were given the same path",
             )
         }
@@ -103,7 +103,7 @@ class ChildSlotsTest {
             ]}}
             """.trimIndent()
 
-        val paths = walkJsonObjects(Json.parseToJsonElement(body)).map { it.path }.toList()
+        val paths = walkJsonObjects(Json.parseToJsonElement(body)).map { it.path.toString() }.toList()
 
         // The validator's own notation, so a finding and a node line up without translating either.
         assertEquals(

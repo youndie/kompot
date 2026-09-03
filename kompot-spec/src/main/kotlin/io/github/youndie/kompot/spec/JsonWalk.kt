@@ -19,11 +19,11 @@ public fun collectJsonObjects(element: JsonElement): List<JsonObject> =
 
 // The same objects, each with the path it was found at.
 //
-// The path is the validator's format — `$`, `$.screen`, `$.screen.children[0]` — and that is the
-// whole reason to have it: a finding already arrives with a path in its message, so anything holding
-// nodes by path can line them up without parsing a second notation into existence.
+// The path is a JsonPath — the very type a finding carries — rather than the string it prints as.
+// That is the whole reason to have it: a rule reporting about a node and a validator reporting about
+// the same node then produce the same value, not two strings that happen to match today.
 public data class JsonNode(
-    val path: String,
+    val path: JsonPath,
     val value: JsonObject,
 )
 
@@ -33,19 +33,19 @@ public data class JsonNode(
 // to a deployment's component last week: each is a place where a schema-driven walk goes quietly
 // blind, and "quietly" is the problem. The schema says what a child SLOT is; it does not get to say
 // what exists.
-public fun walkJsonObjects(element: JsonElement): Sequence<JsonNode> = walk(element, "$")
+public fun walkJsonObjects(element: JsonElement): Sequence<JsonNode> = walk(element, JsonPath.ROOT)
 
 private fun walk(
     element: JsonElement,
-    path: String,
+    path: JsonPath,
 ): Sequence<JsonNode> =
     when (element) {
         is JsonObject ->
             sequenceOf(JsonNode(path, element)) +
-                element.entries.asSequence().flatMap { (name, value) -> walk(value, "$path.$name") }
+                element.entries.asSequence().flatMap { (name, value) -> walk(value, path + name) }
 
         is JsonArray ->
-            element.asSequence().flatMapIndexed { index, value -> walk(value, "$path[$index]") }
+            element.asSequence().flatMapIndexed { index, value -> walk(value, path + index) }
 
         else -> emptySequence()
     }

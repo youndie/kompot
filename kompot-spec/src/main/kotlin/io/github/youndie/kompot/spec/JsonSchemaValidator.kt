@@ -41,6 +41,11 @@ public class JsonPath private constructor(
 
     public operator fun plus(index: Int): JsonPath = JsonPath(segments + Segment.Index(index))
 
+    // Another path's segments hung off this one. A rule that walked a SUBTREE — the `screen` half of a
+    // form response, say — has paths relative to that subtree, and reporting them as they are would
+    // point at `$.children[0]` in a body whose node is at `$.screen.children[0]`.
+    public fun append(other: JsonPath): JsonPath = JsonPath(segments + other.segments)
+
     // The notation the messages have always used, and the one a tree node carries, so a finding and a
     // node line up by string when a caller has no reason to walk segments.
     override fun toString(): String =

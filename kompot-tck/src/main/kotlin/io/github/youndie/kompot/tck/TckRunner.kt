@@ -2,6 +2,7 @@ package io.github.youndie.kompot.tck
 
 import io.github.youndie.kompot.spec.JsonSchemaValidator
 import io.github.youndie.kompot.navigation.ScreenRouteKind
+import io.github.youndie.kompot.spec.BodyRules
 import io.github.youndie.kompot.spec.KompotProtocol
 import io.github.youndie.kompot.spec.collectJsonObjects
 import kotlinx.serialization.json.Json
@@ -299,63 +300,32 @@ public class TckRunner(
 
     // A node's id addresses point updates (SPEC.md §4.2): an empty or duplicated id makes the address
     // ambiguous, and a frame of the update channel lands on the wrong node.
+    //
+    // The rule itself lives in :kompot-spec (BodyRules) because it is a claim about a BODY, not about
+    // a server: a studio looking at one recorded response needs the same check and no HTTP at all.
+    // What stays here is the half that is this kit's — walking the endpoints and naming where a body
+    // came from.
     private suspend fun componentIdsPresentAndUnique(): List<TckFinding> =
         probeable().exercising("component-id").flatMap { endpoint ->
             val element = parse(get(endpoint).body) ?: return@flatMap emptyList()
-            val ids = mutableListOf<String>()
-            val findings = mutableListOf<TckFinding>()
-
-            collectJsonObjects(element)
-                .filter { (it[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content in componentTypes }
-                .forEach { component ->
-                    val id = (component["id"] as? JsonPrimitive)?.content
-                    val type = (component[KompotProtocol.DISCRIMINATOR] as JsonPrimitive).content
-                    if (id.isNullOrBlank()) {
-                        findings += TckFinding("component-id", endpoint.path, "component \"$type\" has an empty id")
-                    } else {
-                        ids += id
-                    }
-                }
-
-            findings +
-                ids
-                    .groupingBy { it }
-                    .eachCount()
-                    .filterValues { it > 1 }
-                    .keys
-                    .sorted()
-                    .map { TckFinding("component-id", endpoint.path, "id \"$it\" occurs more than once in the tree") }
+            // distinctBy the message, because the rule reports every REPEAT of a duplicated id — a
+            // studio highlights the node a finding points at, and an id has no node. A report read by
+            // a person wants the sentence once.
+            BodyRules
+                .componentIds(element, componentTypes)
+                .distinctBy { it.message }
+                .map { TckFinding("component-id", endpoint.path, it.message) }
         }
 
     // A form's schema and its screen must agree on fieldId, and the cross-references of rules and
-    // conditions must point at fields that exist (SPEC.md §9.2, §9.3).
+    // conditions must point at fields that exist (SPEC.md §9.2, §9.3). The rule is BodyRules'; the
+    // walk is this kit's.
     private suspend fun formsAreSelfConsistent(): List<TckFinding> =
         probeable().filter { it.kind == "form" }.exercising("form-fields").flatMap { endpoint ->
-            val response = parse(get(endpoint).body)?.jsonObject ?: return@flatMap emptyList()
-            val schema = response["schema"]?.jsonObject ?: return@flatMap emptyList()
-            val screen = response["screen"] ?: return@flatMap emptyList()
-
-            val declared =
-                (schema["fields"] as? JsonArray)
-                    .orEmpty()
-                    .mapNotNull { (it.jsonObject["fieldId"] as? JsonPrimitive)?.content }
-                    .toSet()
-
-            val referenced =
-                collectJsonObjects(screen)
-                    .mapNotNull { (it["fieldId"] as? JsonPrimitive)?.takeIf { value -> value.isString }?.content }
-                    .toSet()
-
-            val crossReferences =
-                collectJsonObjects(schema).mapNotNull { obj ->
-                    val type = (obj[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content ?: return@mapNotNull null
-                    val key = config.crossReferenceKeys[type] ?: return@mapNotNull null
-                    (obj[key] as? JsonPrimitive)?.takeIf { it.isString }?.content
-                }.toSet()
-
-            (referenced - declared).map { TckFinding("form-fields", endpoint.path, "a component refers to undeclared field \"$it\"") } +
-                (declared - referenced).map { TckFinding("form-fields", endpoint.path, "field \"$it\" is declared but never rendered") } +
-                (crossReferences - declared).map { TckFinding("form-fields", endpoint.path, "a cross-reference points at non-existent field \"$it\"") }
+            val response = parse(get(endpoint).body) ?: return@flatMap emptyList()
+            BodyRules
+                .formFields(response, config.crossReferenceKeys)
+                .map { TckFinding("form-fields", endpoint.path, it.message) }
         }
 
     // A patch names fields, and every one of them has to be a field the form declares (SPEC.md §9.2,
@@ -506,34 +476,11 @@ public class TckRunner(
     // `text` stays the whole string and the spans are its runs, so the two have to agree (SPEC.md §14).
     // One string kept in two places is the shape that drifts, and it drifts INVISIBLY here: a client
     // that reads the spans shows one sentence and a client that reads the flat form shows another,
-    // and neither has any way to notice.
+    // and neither has any way to notice. The rule is BodyRules'; the walk is this kit's.
     private suspend fun textSpansSpellTheirOwnText(): List<TckFinding> =
         probeable().exercising("text-spans").flatMap { endpoint ->
             val element = parse(get(endpoint).body) ?: return@flatMap emptyList()
-
-            collectJsonObjects(element)
-                .filter { (it[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content == TEXT_TYPE }
-                .mapNotNull { node ->
-                    val spans = node["spans"] as? JsonArray ?: return@mapNotNull null
-                    if (spans.isEmpty()) return@mapNotNull null
-
-                    val whole = (node["text"] as? JsonPrimitive)?.content.orEmpty()
-                    val spelled =
-                        spans.joinToString("") { span ->
-                            ((span as? JsonObject)?.get("text") as? JsonPrimitive)?.content.orEmpty()
-                        }
-
-                    if (whole == spelled) {
-                        null
-                    } else {
-                        val id = (node["id"] as? JsonPrimitive)?.content ?: "?"
-                        TckFinding(
-                            "text-spans",
-                            endpoint.path,
-                            "text \"$id\" reads \"$whole\" flat and \"$spelled\" through its spans — a client sees one or the other",
-                        )
-                    }
-                }
+            BodyRules.textSpans(element).map { TckFinding("text-spans", endpoint.path, it.message) }
         }
 
     // Conditional delivery: a repeat with the same ETag must answer 304 with no body (SPEC.md §16.2).
