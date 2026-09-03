@@ -667,7 +667,10 @@ private fun StudioWindowContent(
                                     state = bodyState,
                                     lexed = lexed,
                                     errorOffset = findings.firstOrNull { it.layer == "syntax" }?.offset,
-                                    modifier = Modifier.fillMaxWidth().weight(1f).padding(8.dp),
+                                    // On the field ground, not the panel's: the text is the one
+                                    // thing in the window that is typed into, and it sits a shade
+                                    // deeper than the panels around it, the way every editor's does.
+                                    modifier = Modifier.fillMaxWidth().weight(1f).background(studioColors().field).padding(8.dp),
                                     selectedRange = selected?.path?.let { lexed.spans[it] },
                                 )
 
