@@ -98,6 +98,7 @@ import org.jetbrains.jewel.ui.component.HorizontalSplitLayout
 import org.jetbrains.jewel.ui.component.OutlinedButton
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -129,12 +130,16 @@ public fun kompotStudio(
     title: String = "kompot studio",
 ) {
     application {
+        // Two darks, and they are different questions. The PREVIEW's is the screen being edited —
+        // a switch in the toolbar, because the point is to look at both. The STUDIO's is the
+        // operating system's, and nothing in the window changes it: a tool that goes dark because the
+        // screen inside it did is a tool whose text vanishes the moment somebody checks a night mode.
         var dark by remember { mutableStateOf(false) }
         var brand by remember { mutableStateOf(config.brands.firstOrNull()) }
         val bodyState = rememberTextFieldState(body)
 
         val themeDefinition =
-            if (dark) JewelTheme.darkThemeDefinition() else JewelTheme.lightThemeDefinition()
+            if (isSystemInDarkTheme()) JewelTheme.darkThemeDefinition() else JewelTheme.lightThemeDefinition()
 
         IntUiTheme(theme = themeDefinition, styling = ComponentStyling.decoratedWindow()) {
             val windowState = rememberWindowState(width = 1280.dp, height = 860.dp)
@@ -392,7 +397,10 @@ private fun StudioWindowContent(
     val sidebarSplit = remember { SplitLayoutState(SIDEBAR_SHARE) }
     val mainSplit = remember { SplitLayoutState(EDITOR_SHARE) }
 
-    Column(Modifier.fillMaxSize()) {
+    // Painted, and it has to be: a Compose window on the desktop has no ground of its own, and the
+    // light theme only ever looked right because AWT's default happened to be light. The first dark
+    // theme drew light text on that same default.
+    Column(Modifier.fillMaxSize().background(JewelTheme.globalColors.panelBackground)) {
         Toolbar(
             title = screen?.ref?.title ?: if (opened.isEmpty()) "sample screen" else "no screen selected",
             status = status,
@@ -762,6 +770,8 @@ private fun Toolbar(
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(GUTTER), verticalAlignment = Alignment.CenterVertically) {
+            // Named, so the theme switch beside it reads as the preview's and not the window's.
+            Dim("preview")
             // Only when there is a choice to make. A deployment with one brand — or none — should not
             // be looking at a control that cannot change anything.
             if (brands.size > 1) Segmented(brands, brand, { it.orEmpty() }) { onBrand(it) }
