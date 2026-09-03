@@ -6,6 +6,7 @@ import io.github.youndie.kompot.KompotRegistry
 import io.github.youndie.kompot.kompotJson
 import io.github.youndie.kompot.spec.KompotSpecResources
 import io.github.youndie.kompot.standard.KompotPageLoader
+import io.github.youndie.kompot.theme.KompotTheme
 import java.nio.file.Path
 import io.github.youndie.kompot.studio.source.ScreenSource
 import kotlinx.serialization.json.Json
@@ -32,6 +33,9 @@ public class KompotStudioConfig(
     // LocalKompotDesignSystem and LocalKompotRegistry from inside — so a consumer's existing
     // screenshot frame is usable unchanged, and a frame that installs neither still renders.
     public val frame: KompotStudioFrame = kompotStudioFrame(),
+    // NOTE: a default frame built from `themes` cannot be the default of `frame` above — a constructor
+    // parameter cannot read one declared after it. A project with no frame of its own passes
+    // `kompotStudioFrame(themes)` explicitly, and `kompotThemesFrom(dir)` is what fills both.
     // The names `frame` understands. The studio does not interpret them: it shows them and passes
     // whichever is selected straight back.
     public val brands: List<String> = emptyList(),
@@ -62,6 +66,11 @@ public class KompotStudioConfig(
     // thing — so nothing can derive this list, and a deployment that keeps one keeps it in Kotlin.
     // With it, "every state of every component" stops being a picture somebody redraws.
     public val vocabulary: Map<String, Map<String, Set<String>>> = emptyMap(),
+    // The brand kits themselves, by the same names as `brands`. The default frame already needs them;
+    // the token check needs them for a different reason — to say which token no kit names, and in
+    // which palette. Empty means that check does not run: a deployment whose frame builds its kits in
+    // code has nothing to hand over, and inventing a set would report every token as missing.
+    public val themes: Map<String, KompotTheme> = emptyMap(),
     // Where this build keeps its goldens. viddik's convention is a `snapshots` directory beside the
     // tests that record them, and the studio only ever READS from it plus writes where asked — it does
     // not run viddikVerify and does not decide for a deployment what its expected picture is.

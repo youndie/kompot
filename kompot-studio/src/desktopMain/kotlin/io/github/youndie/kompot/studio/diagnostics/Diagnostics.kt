@@ -17,6 +17,7 @@ import kotlinx.serialization.json.Json
 //   schema  — is it a body of THIS build's profile
 //   rules   — is it a body by the rules a schema cannot express (ids, text/spans, form fields)
 //   render  — will THIS client draw it
+//   vocabulary — is every open word and every token one this build actually answers for
 //
 // None of them is invented here. Layers 2 and 3 are the conformance kit's, layer 4 is the real
 // render reporting on itself, and the studio's whole job is to put them in one list with one shape.
@@ -70,7 +71,7 @@ internal fun diagnose(
                 Finding("rules:${finding.rule}", finding.path.toString(), finding.message, Severity.ERROR)
             }
 
-    return schemaFindings + ruleFindings
+    return schemaFindings + ruleFindings + vocabularyFindings(config, element)
 }
 
 // Layer 4: what the real render reported while drawing this body.
