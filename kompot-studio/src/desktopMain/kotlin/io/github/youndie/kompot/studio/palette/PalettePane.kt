@@ -1,7 +1,7 @@
 package io.github.youndie.kompot.studio.palette
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,7 +34,7 @@ internal fun PalettePane(
 
     val grouped = remember(entries) { entries.groupBy { it.group }.toList() }
 
-    LazyColumn(modifier) {
+    LazyColumn(modifier, contentPadding = PaddingValues(bottom = 8.dp)) {
         grouped.forEach { (group, types) ->
             item(key = "group:$group") {
                 Text(group, Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
@@ -54,18 +54,5 @@ internal fun PalettePane(
                 }
             }
         }
-    }
-}
-
-@Composable
-internal fun PaletteColumn(
-    config: KompotStudioConfig,
-    modifier: Modifier = Modifier,
-    onAdd: (String) -> Unit,
-    dragModifier: (String) -> Modifier = { Modifier },
-) {
-    Column(modifier) {
-        Text("Palette", Modifier.padding(8.dp))
-        PalettePane(config, Modifier.fillMaxWidth(), onAdd, dragModifier)
     }
 }

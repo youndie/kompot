@@ -49,8 +49,6 @@ internal fun InspectorPane(
         val fields = remember(config, node.wireType) { fieldsOf(config, node.wireType) }
         val values = remember(body, node.path) { valuesAt(body, node.path) }
 
-        Text("${node.wireType}${node.id?.let { " · $it" } ?: ""}")
-
         if (fields.isEmpty()) {
             // A type this build has no schema for. Its keys are still shown, and still editable as
             // text: a node nobody can describe is not a node nobody may touch.
