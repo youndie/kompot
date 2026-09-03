@@ -80,7 +80,19 @@ private fun TextStyle.mergeWith(overrides: KompotTextStyle): TextStyle =
 public fun rememberKompotDesignSystem(
     theme: KompotTheme?,
     fallback: KompotDesignSystem,
+    // WHICH MODE TO DRAW IN, and null keeps the old answer: ask the system.
+    //
+    // A brand has two halves — the design system every token resolves through, and the Material scheme
+    // every control reads — and they have to be told the SAME thing. `rememberMaterialColorScheme`
+    // already takes this; this one did not, so the two could be asked different questions: the scheme
+    // from the caller, the design system from the machine. On a dark Mac a light frame then came out
+    // with a dark card under a light button, and the two halves each looked correct on their own.
+    //
+    // A preview or a screenshot has no system signal worth obeying at all — the switch above the
+    // window is the signal — which is why the underlying class has had this parameter all along and
+    // the convenient wrapper was the one place it could not be reached.
+    darkMode: Boolean? = null,
 ): KompotDesignSystem =
-    remember(theme, fallback) {
-        theme?.let { RemoteThemeDesignSystem(it, fallback) } ?: fallback
+    remember(theme, fallback, darkMode) {
+        theme?.let { RemoteThemeDesignSystem(it, fallback, darkModeOverride = darkMode) } ?: fallback
     }

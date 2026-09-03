@@ -1,0 +1,8 @@
+{
+  "type": "paginated_list",
+  "id": "feed",
+  "initialItems": [
+    { "type": "text", "id": "row-1", "text": "The first page arrives inside the body" }
+  ],
+  "loadMoreAction": { "type": "load_page", "url": "/feed?page=2" }
+}

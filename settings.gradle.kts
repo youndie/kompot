@@ -50,6 +50,15 @@ dependencyResolutionManagement {
     // google() and mavenCentral() are the settings plugin's, with the same group filters this file
     // used to carry.
     repositories {
+        // The pictures behind Jewel's icon keys. Jewel itself is on Maven Central; the SVG bundle
+        // its standalone theme draws with is published only here, and without it every chevron and
+        // combo-box arrow in the studio is a magenta square. Filtered to the one group it serves,
+        // for the reason written under the ivy repositories below.
+        maven("https://www.jetbrains.com/intellij-repository/releases") {
+            name = "IntelliJ platform"
+            content { includeGroup("com.jetbrains.intellij.platform") }
+        }
+
         // The Kotlin plugin registers its own repository for the Node and Yarn distributions the
         // wasmJs/js test infrastructure runs on. PREFER_SETTINGS above overrides it, so the lookup
         // falls through to Maven Central and fails with "Could not find org.nodejs:node".
@@ -197,3 +206,14 @@ include(":kompot-bom")
 // :kompot-standard so that a profile of "core + standard" keeps its promise of needing no form
 // vocabulary at all.
 include(":kompot-commands")
+
+// The screen editor. The one module here that is an application rather than a library, and the only
+// one with a single target: it draws a screen through the CONSUMER's renderers, which puts it in the
+// consumer's classpath and on the desktop JVM. It is not published yet — B-08 asks whether the window
+// can exist at all, and publishing it is the next question, not this one.
+include(":kompot-studio")
+
+// The build plugin that opens it: one task instead of a `main` and a run configuration in each
+// consumer's IDE. Separate from the studio because it runs in Gradle rather than in the window, and a
+// module cannot be both.
+include(":kompot-studio-gradle-plugin")

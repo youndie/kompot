@@ -29,6 +29,7 @@ class ProfileExtensionsTest {
     ): List<String> =
         JsonSchemaValidator(profileWith(extensions))
             .validate(Json.parseToJsonElement(body), "${KompotProtocol.PROFILE_FILE_NAME}#/\$defs/KompotComponent")
+            .map { it.toString() }
 
     private val ownType = """{"type":"banking_story","id":"s","title":"Anything at all"}"""
 

@@ -18,6 +18,11 @@ public object KompotProtocol {
 
     public const val PROFILE_FILE_NAME: String = "kompot.profile.schema.json"
 
+    // The hierarchy a screen tree is made of, by the key the generator gives it. Named here rather
+    // than spelled at each call site: it is the same string in the profile, in the validator's entry
+    // ref and in childSlots, and a fourth copy is how one of them starts meaning something else.
+    public const val COMPONENT_HIERARCHY: String = "KompotComponent"
+
     // The wire name of the action that performs an operation on one item. The conformance kit works on
     // JSON rather than on Kotlin types, so it has no serializer to ask — but a wire name written out
     // twice is how a rename leaves a dead string behind in the half nobody compiles. Hence the name is

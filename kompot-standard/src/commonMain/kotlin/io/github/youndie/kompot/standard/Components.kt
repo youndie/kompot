@@ -10,6 +10,7 @@ import io.github.youndie.kompot.KompotModifierNode
 import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.registry.KompotComponentMarker
 
+/** A vertical stack of nodes. The root of most screens, and the only container that scrolls. */
 @Serializable
 @SerialName("column")
 @KompotComponentMarker
@@ -17,6 +18,7 @@ public data class ColumnComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val children: List<@Polymorphic KompotComponent>,
+    /** The gap between children, in density-independent pixels. */
     val spacing: Int = 0,
     // What tapping the container does. Before it existed only `button` carried an action, so a list
     // whose rows open something was expressible only as a list of buttons — the protocol deciding a
@@ -31,6 +33,7 @@ public data class ColumnComponent(
 // A horizontal container — a pair of fields side by side, say a document number and its date. A
 // child's share of the width is set by a KompotModifierNode.Weight node in the child's own
 // modifiers rather than by a property here, the same trick as Compose's RowScope.weight.
+/** A horizontal row of nodes. Unlike a column it never scrolls: a row is one item of its parent. */
 @Serializable
 @SerialName("row")
 @KompotComponentMarker
@@ -38,11 +41,13 @@ public data class RowComponent(
     override val id: String,
     override val modifiers: List<KompotModifierNode> = emptyList(),
     val children: List<@Polymorphic KompotComponent>,
+    /** The gap between children, in density-independent pixels. */
     val spacing: Int = 0,
     // See ColumnComponent.action.
     val action: @Polymorphic KompotAction? = null,
 ) : KompotComponent
 
+/** A run of words to show. The only node that carries copy, and every string a person reads is one. */
 @Serializable
 @SerialName("text")
 @KompotComponentMarker
@@ -84,8 +89,10 @@ public data class TextComponent(
     // Two plain fields rather than an overflow vocabulary, deliberately: a closed set of names would
     // gain a value one day and take down the whole screen of every client released before it, since an
     // unknown enum constant fails the parse rather than falling back.
+    /** How many lines the text may occupy before it is cut. Null lets it take as many as it needs. */
     val maxLines: Int? = null,
     // Only meaningful together with maxLines: whether the cut is marked. false clips silently.
+    /** Whether a cut is marked with an ellipsis. Only meaningful together with maxLines. */
     val ellipsis: Boolean = true,
 ) : KompotComponent
 
@@ -106,6 +113,7 @@ public data class TextSpan(
     val action: @Polymorphic KompotAction? = null,
 )
 
+/** A control that raises an action when pressed. */
 @Serializable
 @SerialName("button")
 @KompotComponentMarker
@@ -121,6 +129,7 @@ public data class ButtonComponent(
     //
     // An open string, named by the design system exactly as a colour token is: the protocol fixes no
     // set of emphases, and a client that does not recognise one falls back to its ordinary button.
+    /** Which of the client's button styles to use. An unfamiliar word draws the neutral one. */
     val variant: String? = null,
 ) : KompotComponent
 

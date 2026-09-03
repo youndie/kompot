@@ -34,6 +34,10 @@ kotlin {
             api(projects.kompotForms)
             // The other shape: the envelope that carries a screen plus the topic its updates arrive on.
             api(projects.kompotRealtime)
+            // KompotPageLoader is a parameter of KompotPreview now, so a caller who cannot name it
+            // cannot pass one. It arrives through kompot-client anyway; naming it is what says this
+            // module's own signature depends on it (#70).
+            api(projects.kompotStandard)
             api(libs.compose.runtime)
             implementation(libs.kotlinx.serialization.json)
         }

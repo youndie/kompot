@@ -7,12 +7,12 @@ import io.github.youndie.kompot.dsl.KompotDsl
 import io.github.youndie.kompot.dsl.KompotModifierBuilder
 import io.github.youndie.kompot.forms.KompotFormResponse
 import io.github.youndie.kompot.standard.ColumnComponent
+import io.github.youndie.kompot.standard.ROOT_PATH
 import io.github.youndie.kompot.standard.RowComponent
 import io.github.youndie.kompot.form.FormFieldDefinition
 import io.github.youndie.kompot.form.FormSchema
 import io.github.youndie.kompot.form.ValidationRule
 import io.github.youndie.kompot.form.ValidationRulesBuilder
-import kotlin.uuid.Uuid
 
 // An extension of KompotContainerContext that adds field(...), the entry point for the bound builders
 // in BoundFields.kt. The screen is still built exactly as before — columns, text, buttons, unbound
@@ -79,6 +79,7 @@ public fun buildFormScreen(
 public class FormColumnBuilder(
     private val parent: KompotFormContext,
     private val id: String?,
+    private val path: String = id ?: ROOT_PATH,
 ) : KompotFormContext {
     private val children = mutableListOf<KompotComponent>()
     private var modifiers: List<KompotModifierNode> = emptyList()
@@ -100,21 +101,24 @@ public class FormColumnBuilder(
         parent.field(definition)
     }
 
+    override fun nextChildPath(): String = "$path/${children.size}"
+
     public fun build(): ColumnComponent =
-        ColumnComponent(id = id ?: Uuid.random().toString(), modifiers = modifiers, spacing = spacing, children = children.toList())
+        ColumnComponent(id = id ?: path, modifiers = modifiers, spacing = spacing, children = children.toList())
 }
 
 public fun KompotFormContext.column(
     id: String? = null,
     block: FormColumnBuilder.() -> Unit,
 ) {
-    addComponent(FormColumnBuilder(this, id).apply(block).build())
+    addComponent(FormColumnBuilder(this, id, id ?: nextChildPath()).apply(block).build())
 }
 
 @KompotDsl
 public class FormRowBuilder(
     private val parent: KompotFormContext,
     private val id: String?,
+    private val path: String = id ?: ROOT_PATH,
 ) : KompotFormContext {
     private val children = mutableListOf<KompotComponent>()
     private var modifiers: List<KompotModifierNode> = emptyList()
@@ -136,15 +140,17 @@ public class FormRowBuilder(
         parent.field(definition)
     }
 
+    override fun nextChildPath(): String = "$path/${children.size}"
+
     public fun build(): RowComponent =
-        RowComponent(id = id ?: Uuid.random().toString(), modifiers = modifiers, spacing = spacing, children = children.toList())
+        RowComponent(id = id ?: path, modifiers = modifiers, spacing = spacing, children = children.toList())
 }
 
 public fun KompotFormContext.row(
     id: String? = null,
     block: FormRowBuilder.() -> Unit,
 ) {
-    addComponent(FormRowBuilder(this, id).apply(block).build())
+    addComponent(FormRowBuilder(this, id, id ?: nextChildPath()).apply(block).build())
 }
 
 internal fun buildRules(rules: ValidationRulesBuilder.() -> Unit): List<ValidationRule> = ValidationRulesBuilder().apply(rules).build()

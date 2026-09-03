@@ -1,5 +1,6 @@
 package io.github.youndie.kompot.spec
 
+import io.github.youndie.kompot.registry.KompotComponentDoc
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
@@ -29,6 +30,18 @@ public data class KompotSpecModule(
     // Constraints on GENERATED properties: defKey -> property name -> keywords to add. Needed wherever
     // the Kotlin type of a property (usually String) says nothing about its allowed format.
     val annotations: Map<String, Map<String, JsonObject>> = emptyMap(),
+    // Prose, by serial name: what a type and its properties MEAN, as opposed to what shape they have.
+    // Written as KDoc beside the type and carried here by KSP (`generated<Tag>Docs`), because a
+    // descriptor has no comments in it and a sentence kept anywhere else goes stale on the first
+    // rename.
+    //
+    // Keyed by serialName rather than by schema key: the processor knows a class's @SerialName and not
+    // what the generator will call its definition, and inventing the key twice is how the two come to
+    // disagree for one type and nobody notices.
+    //
+    // `annotations` wins where both describe the same property: those are written by hand in a spec
+    // module for a reason, and a doc comment must not quietly replace one.
+    val docs: Map<String, KompotComponentDoc> = emptyMap(),
     // The property a polymorphic value carries its wire name in. Everything on the kompot wire uses
     // "type" and no module should change it — this exists for a schema of something that is NOT the
     // wire, and there is exactly one: the client corpus, whose steps are discriminated by "step" so

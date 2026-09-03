@@ -15,6 +15,21 @@ compose-multiplatform = "1.11.1"
 compose-material3 = "1.11.0-alpha07"
 coil3 = "3.5.0"
 viddik = "0.1.1.8"
+# The studio's IDE-style shell. The version carries the IntelliJ build it was cut from
+# (`0.40.0-262.10315.125`), which is why it cannot be a plain three-number bump: what has to match is
+# the Compose line, not the IJ build. 0.40 is compiled against Compose Multiplatform 1.11.0 — the
+# same line as `compose-multiplatform` above; 0.41 moved to 1.12. Mixing lines resolves cleanly and
+# then throws NoSuchMethodError on the first frame, inside a renderer, so this number moves only
+# together with `compose-multiplatform` and `viddik`.
+jewel = "0.40.0-262.10315.125"
+# The IntelliJ platform build Jewel was cut against — the suffix of the line above — and the only
+# place the icon bundle comes from. The two move together or the chevrons come out magenta.
+ijPlatform = "262.10315.125"
+# The JetBrains Runtime's own API, and the studio compiles against it for ONE call: the same
+# `JBR.isAvailable()` Jewel's DecoratedWindow tests before refusing to open. It arrives transitively
+# with Jewel anyway; naming it is what lets code ask the question rather than guess at it from
+# `java.vendor` — which on a JBR reads "Oracle Corporation", exactly like the JDK it is not.
+jbrApi = "1.9.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -55,7 +70,21 @@ viddik-annotations = { module = "ru.workinprogress:viddik-annotations", version.
 viddik-testing-core = { module = "ru.workinprogress:viddik-testing-core", version.ref = "viddik" }
 viddik-processor = { module = "ru.workinprogress:viddik-processor", version.ref = "viddik" }
 
+# Jewel, the standalone (non-IDE) flavour: the tree, the split panes and the decorated window the
+# studio's shell is made of. It pulls Compose Material 2 for its own theming, and the toolkit's
+# renderers read material3 — the consumer of this entry excludes the former, per Jewel's own
+# instructions, so that two Material generations do not sit in one classpath.
+jewel-int-ui-standalone = { module = "org.jetbrains.jewel:jewel-int-ui-standalone", version.ref = "jewel" }
+jewel-int-ui-decorated-window = { module = "org.jetbrains.jewel:jewel-int-ui-decorated-window", version.ref = "jewel" }
+jbr-api = { module = "org.jetbrains.runtime:jbr-api", version.ref = "jbrApi" }
+intellij-icons = { module = "com.jetbrains.intellij.platform:icons", version.ref = "ijPlatform" }
+
 ksp-symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
+
+# The Kotlin Gradle plugin as a LIBRARY, for a build plugin of ours that has to read a multiplatform
+# target's compilation. compileOnly wherever it is used: the build applying it already has the plugin,
+# and a second copy on a build classpath is how two versions of it meet.
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
 

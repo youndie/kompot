@@ -120,6 +120,7 @@
     "KompotComponentButton": {
       "x-kompot-kind": "variant",
       "x-kompot-wire-type": "button",
+      "description": "A control that raises an action when pressed.",
       "type": "object",
       "properties": {
         "type": {
@@ -144,7 +145,8 @@
           "type": [
             "string",
             "null"
-          ]
+          ],
+          "description": "Which of the client's button styles to use. An unfamiliar word draws the neutral one."
         }
       },
       "required": [
@@ -158,6 +160,7 @@
     "KompotComponentColumn": {
       "x-kompot-kind": "variant",
       "x-kompot-wire-type": "column",
+      "description": "A vertical stack of nodes. The root of most screens, and the only container that scrolls.",
       "type": "object",
       "properties": {
         "type": {
@@ -179,7 +182,8 @@
           }
         },
         "spacing": {
-          "type": "integer"
+          "type": "integer",
+          "description": "The gap between children, in density-independent pixels."
         },
         "action": {
           "anyOf": [
@@ -261,6 +265,7 @@
     "KompotComponentRow": {
       "x-kompot-kind": "variant",
       "x-kompot-wire-type": "row",
+      "description": "A horizontal row of nodes. Unlike a column it never scrolls: a row is one item of its parent.",
       "type": "object",
       "properties": {
         "type": {
@@ -282,7 +287,8 @@
           }
         },
         "spacing": {
-          "type": "integer"
+          "type": "integer",
+          "description": "The gap between children, in density-independent pixels."
         },
         "action": {
           "anyOf": [
@@ -336,6 +342,7 @@
     "KompotComponentText": {
       "x-kompot-kind": "variant",
       "x-kompot-wire-type": "text",
+      "description": "A run of words to show. The only node that carries copy, and every string a person reads is one.",
       "type": "object",
       "properties": {
         "type": {
@@ -383,10 +390,12 @@
           "type": [
             "integer",
             "null"
-          ]
+          ],
+          "description": "How many lines the text may occupy before it is cut. Null lets it take as many as it needs."
         },
         "ellipsis": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether a cut is marked with an ellipsis. Only meaningful together with maxLines."
         }
       },
       "required": [
