@@ -42,6 +42,7 @@ import org.jetbrains.jewel.intui.window.decoratedWindow
 import org.jetbrains.jewel.ui.ComponentStyling
 import io.github.youndie.kompot.KompotActionHandler
 import io.github.youndie.kompot.preview.KompotBodyShape
+import io.github.youndie.kompot.preview.decodeKompotBody
 import io.github.youndie.kompot.preview.kompotBodyShape
 import io.github.youndie.kompot.spec.childSlots
 import io.github.youndie.kompot.studio.diagnostics.Finding
@@ -227,7 +228,18 @@ private fun StudioWindowContent(
     // and a body whose node lacks a renderer degrade for different reasons, and neither should be
     // read off a stale list.
     val degradations = remember(body, brand, dark) { mutableStateListOf<Finding>() }
-    val findings = remember(config, body) { diagnose(config, body) }
+    // Set by the render gate below, read here: a body the client cannot decode is an error of the
+    // render layer, whatever the schema thinks of it.
+    var undecodable by remember { mutableStateOf<String?>(null) }
+    val findings =
+        remember(config, body, undecodable) {
+            diagnose(config, body) +
+                listOfNotNull(
+                    undecodable?.let {
+                        Finding("render", null, "the client cannot decode this body — ${it.lineSequence().first()}", Severity.ERROR)
+                    },
+                )
+        }
     // The worst finding per node, for the tree's margin.
     val marks =
         remember(findings, degradations.size) {
@@ -253,10 +265,17 @@ private fun StudioWindowContent(
     // parse cannot be done at all, and blanking the frame while somebody deletes a comma would make
     // the studio unusable exactly where it is meant to help.
     var rendered by remember { mutableStateOf(body) }
+    // A body that parses as JSON and still cannot be DECODED — a string where a number goes — is not
+    // handed to the frame: the frame's decode throws inside composition, and on the desktop that is a
+    // dialog and a dead window rather than a red line. It is checked here, with the application's
+    // own Json, and reported as a finding of the render layer; the frame keeps the last body it
+    // could draw, the way it keeps it across a body that does not parse.
     LaunchedEffect(body) {
         if (parsed == null) return@LaunchedEffect
         delay(RENDER_DEBOUNCE_MS)
-        rendered = body
+        val failure = runCatching { config.json.decodeKompotBody(body) }.exceptionOrNull()
+        undecodable = failure?.let { it.message ?: it.toString() }
+        if (failure == null) rendered = body
     }
 
     val tree = remember(parsed, slots) { parsed?.let { screenTree(it, slots) } }
