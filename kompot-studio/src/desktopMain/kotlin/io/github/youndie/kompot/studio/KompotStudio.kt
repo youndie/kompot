@@ -447,10 +447,11 @@ private fun StudioWindowContent(
     // Asked once. Everything that can be wrong with the reflective binding is wrong at construction,
     // so the window either has these buttons for its whole life or never shows them.
     val capture = remember { frameCaptureOrNull() }
-    // Reset with the device too: a result is about one picture, and the picture on screen is no
-    // longer the one it was about.
-    var comparison by remember(body, brand, dark, device) { mutableStateOf<Comparison?>(null) }
-    var captureStatus by remember(body, brand, dark, device) { mutableStateOf("") }
+    // Reset with the device and the screen too: a result is about one picture, and the picture on
+    // screen is no longer the one it was about. The screen is named although its body follows a
+    // moment later: the band goes the instant another screen is picked, not when it has loaded.
+    var comparison by remember(body, brand, dark, device, screen) { mutableStateOf<Comparison?>(null) }
+    var captureStatus by remember(body, brand, dark, device, screen) { mutableStateOf("") }
     // Whether the question about a stubbed frame is on screen. Reset with the body: the question is
     // about THIS screen, and carrying it across an edit would make the second capture the unguarded
     // one.
