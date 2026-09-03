@@ -76,6 +76,11 @@ jewel-int-ui-decorated-window = { module = "org.jetbrains.jewel:jewel-int-ui-dec
 jbr-api = { module = "org.jetbrains.runtime:jbr-api", version.ref = "jbrApi" }
 
 ksp-symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
+
+# The Kotlin Gradle plugin as a LIBRARY, for a build plugin of ours that has to read a multiplatform
+# target's compilation. compileOnly wherever it is used: the build applying it already has the plugin,
+# and a second copy on a build classpath is how two versions of it meet.
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
 

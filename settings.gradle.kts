@@ -203,3 +203,8 @@ include(":kompot-commands")
 // consumer's classpath and on the desktop JVM. It is not published yet — B-08 asks whether the window
 // can exist at all, and publishing it is the next question, not this one.
 include(":kompot-studio")
+
+// The build plugin that opens it: one task instead of a `main` and a run configuration in each
+// consumer's IDE. Separate from the studio because it runs in Gradle rather than in the window, and a
+// module cannot be both.
+include(":kompot-studio-gradle-plugin")
