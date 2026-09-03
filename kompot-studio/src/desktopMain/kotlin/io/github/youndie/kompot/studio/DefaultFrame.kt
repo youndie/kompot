@@ -4,13 +4,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import io.github.youndie.kompot.LocalKompotDesignSystem
 import io.github.youndie.kompot.ds.material.Material3DesignSystem
 import io.github.youndie.kompot.ds.material.rememberMaterialColorScheme
 import io.github.youndie.kompot.theme.KompotTheme
-import io.github.youndie.kompot.theme.client.RemoteThemeDesignSystem
+import io.github.youndie.kompot.theme.client.rememberKompotDesignSystem
 import kotlinx.serialization.json.Json
 import java.io.File
 
@@ -26,16 +25,11 @@ public fun kompotStudioFrame(themes: Map<String, KompotTheme> = emptyMap()): Kom
     { brand, dark, content ->
         val theme = themes[brand]
 
-        // darkModeOverride and not the system setting: a preview has no system signal worth obeying —
-        // the switch above the window is the signal, and it is the reason this parameter exists.
-        val designSystem =
-            remember(theme, dark) {
-                if (theme == null) {
-                    Material3DesignSystem()
-                } else {
-                    RemoteThemeDesignSystem(theme, Material3DesignSystem(), darkModeOverride = dark)
-                }
-            }
+        // Through the toolkit's own wrapper, now that it takes the mode (B-03). It used to build
+        // RemoteThemeDesignSystem by hand for the one reason the fix removed: the convenient helper
+        // read the machine's setting, and a preview has no system signal worth obeying — the switch
+        // above the window is the signal.
+        val designSystem = rememberKompotDesignSystem(theme, Material3DesignSystem(), dark)
 
         MaterialTheme(colorScheme = rememberMaterialColorScheme(theme, dark)) {
             // Inside a Surface, because outside one LocalContentColor is black: any control that
