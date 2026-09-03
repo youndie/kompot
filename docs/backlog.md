@@ -37,11 +37,10 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (11)
+## Открыто (10)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-14](backlog/B-14-konekt-pilot.md) `[?]` | Пилот на konekt: записи и brand-a/b дают кадры голденов | v1-viewer | P0 | S | B-09, B-10, B-12 |
 | [B-03](backlog/B-03-remember-design-system-dark.md) `[ ]` | rememberKompotDesignSystem пробрасывает darkMode | upstream | P1 | XS | — |
 | [B-17](backlog/B-17-goldens.md) `[ ]` | Снять кадр и сравнить с голденом через viddik | v2-editor | P1 | M | B-09 |
 | [B-24](backlog/B-24-stubbed-pagination-is-not-a-golden.md) `[ ]` | Кадр, снятый с заглушкой пагинации, не голден — и должен об этом говорить | v2-editor | P1 | S | B-17 |
@@ -53,7 +52,7 @@
 | [B-22](backlog/B-22-palette-dnd.md) `[ ]` | Палитра типов и drag-and-drop в дереве | v3-builder | P3 | L | B-21 |
 | [B-23](backlog/B-23-dsl-export.md) `[ ]` | Экспорт DSL-черновика из тела | v3-builder | P3 | M | B-07 |
 
-## Сделано (13)
+## Сделано (14)
 
 **Швы в toolkit'е**
 
@@ -73,6 +72,7 @@
 - [B-11](backlog/B-11-tree-from-schema.md) — Дерево экрана из JSON по слотам схемы (Jewel LazyTree)
 - [B-12](backlog/B-12-diagnostics.md) — Диагностика: синтаксис, схема, правила тела, деградации
 - [B-13](backlog/B-13-switches-and-action-log.md) — Бренд, тема, размер устройства, состояния формы, лог действий
+- [B-14](backlog/B-14-konekt-pilot.md) — Пилот на konekt: записи и brand-a/b дают кадры голденов
 
 **v2 — править и снимать**
 
