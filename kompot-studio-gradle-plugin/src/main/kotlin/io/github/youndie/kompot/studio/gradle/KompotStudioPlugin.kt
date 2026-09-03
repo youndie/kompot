@@ -20,6 +20,16 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 // must draw with are the consumer's, and loading them from another process would mean two Compose
 // runtimes. That leaves the question of how a TEAM opens it — a `main` and a run configuration is an
 // answer for whoever wrote them.
+//
+// One thing the plugin cannot do for the build it runs in: declare a repository. The studio's chrome
+// is Jewel, and the SVG bundle behind Jewel's icons is published only in the IntelliJ repository —
+// a consumer adds it, filtered to its one group:
+//
+//     maven("https://www.jetbrains.com/intellij-repository/releases") {
+//         content { includeGroup("com.jetbrains.intellij.platform") }
+//     }
+//
+// Without it the studio still opens, and every chevron in it is a magenta square.
 public open class KompotStudioExtension {
     // Which Kotlin target's classpath the studio runs on. `jvm` covers both the common name and a
     // plain kotlin("jvm") project; a multiplatform build that calls its desktop target something else
