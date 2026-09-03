@@ -260,7 +260,13 @@ private fun StudioWindowContent(
     }
 
     val tree = remember(parsed, slots) { parsed?.let { screenTree(it, slots) } }
-    var selected by remember(tree) { mutableStateOf<ScreenNode?>(null) }
+    // The selection is a PATH, and the node is looked up in whatever tree the body has now. Keyed on
+    // the tree it was a node, and every edit — the inspector's own included — rebuilt the tree and
+    // dropped it, so the panel a person was typing into vanished under their caret. Under an
+    // assistive client that was also a crash: Compose's accessibility sync cannot survive the
+    // focused node being removed. A path outlives the edit; a node that is gone selects nothing.
+    var selectedPath by remember(opened) { mutableStateOf<String?>(null) }
+    val selected = remember(tree, selectedPath) { selectedPath?.let { path -> tree?.flatten()?.firstOrNull { it.path == path } } }
 
     // One walk of the text answers both "what colour is this" and "where is that node", so the caret
     // cannot land somewhere the colours disagree with.
@@ -544,7 +550,7 @@ private fun StudioWindowContent(
                             onDelete = { apply(JsonEdits.delete(body, selected!!.path)) },
                         )
                     },
-                ) { selected = it }
+                ) { selectedPath = it.path }
             },
             second = {
                 Column(Modifier.fillMaxSize()) {
@@ -650,7 +656,7 @@ private fun StudioWindowContent(
                             // notation, so the join is an equality rather than a parse. A finding with
                             // no node (a syntax error, a degradation that names only a type) selects
                             // nothing rather than guessing.
-                            selected = finding.path?.let { path -> tree?.flatten()?.firstOrNull { it.path == path } } ?: selected
+                            finding.path?.let { selectedPath = it }
                         },
                         onNavigate = { screen = it },
                     )
