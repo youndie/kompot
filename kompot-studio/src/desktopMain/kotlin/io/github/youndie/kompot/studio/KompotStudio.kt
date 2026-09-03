@@ -225,7 +225,7 @@ public fun kompotStudio(
                     onKeyEvent = onKey,
                 ) {
                     ReportWindow(window, decorated = true)
-                    LaunchedEffect(window) { installMagnification(window.rootPane) { magnify[0]?.invoke(it) } }
+                    InstallPinch(window) { magnify[0]?.invoke(it) }
                     TitleBar(Modifier.newFullscreenControls()) { Text(title) }
                     StudioWindowContent(config, bodyState, brand, dark, { brand = it }, { dark = it }, { magnify[0] = it }) {
                         shortcuts[0] = it
@@ -239,7 +239,7 @@ public fun kompotStudio(
                     onKeyEvent = onKey,
                 ) {
                     ReportWindow(window, decorated = false)
-                    LaunchedEffect(window) { installMagnification(window.rootPane) { magnify[0]?.invoke(it) } }
+                    InstallPinch(window) { magnify[0]?.invoke(it) }
                     StudioWindowContent(config, bodyState, brand, dark, { brand = it }, { dark = it }, { magnify[0] = it }) {
                         shortcuts[0] = it
                     }
@@ -1907,5 +1907,23 @@ private fun ReportWindow(
 }
 
 private const val ACCESSIBILITY_PROPERTY = "compose.accessibility.enable"
+// Whether the pinch is there is printed beside the window report, because its absence is silent
+// otherwise: the listener is reached by reflection into a package the JDK does not export, and a
+// launch without `--add-exports java.desktop/com.apple.eawt.event=ALL-UNNAMED` has a preview that
+// simply does not respond to the trackpad.
+@Composable
+private fun InstallPinch(
+    window: ComposeWindow,
+    onMagnify: (Double) -> Unit,
+) {
+    LaunchedEffect(window) {
+        val installed = installMagnification(window.rootPane, onMagnify)
+        println(
+            "kompot studio: trackpad pinch " +
+                if (installed) "on" else "off — launch with --add-exports java.desktop/com.apple.eawt.event=ALL-UNNAMED on a JetBrains Runtime",
+        )
+    }
+}
+
 private const val SHOW_TIMEOUT_MS = 10_000L
 private const val POLL_MS = 100L

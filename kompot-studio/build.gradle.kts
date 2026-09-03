@@ -181,6 +181,10 @@ afterEvaluate {
     tasks.named<JavaExec>("run") {
         setExecutable(jetBrainsRuntime.get().executablePath.asFile.absolutePath)
         classpath += studioRuntime
+        // The trackpad pinch: Apple's gesture API lives in a package java.desktop does not export,
+        // and without this the studio's reflective listener is refused and the preview has no pinch.
+        // A warning and nothing more on a JDK without the package.
+        jvmArgs("--add-exports", "java.desktop/com.apple.eawt.event=ALL-UNNAMED")
 
         // Two directories the demo can be pointed at, forwarded from the command line: -D on a Gradle
         // invocation reaches the GRADLE jvm, not this one, which is the sort of thing that reads as

@@ -82,6 +82,11 @@ public class KompotStudioPlugin : Plugin<Project> {
             // classpath and a task that starts and finds nothing.
             classpath = target.files({ consumerClasspath(target, extension) }, studioRuntime)
 
+            // The trackpad pinch on macOS: Apple's gesture API lives in a package java.desktop does
+            // not export, and without this the studio's reflective listener is refused and the
+            // preview has no pinch. A warning and nothing more on a JDK without the package.
+            jvmArgs("--add-exports", "java.desktop/com.apple.eawt.event=ALL-UNNAMED")
+
             // Jewel ships class file 69 and its decorated window refuses to open on anything but a
             // JetBrains Runtime — both measured in the toolkit rather than assumed. Asking for the
             // vendor by toolchain means a machine without one provisions it instead of silently
