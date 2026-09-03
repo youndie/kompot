@@ -99,6 +99,7 @@ import org.jetbrains.jewel.ui.component.OutlinedButton
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -111,6 +112,17 @@ import org.jetbrains.jewel.ui.component.SplitLayoutState
 import androidx.compose.foundation.layout.size
 import org.jetbrains.jewel.ui.component.IconButton
 import org.jetbrains.jewel.ui.component.Tooltip
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import io.github.youndie.kompot.studio.palette.paletteFor
+import io.github.youndie.kompot.studio.ui.Icon
+import io.github.youndie.kompot.studio.ui.StudioIcon
+import io.github.youndie.kompot.studio.ui.studioColors
+import org.jetbrains.jewel.ui.component.DefaultButton
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.window.DecoratedWindow
 import org.jetbrains.jewel.window.TitleBar
@@ -207,7 +219,8 @@ private fun StudioWindowContent(
     // The status line, and it is where the sources pay for themselves: "polled 42, changed 1" is what
     // a working ETag looks like, and "polled 42, changed 42" is a server that ignores If-None-Match.
     // Both draw the same screen, so nothing else in this window can tell them apart.
-    val status = SelectedBody(opened, screen, bodyState)
+    var savedBody by remember(opened) { mutableStateOf(bodyState.text.toString()) }
+    val status = SelectedBody(opened, screen, bodyState) { savedBody = it }
 
     val body = bodyState.text.toString()
     // Keyed on everything that can change what the render reports: a brand whose kit lacks a token
@@ -215,6 +228,15 @@ private fun StudioWindowContent(
     // read off a stale list.
     val degradations = remember(body, brand, dark) { mutableStateListOf<Finding>() }
     val findings = remember(config, body) { diagnose(config, body) }
+    // The worst finding per node, for the tree's margin.
+    val marks =
+        remember(findings, degradations.size) {
+            (findings + degradations)
+                .filter { it.path != null }
+                .groupBy { it.path!! }
+                .mapValues { (_, own) -> if (own.any { it.severity == Severity.ERROR }) Severity.ERROR else Severity.WARNING }
+        }
+    val paletteCount = remember(config) { paletteFor(config).size }
 
     var device by remember { mutableStateOf(DEVICE_PRESETS.first()) }
     var formState by remember { mutableStateOf(FormState.EMPTY) }
@@ -355,7 +377,11 @@ private fun StudioWindowContent(
         val target = saveTo ?: return
         target.parent?.let { Files.createDirectories(it) }
         Files.writeString(target, body)
+        savedBody = body
     }
+    // Unsaved is a fact about the text, not about the history: an edit undone back to the file is
+    // not a change, and a file that changed underneath is not one either.
+    val dirty = saveTo != null && body != savedBody
 
     // EXPORT, beside the save and going to the same place with a different extension. A draft is only
     // ever a draft, so it is written next to the body it came from rather than into a source tree the
@@ -414,9 +440,10 @@ private fun StudioWindowContent(
             formState = if (isForm) formState else null,
             onFormState = { formState = it },
             canSave = saveTo != null,
+            dirty = dirty,
             onSave = ::save,
             onExport = ::exportKotlin,
-            note = listOf(captureStatus, exported).filter { it.isNotEmpty() }.joinToString("  ·  "),
+            note = listOf(if (dirty) "unsaved" else "", captureStatus, exported).filter { it.isNotEmpty() }.joinToString(" · "),
             capture =
                 if (capture == null || goldenFile == null) {
                     null
@@ -445,7 +472,7 @@ private fun StudioWindowContent(
                                 comparison = null
                                 captureStatus = "wrote ${goldenFile.fileName}"
                             }
-                        }) { Text(if (safe || captureConfirmed) "Capture" else "Capture…") }
+                        }) { IconLabel(StudioIcon.CAPTURE, if (safe || captureConfirmed) "Capture" else "Capture…") }
 
                         OutlinedButton(onClick = {
                             val actual = snap()
@@ -459,7 +486,8 @@ private fun StudioWindowContent(
                                     captureStatus = "${goldenFile.fileName}: ${"%.2f".format(diff.mismatchPercent)}% differ"
                                 }
                             }
-                        }) { Text("Compare") }
+                        }) { IconLabel(StudioIcon.COMPARE, "Compare") }
+                        Divider(Orientation.Vertical, Modifier.height(20.dp))
                     }
                 },
         )
@@ -483,6 +511,9 @@ private fun StudioWindowContent(
                     },
                     onFixture = { fixture = it },
                     onDrop = ::drop,
+                    selectedPath = selected?.path,
+                    marks = marks,
+                    paletteCount = paletteCount,
                     palette = {
                         PalettePane(
                             config = config,
@@ -546,9 +577,11 @@ private fun StudioWindowContent(
                             }
                         },
                         second = {
+                            val colors = studioColors()
+                            Column(Modifier.fillMaxSize().background(if (JewelTheme.isDark) colors.field else colors.hover).padding(16.dp, 16.dp, 16.dp, 10.dp)) {
                             // Beside the frame rather than instead of it: what a golden disagrees about
                             // is only readable next to what the screen actually draws.
-                            Row(Modifier.fillMaxSize().padding(8.dp)) {
+                            Row(Modifier.fillMaxWidth().weight(1f)) {
                                 comparison?.let { diff ->
                                     Image(
                                         bitmap = diff.image.toComposeImageBitmap(),
@@ -588,6 +621,15 @@ private fun StudioWindowContent(
                                         }
                                     }
                                 }
+                            }
+                            // What is being looked at, in the caption's own words: the size and the
+                            // brand and theme the frame was asked for — so a screenshot of the window
+                            // carries its own provenance.
+                            Row(Modifier.fillMaxWidth().padding(top = 4.dp).height(22.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Mono(device.label.lowercase(), colors.dim)
+                                Spacer(Modifier.weight(1f))
+                                Mono(listOfNotNull(brand, if (dark) "dark" else "light").joinToString(" · "), colors.dim)
+                            }
                             }
                         },
                         modifier = Modifier.fillMaxWidth().weight(1f),
@@ -646,6 +688,7 @@ private fun SelectedBody(
     opened: List<OpenSource>,
     selected: SelectedScreen?,
     bodyState: TextFieldState,
+    onLoaded: (String) -> Unit,
 ): String {
     // Nothing, rather than "no screen selected": the toolbar title already says so, and the same
     // words twice one above the other read as a stutter.
@@ -654,7 +697,10 @@ private fun SelectedBody(
     val state by opened[selected.source].session.body(selected.ref).collectAsState()
 
     LaunchedEffect(selected, state.revisions) {
-        state.text?.let { bodyState.setTextAndPlaceCursorAtEnd(it) }
+        state.text?.let {
+            bodyState.setTextAndPlaceCursorAtEnd(it)
+            onLoaded(it)
+        }
     }
 
     val counts = "polled ${state.checks}, changed ${state.revisions}"
@@ -750,23 +796,25 @@ private fun Toolbar(
     formState: FormState?,
     onFormState: (FormState) -> Unit,
     canSave: Boolean,
+    dirty: Boolean,
     onSave: () -> Unit,
     onExport: () -> Unit,
     note: String,
     capture: (@Composable RowScope.() -> Unit)?,
 ) {
     Row(
-        Modifier.fillMaxWidth().padding(horizontal = GUTTER, vertical = GAP),
+        Modifier.fillMaxWidth().height(40.dp).padding(horizontal = GUTTER),
         horizontalArrangement = Arrangement.spacedBy(GUTTER),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column(Modifier.weight(1f)) {
-            Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Row(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis, fontWeight = FontWeight.Medium)
             // The status line, and it is where the sources pay for themselves: "polled 42, changed 1"
             // is what a working ETag looks like, and "polled 42, changed 42" is a server that ignores
             // If-None-Match. Both draw the same screen, so nothing else in this window can tell them
-            // apart.
-            if (status.isNotEmpty()) Dim(status)
+            // apart. What the actions reported goes on the same line, after a dot.
+            val line = listOf(status, note).filter { it.isNotEmpty() }.joinToString(" · ")
+            if (line.isNotEmpty()) Dim(line, Modifier.weight(1f, fill = false))
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(GUTTER), verticalAlignment = Alignment.CenterVertically) {
@@ -787,9 +835,14 @@ private fun Toolbar(
             horizontalArrangement = Arrangement.spacedBy(GAP, Alignment.End),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (note.isNotEmpty()) Dim(note, Modifier.weight(1f, fill = false))
             capture?.invoke(this)
-            OutlinedButton(onClick = onSave, enabled = canSave) { Text("Save") }
+            // Filled while there is something to save and outlined once there is not: the one button
+            // whose state a person needs to read from across the room.
+            if (dirty) {
+                DefaultButton(onClick = onSave) { Text("Save") }
+            } else {
+                OutlinedButton(onClick = onSave, enabled = canSave) { Text("Save") }
+            }
             OutlinedButton(onClick = onExport, enabled = canSave) { Text("Kotlin") }
         }
     }
@@ -816,6 +869,25 @@ private fun <T> Segmented(
 }
 
 @Composable
+private fun IconLabel(
+    icon: StudioIcon,
+    label: String,
+) {
+    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+        Icon(icon, studioColors().text)
+        Text(label)
+    }
+}
+
+@Composable
+private fun Mono(
+    text: String,
+    color: androidx.compose.ui.graphics.Color,
+) {
+    Text(text, color = color, fontFamily = FontFamily.Monospace, fontSize = 11.sp, maxLines = 1)
+}
+
+@Composable
 private fun Dim(
     text: String,
     modifier: Modifier = Modifier,
@@ -833,16 +905,19 @@ private fun SectionHeader(
     expanded: Boolean? = null,
     onToggle: (() -> Unit)? = null,
 ) {
+    val colors = studioColors()
     Row(
         Modifier
             .fillMaxWidth()
+            .height(28.dp)
+            .focusProperties { canFocus = false }
             .then(if (onToggle == null) Modifier else Modifier.clickable(onClick = onToggle))
-            .padding(horizontal = GUTTER, vertical = 6.dp),
-        horizontalArrangement = Arrangement.spacedBy(GAP),
+            .padding(start = if (expanded == null) GUTTER else GAP, end = GUTTER),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (expanded != null) Text(if (expanded) "▾" else "▸", Modifier.width(12.dp))
-        Text(title)
+        if (expanded != null) Icon(if (expanded) StudioIcon.CHEVRON_DOWN else StudioIcon.CHEVRON_RIGHT, colors.dim)
+        Text(title, fontWeight = FontWeight.Medium)
         if (detail != null) Dim(detail, Modifier.weight(1f, fill = false))
         Spacer(Modifier.weight(1f))
         if (trailing != null) Dim(trailing)
@@ -864,6 +939,9 @@ private fun Sidebar(
     onStory: (Story) -> Unit,
     onFixture: (ViddikStory) -> Unit,
     onDrop: (payload: String, targetPath: String) -> Unit,
+    selectedPath: String?,
+    marks: Map<String, Severity>,
+    paletteCount: Int,
     palette: @Composable () -> Unit,
     pending: @Composable () -> Unit,
     edits: @Composable () -> Unit,
@@ -891,12 +969,12 @@ private fun Sidebar(
         }
 
         SectionHeader("Structure", trailing = tree?.flatten()?.size?.let { "$it nodes" })
-        ScreenTreePane(tree, Modifier.fillMaxWidth().weight(1f), onDrop, onNode)
+        ScreenTreePane(tree, Modifier.fillMaxWidth().weight(1f), selectedPath, marks, onDrop, onNode)
         pending()
         edits()
 
         Divider(Orientation.Horizontal)
-        SectionHeader("Palette", expanded = paletteOpen, onToggle = { paletteOpen = !paletteOpen })
+        SectionHeader("Palette", trailing = "$paletteCount types", expanded = paletteOpen, onToggle = { paletteOpen = !paletteOpen })
         if (paletteOpen) palette()
     }
 }
@@ -918,23 +996,26 @@ private fun EditRow(
     ) {
         // Glyphs with a tooltip rather than words: four worded buttons do not fit a sidebar, and a
         // sidebar that has to be widened before its buttons are legible is one nobody widens.
-        EditButton("↑", "Move up", enabled, onMoveUp)
-        EditButton("↓", "Move down", enabled, onMoveDown)
-        EditButton("⧉", "Duplicate", enabled, onDuplicate)
-        EditButton("✕", "Delete", enabled, onDelete)
+        EditButton(StudioIcon.MOVE_UP, "Move up", enabled, onMoveUp)
+        EditButton(StudioIcon.MOVE_DOWN, "Move down", enabled, onMoveDown)
+        EditButton(StudioIcon.DUPLICATE, "Duplicate", enabled, onDuplicate)
+        EditButton(StudioIcon.DELETE, "Delete", enabled, onDelete)
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun EditButton(
-    glyph: String,
+    icon: StudioIcon,
     label: String,
     enabled: Boolean,
     onClick: () -> Unit,
 ) {
+    val colors = studioColors()
     Tooltip(tooltip = { Text(label) }) {
-        IconButton(onClick = onClick, enabled = enabled, modifier = Modifier.size(28.dp)) { Text(glyph) }
+        IconButton(onClick = onClick, enabled = enabled, modifier = Modifier.size(28.dp)) {
+            Icon(icon, if (enabled) colors.text else colors.dim)
+        }
     }
 }
 
@@ -1018,7 +1099,7 @@ private fun ListRow(
 
 private enum class DrawerTab { FINDINGS, ACTIONS }
 
-// What the tool has to say, in one place at the bottom, with a count on the tab so a closed drawer
+// What the tool has to say, in one place at the bottom, with counts on the tabs so a closed drawer
 // still says whether there is anything in it. Findings first: an action is something that happened,
 // a finding is something wrong.
 @Composable
@@ -1029,61 +1110,135 @@ private fun Drawer(
     onFinding: (Finding) -> Unit,
     onNavigate: (SelectedScreen) -> Unit,
 ) {
+    val colors = studioColors()
     var tab by remember { mutableStateOf(DrawerTab.FINDINGS) }
     var open by remember { mutableStateOf(true) }
     val errors = findings.count { it.severity == Severity.ERROR }
-    val findingsLabel = if (findings.isEmpty()) "Findings" else "Findings · ${findings.size}" + if (errors > 0) " ($errors errors)" else ""
-    val actionsLabel = if (actions.isEmpty()) "Actions" else "Actions · ${actions.size}"
+    val warnings = findings.size - errors
 
     Row(
-        Modifier.fillMaxWidth().padding(horizontal = GUTTER, vertical = 6.dp),
-        horizontalArrangement = Arrangement.spacedBy(GAP),
+        Modifier.fillMaxWidth().height(32.dp).padding(start = GAP, end = GUTTER),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(if (open) "▾" else "▸", Modifier.width(12.dp).clickable { open = !open })
-        Segmented(DrawerTab.entries, tab, { if (it == DrawerTab.FINDINGS) findingsLabel else actionsLabel }) {
-            tab = it
-            open = true
+        Icon(
+            if (open) StudioIcon.CHEVRON_DOWN else StudioIcon.CHEVRON_RIGHT,
+            colors.dim,
+            Modifier.focusProperties { canFocus = false }.clickable { open = !open },
+        )
+        DrawerTabLabel("Findings", tab == DrawerTab.FINDINGS, onClick = { tab = DrawerTab.FINDINGS; open = true }) {
+            if (errors > 0) Badge(errors.toString(), colors.error, androidx.compose.ui.graphics.Color.White)
+            if (warnings > 0) Badge(warnings.toString(), androidx.compose.ui.graphics.Color(0xFFF2D48A), androidx.compose.ui.graphics.Color(0xFF1E1F22))
+        }
+        DrawerTabLabel("Actions", tab == DrawerTab.ACTIONS, onClick = { tab = DrawerTab.ACTIONS; open = true }) {
+            if (actions.isNotEmpty()) Badge(actions.size.toString(), colors.badge, colors.badgeText)
         }
     }
+    Divider(Orientation.Horizontal)
 
     if (!open) return
 
     Column(
-        Modifier.fillMaxWidth().heightIn(min = 40.dp, max = DRAWER_MAX_HEIGHT).verticalScroll(rememberScrollState())
-            .padding(horizontal = GUTTER, vertical = 4.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        Modifier.fillMaxWidth().heightIn(min = 44.dp, max = DRAWER_MAX_HEIGHT).verticalScroll(rememberScrollState()).padding(vertical = 4.dp),
     ) {
         when (tab) {
             DrawerTab.FINDINGS -> {
-                if (findings.isEmpty()) Dim("No findings — the body is what this build's profile expects.")
+                if (findings.isEmpty()) {
+                    DrawerRow(StudioIcon.OK, colors.ok) {
+                        Text("No findings — the body is what this build's profile expects.", color = colors.dim)
+                    }
+                }
                 // Errors first, and only then the warnings: a degradation is the protocol working as
                 // designed, and a page of them above the one line that says the body is malformed
                 // buries it.
                 findings.sortedBy { it.severity.ordinal }.forEach { finding ->
-                    val marker = if (finding.severity == Severity.ERROR) "×" else "⚠"
-                    val where = finding.path?.let { " $it" }.orEmpty()
-                    Text(
-                        text = "$marker ${finding.layer}$where — ${finding.message}",
-                        modifier = Modifier.clickable { onFinding(finding) },
-                    )
+                    val error = finding.severity == Severity.ERROR
+                    DrawerRow(
+                        if (error) StudioIcon.ERROR else StudioIcon.WARNING,
+                        if (error) colors.error else colors.warning,
+                        Modifier.clickable { onFinding(finding) },
+                    ) {
+                        Mono(finding.path ?: "—", colors.dim)
+                        Text(finding.message, Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Dim(finding.layer)
+                    }
                 }
             }
 
             DrawerTab.ACTIONS -> {
-                if (actions.isEmpty()) Dim("Nothing tapped yet — actions the frame raises are listed here.")
+                if (actions.isEmpty()) {
+                    DrawerRow(StudioIcon.INFO, colors.dim) {
+                        Text("Nothing tapped yet — actions the frame raises are listed here.", color = colors.dim)
+                    }
+                }
                 // The one line in the log the studio can act on: a navigate names a deeplink, and an
                 // HTTP source has already read the graph that maps deeplinks to endpoints. Clicking it
                 // opens that screen.
                 actions.asReversed().forEach { logged ->
                     val target = logged.deeplink?.let { deeplink -> routeFor(opened, deeplink) }
-                    Text(
-                        text = if (target == null) logged.text else "${logged.text}  ↗",
-                        modifier = if (target == null) Modifier else Modifier.clickable { onNavigate(target) },
-                    )
+                    DrawerRow(
+                        if (target == null) StudioIcon.INFO else StudioIcon.NAVIGATE,
+                        colors.dim,
+                        if (target == null) Modifier else Modifier.clickable { onNavigate(target) },
+                    ) {
+                        Text(logged.text, Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun DrawerTabLabel(
+    label: String,
+    active: Boolean,
+    onClick: () -> Unit,
+    badges: @Composable RowScope.() -> Unit,
+) {
+    val colors = studioColors()
+    // As wide as its label, and no wider: a tab that filled the row would push the next one out.
+    Column(Modifier.fillMaxHeight().width(IntrinsicSize.Max).focusProperties { canFocus = false }.clickable(onClick = onClick)) {
+        Row(
+            Modifier.weight(1f).padding(horizontal = GAP),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(label, color = if (active) colors.text else colors.dim)
+            badges()
+        }
+        Spacer(Modifier.fillMaxWidth().height(2.dp).background(if (active) colors.accent else androidx.compose.ui.graphics.Color.Transparent))
+    }
+}
+
+@Composable
+private fun Badge(
+    text: String,
+    background: androidx.compose.ui.graphics.Color,
+    foreground: androidx.compose.ui.graphics.Color,
+) {
+    Text(
+        text,
+        Modifier.background(background, RoundedCornerShape(8.dp)).padding(horizontal = 5.dp),
+        color = foreground,
+        fontSize = 11.sp,
+    )
+}
+
+@Composable
+private fun DrawerRow(
+    icon: StudioIcon,
+    tint: androidx.compose.ui.graphics.Color,
+    modifier: Modifier = Modifier,
+    content: @Composable RowScope.() -> Unit,
+) {
+    Row(
+        modifier.fillMaxWidth().height(24.dp).padding(horizontal = GUTTER),
+        horizontalArrangement = Arrangement.spacedBy(GAP),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(icon, tint)
+        content()
     }
 }
 

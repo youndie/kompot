@@ -3,7 +3,9 @@ package io.github.youndie.kompot.studio.tree
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,11 +13,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.github.youndie.kompot.studio.diagnostics.Severity
+import io.github.youndie.kompot.studio.ui.Icon
+import io.github.youndie.kompot.studio.ui.StudioIcon
+import io.github.youndie.kompot.studio.ui.studioColors
 import org.jetbrains.jewel.ui.component.Text
 
 // The tree panel, as a flat list of indented rows this module lays out itself.
@@ -30,11 +36,15 @@ import org.jetbrains.jewel.ui.component.Text
 internal fun ScreenTreePane(
     root: ScreenNode?,
     modifier: Modifier = Modifier,
+    selectedPath: String? = null,
+    // The worst finding on each node, so a row can carry the mark the drawer would otherwise be the
+    // only place to see: a tree that looks clean above a drawer full of errors is lying by omission.
+    marks: Map<String, Severity> = emptyMap(),
     onDrop: (payload: String, targetPath: String) -> Unit = { _, _ -> },
     onSelect: (ScreenNode) -> Unit,
 ) {
     if (root == null) {
-        Text("The body carries no component tree.", modifier.padding(8.dp))
+        Text("The body carries no component tree.", modifier.padding(12.dp), color = studioColors().dim)
         return
     }
 
@@ -44,7 +54,9 @@ internal fun ScreenTreePane(
     val rows = remember(root, open.toMap()) { flatten(root, 0, open) }
 
     LazyColumn(modifier) {
-        items(rows, key = { it.node.path }) { row -> TreeRow(row, open, onDrop, onSelect) }
+        items(rows, key = { it.node.path }) { row ->
+            TreeRow(row, open, row.node.path == selectedPath, marks[row.node.path], onDrop, onSelect)
+        }
     }
 }
 
@@ -65,10 +77,13 @@ private fun flatten(
 private fun TreeRow(
     row: TreeRow,
     open: MutableMap<String, Boolean>,
+    selected: Boolean,
+    mark: Severity?,
     onDrop: (payload: String, targetPath: String) -> Unit,
     onSelect: (ScreenNode) -> Unit,
 ) {
     val node = row.node
+    val colors = studioColors()
     // Every row is both ends of a drag: a node can be picked up and a node can be dropped on. The
     // payload is the PATH rather than the node, so the drop is resolved against the body as it is
     // when the mouse comes up — a tree rebuilt mid-drag would otherwise hand over an index measured
@@ -77,8 +92,6 @@ private fun TreeRow(
     val target = rememberDropTarget(node.path) { payload -> onDrop(payload, node.path) }
     val drag = remember(node.path) { Modifier.dragPayload(Dragged.MOVE + node.path) }
 
-    // The label is what is picked up; the whole row is where things land. Kept apart because that
-    // is the arrangement the move was verified on, not because the other was shown to fail.
     // NOT FOCUSABLE, and the reason is a crash rather than taste. A row that holds keyboard focus and
     // is then removed — which is what moving a node does to its old row — took the whole window down
     // inside Compose's accessibility sync (an NPE in ComposeSceneAccessibility when the focused node
@@ -87,31 +100,67 @@ private fun TreeRow(
     Row(
         Modifier
             .fillMaxWidth()
+            .height(ROW_HEIGHT)
+            .background(if (selected) colors.selection else androidx.compose.ui.graphics.Color.Transparent)
             .focusProperties { canFocus = false }
             .dropZone(target)
             .clickable { onSelect(node) }
-            .padding(start = (row.depth * INDENT).dp, top = 3.dp, bottom = 3.dp, end = 8.dp),
+            .padding(start = 8.dp + INDENT * row.depth, end = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp),
     ) {
         if (node.children.isNotEmpty()) {
             val expanded = open[node.path] == true
-            Text(
-                if (expanded) "▾" else "▸",
-                Modifier.width(16.dp).focusProperties { canFocus = false }.clickable { open[node.path] = !expanded },
+            Icon(
+                if (expanded) StudioIcon.CHEVRON_DOWN else StudioIcon.CHEVRON_RIGHT,
+                colors.dim,
+                Modifier.focusProperties { canFocus = false }.clickable { open[node.path] = !expanded },
             )
         } else {
-            Text("", Modifier.width(16.dp))
+            Spacer(Modifier.width(16.dp))
         }
-        // A marker rather than a colour: a type the profile does not carry is the single most useful
-        // thing this panel can say, and it has to survive a screenshot and a colour-blind reader.
-        // One line per node, however long an id is: a row that wraps is two rows to the eye, and the
-        // eye counts rows to find a node.
-        Text(
-            if (node.known) node.label else "⚠ ${node.label}",
-            drag.background(if (node.known) Color.Transparent else Color(0x22FF0000)),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+
+        // The glyph says what kind of node this is; a type outside the profile gets the one with the
+        // question mark, in the warning colour, because that is the single most useful thing this
+        // panel can say and it has to survive a screenshot and a colour-blind reader.
+        Icon(iconFor(node), if (!node.known) colors.warning else if (selected) colors.text else colors.dim)
+
+        // The label is what is picked up; the whole row is where things land. Kept apart because that
+        // is the arrangement the move was verified on, not because the other was shown to fail.
+        Row(drag.weight(1f), horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp)) {
+            Text(node.wireType, color = colors.text, maxLines = 1)
+            Text(
+                node.label.removePrefix(node.wireType).trimStart(),
+                color = colors.dim,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+
+        when (mark) {
+            Severity.ERROR -> Icon(StudioIcon.ERROR, colors.error)
+            Severity.WARNING -> Icon(StudioIcon.WARNING, colors.warning)
+            null -> {}
+        }
     }
 }
 
-private const val INDENT = 16
+// Which glyph a wire type gets. Names rather than schema kinds, because the schema knows a slot from
+// a property but not a button from a text; the rule falls back to the container glyph for anything
+// with children and the field glyph for the form vocabulary's suffixes.
+internal fun iconFor(node: ScreenNode): StudioIcon =
+    when {
+        !node.known -> StudioIcon.UNKNOWN
+        node.wireType == "column" -> StudioIcon.COLUMN
+        node.wireType == "row" -> StudioIcon.ROW
+        node.wireType == "text" -> StudioIcon.TEXT
+        node.wireType == "button" -> StudioIcon.BUTTON
+        node.wireType == "image" -> StudioIcon.IMAGE
+        node.wireType.endsWith("_list") || node.wireType == "list" -> StudioIcon.LIST
+        node.wireType.endsWith("_input") || node.wireType.endsWith("_field") || node.wireType.endsWith("_group") -> StudioIcon.FIELD
+        node.children.isNotEmpty() -> StudioIcon.SURFACE
+        else -> StudioIcon.SURFACE
+    }
+
+private val ROW_HEIGHT = 24.dp
+private val INDENT = 22.dp

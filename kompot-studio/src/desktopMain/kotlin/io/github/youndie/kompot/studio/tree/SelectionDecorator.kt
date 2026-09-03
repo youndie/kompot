@@ -61,6 +61,6 @@ private class SelectionBorderRenderer<T : KompotComponent>(
 // any brand's, so a frame is never mistaken for something the screen itself drew. `internal` because
 // the test reads it back out of a captured frame — a second copy of the number in the test would
 // assert that the test and the test agree.
-internal const val SELECTION_RGB: Int = 0xFF3D00
+internal const val SELECTION_RGB: Int = 0x3574F0
 internal val SELECTION_COLOUR: Color = Color(0xFF000000 or SELECTION_RGB.toLong())
-private val SELECTION_WIDTH = 2.dp
+private val SELECTION_WIDTH = 1.dp
