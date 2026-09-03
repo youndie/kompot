@@ -71,6 +71,9 @@ kotlin {
                 // of the same composition is the frame the window shows. It carries JUnit and
                 // currentOs as api — test scope, never main.
                 implementation(libs.viddik.testing.core)
+                // The annotation module, so the test can stand up a registry of the real shape at the
+                // name the generator writes — reflection asserted against a class, not a guess.
+                implementation(libs.viddik.annotations)
                 implementation(compose.desktop.currentOs)
                 implementation(libs.kotlinx.coroutines.test)
                 // A real click on a real button: the action log's whole claim is that a tap reaches

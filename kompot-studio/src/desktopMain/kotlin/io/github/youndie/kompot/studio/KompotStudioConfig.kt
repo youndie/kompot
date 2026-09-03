@@ -1,6 +1,7 @@
 package io.github.youndie.kompot.studio
 
 import androidx.compose.runtime.Composable
+import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.KompotRegistry
 import io.github.youndie.kompot.kompotJson
 import io.github.youndie.kompot.spec.KompotSpecResources
@@ -51,6 +52,16 @@ public class KompotStudioConfig(
     // having because a recording is what a screenshot test replays. Null means an HTTP body cannot be
     // saved: there is nowhere to put it, and inventing a directory would scatter fixtures.
     public val recordingsDirectory: Path? = null,
+    // One fully filled instance per wire type — the dictionary a deployment already keeps beside its
+    // components, usually for a schema golden or a coverage check. It is a Storybook nobody had a
+    // window for: pairs of (wire name, component), so a type with no sample is visible AS a gap
+    // rather than silently absent.
+    public val samples: List<Pair<String, KompotComponent>> = emptyList(),
+    // The open words a field of a component accepts: `usage_counter_card.state` to every state that
+    // draws differently. The protocol calls these open on purpose — an unknown word draws the neutral
+    // thing — so nothing can derive this list, and a deployment that keeps one keeps it in Kotlin.
+    // With it, "every state of every component" stops being a picture somebody redraws.
+    public val vocabulary: Map<String, Map<String, Set<String>>> = emptyMap(),
     // Where this build keeps its goldens. viddik's convention is a `snapshots` directory beside the
     // tests that record them, and the studio only ever READS from it plus writes where asked — it does
     // not run viddikVerify and does not decide for a deployment what its expected picture is.

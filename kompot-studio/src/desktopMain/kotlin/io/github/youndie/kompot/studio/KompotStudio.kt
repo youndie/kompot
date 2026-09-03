@@ -54,6 +54,10 @@ import io.github.youndie.kompot.studio.capture.FrameCapture
 import io.github.youndie.kompot.studio.capture.FrameDiff
 import io.github.youndie.kompot.studio.capture.frameCaptureOrNull
 import io.github.youndie.kompot.studio.edit.EditHistory
+import io.github.youndie.kompot.studio.stories.Story
+import io.github.youndie.kompot.studio.stories.ViddikStory
+import io.github.youndie.kompot.studio.stories.storiesFor
+import io.github.youndie.kompot.studio.stories.viddikStories
 import io.github.youndie.kompot.studio.edit.JsonEdits
 import io.github.youndie.kompot.studio.editor.BodyEditor
 import io.github.youndie.kompot.studio.editor.lexJson
@@ -223,6 +227,12 @@ private fun StudioWindowContent(
 
     val history = remember(opened) { EditHistory(body) }
 
+    val stories = remember(config) { storiesFor(config) }
+    val fixtures = remember { viddikStories() }
+    // A fixture is a COMPOSITION rather than a body, so looking at one is not "open this text": it
+    // replaces the frame and leaves the editor alone. Null is the ordinary state — a body is showing.
+    var fixture by remember { mutableStateOf<ViddikStory?>(null) }
+
     // Every structural edit is a whole new text, put through the same field somebody types into: the
     // text stays the single state, and the tree stays one of the ways to change it. Two states to keep
     // in step would already be one too many.
@@ -362,7 +372,17 @@ private fun StudioWindowContent(
                     opened = opened,
                     screen = screen,
                     tree = tree,
+                    stories = stories,
+                    fixtures = fixtures,
                     onScreen = { screen = it },
+                    onStory = { story ->
+                        fixture = null
+                        story.body?.let { text ->
+                            history.record(text)
+                            bodyState.setTextAndPlaceCursorAtEnd(text)
+                        }
+                    },
+                    onFixture = { fixture = it },
                     edits = {
                         EditRow(
                             enabled = selected != null,
@@ -398,25 +418,36 @@ private fun StudioWindowContent(
                                 )
                             }
 
-                            StudioRenderPane(
-                                config = config,
-                                body = rendered,
-                                brand = brand,
-                                dark = dark,
-                                modifier = Modifier.weight(1f).fillMaxSize(),
-                                selectedId = selected?.id,
-                                state = previewState,
-                                device = device,
-                                actionHandler =
-                                    KompotActionHandler { action ->
-                                        actions += LoggedAction(LocalTime.now().format(CLOCK), action)
-                                    },
-                            ) { kind, type ->
-                                val finding = degradationFinding(kind, type)
-                                // Deduplicated because this is called from inside composition, once per
-                                // node per pass: without it the list grows for as long as the window is
-                                // open, and the writes never settle.
-                                if (degradations.none { it.message == finding.message }) degradations += finding
+                            val picked = fixture
+                            if (picked != null) {
+                                // Inside the consumer's frame like anything else: a fixture drawn
+                                // outside the brand would be a picture of a composition nobody ships.
+                                DeviceFrame(device, Modifier.weight(1f).fillMaxSize()) {
+                                    config.frame(brand, dark) { picked.content() }
+                                }
+                            } else {
+                                StudioRenderPane(
+                                    config = config,
+                                    body = rendered,
+                                    brand = brand,
+                                    dark = dark,
+                                    modifier = Modifier.weight(1f).fillMaxSize(),
+                                    selectedId = selected?.id,
+                                    state = previewState,
+                                    device = device,
+                                    actionHandler =
+                                        KompotActionHandler { action ->
+                                            actions += LoggedAction(LocalTime.now().format(CLOCK), action)
+                                        },
+                                ) { kind, type ->
+                                    val finding = degradationFinding(kind, type)
+                                    // Deduplicated because this is called from inside composition,
+                                    // once per node per pass: without it the list grows for as long as
+                                    // the window is open, and the writes never settle.
+                                    if (degradations.none { it.message == finding.message }) {
+                                        degradations += finding
+                                    }
+                                }
                             }
                         }
                     },
@@ -615,13 +646,26 @@ private fun ScreensAndTree(
     opened: List<OpenSource>,
     screen: SelectedScreen?,
     tree: ScreenNode?,
+    stories: List<Story>,
+    fixtures: List<ViddikStory>,
     onScreen: (SelectedScreen) -> Unit,
+    onStory: (Story) -> Unit,
+    onFixture: (ViddikStory) -> Unit,
     edits: @Composable () -> Unit,
     onNode: (ScreenNode) -> Unit,
 ) {
     Column(Modifier.fillMaxSize()) {
-        if (opened.isNotEmpty()) {
-            ScreensPane(opened, screen, onScreen, Modifier.fillMaxWidth().height(SOURCES_HEIGHT))
+        if (opened.isNotEmpty() || stories.isNotEmpty() || fixtures.isNotEmpty()) {
+            ScreensPane(
+                opened = opened,
+                selected = screen,
+                stories = stories,
+                fixtures = fixtures,
+                onSelect = onScreen,
+                onStory = onStory,
+                onFixture = onFixture,
+                modifier = Modifier.fillMaxWidth().height(SOURCES_HEIGHT),
+            )
         }
         ScreenTreePane(tree, Modifier.fillMaxWidth().weight(1f), onNode)
         edits()
@@ -634,7 +678,11 @@ private val SOURCES_HEIGHT = 200.dp
 private fun ScreensPane(
     opened: List<OpenSource>,
     selected: SelectedScreen?,
+    stories: List<Story>,
+    fixtures: List<ViddikStory>,
     onSelect: (SelectedScreen) -> Unit,
+    onStory: (Story) -> Unit,
+    onFixture: (ViddikStory) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -651,6 +699,25 @@ private fun ScreensPane(
                     onClick = { onSelect(SelectedScreen(index, ref)) },
                 )
             }
+        }
+
+        if (stories.isNotEmpty()) Text("Stories")
+        stories.forEach { story ->
+            // A story with no body is listed and does nothing: the gap is the message, and a row that
+            // vanished would answer "which component has nobody drawn" with silence.
+            val label = "${story.group} · ${story.name}" + if (story.body == null) "  (no sample)" else ""
+            Text(
+                text = label,
+                modifier = if (story.body == null) Modifier else Modifier.clickable { onStory(story) },
+            )
+        }
+
+        if (fixtures.isNotEmpty()) Text("Screenshot fixtures")
+        fixtures.forEach { story ->
+            Text(
+                text = "${story.group}_${story.name}",
+                modifier = Modifier.clickable { onFixture(story) },
+            )
         }
     }
 }

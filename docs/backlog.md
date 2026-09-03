@@ -37,14 +37,13 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (11)
+## Открыто (10)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-14](backlog/B-14-konekt-pilot.md) `[?]` | Пилот на konekt: записи и brand-a/b дают кадры голденов | v1-viewer | P0 | S | B-09, B-10, B-12 |
 | [B-03](backlog/B-03-remember-design-system-dark.md) `[ ]` | rememberKompotDesignSystem пробрасывает darkMode | upstream | P1 | XS | — |
 | [B-17](backlog/B-17-goldens.md) `[ ]` | Снять кадр и сравнить с голденом через viddik | v2-editor | P1 | M | B-09 |
-| [B-18](backlog/B-18-stories.md) `[ ]` | Истории: образцы словаря, состояния формы, GeneratedViddikRegistry | v2-editor | P1 | M | B-09 |
 | [B-06](backlog/B-06-kdoc-to-schema.md) `[ ]` | KSP переносит KDoc компонента и свойств в description схемы | upstream | P2 | M | — |
 | [B-07](backlog/B-07-deterministic-dsl-ids.md) `[ ]` | DSL: детерминированный id вместо Uuid.random() при пропуске | upstream | P2 | S | — |
 | [B-19](backlog/B-19-project-vocabulary-lint.md) `[ ]` | Слой словаря проекта: открытые слова и токены кита | v2-editor | P2 | S/M | B-12 |
@@ -53,7 +52,7 @@
 | [B-22](backlog/B-22-palette-dnd.md) `[ ]` | Палитра типов и drag-and-drop в дереве | v3-builder | P3 | L | B-21 |
 | [B-23](backlog/B-23-dsl-export.md) `[ ]` | Экспорт DSL-черновика из тела | v3-builder | P3 | M | B-07 |
 
-## Сделано (12)
+## Сделано (13)
 
 **Швы в toolkit'е**
 
@@ -78,6 +77,7 @@
 
 - [B-15](backlog/B-15-text-editor.md) — Редактор текста с подсветкой JSON и синхронизацией каретка ↔ узел
 - [B-16](backlog/B-16-tree-edits.md) — Правки в дереве: переставить, дублировать, удалить, сохранить
+- [B-18](backlog/B-18-stories.md) — Истории: образцы словаря, состояния формы, GeneratedViddikRegistry
 
 <!-- END INDEX -->
 
