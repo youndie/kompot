@@ -563,11 +563,12 @@ private fun StudioWindowContent(
                                 val node = selected
                                 if (node != null) {
                                     Divider(Orientation.Horizontal)
-                                    SectionHeader("Properties", detail = node.wireType + (node.id?.let { " · $it" } ?: ""))
                                     InspectorPane(
                                         config = config,
                                         node = node,
                                         body = body,
+                                        brand = brand,
+                                        dark = dark,
                                         modifier = Modifier.fillMaxWidth().height(INSPECTOR_HEIGHT),
                                     ) { edited ->
                                         history.record(edited)
@@ -773,7 +774,7 @@ private fun nextNodeId(
 // window somebody resized, a width does not.
 private const val SIDEBAR_SHARE = 0.24f
 private const val EDITOR_SHARE = 0.52f
-private val INSPECTOR_HEIGHT = 220.dp
+private val INSPECTOR_HEIGHT = 300.dp
 private val SCREENS_MAX_HEIGHT = 200.dp
 private val PALETTE_MAX_HEIGHT = 200.dp
 private val DRAWER_MAX_HEIGHT = 160.dp
