@@ -660,6 +660,19 @@ public class KompotRegistry(
             )
     }
 
+    // The same decorator, applied to a registry that already exists.
+    //
+    // The one above can only be used by whoever ASSEMBLES the registry, and a tool that is handed one
+    // — a preview, a screenshot harness, a studio — is by definition not that party: a deployment
+    // gives it `konektRegistry()`, finished. Without this, wrapping every renderer for the duration of
+    // one window means asking the deployment to hand over its renderer map instead of its registry,
+    // which makes every consumer's integration a line longer to serve a tool they may never run.
+    //
+    // A member and not an extension over an exposed map: the map stays private, so the only thing this
+    // adds is the ability to wrap it, not the ability to read it.
+    public fun decorated(decorator: (RenderersMap) -> RenderersMap): KompotRegistry =
+        KompotRegistry(decorator(renderers))
+
     @Composable
     public fun <T : KompotComponent> RenderNode(
         component: T,

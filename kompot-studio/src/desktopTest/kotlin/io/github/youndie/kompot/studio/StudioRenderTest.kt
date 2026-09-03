@@ -10,11 +10,13 @@ import androidx.compose.ui.graphics.Color
 import io.github.youndie.kompot.LocalKompotDesignSystem
 import io.github.youndie.kompot.ds.material.Material3DesignSystem
 import io.github.youndie.kompot.theme.KompotPalette
+import io.github.youndie.kompot.studio.tree.SELECTION_RGB
 import io.github.youndie.kompot.theme.KompotTheme
 import ru.workinprogress.viddik.core.captureComposable
 import java.awt.image.BufferedImage
 import kotlin.test.Test
 import kotlin.test.assertContains
+import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertTrue
 import kotlin.test.fail
@@ -84,6 +86,45 @@ class StudioRenderTest {
     }
 
     @Test
+    fun `picking a node frames it, and picking none frames nothing`() {
+        val config = KompotStudioConfig(registry = toolkitRegistry)
+
+        val framed = capture(config, brand = null, selectedId = "cta")
+        val plain = capture(config, brand = null)
+
+        assertTrue(fill(framed, SELECTION_RGB) > 0, "the selected node was not framed")
+        // The control that stops this from being "some orange appeared": with nothing selected no
+        // renderer is wrapped at all, so the same body must contain none of that colour. A preview
+        // that always went through the decorator would be a preview of a different composition than
+        // the one a golden photographs.
+        assertEquals(0, fill(plain, SELECTION_RGB), "an unselected screen drew the selection frame")
+    }
+
+    @Test
+    fun `a type the profile does not carry is drawn as a placeholder and reported`() {
+        val config = KompotStudioConfig(registry = toolkitRegistry)
+        val degradations = mutableListOf<String>()
+
+        val body =
+            """
+            {"type":"column","id":"root","children":[
+              {"type":"esim_transfer_widget","id":"widget","label":"Transfer"},
+              {"type":"text","id":"after","text":"still here"}
+            ]}
+            """.trimIndent()
+
+        captureComposable(width = 420, height = 420, compositionLocals = emptyList()) {
+            StudioRenderPane(config = config, body = body, brand = null, dark = false) { kind, type ->
+                degradations += "$kind:$type"
+            }
+        }
+
+        // Drawn rather than thrown: the whole point of the collecting onDegraded is that a screen with
+        // one unfamiliar node still renders, and says so.
+        assertTrue(degradations.isNotEmpty(), "an unknown type was rendered without a word")
+    }
+
+    @Test
     fun `a paginated_list body fails because the preview provides no page loader`() {
         val config = KompotStudioConfig(registry = toolkitRegistry)
 
@@ -106,9 +147,16 @@ class StudioRenderTest {
         brand: String?,
         dark: Boolean = false,
         body: String = SAMPLE_BODY,
+        selectedId: String? = null,
     ): BufferedImage =
         captureComposable(width = 420, height = 420, compositionLocals = emptyList()) {
-            StudioRenderPane(config = config, body = body, brand = brand, dark = dark) { kind, type ->
+            StudioRenderPane(
+                config = config,
+                body = body,
+                brand = brand,
+                dark = dark,
+                selectedId = selectedId,
+            ) { kind, type ->
                 fail("the standard renderers degraded on the sample body: $kind $type")
             }
         }

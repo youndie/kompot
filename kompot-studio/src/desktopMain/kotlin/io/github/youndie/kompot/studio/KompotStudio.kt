@@ -38,9 +38,14 @@ import org.jetbrains.jewel.intui.standalone.theme.darkThemeDefinition
 import org.jetbrains.jewel.intui.standalone.theme.lightThemeDefinition
 import org.jetbrains.jewel.intui.window.decoratedWindow
 import org.jetbrains.jewel.ui.ComponentStyling
+import io.github.youndie.kompot.spec.childSlots
 import io.github.youndie.kompot.studio.source.ScreenRef
 import io.github.youndie.kompot.studio.source.ScreenSourceSession
 import io.github.youndie.kompot.studio.source.open
+import io.github.youndie.kompot.studio.tree.ScreenNode
+import io.github.youndie.kompot.studio.tree.ScreenTreePane
+import io.github.youndie.kompot.studio.tree.screenTree
+import kotlinx.serialization.json.Json
 import org.jetbrains.jewel.ui.component.CheckboxRow
 import org.jetbrains.jewel.ui.component.HorizontalSplitLayout
 import org.jetbrains.jewel.ui.component.RadioButtonRow
@@ -109,16 +114,25 @@ private fun StudioWindowContent(
     onDarkChange: (Boolean) -> Unit,
 ) {
     val opened = rememberOpenSources(config)
-    var selected by remember(opened) { mutableStateOf<SelectedScreen?>(null) }
+    var screen by remember(opened) { mutableStateOf<SelectedScreen?>(null) }
 
     // The status line, and it is where the sources pay for themselves: "polled 42, changed 1" is what
     // a working ETag looks like, and "polled 42, changed 42" is a server that ignores If-None-Match.
     // Both draw the same screen, so nothing else in this window can tell them apart.
-    val status = SelectedBody(opened, selected, bodyState)
+    val status = SelectedBody(opened, screen, bodyState)
 
     val body = bodyState.text.toString()
     val degradations = remember(body, brand, dark) { mutableStateListOf<String>() }
     val findings = remember(config, body) { diagnose(config, body) }
+
+    val slots = remember(config) { childSlots(config.schemas) }
+    // Null when the body does not parse, which is most keystrokes: the tree then keeps showing
+    // nothing rather than flickering between half-typed shapes, and the syntax finding below says why.
+    val tree =
+        remember(body, slots) {
+            runCatching { screenTree(Json.parseToJsonElement(body), slots) }.getOrNull()
+        }
+    var selected by remember(tree) { mutableStateOf<ScreenNode?>(null) }
 
     Column(Modifier.fillMaxSize()) {
         Row(
@@ -141,7 +155,7 @@ private fun StudioWindowContent(
 
         HorizontalSplitLayout(
             first = {
-                ScreensPane(opened, selected) { selected = it }
+                ScreensAndTree(opened, screen, tree, { screen = it }) { selected = it }
             },
             second = {
                 HorizontalSplitLayout(
@@ -153,6 +167,7 @@ private fun StudioWindowContent(
                             brand = brand,
                             dark = dark,
                             modifier = Modifier.fillMaxSize(),
+                            selectedId = selected?.id,
                         ) { kind, type ->
                             val line = "$kind: $type"
                             if (line !in degradations) degradations += line
@@ -164,7 +179,7 @@ private fun StudioWindowContent(
                 )
             },
             modifier = Modifier.fillMaxWidth().weight(1f),
-            firstPaneMinWidth = 180.dp,
+            firstPaneMinWidth = 200.dp,
             secondPaneMinWidth = 560.dp,
         )
 
@@ -218,21 +233,38 @@ private fun SelectedBody(
     return state.error?.let { "$counts — $it" } ?: counts
 }
 
+// The left column holds both lists, and they are different questions: which BODY to look at, and
+// which NODE of it. Stacked rather than tabbed, because picking a screen and then a node inside it is
+// one move, and a tab would hide the first half the moment the second is used.
+@Composable
+private fun ScreensAndTree(
+    opened: List<OpenSource>,
+    screen: SelectedScreen?,
+    tree: ScreenNode?,
+    onScreen: (SelectedScreen) -> Unit,
+    onNode: (ScreenNode) -> Unit,
+) {
+    Column(Modifier.fillMaxSize()) {
+        if (opened.isNotEmpty()) {
+            ScreensPane(opened, screen, onScreen, Modifier.fillMaxWidth().height(SOURCES_HEIGHT))
+        }
+        ScreenTreePane(tree, Modifier.fillMaxWidth().weight(1f), onNode)
+    }
+}
+
+private val SOURCES_HEIGHT = 200.dp
+
 @Composable
 private fun ScreensPane(
     opened: List<OpenSource>,
     selected: SelectedScreen?,
     onSelect: (SelectedScreen) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        Modifier.fillMaxSize().padding(8.dp).verticalScroll(rememberScrollState()),
+        modifier.padding(8.dp).verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
-        if (opened.isEmpty()) {
-            Text("No sources configured.")
-            return@Column
-        }
-
         opened.forEachIndexed { index, source ->
             val screens by source.session.screens.collectAsState()
             Text(source.name)
