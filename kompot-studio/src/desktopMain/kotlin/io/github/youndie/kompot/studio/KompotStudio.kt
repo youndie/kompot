@@ -50,20 +50,31 @@ import io.github.youndie.kompot.studio.diagnostics.diagnose
 import io.github.youndie.kompot.studio.source.ScreenRef
 import io.github.youndie.kompot.studio.source.ScreenSourceSession
 import io.github.youndie.kompot.studio.source.open
+import io.github.youndie.kompot.studio.edit.EditHistory
+import io.github.youndie.kompot.studio.edit.JsonEdits
 import io.github.youndie.kompot.studio.editor.BodyEditor
 import io.github.youndie.kompot.studio.editor.lexJson
 import io.github.youndie.kompot.studio.tree.ScreenNode
 import io.github.youndie.kompot.studio.tree.ScreenTreePane
 import io.github.youndie.kompot.studio.tree.screenTree
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isMetaPressed
+import androidx.compose.ui.input.key.isShiftPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.TextRange
 import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
+import java.nio.file.Files
+import java.nio.file.Path
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import org.jetbrains.jewel.ui.component.CheckboxRow
 import org.jetbrains.jewel.ui.component.HorizontalSplitLayout
+import org.jetbrains.jewel.ui.component.OutlinedButton
 import org.jetbrains.jewel.ui.component.RadioButtonRow
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.window.DecoratedWindow
@@ -103,16 +114,36 @@ public fun kompotStudio(
             // The condition is Jewel's own call and not a guess at `java.vendor`, which on a
             // JetBrains Runtime reads "Oracle Corporation" — the guess sent the studio down this path
             // on the very runtime the other one exists for.
+            // A holder rather than a state: the handler is replaced on every composition, and making
+            // that a state would recompose the window to install the handler the recomposition
+            // produced.
+            val shortcuts = remember { arrayOfNulls<(androidx.compose.ui.input.key.KeyEvent) -> Boolean>(1) }
+            val onKey: (androidx.compose.ui.input.key.KeyEvent) -> Boolean = { shortcuts[0]?.invoke(it) == true }
+
             if (JBR.isAvailable()) {
-                DecoratedWindow(onCloseRequest = ::exitApplication, title = title, state = windowState) {
+                DecoratedWindow(
+                    onCloseRequest = ::exitApplication,
+                    title = title,
+                    state = windowState,
+                    onKeyEvent = onKey,
+                ) {
                     ReportWindow(window, decorated = true)
                     TitleBar(Modifier.newFullscreenControls()) { Text(title) }
-                    StudioWindowContent(config, bodyState, brand, dark, { brand = it }) { dark = it }
+                    StudioWindowContent(config, bodyState, brand, dark, { brand = it }, { dark = it }) {
+                        shortcuts[0] = it
+                    }
                 }
             } else {
-                Window(onCloseRequest = ::exitApplication, title = title, state = windowState) {
+                Window(
+                    onCloseRequest = ::exitApplication,
+                    title = title,
+                    state = windowState,
+                    onKeyEvent = onKey,
+                ) {
                     ReportWindow(window, decorated = false)
-                    StudioWindowContent(config, bodyState, brand, dark, { brand = it }) { dark = it }
+                    StudioWindowContent(config, bodyState, brand, dark, { brand = it }, { dark = it }) {
+                        shortcuts[0] = it
+                    }
                 }
             }
         }
@@ -127,6 +158,9 @@ private fun StudioWindowContent(
     dark: Boolean,
     onBrandChange: (String?) -> Unit,
     onDarkChange: (Boolean) -> Unit,
+    // The window owns the key events and the content owns the state they act on, so the content hands
+    // a handler back up rather than the window reaching down for a history it does not have.
+    onShortcuts: ((androidx.compose.ui.input.key.KeyEvent) -> Boolean) -> Unit = {},
 ) {
     val opened = rememberOpenSources(config)
     var screen by remember(opened) { mutableStateOf<SelectedScreen?>(null) }
@@ -180,6 +214,44 @@ private fun StudioWindowContent(
 
     val previewState = remember(formState, parsed) { previewState(formState, parsed) }
 
+    val history = remember(opened) { EditHistory(body) }
+
+    // Every structural edit is a whole new text, put through the same field somebody types into: the
+    // text stays the single state, and the tree stays one of the ways to change it. Two states to keep
+    // in step would already be one too many.
+    fun apply(edited: String?) {
+        if (edited == null) return
+        history.record(edited)
+        bodyState.setTextAndPlaceCursorAtEnd(edited)
+    }
+
+    fun undoOrRedo(text: String?) {
+        if (text != null) bodyState.setTextAndPlaceCursorAtEnd(text)
+    }
+
+    val saveTo: Path? = saveTarget(config, opened, screen)
+
+    fun save() {
+        val target = saveTo ?: return
+        target.parent?.let { Files.createDirectories(it) }
+        Files.writeString(target, body)
+    }
+
+    // Meta and not Ctrl: this window only opens on a desktop JVM, and every one of those on this
+    // toolkit's machines is a Mac. A second binding is a B-20 question, once there is a gradle task
+    // somebody runs on Linux.
+    onShortcuts { event ->
+        if (event.type != KeyEventType.KeyDown || !event.isMetaPressed) {
+            false
+        } else {
+            when (event.key) {
+                Key.S -> { save(); true }
+                Key.Z -> { undoOrRedo(if (event.isShiftPressed) history.redo() else history.undo()); true }
+                else -> false
+            }
+        }
+    }
+
     Column(Modifier.fillMaxSize()) {
         Row(
             Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
@@ -217,7 +289,23 @@ private fun StudioWindowContent(
 
         HorizontalSplitLayout(
             first = {
-                ScreensAndTree(opened, screen, tree, { screen = it }) { selected = it }
+                ScreensAndTree(
+                    opened = opened,
+                    screen = screen,
+                    tree = tree,
+                    onScreen = { screen = it },
+                    edits = {
+                        EditRow(
+                            enabled = selected != null,
+                            canSave = saveTo != null,
+                            onMoveUp = { apply(JsonEdits.moveUp(body, selected!!.path)) },
+                            onMoveDown = { apply(JsonEdits.moveDown(body, selected!!.path)) },
+                            onDuplicate = { apply(JsonEdits.duplicate(body, selected!!.path)) },
+                            onDelete = { apply(JsonEdits.delete(body, selected!!.path)) },
+                            onSave = { save() },
+                        )
+                    },
+                ) { selected = it }
             },
             second = {
                 HorizontalSplitLayout(
@@ -388,6 +476,50 @@ private fun DiagnosticsPane(
     }
 }
 
+// The four structural edits and the save, next to the tree they act on. Buttons rather than a context
+// menu: this is a tool for somebody who does not yet know what it can do.
+@Composable
+private fun EditRow(
+    enabled: Boolean,
+    canSave: Boolean,
+    onMoveUp: () -> Unit,
+    onMoveDown: () -> Unit,
+    onDuplicate: () -> Unit,
+    onDelete: () -> Unit,
+    onSave: () -> Unit,
+) {
+    Row(
+        Modifier.fillMaxWidth().padding(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        // Disabled rather than hidden when nothing is selected: a row of controls that appears and
+        // disappears is a row nobody learns.
+        OutlinedButton(onClick = onMoveUp, enabled = enabled) { Text("↑") }
+        OutlinedButton(onClick = onMoveDown, enabled = enabled) { Text("↓") }
+        OutlinedButton(onClick = onDuplicate, enabled = enabled) { Text("Copy") }
+        OutlinedButton(onClick = onDelete, enabled = enabled) { Text("Delete") }
+        OutlinedButton(onClick = onSave, enabled = canSave) { Text("Save") }
+    }
+}
+
+// Where a save goes, and it is the source that decides. A file and a directory are edited in place —
+// the loop this exists for is "a test rewrote the fixture, fix it, save it back". An HTTP body has no
+// file of its own, so it becomes a RECORDING, which is the step a deployment does by hand today.
+private fun saveTarget(
+    config: KompotStudioConfig,
+    opened: List<OpenSource>,
+    screen: SelectedScreen?,
+): Path? {
+    val selected = screen ?: return null
+    val source = opened.getOrNull(selected.source) ?: return null
+
+    return if (source.session.screens.value.any { it.deeplink != null }) {
+        config.recordingsDirectory?.resolve(selected.ref.title.trim('/').ifEmpty { "screen" } + ".json")
+    } else {
+        Path.of(selected.ref.id)
+    }
+}
+
 // The left column holds both lists, and they are different questions: which BODY to look at, and
 // which NODE of it. Stacked rather than tabbed, because picking a screen and then a node inside it is
 // one move, and a tab would hide the first half the moment the second is used.
@@ -397,6 +529,7 @@ private fun ScreensAndTree(
     screen: SelectedScreen?,
     tree: ScreenNode?,
     onScreen: (SelectedScreen) -> Unit,
+    edits: @Composable () -> Unit,
     onNode: (ScreenNode) -> Unit,
 ) {
     Column(Modifier.fillMaxSize()) {
@@ -404,6 +537,7 @@ private fun ScreensAndTree(
             ScreensPane(opened, screen, onScreen, Modifier.fillMaxWidth().height(SOURCES_HEIGHT))
         }
         ScreenTreePane(tree, Modifier.fillMaxWidth().weight(1f), onNode)
+        edits()
     }
 }
 

@@ -38,6 +38,13 @@ internal data class LexedJson(
     // The path notation the tree and the findings use, to the range worth putting a caret on: the
     // node's own `"type"` value where it has one, and its opening brace where it does not.
     val nodes: Map<String, IntRange>,
+    // The WHOLE text of the value at each path, first brace to last. This is what makes a structural
+    // edit surgical: moving a node is moving these characters and nothing else, so a recording keeps
+    // the formatting it was committed with instead of arriving as a whole-file diff.
+    val spans: Map<String, IntRange> = emptyMap(),
+    // The node's own `"id"` value, quotes included — the one thing a duplicate has to change, and the
+    // one place a naive search-and-replace would find a child's id instead.
+    val ids: Map<String, IntRange> = emptyMap(),
 )
 
 // Never throws and never gives up early on purpose. A body under the cursor is malformed most of the
@@ -53,10 +60,12 @@ private class JsonScanner(
     private var at = 0
     private val tokens = mutableListOf<JsonToken>()
     private val nodes = mutableMapOf<String, IntRange>()
+    private val spans = mutableMapOf<String, IntRange>()
+    private val ids = mutableMapOf<String, IntRange>()
 
     fun scan(): LexedJson {
         value("$")
-        return LexedJson(tokens, nodes)
+        return LexedJson(tokens, nodes, spans, ids)
     }
 
     private fun skipWhitespace() {
@@ -120,6 +129,10 @@ private class JsonScanner(
                 typeValue = range
             } else {
                 value("$path.$name")
+                // The node's OWN id, recorded here where the property is known to belong to this
+                // object. A regex over the node's text would find the first id in it, which on a
+                // container is a child's.
+                if (name == ID) spans["$path.$name"]?.let { ids[path] = it }
             }
         }
 
@@ -154,6 +167,7 @@ private class JsonScanner(
     private fun value(path: String) {
         skipWhitespace()
         if (at >= text.length) return
+        val start = at
 
         when {
             text[at] == '{' -> readObject(path)
@@ -177,7 +191,10 @@ private class JsonScanner(
 
             else -> Unit
         }
+
+        if (at > start) spans[path] = start until at
     }
 }
 
 private const val DISCRIMINATOR = "type"
+private const val ID = "id"

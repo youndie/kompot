@@ -5,6 +5,7 @@ import io.github.youndie.kompot.KompotRegistry
 import io.github.youndie.kompot.kompotJson
 import io.github.youndie.kompot.spec.KompotSpecResources
 import io.github.youndie.kompot.standard.KompotPageLoader
+import java.nio.file.Path
 import io.github.youndie.kompot.studio.source.ScreenSource
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -45,6 +46,11 @@ public class KompotStudioConfig(
     // so loudly rather than showing a list that ends where it does not. A deployment that wants to
     // scroll one in the window passes its own, or a stub answering an empty page.
     public val pageLoader: KompotPageLoader? = null,
+    // Where a body fetched from a server is written down when somebody saves it. This is the step a
+    // deployment does by hand today — copy the response into `/recorded/*.json` — and it is worth
+    // having because a recording is what a screenshot test replays. Null means an HTTP body cannot be
+    // saved: there is nowhere to put it, and inventing a directory would scatter fixtures.
+    public val recordingsDirectory: Path? = null,
     // Where a form's rules and conditions keep the fieldId they point at, by the wire type that
     // carries them: "required_if" to "fieldId", and whatever a deployment adds beside them. The
     // toolkit cannot know — a rule type is a deployment's to invent — so an empty map means the
