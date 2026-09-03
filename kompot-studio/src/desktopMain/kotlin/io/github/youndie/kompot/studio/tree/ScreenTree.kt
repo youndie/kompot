@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.jetbrains.jewel.ui.component.Text
@@ -77,9 +78,15 @@ private fun TreeRow(
 
     // The label is what is picked up; the whole row is where things land. Kept apart because that
     // is the arrangement the move was verified on, not because the other was shown to fail.
+    // NOT FOCUSABLE, and the reason is a crash rather than taste. A row that holds keyboard focus and
+    // is then removed — which is what moving a node does to its old row — took the whole window down
+    // inside Compose's accessibility sync (an NPE in ComposeSceneAccessibility when the focused node
+    // vanished). Accessibility is switched on whenever an assistive client is attached, so this is
+    // the ordinary case for anybody driving the window with one. Rows are clicked, never tabbed to.
     Row(
         Modifier
             .fillMaxWidth()
+            .focusProperties { canFocus = false }
             .dropZone(target)
             .clickable { onSelect(node) }
             .padding(start = (row.depth * INDENT).dp, top = 3.dp, bottom = 3.dp, end = 8.dp),
@@ -88,7 +95,7 @@ private fun TreeRow(
             val expanded = open[node.path] == true
             Text(
                 if (expanded) "▾" else "▸",
-                Modifier.width(16.dp).clickable { open[node.path] = !expanded },
+                Modifier.width(16.dp).focusProperties { canFocus = false }.clickable { open[node.path] = !expanded },
             )
         } else {
             Text("", Modifier.width(16.dp))
