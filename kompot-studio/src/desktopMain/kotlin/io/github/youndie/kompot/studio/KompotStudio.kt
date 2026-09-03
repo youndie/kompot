@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextFieldState
@@ -349,7 +350,9 @@ private fun StudioWindowContent(
         val parsed = runCatching { Json.parseToJsonElement(body) }.getOrNull() ?: return
         target.parent?.let { Files.createDirectories(it) }
         Files.writeString(target, exportDsl(config, parsed, functionName = target.fileName.toString().removeSuffix(".kt")))
-        exported = "drafted $target"
+        // The name and not the path: the path is five wrapped lines in a row that has one, and the
+        // directory is the one the body itself came from.
+        exported = "drafted ${target.fileName}"
     }
 
     // Meta and not Ctrl: this window only opens on a desktop JVM, and every one of those on this
@@ -585,7 +588,10 @@ private fun StudioWindowContent(
             }
         }
 
-        DiagnosticsPane(findings + degradations, Modifier.fillMaxWidth().height(180.dp)) { finding ->
+        // As tall as its findings and no taller: a fixed pane under a fixed inspector left the tree
+        // above them with no height at all the moment a node was selected, which is the moment the
+        // tree is needed. Bounded above so a body with forty findings scrolls rather than pushes.
+        DiagnosticsPane(findings + degradations, Modifier.fillMaxWidth().heightIn(max = DIAGNOSTICS_MAX_HEIGHT)) { finding ->
             // Clicking a finding selects the node it is about — the two carry the same notation, so
             // the join is an equality rather than a parse. A finding with no node (a syntax error, a
             // degradation that names only a type) selects nothing rather than guessing.
@@ -669,6 +675,7 @@ private fun routeFor(
 
 private val ACTION_LOG_HEIGHT = 120.dp
 private val INSPECTOR_HEIGHT = 200.dp
+private val DIAGNOSTICS_MAX_HEIGHT = 140.dp
 
 // The canvas size design work is done at, used when nothing narrower was chosen: a golden has to have
 // SOME size, and taking the pane's would make the picture depend on how wide somebody dragged a
@@ -800,8 +807,8 @@ private fun ScreensAndTree(
     }
 }
 
-private val SOURCES_HEIGHT = 200.dp
-private val PALETTE_HEIGHT = 180.dp
+private val SOURCES_HEIGHT = 150.dp
+private val PALETTE_HEIGHT = 140.dp
 
 // A drop that has not happened yet because it would overwrite something.
 private data class PendingDrop(

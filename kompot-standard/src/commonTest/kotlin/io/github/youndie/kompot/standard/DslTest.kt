@@ -31,7 +31,7 @@ class DslTest {
     }
 
     @Test
-    fun `a node nobody named is named by where it sits, so two builds agree`() {
+    fun `a node nobody named is named by where it sits so two builds agree`() {
         // This test used to assert the OPPOSITE — that two builds produce different ids — and the
         // behaviour it pinned is what B-07 removed. A random id met the one rule an id has (unique in
         // the tree) and quietly failed three things: a diff by id read a one-word edit as every node
@@ -45,7 +45,7 @@ class DslTest {
     }
 
     @Test
-    fun `the path counts position, so siblings and depth are told apart`() {
+    fun `the path counts position so siblings and depth are told apart`() {
         val screen =
             kompotScreen {
                 text("first")

@@ -332,7 +332,21 @@ public class KompotSchemaGenerator(
             when (kind) {
                 PrimitiveKind.BOOLEAN -> put("type", "boolean")
                 PrimitiveKind.BYTE, PrimitiveKind.SHORT, PrimitiveKind.INT, PrimitiveKind.LONG -> put("type", "integer")
-                PrimitiveKind.FLOAT, PrimitiveKind.DOUBLE -> put("type", "number")
+                // `format` beside `type`, because "number" alone loses the one thing a Kotlin reader
+                // of this schema needs: whether the property is a Float or a Double. A validator ignores
+                // an unfamiliar format by the JSON Schema rules, so nothing that checks bodies changes;
+                // what changes is that a draft printed from a body can write `0.5f` where `0.5` would
+                // not compile.
+                PrimitiveKind.FLOAT -> {
+                    put("type", "number")
+                    put("format", "float")
+                }
+
+                PrimitiveKind.DOUBLE -> {
+                    put("type", "number")
+                    put("format", "double")
+                }
+
                 PrimitiveKind.CHAR -> {
                     put("type", "string")
                     put("minLength", 1)

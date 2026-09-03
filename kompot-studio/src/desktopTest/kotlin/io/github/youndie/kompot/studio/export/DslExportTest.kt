@@ -153,6 +153,74 @@ class DslExportTest {
     }
 
     @Test
+    fun `a file name becomes a function name Kotlin accepts`() {
+        // Recordings are called `home-screen`; `fun home-screen()` is a parse error, and the draft is
+        // written next to the recording under the recording's name.
+        assertEquals("homeScreen", identifier("home-screen"))
+        assertEquals("esimActivateScreen", identifier("esim-activate-screen"))
+        assertEquals("screen2fa", identifier("2fa"))
+        assertEquals("screen", identifier("---"))
+        assertTrue(export("""{ "type": "column", "id": "root", "children": [] }""", "home-screen").contains("fun homeScreen()"))
+    }
+
+    @Test
+    fun `a consumer's node inside a block is added, not merely built`() {
+        val drafted =
+            export(
+                """
+                { "type": "column", "id": "root", "children": [
+                  { "type": "usage_counter_card", "id": "usage", "title": "Requests" }
+                ] }
+                """.trimIndent(),
+            )
+
+        // A bare constructor inside `kompotScreen { }` is an expression whose value is dropped: the
+        // draft compiles and the node is not on the screen. Seen on a real export, where every one of
+        // a deployment's own components was silently missing from the result.
+        assertTrue(drafted.contains("addComponent(UsageCounterCardComponent("), drafted)
+        // The marker survives outside the call, where a reader sees it and the compiler does not.
+        assertTrue(drafted.contains(") /* TODO: check this name */"), drafted)
+    }
+
+    @Test
+    fun `the marker is a block comment, so it cannot swallow the rest of a list`() {
+        val drafted =
+            export(
+                """
+                { "type": "column", "id": "root", "children": [
+                  { "type": "paginated_list", "id": "list", "initialItems": [
+                    { "type": "usage_counter_card", "id": "a", "title": "A" },
+                    { "type": "usage_counter_card", "id": "b", "title": "B" }
+                  ] }
+                ] }
+                """.trimIndent(),
+            )
+
+        // Two guessed names in one `listOf(...)`. A line comment after the first would comment out
+        // `, UsageCounterCardComponent(...))` — the second item and the closing parenthesis with it.
+        assertFalse(drafted.contains("// TODO"), drafted)
+        assertTrue(drafted.contains("/* TODO: check this name */, UsageCounterCardComponent(id = \"b\""), drafted)
+    }
+
+    @Test
+    fun `a number the schema calls a float is printed as one`() {
+        val drafted =
+            export(
+                """
+                { "type": "column", "id": "root", "children": [
+                  { "type": "text", "id": "t", "text": "hi",
+                    "modifiers": [ { "type": "weight", "value": 1.0 }, { "type": "background", "color": "surface", "role": "card" } ] }
+                ] }
+                """.trimIndent(),
+            )
+
+        // `Weight.value` is a Float, and `Weight(value = 1.0)` does not compile. The schema now says
+        // `format: float` beside `number` for exactly this reason; the DSL builder path writes `1.0f`
+        // by itself, so the constructor path is the one this exercises — forced by the role.
+        assertTrue(drafted.contains("KompotModifierNode.Weight(value = 1.0f)"), drafted)
+    }
+
+    @Test
     fun `a body that carries no screen says so instead of printing an empty file`() {
         assertTrue(export("""{ "nothing": true }""").startsWith("// the body carries no screen"))
     }

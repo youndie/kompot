@@ -243,7 +243,8 @@
           "const": "weight"
         },
         "value": {
-          "type": "number"
+          "type": "number",
+          "format": "float"
         }
       },
       "required": [

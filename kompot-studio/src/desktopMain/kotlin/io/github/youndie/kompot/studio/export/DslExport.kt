@@ -37,7 +37,7 @@ internal fun exportDsl(
         if (writer.imports().isNotEmpty()) appendLine()
         appendLine("// Drafted from a JSON body by kompot-studio. Names marked TODO are guesses: the")
         appendLine("// schema carries wire types, and what a class is called in Kotlin is not on the wire.")
-        appendLine("public fun $functionName(): KompotComponent =")
+        appendLine("public fun ${identifier(functionName)}(): KompotComponent =")
         append(call.prependIndent("    "))
         appendLine()
     }
@@ -115,6 +115,24 @@ private class DslWriter(
         }
     }
 
+    // What a child looks like INSIDE a builder block. A DSL call adds itself; a constructor written
+    // bare is an expression whose value falls on the floor — the draft would compile and the node
+    // would never be on the screen, which is the worst kind of wrong for a file called a draft.
+    private fun inBlock(
+        node: JsonObject,
+        path: String,
+    ): String {
+        val printed = component(node, path)
+        if (isDslCall(printed)) return printed
+        // Only a TRAILING marker moves outside the call. Cutting at the first marker would cut inside
+        // a nested list — the second guessed item and every closing parenthesis after it.
+        val marked = printed.endsWith(MARKER)
+        val call = if (marked) printed.removeSuffix(MARKER).trimEnd() else printed
+        return "addComponent($call)" + if (marked) " $MARKER" else ""
+    }
+
+    private fun isDslCall(printed: String): Boolean = DSL_CALLS.any { printed.startsWith("$it(") || printed.startsWith("$it {") }
+
     private fun containerBody(
         node: JsonObject,
         path: String,
@@ -123,7 +141,7 @@ private class DslWriter(
         (node["spacing"] as? JsonPrimitive)?.content?.toIntOrNull()?.takeIf { it != 0 }?.let { lines += "spacing($it)" }
         modifierBlock(node["modifiers"] as? JsonArray)?.let { lines += "modifier $it" }
         (node["children"] as? JsonArray).orEmpty().forEachIndexed { index, child ->
-            (child as? JsonObject)?.let { lines += component(it, "$path/$index") }
+            (child as? JsonObject)?.let { lines += inBlock(it, "$path/$index") }
         }
         return lines.joinToString("\n")
     }
@@ -142,20 +160,23 @@ private class DslWriter(
     private fun constructor(node: JsonObject): String {
         val type = wireType(node) ?: return "TODO(\"a node with no type\")"
         val name = className(type, "Component")
+        val floats = floatProperties(type)
         val arguments =
             node.entries
                 .filter { it.key != KompotProtocol.DISCRIMINATOR }
-                .map { (key, held) -> "$key = ${value(key, held)}" }
+                .map { (key, held) -> "$key = ${value(key, held, floats)}" }
 
-        return call(name, arguments) + if (known(type)) "" else " // TODO: check this name"
+        return call(name, arguments) + if (known(type)) "" else " $MARKER"
     }
 
     private fun value(
         key: String,
         element: JsonElement,
+        floats: Set<String> = emptySet(),
     ): String =
         when {
             element is JsonNull -> "null"
+            key in floats && element is JsonPrimitive && !element.isString -> "${element.content}f"
             key == "modifiers" && element is JsonArray -> "listOf(" + element.joinToString(", ") { modifierNode(it) } + ")"
             key == "action" || key == "loadMoreAction" -> action(element) ?: "null"
             key == "style" -> tokenValue("TypographyToken", element)
@@ -171,6 +192,7 @@ private class DslWriter(
         val node = element as? JsonObject ?: return "TODO(\"a modifier that is not an object\")"
         val type = wireType(node) ?: return "TODO(\"a modifier with no type\")"
         used += "io.github.youndie.kompot.KompotModifierNode"
+        val floats = floatProperties(type)
         val arguments =
             node.entries
                 .filter { it.key != KompotProtocol.DISCRIMINATOR }
@@ -179,7 +201,7 @@ private class DslWriter(
                         when {
                             key == "color" -> tokenValue("ColorToken", held)
                             key == "colors" && held is JsonArray -> "listOf(" + held.joinToString(", ") { tokenValue("ColorToken", it) } + ")"
-                            else -> value(key, held)
+                            else -> value(key, held, floats)
                         }
                     "$key = $printed"
                 }
@@ -193,10 +215,11 @@ private class DslWriter(
 
         val name = className(type, "Action")
         used += "io.github.youndie.kompot.standard.$name"
+        val floats = floatProperties(type)
         val arguments =
             node.entries
                 .filter { it.key != KompotProtocol.DISCRIMINATOR }
-                .map { (key, held) -> "$key = ${value(key, held)}" }
+                .map { (key, held) -> "$key = ${value(key, held, floats)}" }
         // A type with nothing but its discriminator is a `data object` on this side, and an object
         // written with parentheses does not compile.
         return if (arguments.isEmpty()) name else call(name, arguments)
@@ -282,6 +305,28 @@ private class DslWriter(
         return "$type(${quote((element as JsonPrimitive).content)})"
     }
 
+    // Which of a type's properties are Floats, read from the `format` the generator writes beside
+    // `number`. Looked up by the discriminator's const across every definition rather than by a
+    // definition key, so components, actions and modifier nodes are all answered the same way.
+    private fun floatProperties(wireType: String): Set<String> =
+        definitionsFor(wireType)
+            .flatMap { definition ->
+                (definition["properties"] as? JsonObject).orEmpty().entries
+                    .filter { (_, schema) -> (schema.jsonObject["format"] as? JsonPrimitive)?.content == "float" }
+                    .map { it.key }
+            }.toSet()
+
+    private fun definitionsFor(wireType: String): List<JsonObject> =
+        config.schemas.values.flatMap { document ->
+            (document["\$defs"] as? JsonObject).orEmpty().values.map { it.jsonObject }.filter { definition ->
+                (definition["properties"] as? JsonObject)
+                    ?.get(KompotProtocol.DISCRIMINATOR)
+                    ?.jsonObject
+                    ?.get("const")
+                    ?.let { (it as? JsonPrimitive)?.content } == wireType
+            }
+        }
+
     private fun known(wireType: String): Boolean =
         config.schemas
             .filterKeys { it in toolkitFiles }
@@ -315,7 +360,21 @@ private class DslWriter(
 
     private companion object {
         const val ROOT = "root"
+        const val MARKER = "/* TODO: check this name */"
+        val DSL_CALLS = setOf("column", "row", "text", "button", "table")
     }
+}
+
+// A file is called `home-screen`; a function cannot be. Hyphens and anything else Kotlin refuses
+// become camel-case joins, and a name that starts with a digit gets a letter in front — the draft is
+// meant to compile before anybody has renamed anything.
+internal fun identifier(name: String): String {
+    val parts = name.split(Regex("[^A-Za-z0-9]+")).filter { it.isNotEmpty() }
+    val joined =
+        parts.mapIndexed { index, part -> if (index == 0) part else part.replaceFirstChar { it.uppercaseChar() } }
+            .joinToString("")
+    val safe = joined.ifEmpty { "screen" }
+    return if (safe.first().isDigit()) "screen$safe" else safe
 }
 
 private fun wireType(node: JsonObject): String? =
@@ -330,5 +389,7 @@ private fun quote(text: String): String =
     "\"" + text.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\$", "\\\$") + "\""
 
 private fun <T> Collection<T>?.orEmpty(): Collection<T> = this ?: emptyList()
+
+private fun JsonObject?.orEmpty(): Map<String, JsonElement> = this ?: emptyMap()
 
 private fun JsonArray?.orEmpty(): List<JsonElement> = this ?: emptyList()
