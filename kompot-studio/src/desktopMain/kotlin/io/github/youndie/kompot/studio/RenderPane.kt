@@ -72,12 +72,14 @@ internal fun StudioRenderPane(
     // The size the screen is being looked at, so that a fixed-height design meets a short window HERE
     // rather than on somebody's phone.
     device: DevicePreset = DEVICE_PRESETS.first(),
+    zoom: Float? = null,
+    onScale: (Float) -> Unit = {},
     // Where a tap goes. Nowhere, by default — the same nothing a preview has always done — and the
     // window passes one that writes the action down.
     actionHandler: KompotActionHandler = KompotActionHandler {},
     onDegraded: (KompotDegradationKind, String) -> Unit,
 ) {
-    DeviceFrame(device, modifier) {
+    DeviceFrame(device, modifier, zoom, onScale) {
         CompositionLocalProvider(
             LocalKompotRegistry provides config.registry,
             // A floor rather than a choice: LocalKompotDesignSystem errors when nobody provides it,

@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import kotlin.math.roundToInt
 import org.jetbrains.jewel.ui.component.TextField
 import io.github.youndie.kompot.studio.tree.kindFor
 import io.github.youndie.kompot.studio.tree.DropKind
@@ -287,6 +288,10 @@ private fun StudioWindowContent(
     val paletteCount = remember(config) { paletteFor(config).size }
 
     var device by remember { mutableStateOf(DEVICE_PRESETS.first()) }
+    // Null is "fit": the frame scales to the pane, and the number under the frame says what that
+    // came to. Reset with the device, because a zoom chosen for a phone means nothing on a tablet.
+    var zoom by remember(device) { mutableStateOf<Float?>(null) }
+    var shownScale by remember { mutableStateOf(1f) }
     var formState by remember { mutableStateOf(FormState.EMPTY) }
     val actions = remember(body) { mutableStateListOf<LoggedAction>() }
 
@@ -744,7 +749,7 @@ private fun StudioWindowContent(
                                 if (picked != null) {
                                     // Inside the consumer's frame like anything else: a fixture drawn
                                     // outside the brand would be a picture of a composition nobody ships.
-                                    DeviceFrame(device, Modifier.weight(1f).fillMaxSize()) {
+                                    DeviceFrame(device, Modifier.weight(1f).fillMaxSize(), zoom, { shownScale = it }) {
                                         config.frame(brand, dark) { picked.content() }
                                     }
                                 } else {
@@ -758,6 +763,8 @@ private fun StudioWindowContent(
                                         dropId = dropHover?.id,
                                         state = previewState,
                                         device = device,
+                                        zoom = zoom,
+                                        onScale = { shownScale = it },
                                         actionHandler =
                                             KompotActionHandler { action ->
                                                 actions += LoggedAction(LocalTime.now().format(CLOCK), action)
@@ -779,6 +786,13 @@ private fun StudioWindowContent(
                             // carries its own provenance.
                             Row(Modifier.fillMaxWidth().padding(top = 4.dp).height(22.dp), verticalAlignment = Alignment.CenterVertically) {
                                 Mono(device.label.lowercase(), colors.dim)
+                                Spacer(Modifier.weight(1f))
+                                ZoomControl(
+                                    scale = shownScale,
+                                    fitted = zoom == null,
+                                    onZoom = { zoom = it },
+                                    onReset = { zoom = null },
+                                )
                                 Spacer(Modifier.weight(1f))
                                 Mono(listOfNotNull(brand, if (dark) "dark" else "light").joinToString(" · "), colors.dim)
                             }
@@ -1048,6 +1062,43 @@ private fun RowScope.Frame(
         Mono(caption, studioColors().dim, Modifier.padding(top = 4.dp))
     }
 }
+
+// Minus, the percentage, plus. The percentage is the reset: it says what the frame is drawn at, and
+// clicking it goes back to fitting the pane — "fit" beside the number when that is already the case.
+@Composable
+private fun ZoomControl(
+    scale: Float,
+    fitted: Boolean,
+    onZoom: (Float) -> Unit,
+    onReset: () -> Unit,
+) {
+    val colors = studioColors()
+    Row(horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
+        ZoomButton(StudioIcon.REMOVE) { onZoom((scale / ZOOM_STEP).coerceAtLeast(MIN_ZOOM)) }
+        Mono(
+            "${(scale * 100).roundToInt()}%" + if (fitted) " · fit" else "",
+            colors.dim,
+            Modifier.focusProperties { canFocus = false }.clickable(onClick = onReset).padding(horizontal = 4.dp),
+        )
+        ZoomButton(StudioIcon.ADD) { onZoom((scale * ZOOM_STEP).coerceAtMost(MAX_ZOOM)) }
+    }
+}
+
+@Composable
+private fun ZoomButton(
+    icon: StudioIcon,
+    onClick: () -> Unit,
+) {
+    Icon(
+        icon,
+        studioColors().dim,
+        Modifier.focusProperties { canFocus = false }.clickable(onClick = onClick).padding(2.dp),
+    )
+}
+
+private const val ZOOM_STEP = 1.25f
+private const val MIN_ZOOM = 0.25f
+private const val MAX_ZOOM = 4f
 
 // The line under the text when the text does not parse: where, and what the rest of the window is
 // showing meanwhile. The parser's own words after it, for whoever wants them.
