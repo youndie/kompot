@@ -50,6 +50,15 @@ dependencyResolutionManagement {
     // google() and mavenCentral() are the settings plugin's, with the same group filters this file
     // used to carry.
     repositories {
+        // The pictures behind Jewel's icon keys. Jewel itself is on Maven Central; the SVG bundle
+        // its standalone theme draws with is published only here, and without it every chevron and
+        // combo-box arrow in the studio is a magenta square. Filtered to the one group it serves,
+        // for the reason written under the ivy repositories below.
+        maven("https://www.jetbrains.com/intellij-repository/releases") {
+            name = "IntelliJ platform"
+            content { includeGroup("com.jetbrains.intellij.platform") }
+        }
+
         // The Kotlin plugin registers its own repository for the Node and Yarn distributions the
         // wasmJs/js test infrastructure runs on. PREFER_SETTINGS above overrides it, so the lookup
         // falls through to Maven Central and fails with "Could not find org.nodejs:node".

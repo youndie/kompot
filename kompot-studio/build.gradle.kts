@@ -107,6 +107,11 @@ dependencies {
     "desktopMainImplementation"(libs.jewel.int.ui.decorated.window) {
         exclude(group = "org.jetbrains.compose.material", module = "material")
     }
+    // The SVGs behind Jewel's icon keys. Jewel's own POM brings the keys and the loader but not the
+    // pictures — every chevron, checkbox and combo-box arrow drew as a magenta square until this was
+    // here, with a SEVERE "resource not found" in the log for each. Jewel documents the dependency;
+    // it is easy to read past.
+    "desktopMainImplementation"(libs.intellij.icons)
 }
 
 compose.desktop {

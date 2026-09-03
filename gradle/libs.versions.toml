@@ -22,6 +22,9 @@ viddik = "0.1.1.8"
 # then throws NoSuchMethodError on the first frame, inside a renderer, so this number moves only
 # together with `compose-multiplatform` and `viddik`.
 jewel = "0.40.0-262.10315.125"
+# The IntelliJ platform build Jewel was cut against — the suffix of the line above — and the only
+# place the icon bundle comes from. The two move together or the chevrons come out magenta.
+ijPlatform = "262.10315.125"
 # The JetBrains Runtime's own API, and the studio compiles against it for ONE call: the same
 # `JBR.isAvailable()` Jewel's DecoratedWindow tests before refusing to open. It arrives transitively
 # with Jewel anyway; naming it is what lets code ask the question rather than guess at it from
@@ -74,6 +77,7 @@ viddik-processor = { module = "ru.workinprogress:viddik-processor", version.ref 
 jewel-int-ui-standalone = { module = "org.jetbrains.jewel:jewel-int-ui-standalone", version.ref = "jewel" }
 jewel-int-ui-decorated-window = { module = "org.jetbrains.jewel:jewel-int-ui-decorated-window", version.ref = "jewel" }
 jbr-api = { module = "org.jetbrains.runtime:jbr-api", version.ref = "jbrApi" }
+intellij-icons = { module = "com.jetbrains.intellij.platform:icons", version.ref = "ijPlatform" }
 
 ksp-symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 
