@@ -787,8 +787,11 @@ private fun StudioWindowContent(
                             Row(Modifier.fillMaxWidth().padding(top = 4.dp).height(22.dp), verticalAlignment = Alignment.CenterVertically) {
                                 Mono(device.label.lowercase(), colors.dim)
                                 Spacer(Modifier.weight(1f))
+                                // Stepping from the zoom that is SET when one is, and from the
+                                // drawn scale only when fitting: the drawn scale arrives a frame
+                                // late, and two quick clicks from it are one step, not two.
                                 ZoomControl(
-                                    scale = shownScale,
+                                    scale = zoom ?: shownScale,
                                     fitted = zoom == null,
                                     onZoom = { zoom = it },
                                     onReset = { zoom = null },
@@ -1074,7 +1077,7 @@ private fun ZoomControl(
 ) {
     val colors = studioColors()
     Row(horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
-        ZoomButton(StudioIcon.REMOVE) { onZoom((scale / ZOOM_STEP).coerceAtLeast(MIN_ZOOM)) }
+        ZoomButton(StudioIcon.MINUS) { onZoom((scale / ZOOM_STEP).coerceAtLeast(MIN_ZOOM)) }
         Mono(
             "${(scale * 100).roundToInt()}%" + if (fitted) " · fit" else "",
             colors.dim,
