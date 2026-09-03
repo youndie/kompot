@@ -62,6 +62,7 @@ import io.github.youndie.kompot.studio.stories.viddikStories
 import io.github.youndie.kompot.studio.edit.JsonEdits
 import io.github.youndie.kompot.studio.editor.BodyEditor
 import io.github.youndie.kompot.studio.editor.lexJson
+import io.github.youndie.kompot.studio.inspector.InspectorPane
 import io.github.youndie.kompot.studio.tree.ScreenNode
 import io.github.youndie.kompot.studio.tree.ScreenTreePane
 import io.github.youndie.kompot.studio.tree.screenTree
@@ -478,6 +479,21 @@ private fun StudioWindowContent(
             secondPaneMinWidth = 560.dp,
         )
 
+        // The inspector under the tree's column rather than beside the frame: it is about the node the
+        // tree selected, and the two being far apart is what makes a properties panel feel like a
+        // second application.
+        if (selected != null) {
+            InspectorPane(
+                config = config,
+                node = selected,
+                body = body,
+                modifier = Modifier.fillMaxWidth().height(INSPECTOR_HEIGHT),
+            ) { edited ->
+                history.record(edited)
+                bodyState.setTextAndPlaceCursorAtEnd(edited)
+            }
+        }
+
         if (actions.isNotEmpty()) {
             ActionLogPane(actions, opened, Modifier.fillMaxWidth().height(ACTION_LOG_HEIGHT)) { target ->
                 screen = target
@@ -567,6 +583,7 @@ private fun routeFor(
 }
 
 private val ACTION_LOG_HEIGHT = 120.dp
+private val INSPECTOR_HEIGHT = 200.dp
 
 // The canvas size design work is done at, used when nothing narrower was chosen: a golden has to have
 // SOME size, and taking the pane's would make the picture depend on how wide somebody dragged a

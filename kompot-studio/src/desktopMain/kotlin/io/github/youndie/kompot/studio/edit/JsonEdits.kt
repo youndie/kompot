@@ -81,6 +81,51 @@ internal object JsonEdits {
         return text.take(from) + text.drop(to)
     }
 
+    // ONE PROPERTY, WRITTEN IN PLACE. The same splice as the structural edits and for the same
+    // reason: a fixture is committed in somebody's formatting, and rewriting the document to change a
+    // spacing would turn a one-word edit into a whole-file diff.
+    //
+    // A property that is not there yet is inserted after the node's `type`, which every component
+    // carries and which is therefore the one anchor that always exists — appending before the closing
+    // brace would have to find it through whatever nesting the last value has.
+    fun setProperty(
+        text: String,
+        path: String,
+        name: String,
+        value: String,
+    ): String? {
+        val lexed = lexJson(text)
+        val existing = lexed.spans["$path.$name"]
+        if (existing != null) return text.take(existing.first) + value + text.drop(existing.last + 1)
+
+        val node = lexed.nodes[path] ?: return null
+        // `nodes` points at the type's VALUE, so the insertion goes just after it.
+        return text.take(node.last + 1) + ", \"$name\": " + value + text.drop(node.last + 1)
+    }
+
+    // Removing a property, which is how an optional one goes back to its default. Written beside the
+    // setter because "clear this field" and "type into this field" are one control in a panel.
+    fun removeProperty(
+        text: String,
+        path: String,
+        name: String,
+    ): String? {
+        val lexed = lexJson(text)
+        val value = lexed.spans["$path.$name"] ?: return null
+        val key = text.lastIndexOf("\"$name\"", value.first)
+        if (key < 0) return null
+
+        // Back to the separator that introduced the key, and forward over the one that follows it if
+        // this was the first property — either way exactly one comma leaves with it.
+        val before = text.take(key).trimEnd()
+        return if (before.endsWith(",")) {
+            before.dropLast(1) + text.drop(value.last + 1)
+        } else {
+            val after = text.drop(value.last + 1)
+            before + after.trimStart().removePrefix(",")
+        }
+    }
+
     private fun swap(
         text: String,
         path: String,
