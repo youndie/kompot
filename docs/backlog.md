@@ -37,13 +37,12 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (17)
+## Открыто (16)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-12](backlog/B-12-diagnostics.md) `[ ]` | Диагностика: синтаксис, схема, правила тела, деградации | v1-viewer | P0 | L | B-02, B-04 |
 | [B-14](backlog/B-14-konekt-pilot.md) `[ ]` | Пилот на konekt: записи и brand-a/b дают кадры голденов | v1-viewer | P0 | S | B-09, B-10, B-12 |
-| [B-02](backlog/B-02-decode-body-public.md) `[ ]` | kompot-preview: публичный decodeKompotBody и параметр pageLoader | upstream | P1 | S | — |
 | [B-03](backlog/B-03-remember-design-system-dark.md) `[ ]` | rememberKompotDesignSystem пробрасывает darkMode | upstream | P1 | XS | — |
 | [B-04](backlog/B-04-schema-findings.md) `[ ]` | JsonSchemaValidator: структурированная ошибка вместо String | upstream | P1 | S | — |
 | [B-13](backlog/B-13-switches-and-action-log.md) `[ ]` | Бренд, тема, размер устройства, состояния формы, лог действий | v1-viewer | P1 | S/M | B-09 |
@@ -59,11 +58,12 @@
 | [B-22](backlog/B-22-palette-dnd.md) `[ ]` | Палитра типов и drag-and-drop в дереве | v3-builder | P3 | L | B-21 |
 | [B-23](backlog/B-23-dsl-export.md) `[ ]` | Экспорт DSL-черновика из тела | v3-builder | P3 | M | B-07 |
 
-## Сделано (6)
+## Сделано (7)
 
 **Швы в toolkit'е**
 
 - [B-01](backlog/B-01-compose-line.md) — Одна линия Compose: kompot, viddik, Jewel в libs.versions.toml
+- [B-02](backlog/B-02-decode-body-public.md) — kompot-preview: публичный decodeKompotBody и параметр pageLoader
 - [B-05](backlog/B-05-child-slots-from-schema.md) — childSlots(schemas): дочерние слоты компонента из $ref схемы
 
 **Spike**

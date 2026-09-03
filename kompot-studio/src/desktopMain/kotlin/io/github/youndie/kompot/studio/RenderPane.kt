@@ -65,6 +65,7 @@ internal fun StudioRenderPane(
                     // degrades on every keystroke, and a preview that dies on the first one cannot be
                     // typed in at all.
                     onDegraded = onDegraded,
+                    pageLoader = config.pageLoader,
                 )
             }
         }

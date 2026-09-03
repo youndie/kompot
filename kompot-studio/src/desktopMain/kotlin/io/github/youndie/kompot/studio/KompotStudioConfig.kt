@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import io.github.youndie.kompot.KompotRegistry
 import io.github.youndie.kompot.kompotJson
 import io.github.youndie.kompot.spec.KompotSpecResources
+import io.github.youndie.kompot.standard.KompotPageLoader
 import io.github.youndie.kompot.studio.source.ScreenSource
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -40,6 +41,10 @@ public class KompotStudioConfig(
     // NavigationGraph. Empty means the window opens on the body it was handed and watches nothing —
     // which is what the toolkit's own demo does, having no deployment to read from.
     public val sources: List<ScreenSource> = emptyList(),
+    // How a paginated list gets its next page. Null — the default — means it does not: the body says
+    // so loudly rather than showing a list that ends where it does not. A deployment that wants to
+    // scroll one in the window passes its own, or a stub answering an empty page.
+    public val pageLoader: KompotPageLoader? = null,
     // Wire types a DEPLOYMENT adds on top of the profile. Declared ones pass the check without their
     // shape being validated — safe, because an unfamiliar type degrades by protocol; undeclared ones
     // stay violations, or the check would stop meaning anything.

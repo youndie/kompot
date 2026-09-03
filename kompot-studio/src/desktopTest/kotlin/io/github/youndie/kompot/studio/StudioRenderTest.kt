@@ -10,6 +10,8 @@ import androidx.compose.ui.graphics.Color
 import io.github.youndie.kompot.LocalKompotDesignSystem
 import io.github.youndie.kompot.ds.material.Material3DesignSystem
 import io.github.youndie.kompot.theme.KompotPalette
+import io.github.youndie.kompot.standard.KompotPageLoader
+import io.github.youndie.kompot.standard.KompotPageResponse
 import io.github.youndie.kompot.studio.tree.SELECTION_RGB
 import io.github.youndie.kompot.theme.KompotTheme
 import ru.workinprogress.viddik.core.captureComposable
@@ -125,21 +127,26 @@ class StudioRenderTest {
     }
 
     @Test
-    fun `a paginated_list body fails because the preview provides no page loader`() {
-        val config = KompotStudioConfig(registry = toolkitRegistry)
+    fun `a paginated_list body needs a page loader, and the configuration is where one comes from`() {
+        val body = sample("sample-paginated.json")
 
-        val failure =
-            assertFails {
-                capture(config, brand = null, body = sample("sample-paginated.json"))
-            }
-
-        // The exact seam B-02 closes: KompotPreview does not provide LocalKompotPageLoader, so the one
-        // standard component that asks for one takes the screen down. Asserted rather than described,
-        // so that closing B-02 makes this test fail and say so.
+        // Without one, loudly, and that is the DEFAULT on purpose: a studio that quietly supplied an
+        // empty page would show a list ending where it does not. The seam exists now (B-02) — what is
+        // still deliberate is that nobody walks through it unasked.
+        val failure = assertFails { capture(KompotStudioConfig(registry = toolkitRegistry), brand = null, body = body) }
         assertContains(
             generateSequence(failure) { it.cause }.mapNotNull { it.message }.joinToString(" | "),
             "PageLoader",
         )
+
+        // And with one, the same body draws. The pair is the point: either assertion alone is
+        // satisfied by a studio that ignores the parameter.
+        val withLoader =
+            KompotStudioConfig(
+                registry = toolkitRegistry,
+                pageLoader = EmptyPages,
+            )
+        capture(withLoader, brand = null, body = body)
     }
 
     private fun capture(
@@ -172,6 +179,15 @@ class StudioRenderTest {
             }
         }
         return matched
+    }
+
+    // An object rather than a lambda: KompotPageLoader is a plain interface, not a `fun interface`,
+    // so there is no SAM conversion to lean on.
+    private object EmptyPages : KompotPageLoader {
+        override suspend fun loadPage(
+            url: String,
+            params: Map<String, String>,
+        ): KompotPageResponse = KompotPageResponse(items = emptyList())
     }
 
     private companion object {

@@ -1,5 +1,6 @@
 package io.github.youndie.kompot.studio.tree
 
+import io.github.youndie.kompot.preview.kompotBodyShape
 import io.github.youndie.kompot.spec.Slot
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
@@ -30,20 +31,17 @@ internal data class ScreenNode(
     fun flatten(): List<ScreenNode> = listOf(this) + children.flatMap { it.flatten() }
 }
 
-// The three shapes a body arrives in, told apart by what they carry rather than by a flag — the same
-// rule KompotPreview decodes by, and it has to be the same one: a tree that found its root somewhere
-// else than the render did would be a picture of a different screen.
+// The root is found by kompotBodyShape — the function KompotPreview decodes by, and not a copy of
+// it. A tree that located its root somewhere else than the render did would be a picture of a
+// different screen, and on the day a fourth envelope appears the copy would go on pointing at the
+// third without failing.
 internal fun screenTree(
     body: JsonElement,
     slots: Map<String, List<Slot>>,
 ): ScreenNode? {
     val root = body as? JsonObject ?: return null
-
-    return when {
-        "schema" in root -> (root["screen"] as? JsonObject)?.let { node(it, "$.screen", slots) }
-        "screen" in root -> (root["screen"] as? JsonObject)?.let { node(it, "$.screen", slots) }
-        else -> node(root, "$", slots)
-    }
+    val property = kompotBodyShape(root).screenProperty ?: return node(root, "$", slots)
+    return (root[property] as? JsonObject)?.let { node(it, "$.$property", slots) }
 }
 
 private fun node(

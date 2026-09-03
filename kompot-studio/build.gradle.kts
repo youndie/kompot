@@ -30,7 +30,8 @@ kotlin {
                 // The overlay that turns a served theme into a design system. The default frame is the
                 // only caller — a consumer with a frame of its own never needs it — so implementation.
                 implementation(projects.kompotThemeClient)
-                implementation(projects.kompotStandard)
+                // api, not implementation: KompotPageLoader is a parameter of KompotStudioConfig.
+                api(projects.kompotStandard)
                 implementation(projects.kompotPreview)
                 // The graph an HTTP source reads its screen list from. Not `api`: a consumer names a
                 // ScreenSource.Http with a path, never a NavigationGraph.

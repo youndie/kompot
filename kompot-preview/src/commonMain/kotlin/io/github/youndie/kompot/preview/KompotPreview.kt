@@ -11,6 +11,7 @@ import io.github.youndie.kompot.KompotDesignSystem
 import io.github.youndie.kompot.KompotRegistry
 import io.github.youndie.kompot.LocalKompotDegradationSink
 import io.github.youndie.kompot.LocalKompotDesignSystem
+import io.github.youndie.kompot.LocalKompotPageLoader
 import io.github.youndie.kompot.LocalKompotRegistry
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormController
@@ -18,6 +19,7 @@ import io.github.youndie.kompot.form.FormSchema
 import io.github.youndie.kompot.forms.KompotFormResponse
 import io.github.youndie.kompot.kompotJson
 import io.github.youndie.kompot.realtime.KompotScreenResponse
+import io.github.youndie.kompot.standard.KompotPageLoader
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -79,8 +81,14 @@ public fun KompotPreview(
     // component stays missing. A preview that cannot draw the screen should say so, not photograph
     // the hole.
     onDegraded: (kind: KompotDegradationKind, originalType: String) -> Unit = ::failOnDegradation,
+    // NOT PROVIDED by default, and that default is the same argument as the one above. A paginated
+    // list asks for its next page from LocalKompotPageLoader, and nothing here can honestly answer:
+    // a preview that quietly supplied an empty page would photograph a list that ends where it does
+    // not, and the golden would go on passing for as long as the loader stayed missing. So the body
+    // that needs one says so — loudly — and a caller who has an answer passes it.
+    pageLoader: KompotPageLoader? = null,
 ) {
-    val decoded = remember(body, json) { decodeBody(json, body) }
+    val decoded = remember(body, json) { json.decodeKompotBody(body) }
     val controller =
         remember(decoded, state) {
             FormController(decoded.schema, initialValues = state.values)
@@ -91,6 +99,9 @@ public fun KompotPreview(
         LocalKompotDesignSystem provides designSystem,
         LocalKompotRegistry provides registry,
         LocalKompotDegradationSink provides KompotDegradationSink { kind, originalType, _ -> onDegraded(kind, originalType) },
+        // Only when there is one. Providing LocalKompotPageLoader with a stub whenever the caller
+        // passed nothing would turn "this screen needs a page loader" from an error into a silence.
+        *listOfNotNull(pageLoader?.let { LocalKompotPageLoader provides it }).toTypedArray(),
     ) {
         registry.RenderNode(decoded.screen, actionHandler, controller)
     }
@@ -118,35 +129,74 @@ private const val NO_DISCRIMINATOR_HINT =
         "it is handed — call.respond(component), or encodeToString(MyComponent.serializer(), ...). Encode the " +
         "root polymorphically and the discriminator comes back."
 
-private class DecodedBody(
-    val screen: KompotComponent,
-    val schema: FormSchema,
-)
-
 // A screen that is not a form still needs a controller, because every renderer takes one — so it gets
 // a schema with no fields in it rather than a nullable controller threaded through the renderers.
 private val NO_FIELDS = FormSchema(formId = "preview", fields = emptyList())
 
-private fun decodeBody(
-    json: Json,
-    body: String,
-): DecodedBody {
-    val root: JsonObject = json.parseToJsonElement(body).jsonObject
+// WHAT SHAPE A RESPONSE BODY IS IN, and it is a fact about the protocol rather than about this
+// harness — which is why it is public and why everything that has to answer it answers it here.
+//
+// A studio drawing a tree beside this render, a linter checking the body, a tool nobody has written
+// yet: each needs the same three branches, and a copy of them drifts on the day a fourth envelope
+// appears. The copy would not fail — it would draw a tree of the envelope instead of the screen.
+public enum class KompotBodyShape(
+    // The property the screen sits under, or null when the body IS the screen.
+    public val screenProperty: String?,
+) {
+    // A form response: a schema and the tree that fills it.
+    FORM("screen"),
 
-    return when {
-        "schema" in root -> {
-            val response = json.decodeFromString(KompotFormResponse.serializer(), body)
-            DecodedBody(response.screen, response.schema)
+    // A screen response: the same tree, plus the channel its updates arrive on.
+    SCREEN("screen"),
+
+    // A bare component tree, which is what an endpoint answers when it has nothing to add to it.
+    COMPONENT(null),
+}
+
+// Told apart by what the body CARRIES rather than by a flag, because there is no flag: the envelopes
+// are distinguished by their own properties, and a response never says which one it is.
+public fun kompotBodyShape(root: JsonObject): KompotBodyShape =
+    when {
+        "schema" in root -> KompotBodyShape.FORM
+        "screen" in root -> KompotBodyShape.SCREEN
+        else -> KompotBodyShape.COMPONENT
+    }
+
+// A decoded body: the tree, the form schema behind it (empty for a screen that is not a form), and
+// the update channel the response named, if any.
+public class KompotDecodedBody(
+    public val screen: KompotComponent,
+    public val schema: FormSchema,
+    public val realtimeTopic: String?,
+)
+
+// The decode this harness does, as a function anything can call.
+//
+// On the receiver rather than as a parameter: the Json is the APPLICATION's, and putting it first
+// makes that hard to forget. A preview that decoded with more types than its client can is a picture
+// of a screen the client cannot show; one that decoded with fewer fails on a body that works.
+public fun Json.decodeKompotBody(body: String): KompotDecodedBody {
+    val root: JsonObject = parseToJsonElement(body).jsonObject
+
+    return when (kompotBodyShape(root)) {
+        KompotBodyShape.FORM -> {
+            val response = decodeFromString(KompotFormResponse.serializer(), body)
+            KompotDecodedBody(response.screen, response.schema, realtimeTopic = null)
         }
 
-        "screen" in root -> {
-            val response = json.decodeFromString(KompotScreenResponse.serializer(), body)
-            DecodedBody(response.screen, NO_FIELDS)
+        KompotBodyShape.SCREEN -> {
+            val response = decodeFromString(KompotScreenResponse.serializer(), body)
+            KompotDecodedBody(response.screen, NO_FIELDS, response.realtimeTopic)
         }
 
         // PolymorphicSerializer rather than KompotComponent.serializer(): the hierarchy is OPEN, so the
         // interface has no generated serializer of its own — the same asymmetry that makes a plain
         // call.respond drop the discriminator on a root, met here from the reading side.
-        else -> DecodedBody(json.decodeFromString(PolymorphicSerializer(KompotComponent::class), body), NO_FIELDS)
+        KompotBodyShape.COMPONENT ->
+            KompotDecodedBody(
+                decodeFromString(PolymorphicSerializer(KompotComponent::class), body),
+                NO_FIELDS,
+                realtimeTopic = null,
+            )
     }
 }
