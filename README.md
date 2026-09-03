@@ -98,6 +98,7 @@ so a declaration reaches you because somebody wrote `public`, not because nobody
 | `kompot-forms-client`, `kompot-wizard-client`, `kompot-images-client-coil` | the renderers of the form, wizard and image plug-ins | kompot-client |
 | `kompot-theme-client`, `kompot-ds-material-compose` | the Compose side of a server-driven theme, and the Material3 design system tokens resolve through | kompot-client, kompot-theme |
 | `kompot-preview` | a response body drawn by the real renderers, so a server can see the screen it built | kompot-client, kompot-forms |
+| `kompot-studio`, `kompot-studio-gradle-plugin` | the desktop editor: a body, its tree, its properties and the rendered screen in one window, with the checks a body has to pass — and the Gradle task that opens it on a consumer's build | kompot-preview, kompot-spec |
 | `kompot-client-cache` | offline-first screen cache: the store contract and a cache-first provider with ETag revalidation | core |
 | `kompot-analytics` | tracking contracts for screens, actions and form outcomes | — |
 
@@ -294,6 +295,13 @@ perfectly from the object in memory degrades to a placeholder in front of a pers
 from the object photographs a working screen that does not work. For the same reason a missing
 renderer stops the preview instead of drawing the grey placeholder — recorded into a screenshot golden
 it would become the screen's expected appearance.
+
+For more than a look there is [`kompot-studio`](kompot-studio/README.md): a desktop window that opens
+the recorded bodies of a consumer's build, draws each one in that build's brand frame, and lets a
+person edit it — the JSON, the tree of nodes, the properties the schema describes, a palette of the
+types the build's profile allows — while the checks a body has to pass run beside it.
+
+![kompot studio](docs/images/kompot-studio.png)
 
 The same call is what a screenshot test photographs, so a preview and a golden are one input and two
 checks. Note that an IDE preview renders through skiko, whose host-native half comes with
