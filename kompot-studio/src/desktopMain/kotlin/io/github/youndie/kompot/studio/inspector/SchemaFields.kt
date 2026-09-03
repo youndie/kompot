@@ -43,7 +43,22 @@ internal data class PropertyField(
     val pattern: String? = null,
     // For NESTED: the hierarchy whose members this value may be, so the editor can offer them.
     val hierarchy: String? = null,
+    // For a design-system key: which kind — "ColorToken" or "TypographyToken" — so the editor can
+    // show a swatch for one and a type sample for the other. Null for enums and declared words.
+    val tokenKind: String? = null,
 )
+
+// The wire types a hierarchy admits, from the profile's discriminator mapping: what an action may
+// be, in the order the profile lists them.
+internal fun membersOf(
+    schemas: Map<String, JsonObject>,
+    hierarchy: String,
+): List<String> {
+    val profile = schemas[KompotProtocol.PROFILE_FILE_NAME] ?: return emptyList()
+    val base = (profile["\$defs"] as? JsonObject)?.get(hierarchy)?.jsonObject ?: return emptyList()
+    val mapping = (base["discriminator"] as? JsonObject)?.get("mapping")?.jsonObject ?: return emptyList()
+    return mapping.keys.toList()
+}
 
 // The definition key a wire type resolves to in this build's profile — "column" to
 // "KompotComponentColumn". Everything else here works on definitions, so that an action's sub-form is
@@ -114,7 +129,7 @@ private fun field(
         val kind = (target["x-kompot-kind"] as? JsonPrimitive)?.content
         return when (kind) {
             "token" ->
-                PropertyField(name, FieldKind.CHOICE, required, description, tokens[referenced].orEmpty())
+                PropertyField(name, FieldKind.CHOICE, required, description, tokens[referenced].orEmpty(), tokenKind = referenced)
 
             "enum" ->
                 PropertyField(

@@ -10,6 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 // THE SIZE THE SCREEN IS BEING LOOKED AT, and it is a switch rather than "make the window smaller"
@@ -53,7 +57,18 @@ internal fun DeviceFrame(
             // requiredSize and not size: the point is to IGNORE what the pane offers. A screen that
             // overflows a 360-wide phone has to overflow here too, and clipToBounds is what makes the
             // overflow visible instead of letting it draw over the studio's own chrome.
-            Box(Modifier.requiredSize(preset.width!!.dp, preset.height!!.dp).clipToBounds()) { content() }
+            // A device has corners and an edge; a bare rectangle reads as a bug in the layout rather
+            // than as a phone. The corner is the frame's, not the screen's: content is clipped to it
+            // the way a real screen is.
+            Box(
+                Modifier
+                    .requiredSize(preset.width!!.dp, preset.height!!.dp)
+                    // A translucent grey rather than a theme colour: this frame is composed in tests
+                    // and captures that install no window theme, and an edge that reads on both
+                    // grounds needs no theme to be told which one it is on.
+                    .border(1.dp, Color(0x33808080), RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(12.dp)),
+            ) { content() }
         }
     }
 }

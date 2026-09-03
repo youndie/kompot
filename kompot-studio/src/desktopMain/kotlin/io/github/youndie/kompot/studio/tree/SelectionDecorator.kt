@@ -5,6 +5,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
 import io.github.youndie.kompot.KompotActionHandler
 import io.github.youndie.kompot.KompotComponent
@@ -48,8 +56,22 @@ private class SelectionBorderRenderer<T : KompotComponent>(
         // its child the minimum of nothing, so a node that filled its parent's width stops doing so
         // the moment it is selected — the screen would rearrange itself under the click that selected
         // it, and the frame would be around a differently shaped thing than the one being looked at.
+        // The id as a tag above the outline, in the outline's colour: which node is framed is the
+        // question, and the frame alone answers it only when nothing else on the screen is that shape.
+        val measurer = rememberTextMeasurer()
+        val label = component.id
         Box(
-            modifier = Modifier.border(SELECTION_WIDTH, SELECTION_COLOUR),
+            modifier =
+                Modifier
+                    .border(SELECTION_WIDTH, SELECTION_COLOUR)
+                    .drawWithContent {
+                        drawContent()
+                        val layout = measurer.measure(label, TAG_STYLE)
+                        val pad = 4.dp.toPx()
+                        val height = layout.size.height + 2.dp.toPx()
+                        drawRect(SELECTION_COLOUR, Offset(-1.dp.toPx(), -height), Size(layout.size.width + pad * 2, height))
+                        drawText(layout, Color.White, Offset(-1.dp.toPx() + pad, -height + 1.dp.toPx()))
+                    },
             propagateMinConstraints = true,
         ) {
             delegate.Render(component, actionHandler, formController)
@@ -61,6 +83,8 @@ private class SelectionBorderRenderer<T : KompotComponent>(
 // any brand's, so a frame is never mistaken for something the screen itself drew. `internal` because
 // the test reads it back out of a captured frame — a second copy of the number in the test would
 // assert that the test and the test agree.
-internal const val SELECTION_RGB: Int = 0xFF3D00
+internal const val SELECTION_RGB: Int = 0x3574F0
 internal val SELECTION_COLOUR: Color = Color(0xFF000000 or SELECTION_RGB.toLong())
-private val SELECTION_WIDTH = 2.dp
+private val SELECTION_WIDTH = 1.dp
+
+private val TAG_STYLE = TextStyle(fontSize = 10.sp, fontFamily = FontFamily.Monospace)

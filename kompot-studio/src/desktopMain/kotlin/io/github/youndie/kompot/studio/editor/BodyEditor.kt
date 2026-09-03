@@ -13,6 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
+import io.github.youndie.kompot.studio.ui.studioColors
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 
 // THE BODY, EDITABLE. The source of truth is the text — not a component, not a DSL — because the text
@@ -30,8 +31,12 @@ internal fun BodyEditor(
     // usually correct and the character after it is missing.
     errorOffset: Int?,
     modifier: Modifier = Modifier,
+    // The text of the node the tree selected, tinted: the caret says where a node starts, the tint
+    // says where it ends, and a person editing a node needs the second more than the first.
+    selectedRange: IntRange? = null,
 ) {
     val palette = if (JewelTheme.isDark) DarkPalette else LightPalette
+    val selectionTint = studioColors().selection
 
     BasicTextField(
         state = state,
@@ -44,8 +49,14 @@ internal fun BodyEditor(
             ),
         cursorBrush = SolidColor(palette.plain),
         outputTransformation =
-            remember(lexed, errorOffset, palette) {
+            remember(lexed, errorOffset, palette, selectedRange, selectionTint) {
                 OutputTransformation {
+                    if (selectedRange != null) {
+                        val start = selectedRange.first.coerceIn(0, length)
+                        val end = (selectedRange.last + 1).coerceIn(start, length)
+                        if (end > start) addStyle(SpanStyle(background = selectionTint), start, end)
+                    }
+
                     // Coerced against THIS buffer's length, not the lexed text's: a keystroke between
                     // the lex and the draw is the normal case, and a span past the end throws.
                     lexed.tokens.forEach { token ->
