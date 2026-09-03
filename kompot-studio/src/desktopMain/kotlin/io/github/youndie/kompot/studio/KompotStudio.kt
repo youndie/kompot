@@ -64,6 +64,7 @@ import io.github.youndie.kompot.studio.editor.BodyEditor
 import io.github.youndie.kompot.studio.editor.lexJson
 import io.github.youndie.kompot.studio.inspector.InspectorPane
 import io.github.youndie.kompot.studio.tree.ScreenNode
+import io.github.youndie.kompot.studio.export.exportDsl
 import io.github.youndie.kompot.studio.palette.PaletteColumn
 import io.github.youndie.kompot.studio.palette.newNode
 import io.github.youndie.kompot.studio.tree.DropTarget
@@ -338,6 +339,19 @@ private fun StudioWindowContent(
         Files.writeString(target, body)
     }
 
+    // EXPORT, beside the save and going to the same place with a different extension. A draft is only
+    // ever a draft, so it is written next to the body it came from rather than into a source tree the
+    // studio has no business knowing about — where it goes from there is a person's decision.
+    var exported by remember(body) { mutableStateOf("") }
+
+    fun exportKotlin() {
+        val target = saveTo?.let { it.resolveSibling(it.fileName.toString().substringBeforeLast('.') + ".kt") } ?: return
+        val parsed = runCatching { Json.parseToJsonElement(body) }.getOrNull() ?: return
+        target.parent?.let { Files.createDirectories(it) }
+        Files.writeString(target, exportDsl(config, parsed, functionName = target.fileName.toString().removeSuffix(".kt")))
+        exported = "drafted $target"
+    }
+
     // Meta and not Ctrl: this window only opens on a desktop JVM, and every one of those on this
     // toolkit's machines is a Mac. A second binding is a B-20 question, once there is a gradle task
     // somebody runs on Linux.
@@ -479,6 +493,8 @@ private fun StudioWindowContent(
                             onDuplicate = { apply(JsonEdits.duplicate(body, selected!!.path)) },
                             onDelete = { apply(JsonEdits.delete(body, selected!!.path)) },
                             onSave = { save() },
+                            onExport = { exportKotlin() },
+                            exported = exported,
                         )
                     },
                 ) { selected = it }
@@ -708,6 +724,8 @@ private fun EditRow(
     onDuplicate: () -> Unit,
     onDelete: () -> Unit,
     onSave: () -> Unit,
+    onExport: () -> Unit,
+    exported: String,
 ) {
     Row(
         Modifier.fillMaxWidth().padding(8.dp),
@@ -720,6 +738,8 @@ private fun EditRow(
         OutlinedButton(onClick = onDuplicate, enabled = enabled) { Text("Copy") }
         OutlinedButton(onClick = onDelete, enabled = enabled) { Text("Delete") }
         OutlinedButton(onClick = onSave, enabled = canSave) { Text("Save") }
+        OutlinedButton(onClick = onExport, enabled = canSave) { Text("Kotlin") }
+        if (exported.isNotEmpty()) Text(exported)
     }
 }
 

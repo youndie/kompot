@@ -194,4 +194,16 @@ tasks.withType<Test>().configureEach {
     // :kompot-ds-material-compose raises for the same suite — viddik ships class file 65 while
     // everything here compiles on 17.
     javaLauncher = jetBrainsRuntime
+
+    // Where the checked-in DSL draft is regenerated to. Opt-in by property and absent otherwise, so
+    // the ordinary suite never writes into the source tree — the draft is a source file the compiler
+    // checks, and a test that rewrote it on every run would be marking its own homework.
+    (project.findProperty("draft.out") as? String)?.let { systemProperty("draft.out", it) }
+
+    // The same file, handed to the suite so it can check the exporter still produces it. DECLARED as
+    // an input rather than just read: a test that reads a file Gradle does not know about goes on
+    // passing from cache after that file changes, which is the one failure a drift guard must not have.
+    val draft = layout.projectDirectory.file("src/desktopTest/kotlin/io/github/youndie/kompot/studio/export/SampleScreenDraft.kt")
+    inputs.file(draft).withPathSensitivity(PathSensitivity.RELATIVE)
+    systemProperty("draft.checkedIn", draft.asFile.absolutePath)
 }
