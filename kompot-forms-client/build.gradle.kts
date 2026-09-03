@@ -31,7 +31,11 @@ kotlin {
             // про тот же принцип для картинок).
             api(projects.kompotClient)
             api(projects.kompotForms)
-            implementation(projects.kompotRegistryAnnotations)
+            // `api`, not `implementation`: the registry the processor generates is public and typed by
+            // this module's annotations — `generated…Docs` is a map of KompotComponentDoc — so a consumer
+            // compiling against this artefact has to be able to name them. A consumer check on the
+            // published artefacts failed on exactly that while this build stayed green.
+            api(projects.kompotRegistryAnnotations)
             // KompotComponentRenderer.Render принимает FormController в сигнатуре, и рендереры полей
             // сами читают/пишут состояние формы через FormController.collectFieldState и т.п.
             api(projects.formCore)

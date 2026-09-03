@@ -31,7 +31,11 @@ kotlin {
             // (см. комментарий в kompot-client/build.gradle.kts про синтетический KompotImageComponent).
             api(projects.kompotClient)
             api(projects.kompotImages)
-            implementation(projects.kompotRegistryAnnotations)
+            // `api`, not `implementation`: the registry the processor generates is public and typed by
+            // this module's annotations — `generated…Docs` is a map of KompotComponentDoc — so a consumer
+            // compiling against this artefact has to be able to name them. A consumer check on the
+            // published artefacts failed on exactly that while this build stayed green.
+            api(projects.kompotRegistryAnnotations)
             // KompotComponentRenderer.Render принимает FormController в сигнатуре — нужен на
             // компайл-класспасе любому модулю, реализующему интерфейс (kompot-client сам
             // подключает form-core как implementation, не api, поэтому это не транзитивно).
