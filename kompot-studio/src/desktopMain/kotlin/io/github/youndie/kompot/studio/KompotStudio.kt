@@ -556,6 +556,7 @@ private fun StudioWindowContent(
                                     lexed = lexed,
                                     errorOffset = findings.firstOrNull { it.layer == "syntax" }?.offset,
                                     modifier = Modifier.fillMaxWidth().weight(1f).padding(8.dp),
+                                    selectedRange = selected?.path?.let { lexed.spans[it] },
                                 )
 
                                 // Under the text and not under the whole window: it is about one node
