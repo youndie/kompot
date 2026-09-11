@@ -1,8 +1,8 @@
 plugins {
     kotlin("jvm")
     `java-gradle-plugin`
-    id("ru.workinprogress.sborka.jvm")
-    id("ru.workinprogress.sborka.publish")
+    id("io.github.youndie.sborka.jvm")
+    id("io.github.youndie.sborka.publish")
 }
 
 // The one module here that is a BUILD plugin rather than a library or an application. It ships no

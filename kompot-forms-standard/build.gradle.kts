@@ -1,8 +1,8 @@
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    id("ru.workinprogress.sborka.kmp")
-    id("ru.workinprogress.sborka.publish")
+    id("io.github.youndie.sborka.kmp")
+    id("io.github.youndie.sborka.publish")
 }
 
 
