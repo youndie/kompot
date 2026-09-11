@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     id("io.github.youndie.sborka.kmp")
+    alias(libs.plugins.dokka)
     id("io.github.youndie.sborka.publish")
 }
 
