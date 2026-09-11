@@ -10,6 +10,11 @@ version that was never released. Two releases then put identically-named files o
 anything reading file names rather than coordinates — an SBOM, a licence scan, shadow-jar
 deduplication, a cache — cannot tell them apart.
 
+Module metadata is not the whole publication, and the gap is the point of the second pass below. A
+sources jar and a javadoc jar are attached to the POM rather than listed as variant files, so they
+appear in no `.module` at all — and the javadoc jar is the one artefact Maven Central refuses a release
+without. The check that exists because a file name can lie was blind to the file the portal insists on.
+
 Run against a local publication:
 
     ./gradlew publishToMavenLocal -PVERSION=<v>
@@ -46,6 +51,25 @@ for path in modules:
 for artifact, name, url in wrong:
     print(f"{artifact}: published as {url}, arrives named {name}")
 
-if wrong:
-    sys.exit(f"\n{len(wrong)} artifact(s) reach a consumer under a name that is not their version")
-print(f"checked {checked} artifacts across {len(modules)} modules: every file arrives named with {VERSION}")
+# The second pass: everything that actually lies in the published directory, whether or not any
+# metadata mentions it. Checksums and signatures carry the name of the file they belong to plus a
+# suffix, so they are covered by the same rule rather than exempted from it.
+IGNORED = ("maven-metadata",)
+beside, beside_wrong = 0, []
+for path in sorted(glob.glob(f"{M2}/*/{VERSION}/*")):
+    name = os.path.basename(path)
+    if not os.path.isfile(path) or name.startswith(IGNORED):
+        continue
+    beside += 1
+    if f"-{VERSION}." not in name and f"-{VERSION}-" not in name:
+        beside_wrong.append((os.path.basename(os.path.dirname(os.path.dirname(path))), name))
+
+for artifact, name in beside_wrong:
+    print(f"{artifact}: {name} lies in the {VERSION} directory under another version's name")
+
+if not beside:
+    sys.exit(f"nothing lies beside the metadata under {VERSION} — the second pass would pass by finding nothing")
+
+if wrong or beside_wrong:
+    sys.exit(f"\n{len(wrong) + len(beside_wrong)} artifact(s) reach a consumer under a name that is not their version")
+print(f"checked {checked} artifacts across {len(modules)} modules and {beside} files beside them: every file arrives named with {VERSION}")

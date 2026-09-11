@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     id("io.github.youndie.sborka.jvm")
+    alias(libs.plugins.dokka)
     id("io.github.youndie.sborka.publish")
 }
 

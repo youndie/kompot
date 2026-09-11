@@ -7,6 +7,7 @@ androidGradlePlugin = "9.3.1"
 kotlin = "2.4.10"
 ktor = "3.5.2"
 ksp = "2.3.11"
+dokka = "2.2.0"
 kotlinpoet = "2.3.0"
 kotlinx-coroutines = "1.11.0"
 kotlinxSerializationJson = "1.11.0"
@@ -97,6 +98,9 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+# What fills the javadoc jar. Central takes an empty one and says nothing about it, so without this
+# the file every artefact must carry is a file with nothing in it.
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 sborkaJvm = { id = "io.github.youndie.sborka.jvm", version.ref = "sborka" }

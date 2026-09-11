@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     kotlin("plugin.serialization")
     id("io.github.youndie.sborka.kmp")
+    alias(libs.plugins.dokka)
     id("io.github.youndie.sborka.publish")
 }
 
