@@ -26,7 +26,14 @@ pluginManagement {
         // sborka one, which is fetched through it.
         maven("https://reposilite.kotlin.website/snapshots") {
             name = "wip-snapshots"
-            content { includeGroupByRegex("ru\\.workinprogress.*") }
+            // Both groups. The portfolio moved to `io.github.youndie` and sborka is already there —
+            // the plugin marker and the jar behind it are under the new one. The old group is still
+            // needed for the libraries published before the move: those files did not go anywhere
+            // and still resolve under the name they went up with.
+            content {
+                includeGroupByRegex("io\\.github\\.youndie.*")
+                includeGroupByRegex("ru\\.workinprogress.*")
+            }
         }
     }
 }
@@ -37,7 +44,7 @@ plugins {
     // `wip` catalog, and the check that this repository's `.editorconfig` is the one the rest of the
     // portfolio uses. What this file keeps is what is kompot's: Compose's own plugin repository
     // above, and the two ivy repositories the wasmJs toolchain needs below.
-    id("ru.workinprogress.sborka.settings") version "0.1.0.18"
+    id("io.github.youndie.sborka.settings") version "0.4.0.56"
 }
 
 dependencyResolutionManagement {

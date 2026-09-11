@@ -4,8 +4,8 @@ plugins {
     kotlin("plugin.serialization")
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    id("ru.workinprogress.sborka.kmp")
-    id("ru.workinprogress.sborka.publish")
+    id("io.github.youndie.sborka.kmp")
+    id("io.github.youndie.sborka.publish")
 }
 
 kotlin {

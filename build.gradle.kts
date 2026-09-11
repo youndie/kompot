@@ -15,7 +15,7 @@ plugins {
 }
 
 // The group, the version, the toolchain and the whole publication lived here and in
-// `buildSrc/src/main/kotlin/kompot.publishing.gradle.kts`. They come from `ru.workinprogress.sborka`
+// `buildSrc/src/main/kotlin/kompot.publishing.gradle.kts`. They come from `io.github.youndie.sborka`
 // now — the same code, with the same reasons written into it, shared with the rest of the portfolio
 // instead of copied — and the numbers behind them are one line each in `gradle.properties`.
 //
