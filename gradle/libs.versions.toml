@@ -25,7 +25,7 @@ viddik = "0.1.1.8"
 jewel = "0.40.0-262.10315.125"
 # The IntelliJ platform build Jewel was cut against — the suffix of the line above — and the only
 # place the icon bundle comes from. The two move together or the chevrons come out magenta.
-ijPlatform = "262.10315.125"
+ijPlatform = "262.10315.174"
 # The JetBrains Runtime's own API, and the studio compiles against it for ONE call: the same
 # `JBR.isAvailable()` Jewel's DecoratedWindow tests before refusing to open. It arrives transitively
 # with Jewel anyway; naming it is what lets code ask the question rather than guess at it from
