@@ -14,7 +14,7 @@ kotlinxSerializationJson = "1.11.0"
 lettuce = "7.6.0.RELEASE"
 compose-multiplatform = "1.11.1"
 compose-material3 = "1.11.0-alpha07"
-coil3 = "3.5.0"
+coil3 = "3.6.2"
 viddik = "0.1.1.8"
 # The studio's IDE-style shell. The version carries the IntelliJ build it was cut from
 # (`0.40.0-262.10315.125`), which is why it cannot be a plain three-number bump: what has to match is
