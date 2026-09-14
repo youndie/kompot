@@ -2,7 +2,7 @@
 # The build conventions: where the group, the version, the toolchain, the jvm floor and the
 # publication come from. Bumping this changes how every module is built, so it is pinned like any
 # other dependency and moved deliberately.
-sborka = "0.4.0.56"
+sborka = "0.4.0.76"
 androidGradlePlugin = "9.3.1"
 kotlin = "2.4.10"
 ktor = "3.5.2"
