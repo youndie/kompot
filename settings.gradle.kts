@@ -44,7 +44,7 @@ plugins {
     // `wip` catalog, and the check that this repository's `.editorconfig` is the one the rest of the
     // portfolio uses. What this file keeps is what is kompot's: Compose's own plugin repository
     // above, and the two ivy repositories the wasmJs toolchain needs below.
-    id("io.github.youndie.sborka.settings") version "0.4.0.56"
+    id("io.github.youndie.sborka.settings") version "0.4.0.76"
 }
 
 dependencyResolutionManagement {
