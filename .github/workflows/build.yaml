@@ -66,6 +66,15 @@ jobs:
       - name: The backlog index still matches the items it is generated from
         run: python3 docs/scripts/backlog_index.py --check
 
+      # The kotlin blocks in the readmes look like code and are none: nothing compiles them, so a
+      # rename leaves a snippet that builds only to the eye. This does not compile them either —
+      # they reach across module classpaths that never meet, and some of them are Gradle DSL — it
+      # asks the smaller question the renames actually broke: does every name in them still exist.
+      # The run carries its own self-test, because a parser that stopped finding blocks reports the
+      # same zero findings as a repository with nothing wrong.
+      - name: The names in the readmes still exist
+        run: python3 docs/scripts/readme_snippets.py
+
       # Only on a pull request, and this is the case the check was written for: `B-NN` is taken from
       # the index when the branch is cut, and a branch merged in the meantime can take that same
       # number. Neither tree holds a duplicate on its own — both are legal, and the collision exists
