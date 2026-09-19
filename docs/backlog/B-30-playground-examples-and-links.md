@@ -1,7 +1,7 @@
 ---
 id: B-30
 title: "Набор готовых тел и ссылки на витрину"
-status: open
+status: wip
 priority: P2
 size: S
 stage: playground
