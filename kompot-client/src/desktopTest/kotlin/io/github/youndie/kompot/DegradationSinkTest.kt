@@ -79,6 +79,53 @@ class DegradationSinkTest {
             )
         }
 
+    // THE OPT-IN (B-31). The default draws nothing for an unfamiliar type on purpose — that is the
+    // protocol working — and a deployment that would rather see the holes in a debug build takes this
+    // map. What matters as much as the drawing: the outcome reported changes with it, or a log would
+    // say NOTHING about a screen that has words on it.
+    @Test
+    fun `the opt-in map draws a placeholder for an unfamiliar type and reports it as one`() =
+        runDesktopComposeUiTest {
+            setContent(
+                render(
+                    UnknownComponent(id = "x", originalType = "promo_banner"),
+                    registry = KompotRegistry(kompotCoreRenderers + kompotVisiblePlaceholderRenderers),
+                ),
+            )
+
+            onNodeWithText("Unknown component").assertExists()
+            assertEquals(
+                listOf(
+                    Reported(
+                        KompotDegradationKind.UNKNOWN_COMPONENT,
+                        "promo_banner",
+                        KompotDegradationOutcome.PLACEHOLDER,
+                    ),
+                ),
+                reported,
+            )
+        }
+
+    // The half of the opt-in that must NOT change: a deployment that asked to see holes did not ask to
+    // lose the equivalents a server named for it.
+    @Test
+    fun `the opt-in map still prefers the equivalent the server named`() =
+        runDesktopComposeUiTest {
+            setContent(
+                render(
+                    UnknownComponent(
+                        id = "x",
+                        originalType = "promo_banner",
+                        fallback = TextComponent(id = "t", text = "Promo"),
+                    ),
+                    registry = KompotRegistry(kompotCoreRenderers + kompotStandardRenderers + kompotVisiblePlaceholderRenderers),
+                ),
+            )
+
+            onNodeWithText("Promo").assertExists()
+            assertEquals(listOf(KompotDegradationOutcome.SERVER_FALLBACK), reported.map { it.outcome })
+        }
+
     // The second hole: the type decoded fine and this build has no renderer for it. It is reported
     // under the name the SERVER wrote — "text", not TextComponent — because a reader greps logs with
     // the vocabulary of the wire, and for a while this was the one kind that answered in Kotlin.

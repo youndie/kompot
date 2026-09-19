@@ -509,7 +509,24 @@ private fun LazyListScope.paginatedListItems(
 // chose to replace a component, so it knows what the replacement stands in for. The fallback is an
 // ordinary component and may itself be unfamiliar, in which case this happens again one level down —
 // which is the right behaviour, not an accident of recursion.
-public class UnknownComponentRenderer : KompotComponentRenderer<UnknownComponent> {
+//
+// WITH NO EQUIVALENT NAMED, NOTHING IS DRAWN, and that default is a decision rather than an omission
+// (B-31, SPEC.md §2.1). An unfamiliar type is the protocol working as designed — a client older than
+// a server is the case the whole hierarchy is open for — and a visible marker would put untranslated,
+// unthemed words in front of every user of the older version for the length of a rollout, at the one
+// moment when nothing is wrong. That the hole is INVISIBLE is not the same as unreported: it goes to
+// the degradation sink, where a deployment routes it to its own counters.
+//
+// The other hole in this file is louder on purpose: a type that decoded and has no renderer is a
+// build assembled without a plug-in, which nobody designed and nobody wants to discover in a log.
+// Designed degradation is quiet; a mistake is not.
+//
+// A deployment that would rather see the holes — in a debug build, on a QA stand, in a tool — passes
+// `drawPlaceholder = true`, or takes the map below, and the decision stays where the words and the
+// build types are.
+public class UnknownComponentRenderer(
+    private val drawPlaceholder: Boolean = false,
+) : KompotComponentRenderer<UnknownComponent> {
     @Composable
     override fun Render(
         component: UnknownComponent,
@@ -519,10 +536,19 @@ public class UnknownComponentRenderer : KompotComponentRenderer<UnknownComponent
         val sink = LocalKompotDegradationSink.current
         val fallback = component.fallback
         if (fallback == null) {
-            sink.onUnknown(KompotDegradationKind.UNKNOWN_COMPONENT, component.originalType, KompotDegradationOutcome.NOTHING)
+            // The outcome is the truth about the screen, so the flag decides it rather than decorating
+            // it: a run that drew the placeholder must not report NOTHING.
+            if (drawPlaceholder) {
+                sink.onUnknown(KompotDegradationKind.UNKNOWN_COMPONENT, component.originalType, KompotDegradationOutcome.PLACEHOLDER)
+                UnknownComponentPlaceholder()
+            } else {
+                sink.onUnknown(KompotDegradationKind.UNKNOWN_COMPONENT, component.originalType, KompotDegradationOutcome.NOTHING)
+            }
             return
         }
 
+        // The server's equivalent wins in both modes: the flag is about what happens when there is
+        // nothing to draw, and a deployment that asked to see holes did not ask to lose fallbacks.
         sink.onUnknown(KompotDegradationKind.UNKNOWN_COMPONENT, component.originalType, KompotDegradationOutcome.SERVER_FALLBACK)
         LocalKompotRegistry.current.RenderNode(fallback, actionHandler, formController)
     }
@@ -532,6 +558,17 @@ public class UnknownComponentRenderer : KompotComponentRenderer<UnknownComponent
 // exactly as it merges serializers modules.
 public val kompotCoreRenderers: Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>> =
     mapOf(UnknownComponent::class to UnknownComponentRenderer())
+
+// THE OPT-IN, added AFTER kompotCoreRenderers to replace what it registered:
+//
+//     KompotRegistry(kompotCoreRenderers + myRenderers + kompotVisiblePlaceholderRenderers)
+//
+// One line, in the build types where a deployment wants unfamiliar types to be seen rather than
+// counted — a debug build, a QA stand, a screen-editing tool. It changes nothing about what the server
+// sends and nothing about what a release shows; that asymmetry is the whole point of it being here
+// rather than in the default (SPEC.md §2.1).
+public val kompotVisiblePlaceholderRenderers: RenderersMap =
+    mapOf(UnknownComponent::class to UnknownComponentRenderer(drawPlaceholder = true))
 
 public val kompotStandardRenderers: Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>> =
     mapOf(
