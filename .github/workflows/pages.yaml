@@ -1,0 +1,47 @@
+name: Pages
+
+# The showcase is deployed from `main` and from nowhere else: a page built from a branch is a demo of
+# code nobody has reviewed, served from the address that says the toolkit works this way.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Why this is a workflow of its own rather than a job in build.yaml: `pages: write` and an id token
+# are rights every pull request would inherit there. The build reads the repository; only this
+# publishes it.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time, and not cancelled halfway. A cancelled deploy leaves the site on the
+# previous version, which is harmless; a cancelled upload leaves it on half of the new one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      # The same action the build uses, at the same version, for the same reason: the JDK Gradle runs
+      # on belongs to the portfolio rather than to this workflow.
+      - uses: youndie/sborka/.github/actions/setup-kotlin@main
+      - run: ./gradlew :kompot-playground:wasmJsBrowserDistribution --no-daemon
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          # What the Kotlin plugin calls the production distribution: the page, its script and the two
+          # wasm binaries beside it.
+          path: kompot-playground/build/dist/wasmJs/productionExecutable
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

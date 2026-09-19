@@ -51,7 +51,7 @@
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-25](backlog/B-25-playground-page.md) `[ ]` | Модуль плейграунда и страница на GH Pages | playground | P0 | S/M | — |
+| [B-25](backlog/B-25-playground-page.md) `[~]` | Модуль плейграунда и страница на GH Pages | playground | P0 | S/M | — |
 | [B-26](backlog/B-26-playground-body-and-render.md) `[ ]` | Живой рендер: текст тела слева, экран справа | playground | P0 | M | B-25 |
 | [B-28](backlog/B-28-playground-demo-plugin.md) `[ ]` | Демо-компонент, объявленный как плагин деплоя | playground | P0 | S | B-25 |
 | [B-29](backlog/B-29-old-client-switch.md) `[ ]` | Переключатель «старый клиент»: три состояния деградации | playground | P0 | M | B-26, B-28 |
