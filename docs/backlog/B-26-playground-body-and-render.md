@@ -1,7 +1,7 @@
 ---
 id: B-26
 title: "Живой рендер: текст тела слева, экран справа"
-status: open
+status: wip
 priority: P0
 size: M
 stage: playground

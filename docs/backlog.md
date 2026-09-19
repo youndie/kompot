@@ -51,7 +51,7 @@
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-26](backlog/B-26-playground-body-and-render.md) `[ ]` | Живой рендер: текст тела слева, экран справа | playground | P0 | M | B-25 |
+| [B-26](backlog/B-26-playground-body-and-render.md) `[~]` | Живой рендер: текст тела слева, экран справа | playground | P0 | M | B-25 |
 | [B-28](backlog/B-28-playground-demo-plugin.md) `[ ]` | Демо-компонент, объявленный как плагин деплоя | playground | P0 | S | B-25 |
 | [B-29](backlog/B-29-old-client-switch.md) `[ ]` | Переключатель «старый клиент»: три состояния деградации | playground | P0 | M | B-26, B-28 |
 | [B-27](backlog/B-27-playground-tree.md) `[ ]` | Дерево тела слева, выбор узла подсвечивает его в рендере | playground | P1 | M | B-26 |
