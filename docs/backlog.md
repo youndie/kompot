@@ -47,16 +47,15 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (4)
+## Открыто (3)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-30](backlog/B-30-playground-examples-and-links.md) `[ ]` | Набор готовых тел и ссылки на витрину | playground | P2 | S | B-29 |
 | [B-31](backlog/B-31-question-placeholder-for-unknown.md) `[?]` | Должен ли незнакомый тип без fallback рисовать заглушку? | playground | P2 | S | — |
 | [B-34](backlog/B-34-degradation-vocabulary-is-ambiguous.md) `[ ]` | Сток деградации называет тип по-разному и путает «нарисован фолбэк» с «нарисована заглушка» | — | P3 | S | — |
 | [B-33](backlog/B-33-dokka-reads-ksp-output-too-early.md) `[ ]` | Dokka читает сгенерированное KSP раньше, чем оно появляется | — | infra | S/M | — |
 
-## Сделано (30)
+## Сделано (31)
 
 **Швы в toolkit'е**
 
@@ -104,6 +103,7 @@
 - [B-27](backlog/B-27-playground-tree.md) — Дерево тела слева, выбор узла подсвечивает его в рендере
 - [B-28](backlog/B-28-playground-demo-plugin.md) — Демо-компонент, объявленный как плагин деплоя
 - [B-29](backlog/B-29-old-client-switch.md) — Переключатель «старый клиент»: три состояния деградации
+- [B-30](backlog/B-30-playground-examples-and-links.md) — Набор готовых тел и ссылки на витрину
 - [B-32](backlog/B-32-playground-states-under-test.md) — Три состояния витрины проверяются прогоном, а не глазами
 
 <!-- END INDEX -->

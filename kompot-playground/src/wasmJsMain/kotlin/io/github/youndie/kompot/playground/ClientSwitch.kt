@@ -11,12 +11,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.youndie.kompot.KompotRegistry
+import io.github.youndie.kompot.form.standard.formStandardSerializersModule
+import io.github.youndie.kompot.generated.generatedFormsClientRenderers
 import io.github.youndie.kompot.kompotCoreRenderers
 import io.github.youndie.kompot.kompotJson
 import io.github.youndie.kompot.kompotStandardRenderers
 import io.github.youndie.kompot.playground.demo.demoRenderers
 import io.github.youndie.kompot.playground.demo.demoSerializersModule
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.plus
 
 // WHICH CLIENT IS LOOKING AT THE BODY — the whole point of the page.
 //
@@ -66,21 +69,25 @@ public enum class ClientMode(
     ;
 
     // What the mode means in the two halves a client is made of.
+    // The form vocabulary is in EVERY mode, and deliberately: the switch models a client that is
+    // older by one component, not one that speaks half the protocol. Leaving it out of the older modes
+    // would make the form example degrade for a second reason and blur the one the page is about.
     public val json: Json
         get() =
             when (this) {
-                CURRENT, MISSING_RENDERER -> kompotJson(demoSerializersModule)
-                OLDER, OLDER_WITH_FALLBACK -> kompotJson()
+                CURRENT, MISSING_RENDERER -> kompotJson(formStandardSerializersModule + demoSerializersModule)
+                OLDER, OLDER_WITH_FALLBACK -> kompotJson(formStandardSerializersModule)
             }
 
     public val registry: KompotRegistry
         get() =
             when (this) {
-                CURRENT -> KompotRegistry(kompotCoreRenderers + kompotStandardRenderers + demoRenderers)
+                CURRENT ->
+                    KompotRegistry(kompotCoreRenderers + kompotStandardRenderers + generatedFormsClientRenderers + demoRenderers)
                 // No renderer for the demo type, and no UnknownComponentRenderer either would be a third
                 // thing again — the core map is what any client has.
                 OLDER, OLDER_WITH_FALLBACK, MISSING_RENDERER ->
-                    KompotRegistry(kompotCoreRenderers + kompotStandardRenderers)
+                    KompotRegistry(kompotCoreRenderers + kompotStandardRenderers + generatedFormsClientRenderers)
             }
 
     // Whether the SERVER put an equivalent in the body for this state.
