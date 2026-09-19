@@ -86,6 +86,31 @@ class DegradationStatesTest {
             assertTrue("UNRENDERABLE_COMPONENT" in reported.single(), reported.toString())
         }
 
+    // THE GUARD OVER THE EXAMPLES THEMSELVES. They are hand-written bodies, and a hand-written body
+    // is exactly the kind of thing that goes stale silently: a wire name changes, the page goes on
+    // showing a screen with a hole in it, and the hole looks like the very mechanism the page
+    // demonstrates. Today's client must find nothing to degrade in any of them.
+    @Test
+    fun `every example is a body today's client fully understands`() =
+        runComposeUiTest {
+            EXAMPLES.forEach { example ->
+                val log = DegradationLog()
+                setContent {
+                    MaterialTheme {
+                        KompotPreview(
+                            body = example.body,
+                            registry = ClientMode.CURRENT.registry,
+                            designSystem = Material3DesignSystem(),
+                            json = ClientMode.CURRENT.json,
+                            degradationSink = KompotDegradationSink { kind, type, drawn -> log.report(kind, type, drawn) },
+                        )
+                    }
+                }
+                waitForIdle()
+                assertTrue(log.lines.isEmpty(), "${example.name}: ${log.lines}")
+            }
+        }
+
     // The half the switch does NOT do to the client, because it cannot: naming an equivalent is the
     // server's, so it happens to the body. Checked here because a transform that silently did nothing
     // would make the state above pass for the wrong reason — there would simply be no fallback to draw.

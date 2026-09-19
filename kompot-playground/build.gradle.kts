@@ -46,6 +46,11 @@ kotlin {
                 // brand of our own: the toolkit ships this one, and a showcase brand would have to be
                 // explained before anything else on the page could be.
                 implementation(projects.kompotDsMaterialCompose)
+                // The form vocabulary, because one of the examples is a form and a form is the shape a
+                // reader is least likely to guess: the field definitions and values on one side,
+                // the input renderers on the other.
+                implementation(projects.formStandard)
+                implementation(projects.kompotFormsClient)
 
                 implementation(libs.compose.runtime)
                 implementation(libs.compose.foundation)

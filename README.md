@@ -126,6 +126,14 @@ and diff its text geometry against a Compose frame, inventory a canvas's tokens 
 design system from the named file, draw a server's recorded screens as a canvas in the wire's own
 vocabulary and read such a canvas back into a tree.
 
+### 🧪 See it degrade, in a browser
+
+[**youndie.github.io/kompot**](https://youndie.github.io/kompot/) — the body on the left, the screen
+it becomes on the right, and a switch that says which client is reading it. Pick "a client released
+earlier" and watch a component it has never heard of leave a hole while the rest of the screen stays:
+that is §2.1 happening, not a picture of it. The page is built from this repository's own `wasmJs`
+target, with the renderers a client ships.
+
 ### 📐 The wire specification
 
 `kompot-spec` generates a JSON Schema for every protocol module out of the very SerialDescriptors

@@ -42,8 +42,9 @@ public fun PlaygroundApp() {
             // always, and the whole reason for keeping two is the gap between them: a person adding a
             // property has an unparseable body between two keystrokes, and a page that blanked the
             // screen on every keystroke would be unusable exactly while it is being used.
-            var text by remember { mutableStateOf(SAMPLE_BODY) }
-            var drawn by remember { mutableStateOf(SAMPLE_BODY) }
+            var example by remember { mutableStateOf(EXAMPLES.first()) }
+            var text by remember { mutableStateOf(example.body) }
+            var drawn by remember { mutableStateOf(example.body) }
             var failure by remember { mutableStateOf<String?>(null) }
 
             val log = remember { DegradationLog() }
@@ -70,8 +71,19 @@ public fun PlaygroundApp() {
                 offer(text.withServerFallback(next.serverNamesFallback))
             }
 
+            // Choosing an example replaces the body and keeps the client: which client is looking is
+            // the reader's other axis, and losing it on every example would make the two impossible to
+            // compare.
+            fun show(next: Example) {
+                example = next
+                selectedId = null
+                offer(next.body.withServerFallback(mode.serverNamesFallback))
+            }
+
             Row(Modifier.fillMaxSize()) {
                 Column(Modifier.weight(BODY_WEIGHT).fillMaxHeight().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    ExamplePicker(current = example, onPick = ::show, modifier = Modifier.fillMaxWidth())
+
                     Text("The tree the body describes", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.outline)
 
                     // The tree walks the body that was DRAWN rather than the text being typed: a tree
