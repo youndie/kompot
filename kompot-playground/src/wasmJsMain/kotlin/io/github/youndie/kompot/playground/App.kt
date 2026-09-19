@@ -21,35 +21,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.github.youndie.kompot.KompotRegistry
+import io.github.youndie.kompot.KompotDegradationSink
 import io.github.youndie.kompot.ds.material.Material3DesignSystem
-import io.github.youndie.kompot.kompotCoreRenderers
-import io.github.youndie.kompot.kompotJson
-import io.github.youndie.kompot.kompotStandardRenderers
-import io.github.youndie.kompot.playground.demo.demoRenderers
-import io.github.youndie.kompot.playground.demo.demoSerializersModule
 import io.github.youndie.kompot.preview.KompotPreview
 import io.github.youndie.kompot.preview.decodeKompotBody
 
-// The page: the body on the left, the screen it becomes on the right.
+// The page: the body on the left, and on the right the client that reads it — which client is the
+// switch, and what it could not understand is the log underneath.
 //
-// The registry is assembled exactly as a deployment assembles one — the core renderers, the standard
-// set, and the deployment's own — because that is the claim the page makes: this is the client, not a
-// drawing of it. `demoRenderers` is the playground's own plug-in (B-28), and it sits here in the same
-// line a consumer would put theirs in.
-private val registry = KompotRegistry(kompotCoreRenderers + kompotStandardRenderers + demoRenderers)
-
-// ONE Json for both halves, and it carries the deployment's own types the way a client's does. The right pane decodes with whatever
-// KompotPreview is given; the left pane decides whether the text is a body at all. Two instances
-// would eventually disagree, and then the editor would call a body valid that the screen cannot draw
-// — the exact confusion this page exists to remove. B-29 turns this single instance into two on
-// purpose, which is a different thing entirely: there they model two CLIENTS.
-private val json = kompotJson(demoSerializersModule)
-
+// Nothing here assembles a registry or a Json of its own any more: both belong to a ClientMode, because
+// "which client" is the question the page asks. See ClientSwitch.kt.
 @Composable
 public fun PlaygroundApp() {
     MaterialTheme {
         Surface(Modifier.fillMaxSize()) {
+            var mode by remember { mutableStateOf(ClientMode.CURRENT) }
+
             // What is being typed, and what was last understood. They are the same string almost
             // always, and the whole reason for keeping two is the gap between them: a person adding a
             // property has an unparseable body between two keystrokes, and a page that blanked the
@@ -58,14 +45,24 @@ public fun PlaygroundApp() {
             var drawn by remember { mutableStateOf(SAMPLE_BODY) }
             var failure by remember { mutableStateOf<String?>(null) }
 
+            val log = remember { DegradationLog() }
+
             // The decode happens HERE, on the edit, rather than inside the composition of the right
             // pane: a throw during composition takes the whole page down, and a page that dies on a
             // missing brace tells a stranger the toolkit is broken when what broke is their comma.
             fun offer(next: String) {
                 text = next
-                val error = runCatching { json.decodeKompotBody(next) }.exceptionOrNull()
+                val error = runCatching { mode.json.decodeKompotBody(next) }.exceptionOrNull()
                 failure = error?.let { it.message ?: it.toString() }
                 if (error == null) drawn = next
+            }
+
+            // The client changes, and with it one thing in the BODY: whether the server named an
+            // equivalent. That half is not the client's to decide (SPEC.md §2.1), so it happens to the
+            // text in the editor where it can be seen, rather than quietly inside the render.
+            fun switchTo(next: ClientMode) {
+                mode = next
+                offer(text.withServerFallback(next.serverNamesFallback))
             }
 
             Row(Modifier.fillMaxSize()) {
@@ -78,35 +75,61 @@ public fun PlaygroundApp() {
 
                 VerticalDivider()
 
-                ScreenPane(body = drawn, modifier = Modifier.weight(1f - BODY_WEIGHT).fillMaxHeight())
+                ClientPane(
+                    mode = mode,
+                    body = drawn,
+                    log = log,
+                    onModeChange = ::switchTo,
+                    modifier = Modifier.weight(1f - BODY_WEIGHT).fillMaxHeight(),
+                )
             }
         }
     }
 }
 
 @Composable
-private fun ScreenPane(
+private fun ClientPane(
+    mode: ClientMode,
     body: String,
+    log: DegradationLog,
+    onModeChange: (ClientMode) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("The screen a client draws", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.outline)
+    Column(modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        ClientSwitch(mode = mode, onChange = onModeChange, modifier = Modifier.fillMaxWidth())
+
+        Text("The screen this client draws", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.outline)
+
+        // Cleared HERE rather than in an effect, and the ordering is the whole reason: this runs before
+        // the render pane below composes, while a LaunchedEffect would run after it — wiping the very
+        // entries the sink had just reported.
+        remember(mode, body) { log.clear() }
+
+        // REMEMBERED, and not for speed: LocalKompotDegradationSink is a static composition local, so a
+        // new instance on every composition invalidates the whole render subtree — with a sink that
+        // writes state the pane beside it reads, that is a loop rather than a slowdown.
+        val sink = remember(log) { KompotDegradationSink { kind, originalType, drawn -> log.report(kind, originalType, drawn) } }
 
         // Scrolls, because a body is as long as its author makes it and a clipped screen looks like a
         // renderer that lost the rest.
         Box(Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState())) {
             KompotPreview(
                 body = body,
-                registry = registry,
+                registry = mode.registry,
                 designSystem = Material3DesignSystem(),
-                json = json,
-                // NOT the default, and this is the one place the page must differ from a golden test.
-                // KompotPreview fails loudly so that a screenshot never records a hole as the expected
-                // picture; here a throw is a blank page in somebody's browser. The page reports and
-                // carries on — B-29 turns this callback into the visible log.
-                onDegraded = { kind, originalType -> println("[kompot] $kind: $originalType") },
+                json = mode.json,
+                // The WHOLE sink rather than onDegraded, because the page's subject is the one fact
+                // onDegraded drops: whether anything was drawn in the node's place. Without it the
+                // second and third states of the switch report the same line.
+                //
+                // It also replaces the loud default: KompotPreview fails on degradation so that a
+                // screenshot never records a hole as the expected picture, and here the hole IS the
+                // subject — a throw would be a blank page in somebody's browser.
+                degradationSink = sink,
             )
         }
+
+        DegradationLogPane(log = log, modifier = Modifier.fillMaxWidth())
     }
 }
 
