@@ -3,6 +3,7 @@ package io.github.youndie.kompot.studio.stories
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.encodeKompotComponent
 import io.github.youndie.kompot.studio.KompotStudioConfig
+import io.github.youndie.kompot.studio.samplesByWireType
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
@@ -23,10 +24,10 @@ internal data class Story(
 )
 
 internal fun storiesFor(config: KompotStudioConfig): List<Story> {
-    val samples = config.samples.toMap()
+    val samples = samplesByWireType(config)
 
     val fromSamples =
-        config.samples.map { (wireType, component) ->
+        samples.map { (wireType, component) ->
             Story(group = wireType, name = "sample", body = config.json.encodeKompotComponent(component))
         }
 

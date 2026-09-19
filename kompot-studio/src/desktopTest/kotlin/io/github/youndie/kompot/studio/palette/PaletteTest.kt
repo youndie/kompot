@@ -46,7 +46,7 @@ class PaletteTest {
         val withSample =
             KompotStudioConfig(
                 registry = toolkitRegistry,
-                samples = listOf("text" to TextComponent(id = "sample", text = "hello")),
+                samples = listOf(TextComponent(id = "sample", text = "hello")),
             )
 
         assertTrue(paletteFor(withSample).single { it.wireType == "text" }.hasSample)
@@ -67,7 +67,7 @@ class PaletteTest {
         val withSample =
             KompotStudioConfig(
                 registry = toolkitRegistry,
-                samples = listOf("text" to TextComponent(id = "sample", text = "Order placed")),
+                samples = listOf(TextComponent(id = "sample", text = "Order placed")),
             )
 
         val node = Json.parseToJsonElement(newNode(withSample, "text", "text_1")).jsonObject
