@@ -153,6 +153,17 @@ val schemas = KompotSpec.generateAll(KompotToolkitSpec.modules + myComponentsSpe
 val profile = KompotSpec.profile(schemas)
 ```
 
+Which changes of that schema the other end survives is not a matter of taste either. §15 states the
+rules — a new component degrades to a placeholder, a new form field costs an older client the whole
+response — and `SchemaCompatibility` applies them to two sets of documents rather than leaving them
+to the eye reading a diff of generated JSON, where the two look the same. CI runs it on every pull
+request, against the revision the branch was cut from; an application checking its own schema against
+its own history calls the same function.
+
+```kotlin
+SchemaCompatibility.compare(before, after).filter { it.verdict != Compatibility.COMPATIBLE }
+```
+
 `kompot-tck` is the other half: it points at a **running** server and checks what a schema cannot
 express — ids unique within a tree, a form's screen and schema agreeing on fieldId, a 304 on a
 repeated ETag, pagination that terminates, a 401 without a token, the idempotency contract, and —
