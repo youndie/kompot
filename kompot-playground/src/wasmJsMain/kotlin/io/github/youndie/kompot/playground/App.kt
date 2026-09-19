@@ -143,7 +143,10 @@ private fun ClientPane(
         // REMEMBERED, and not for speed: LocalKompotDegradationSink is a static composition local, so a
         // new instance on every composition invalidates the whole render subtree — with a sink that
         // writes state the pane beside it reads, that is a loop rather than a slowdown.
-        val sink = remember(log) { KompotDegradationSink { kind, originalType, drawn -> log.report(kind, originalType, drawn) } }
+        val sink =
+            remember(log) {
+                KompotDegradationSink { kind, originalType, outcome -> log.report(kind, originalType, outcome) }
+            }
 
         // Scrolls, because a body is as long as its author makes it and a clipped screen looks like a
         // renderer that lost the rest.

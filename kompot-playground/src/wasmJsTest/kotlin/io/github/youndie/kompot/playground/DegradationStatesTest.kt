@@ -42,7 +42,7 @@ class DegradationStatesTest {
                     registry = mode.registry,
                     designSystem = Material3DesignSystem(),
                     json = mode.json,
-                    degradationSink = KompotDegradationSink { kind, type, drawn -> log.report(kind, type, drawn) },
+                    degradationSink = KompotDegradationSink { kind, type, outcome -> log.report(kind, type, outcome) },
                 )
             }
         }
@@ -64,16 +64,16 @@ class DegradationStatesTest {
         checkingReports(ClientMode.OLDER, SAMPLE_BODY) { reported ->
             assertEquals(1, reported.size, reported.toString())
             assertTrue("promo_banner" in reported.single(), reported.toString())
-            assertTrue("skipped" in reported.single(), reported.toString())
+            assertTrue("nothing" in reported.single(), reported.toString())
         }
 
     // The state the whole page exists for: the same client, the same unfamiliar type, and a server
-    // that named an equivalent. The difference is visible only in the third fact the sink carries.
+    // that named an equivalent. The difference is visible only in the outcome the sink carries.
     @Test
     fun `the same client draws the equivalent the server named`() =
         checkingReports(ClientMode.OLDER_WITH_FALLBACK, SAMPLE_BODY.withServerFallback(true)) { reported ->
             assertEquals(1, reported.size, reported.toString())
-            assertTrue("drawn through its fallback" in reported.single(), reported.toString())
+            assertTrue("server_fallback" in reported.single(), reported.toString())
         }
 
     // The fourth case, and the reason the page names it apart: here the type decodes and the registry
@@ -84,6 +84,10 @@ class DegradationStatesTest {
         checkingReports(ClientMode.MISSING_RENDERER, SAMPLE_BODY) { reported ->
             assertEquals(1, reported.size, reported.toString())
             assertTrue("UNRENDERABLE_COMPONENT" in reported.single(), reported.toString())
+            // The WIRE name, not PromoBanner: before B-34 this kind answered in Kotlin, which left the
+            // node in the tree unmarkable and the log ungreppable by the only name its reader has.
+            assertTrue("promo_banner" in reported.single(), reported.toString())
+            assertTrue("placeholder" in reported.single(), reported.toString())
         }
 
     // THE GUARD OVER THE EXAMPLES THEMSELVES. They are hand-written bodies, and a hand-written body
@@ -102,7 +106,7 @@ class DegradationStatesTest {
                             registry = ClientMode.CURRENT.registry,
                             designSystem = Material3DesignSystem(),
                             json = ClientMode.CURRENT.json,
-                            degradationSink = KompotDegradationSink { kind, type, drawn -> log.report(kind, type, drawn) },
+                            degradationSink = KompotDegradationSink { kind, type, outcome -> log.report(kind, type, outcome) },
                         )
                     }
                 }

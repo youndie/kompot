@@ -30,6 +30,8 @@ import kotlinx.coroutines.launch
 import io.github.youndie.kompot.standard.*
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormController
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.serializerOrNull
 import kotlin.reflect.KClass
 import androidx.compose.foundation.layout.Column as ComposeColumn
 
@@ -517,11 +519,11 @@ public class UnknownComponentRenderer : KompotComponentRenderer<UnknownComponent
         val sink = LocalKompotDegradationSink.current
         val fallback = component.fallback
         if (fallback == null) {
-            sink.onUnknown(KompotDegradationKind.UNKNOWN_COMPONENT, component.originalType, drawnAsFallback = false)
+            sink.onUnknown(KompotDegradationKind.UNKNOWN_COMPONENT, component.originalType, KompotDegradationOutcome.NOTHING)
             return
         }
 
-        sink.onUnknown(KompotDegradationKind.UNKNOWN_COMPONENT, component.originalType, drawnAsFallback = true)
+        sink.onUnknown(KompotDegradationKind.UNKNOWN_COMPONENT, component.originalType, KompotDegradationOutcome.SERVER_FALLBACK)
         LocalKompotRegistry.current.RenderNode(fallback, actionHandler, formController)
     }
 }
@@ -643,6 +645,27 @@ internal fun UnknownComponentPlaceholder() {
     Text("Unknown component", color = MaterialTheme.colorScheme.error)
 }
 
+// THE NAME A READER OF A LOG HAS, which is the one the server wrote. UNKNOWN_COMPONENT always had it
+// — an unfamiliar type keeps its wire name in originalType — while this path used to report the Kotlin
+// class, so the two kinds of degradation named the same component two different ways and only one of
+// them could be grepped for.
+//
+// The serial name rather than the class name, and through serializerOrNull because that is where a
+// @SerialName lives at runtime; a type that carries none serialises under its full class name anyway,
+// so that is also the truthful answer for it. The opt-in is the cost, and it is bounded: if the
+// lookup ever stops working the fall-back is the class name, which is what this used to print.
+@OptIn(InternalSerializationApi::class)
+internal fun KompotComponent.wireType(): String =
+    when (this) {
+        // It knows its own: the type the server sent, kept through decoding precisely so it can be
+        // named afterwards.
+        is UnknownComponent -> originalType
+        else ->
+            runCatching { this::class.serializerOrNull()?.descriptor?.serialName }.getOrNull()
+                ?: this::class.simpleName
+                ?: "unknown"
+    }
+
 public typealias RenderersMap = Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>>
 
 public class KompotRegistry(
@@ -703,8 +726,8 @@ public class KompotRegistry(
         } else {
             sink.onUnknown(
                 KompotDegradationKind.UNRENDERABLE_COMPONENT,
-                actual::class.simpleName ?: "unknown",
-                drawnAsFallback = true,
+                actual.wireType(),
+                KompotDegradationOutcome.PLACEHOLDER,
             )
             UnknownComponentPlaceholder()
         }

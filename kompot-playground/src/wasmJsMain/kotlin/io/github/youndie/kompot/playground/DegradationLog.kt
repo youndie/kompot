@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import io.github.youndie.kompot.KompotDegradationKind
+import io.github.youndie.kompot.KompotDegradationOutcome
 
 // WHAT THE CLIENT DID NOT UNDERSTAND, in its own words.
 //
@@ -23,13 +24,14 @@ import io.github.youndie.kompot.KompotDegradationKind
 public class DegradationLog {
     private val entries = mutableStateListOf<String>()
 
-    // The wire types this client did not understand, as the sink named them. The tree marks its nodes
-    // from this rather than from a guess at the profile, so the two halves of the page cannot disagree
-    // about what was unfamiliar.
+    // The wire types this client did not draw properly, as the sink named them. The tree marks its
+    // nodes from this rather than from a guess at the profile, so the two halves of the page cannot
+    // disagree about what was unfamiliar.
     //
-    // UNRENDERABLE_COMPONENT is deliberately not in here: that kind reports the KOTLIN class name
-    // (B-34), which matches no "type" in the body, and a mark that silently never fires is worse than
-    // no mark at all.
+    // BOTH kinds now, which they could not be before B-34: UNRENDERABLE_COMPONENT used to report the
+    // Kotlin class name, matching no "type" in the body, so including it would have been a mark that
+    // silently never fires. Both kinds name the wire type now, and both mean the same thing to the
+    // reader of a tree — this node is not on screen the way the body asked for.
     private val unknown = mutableStateListOf<String>()
 
     public val lines: List<String> get() = entries
@@ -49,15 +51,14 @@ public class DegradationLog {
     public fun report(
         kind: KompotDegradationKind,
         originalType: String,
-        drawnAsFallback: Boolean,
+        outcome: KompotDegradationOutcome,
     ) {
         // The toolkit's own words, taken from the default sink in Degradation.kt rather than invented
         // here: what a deployment reads in its logs and what this page shows should be one sentence,
         // or the page teaches a vocabulary nobody else uses.
-        val line =
-            "$kind  \"$originalType\"" + if (drawnAsFallback) "  drawn through its fallback" else "  skipped"
+        val line = "$kind  \"$originalType\"  ${outcome.name.lowercase()}"
         if (line !in entries) entries += line
-        if (kind == KompotDegradationKind.UNKNOWN_COMPONENT && originalType !in unknown) unknown += originalType
+        if (kind != KompotDegradationKind.UNKNOWN_ACTION && originalType !in unknown) unknown += originalType
     }
 }
 

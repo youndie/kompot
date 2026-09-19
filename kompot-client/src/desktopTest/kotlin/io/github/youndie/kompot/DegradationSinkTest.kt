@@ -20,11 +20,11 @@ class DegradationSinkTest {
     private data class Reported(
         val kind: KompotDegradationKind,
         val originalType: String,
-        val drawnAsFallback: Boolean,
+        val outcome: KompotDegradationOutcome,
     )
 
     private val reported = mutableListOf<Reported>()
-    private val sink = KompotDegradationSink { kind, type, drawn -> reported += Reported(kind, type, drawn) }
+    private val sink = KompotDegradationSink { kind, type, outcome -> reported += Reported(kind, type, outcome) }
 
     private fun render(
         component: KompotComponent,
@@ -48,13 +48,13 @@ class DegradationSinkTest {
             setContent(render(UnknownComponent(id = "x", originalType = "promo_banner")))
 
             assertEquals(
-                listOf(Reported(KompotDegradationKind.UNKNOWN_COMPONENT, "promo_banner", drawnAsFallback = false)),
+                listOf(Reported(KompotDegradationKind.UNKNOWN_COMPONENT, "promo_banner", KompotDegradationOutcome.NOTHING)),
                 reported,
             )
         }
 
     @Test
-    fun `the same type with a server fallback says something was drawn`() =
+    fun `the same type with a server fallback names the server's equivalent`() =
         runDesktopComposeUiTest {
             setContent(
                 render(
@@ -68,19 +68,29 @@ class DegradationSinkTest {
 
             onNodeWithText("Promo").assertExists()
             assertEquals(
-                listOf(Reported(KompotDegradationKind.UNKNOWN_COMPONENT, "promo_banner", drawnAsFallback = true)),
+                listOf(
+                    Reported(
+                        KompotDegradationKind.UNKNOWN_COMPONENT,
+                        "promo_banner",
+                        KompotDegradationOutcome.SERVER_FALLBACK,
+                    ),
+                ),
                 reported,
             )
         }
 
-    // The second hole, and the one the report does not name: the type decoded fine and this build has
-    // no renderer for it. Same consequence, same silence.
+    // The second hole: the type decoded fine and this build has no renderer for it. It is reported
+    // under the name the SERVER wrote — "text", not TextComponent — because a reader greps logs with
+    // the vocabulary of the wire, and for a while this was the one kind that answered in Kotlin.
     @Test
-    fun `a component with no renderer in this registry is reported too`() =
+    fun `a component with no renderer is reported by its wire name, with the placeholder as the outcome`() =
         runDesktopComposeUiTest {
             setContent(render(TextComponent(id = "t", text = "hi"), registry = KompotRegistry(kompotCoreRenderers)))
 
-            assertEquals(listOf(KompotDegradationKind.UNRENDERABLE_COMPONENT), reported.map { it.kind })
+            assertEquals(
+                listOf(Reported(KompotDegradationKind.UNRENDERABLE_COMPONENT, "text", KompotDegradationOutcome.PLACEHOLDER)),
+                reported,
+            )
         }
 
     // An action nobody can act on, reaching the handler as UnknownAction. Reported where it is raised
@@ -100,7 +110,7 @@ class DegradationSinkTest {
             waitForIdle()
 
             assertEquals(
-                listOf(Reported(KompotDegradationKind.UNKNOWN_ACTION, "open_esim", drawnAsFallback = false)),
+                listOf(Reported(KompotDegradationKind.UNKNOWN_ACTION, "open_esim", KompotDegradationOutcome.NOTHING)),
                 reported,
             )
             assertEquals(1, handled.size, "the handler must still receive it: reporting is not swallowing")

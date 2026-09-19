@@ -87,11 +87,10 @@ public fun KompotPreview(
     // not, and the golden would go on passing for as long as the loader stayed missing. So the body
     // that needs one says so — loudly — and a caller who has an answer passes it.
     pageLoader: KompotPageLoader? = null,
-    // THE WHOLE SINK, for the caller that needs the fact `onDegraded` drops: whether anything was
-    // drawn in the node's place. A hole and a placeholder are different facts about a screen — the
-    // toolkit's own KompotDegradationSink says so with a third parameter — and a caller whose subject
-    // IS degradation cannot tell an unfamiliar type that vanished from one the server named an
-    // equivalent for. Both report UNKNOWN_COMPONENT with the same name.
+    // THE WHOLE SINK, for the caller that needs what `onDegraded` drops: the OUTCOME — nothing, the
+    // toolkit's placeholder, or the equivalent the server named. A caller whose subject IS degradation
+    // cannot tell an unfamiliar type that vanished from one the server named a stand-in for, since
+    // both report UNKNOWN_COMPONENT under the same name.
     //
     // Additive rather than a third parameter on `onDegraded`: widening that function type would break
     // every caller that already passes a two-argument lambda. Set, it replaces onDegraded entirely —
@@ -110,6 +109,9 @@ public fun KompotPreview(
         LocalKompotRegistry provides registry,
         LocalKompotDegradationSink provides
             (degradationSink ?: KompotDegradationSink { kind, originalType, _ -> onDegraded(kind, originalType) }),
+        // `_` is the outcome, and dropping it is the whole reason `degradationSink` exists beside this
+        // callback: onDegraded answers "what was not understood", the sink also answers "what the
+        // person saw instead".
         // Only when there is one. Providing LocalKompotPageLoader with a stub whenever the caller
         // passed nothing would turn "this screen needs a page loader" from an error into a silence.
         *listOfNotNull(pageLoader?.let { LocalKompotPageLoader provides it }).toTypedArray(),
