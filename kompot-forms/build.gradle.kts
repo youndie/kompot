@@ -61,38 +61,7 @@ ksp {
     arg("kompotModuleTag", "Forms")
 }
 
-// Where the generated sources land. The producing task is deliberately NOT attached to this directory
-// with `builtBy`: KSP reads the very source set it writes into, so making the source set depend on the
-// producer makes the producer depend on itself — Gradle answers with a circular dependency between
-// kspCommonMainKotlinMetadata and kspCommonMainKotlinMetadata. That is why the consumers below are
-// listed by name rather than served by the collection.
-kotlin.sourceSets.commonMain {
-    kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-}
-
-// For the consumers that take the PATHS out of the source set instead of the collection: those lose
-// the dependency the collection carries, and there is no way to ask Gradle which ones do.
-//
-// This list used to be the whole mechanism, and it named two kinds of consumer. Dokka was a third —
-// it reads the same directory, matched neither pattern, and therefore ran CONCURRENTLY with KSP,
-// which wipes its output directory before regenerating it. The symptom was a publish step failing
-// with FileNotFoundException on a file that does exist, once in every few runs, on branches that had
-// not touched this module (B-33). The list is incomplete by nature; the collection above is what
-// covers whoever is not on it.
-tasks.matching {
-    (it.name.startsWith("compile") || it.name.startsWith("dokka") || it.name.lowercase().endsWith("sourcesjar")) &&
-        it.name != "kspCommonMainKotlinMetadata"
-}.configureEach {
-    dependsOn("kspCommonMainKotlinMetadata")
-}
-
-// The per-target ksp tasks are registered by the plugin for every target and now have no processor of
-// their own, but they still read the metadata output as a source directory — which Gradle reports as
-// an undeclared dependency between tasks. Generation happens once, so they are switched off.
-//
-// A disabled ksp task is the classic way to get a green and EMPTY build, so the exit code proves
-// nothing here. What does: the serializer tests in commonTest round-trip real components THROUGH the
-// generated module, on every target including the browser — an empty registration fails them.
-tasks.matching { it.name.startsWith("ksp") && it.name != "kspCommonMainKotlinMetadata" }.configureEach {
-    enabled = false
-}
+// Where the generated sources go, who is made to wait for them, and which ksp tasks are switched
+// off because they have no processor: `io.github.youndie.sborka.kmp`, keyed off the dependency
+// above. Three paragraphs that stood here byte-identical in seven modules, and one fix to a race
+// with dokka had to visit all seven (B-33, B-35).
