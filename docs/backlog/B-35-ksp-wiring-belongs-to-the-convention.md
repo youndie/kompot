@@ -1,7 +1,7 @@
 ---
 id: B-35
 title: "Обвязка KSP живёт в семи копиях вместо конвенции сборки"
-status: open
+status: wip
 priority: infra
 size: M
 ---

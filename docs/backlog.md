@@ -52,7 +52,7 @@
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-36](backlog/B-36-kompot-client-readme.md) `[ ]` | У kompot-client нет README, и рассказать про реестр и сток негде | — | P2 | S | — |
-| [B-35](backlog/B-35-ksp-wiring-belongs-to-the-convention.md) `[ ]` | Обвязка KSP живёт в семи копиях вместо конвенции сборки | — | infra | M | — |
+| [B-35](backlog/B-35-ksp-wiring-belongs-to-the-convention.md) `[~]` | Обвязка KSP живёт в семи копиях вместо конвенции сборки | — | infra | M | — |
 
 ## Сделано (34)
 
