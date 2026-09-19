@@ -1,7 +1,7 @@
 ---
 id: B-28
 title: "Демо-компонент, объявленный как плагин деплоя"
-status: wip
+status: done
 priority: P0
 size: S
 stage: playground
@@ -28,3 +28,21 @@ blocked_by: [B-25]
 - AC: «новый клиент» рисует `promo_banner` со всеми тремя элементами; `schema/` не меняется, и
   голден-тест схемы это подтверждает; `:kompot-spec:checkSchemaCompatibility` не видит изменений.
 - Якоря: `kompot-playground/src/wasmJsMain/kotlin/io/github/youndie/kompot/playground/demo/{PromoBanner,PromoBannerRenderer}.kt`.
+
+## Итог
+
+`demo/PromoBanner.kt` (класс + модуль сериализаторов) и `demo/PromoBannerRenderer.kt` (рендерер +
+карта) — вся интеграция плагина, пятьдесят строк на два файла. Подключение к странице — две строки в
+`App.kt`: `+ demoRenderers` в реестр и `demoSerializersModule` в `kompotJson(...)`. Ровно то, что
+пишет у себя потребитель.
+
+Проверено на собранной странице: баннер рисуется карточкой с заголовком, текстом и кнопкой — все три
+элемента на месте, цвет из `tertiaryContainer`, то есть через тему, а не мимо неё.
+
+Схема тулкита не сдвинулась, и это проверено двумя способами: `git status -- kompot-spec/schema`
+пустой, `:kompot-spec:checkSchemaCompatibility` отвечает «14 files against 14, 0 changes». Голден-тест
+схемы при этом **не перезапускался** — его входы не менялись, и Gradle честно отдал прошлый вердикт;
+доказательством служат две проверки выше, а не «BUILD SUCCESSFUL» у задачи, которая не выполнялась.
+
+Кнопка баннера намеренно ничего не делает: сервера у страницы нет, и кнопка, изображающая действие,
+была бы единственным нечестным пикселем на витрине.

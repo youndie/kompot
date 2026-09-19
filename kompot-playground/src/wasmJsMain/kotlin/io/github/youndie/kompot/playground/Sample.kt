@@ -32,6 +32,13 @@ internal val SAMPLE_BODY: String =
           "color": "on_surface_variant"
         },
         {
+          "type": "promo_banner",
+          "id": "promo",
+          "title": "A component the toolkit does not have",
+          "text": "This banner is declared by the page itself, exactly as a deployment declares its own: a serializable class, a line in a serializers module, a renderer in a map.",
+          "cta": "Nothing happens, there is no server"
+        },
+        {
           "type": "row",
           "id": "actions",
           "spacing": 8,
