@@ -11,6 +11,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.compose.ui.text.TextStyle
 import io.github.youndie.kompot.ColorToken
+import io.github.youndie.kompot.KompotDegradationSink
 import io.github.youndie.kompot.KompotDesignSystem
 import io.github.youndie.kompot.KompotRegistry
 import io.github.youndie.kompot.TypographyToken
@@ -34,6 +35,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
@@ -114,6 +116,55 @@ class KompotPreviewTest {
 
                 onNodeWithText("Ada").assertIsDisplayed()
             }
+        }
+
+    // The fact `onDegraded` cannot carry, and the reason the whole sink can be passed instead: an
+    // unfamiliar type that VANISHED and one the server named an equivalent for report the same kind
+    // and the same name, and differ only in whether anything was drawn. A caller whose subject is
+    // degradation — a page showing what an old client does — has to tell those two apart.
+    @Test
+    fun `the sink hears whether the unfamiliar node was drawn through a fallback`() =
+        withMainDispatcher {
+            val reported = mutableListOf<Pair<String, Boolean>>()
+            val sink =
+                KompotDegradationSink { _, originalType, drawnAsFallback ->
+                    reported += originalType to drawnAsFallback
+                }
+
+            val skipped = """{"type":"promo_banner","id":"promo"}"""
+            val withFallback =
+                """{"type":"promo_banner","id":"promo","fallback":{"type":"text","id":"t","text":"instead"}}"""
+
+            runDesktopComposeUiTest {
+                setContent {
+                    MaterialTheme {
+                        KompotPreview(
+                            body = skipped,
+                            registry = registry,
+                            designSystem = designSystem,
+                            json = json,
+                            degradationSink = sink,
+                        )
+                    }
+                }
+            }
+
+            runDesktopComposeUiTest {
+                setContent {
+                    MaterialTheme {
+                        KompotPreview(
+                            body = withFallback,
+                            registry = registry,
+                            designSystem = designSystem,
+                            json = json,
+                            degradationSink = sink,
+                        )
+                    }
+                }
+                onNodeWithText("instead").assertIsDisplayed()
+            }
+
+            assertEquals(listOf("promo_banner" to false, "promo_banner" to true), reported)
         }
 
     // The reason the input is a body rather than a component, in one test — and the reason the
