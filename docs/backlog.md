@@ -51,7 +51,7 @@
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-31](backlog/B-31-question-placeholder-for-unknown.md) `[?]` | Должен ли незнакомый тип без fallback рисовать заглушку? | playground | P2 | S | — |
+| [B-31](backlog/B-31-question-placeholder-for-unknown.md) `[~]` | Должен ли незнакомый тип без fallback рисовать заглушку? | playground | P2 | S | — |
 
 ## Сделано (33)
 

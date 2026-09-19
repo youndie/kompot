@@ -1,7 +1,7 @@
 ---
 id: B-31
 title: "Должен ли незнакомый тип без fallback рисовать заглушку?"
-status: question
+status: wip
 priority: P2
 size: S
 stage: playground
