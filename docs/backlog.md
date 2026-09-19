@@ -51,7 +51,7 @@
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-32](backlog/B-32-playground-states-under-test.md) `[ ]` | Три состояния витрины проверяются прогоном, а не глазами | playground | P1 | S/M | B-29 |
+| [B-32](backlog/B-32-playground-states-under-test.md) `[~]` | Три состояния витрины проверяются прогоном, а не глазами | playground | P1 | S/M | B-29 |
 | [B-30](backlog/B-30-playground-examples-and-links.md) `[ ]` | Набор готовых тел и ссылки на витрину | playground | P2 | S | B-29 |
 | [B-31](backlog/B-31-question-placeholder-for-unknown.md) `[?]` | Должен ли незнакомый тип без fallback рисовать заглушку? | playground | P2 | S | — |
 | [B-34](backlog/B-34-degradation-vocabulary-is-ambiguous.md) `[ ]` | Сток деградации называет тип по-разному и путает «нарисован фолбэк» с «нарисована заглушка» | — | P3 | S | — |

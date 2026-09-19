@@ -1,7 +1,7 @@
 ---
 id: B-32
 title: "Три состояния витрины проверяются прогоном, а не глазами"
-status: open
+status: wip
 priority: P1
 size: S/M
 stage: playground
