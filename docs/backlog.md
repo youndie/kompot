@@ -47,14 +47,13 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (2)
+## Открыто (1)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-36](backlog/B-36-kompot-client-readme.md) `[ ]` | У kompot-client нет README, и рассказать про реестр и сток негде | — | P2 | S | — |
-| [B-35](backlog/B-35-ksp-wiring-belongs-to-the-convention.md) `[~]` | Обвязка KSP живёт в семи копиях вместо конвенции сборки | — | infra | M | — |
 
-## Сделано (34)
+## Сделано (35)
 
 **Швы в toolkit'е**
 
@@ -110,6 +109,7 @@
 
 - [B-33](backlog/B-33-dokka-reads-ksp-output-too-early.md) — Dokka читает сгенерированное KSP раньше, чем оно появляется
 - [B-34](backlog/B-34-degradation-vocabulary-is-ambiguous.md) — Сток деградации называет тип по-разному и путает «нарисован фолбэк» с «нарисована заглушка»
+- [B-35](backlog/B-35-ksp-wiring-belongs-to-the-convention.md) — Обвязка KSP живёт в семи копиях вместо конвенции сборки
 
 <!-- END INDEX -->
 
