@@ -47,7 +47,7 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (6)
+## Открыто (7)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
@@ -57,6 +57,7 @@
 | [B-32](backlog/B-32-playground-states-under-test.md) `[ ]` | Три состояния витрины проверяются прогоном, а не глазами | playground | P1 | S/M | B-29 |
 | [B-30](backlog/B-30-playground-examples-and-links.md) `[ ]` | Набор готовых тел и ссылки на витрину | playground | P2 | S | B-29 |
 | [B-31](backlog/B-31-question-placeholder-for-unknown.md) `[?]` | Должен ли незнакомый тип без fallback рисовать заглушку? | playground | P2 | S | — |
+| [B-33](backlog/B-33-dokka-reads-ksp-output-too-early.md) `[ ]` | Dokka читает сгенерированное KSP раньше, чем оно появляется | — | infra | S/M | — |
 
 ## Сделано (26)
 
