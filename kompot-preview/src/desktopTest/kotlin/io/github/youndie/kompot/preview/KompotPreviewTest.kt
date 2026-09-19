@@ -11,6 +11,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.compose.ui.text.TextStyle
 import io.github.youndie.kompot.ColorToken
+import io.github.youndie.kompot.KompotDegradationOutcome
 import io.github.youndie.kompot.KompotDegradationSink
 import io.github.youndie.kompot.KompotDesignSystem
 import io.github.youndie.kompot.KompotRegistry
@@ -120,15 +121,15 @@ class KompotPreviewTest {
 
     // The fact `onDegraded` cannot carry, and the reason the whole sink can be passed instead: an
     // unfamiliar type that VANISHED and one the server named an equivalent for report the same kind
-    // and the same name, and differ only in whether anything was drawn. A caller whose subject is
-    // degradation — a page showing what an old client does — has to tell those two apart.
+    // and the same name, and differ only in the outcome. A caller whose subject is degradation — a
+    // page showing what an old client does — has to tell those two apart.
     @Test
-    fun `the sink hears whether the unfamiliar node was drawn through a fallback`() =
+    fun `the sink hears what was drawn in the unfamiliar node's place`() =
         withMainDispatcher {
-            val reported = mutableListOf<Pair<String, Boolean>>()
+            val reported = mutableListOf<Pair<String, KompotDegradationOutcome>>()
             val sink =
-                KompotDegradationSink { _, originalType, drawnAsFallback ->
-                    reported += originalType to drawnAsFallback
+                KompotDegradationSink { _, originalType, outcome ->
+                    reported += originalType to outcome
                 }
 
             val skipped = """{"type":"promo_banner","id":"promo"}"""
@@ -164,7 +165,13 @@ class KompotPreviewTest {
                 onNodeWithText("instead").assertIsDisplayed()
             }
 
-            assertEquals(listOf("promo_banner" to false, "promo_banner" to true), reported)
+            assertEquals(
+                listOf(
+                    "promo_banner" to KompotDegradationOutcome.NOTHING,
+                    "promo_banner" to KompotDegradationOutcome.SERVER_FALLBACK,
+                ),
+                reported,
+            )
         }
 
     // The reason the input is a body rather than a component, in one test — and the reason the

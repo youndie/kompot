@@ -1,7 +1,7 @@
 ---
 id: B-34
 title: "Сток деградации называет тип по-разному и путает «нарисован фолбэк» с «нарисована заглушка»"
-status: open
+status: done
 priority: P3
 size: S
 ---
@@ -42,3 +42,30 @@ UNRENDERABLE_COMPONENT "PromoBanner"   drawn through its fallback
 - Якоря: `kompot-client/src/commonMain/kotlin/io/github/youndie/kompot/Degradation.kt`,
   `kompot-client/src/commonMain/kotlin/io/github/youndie/kompot/Components.kt`
   (`KompotRegistry.RenderNode`, `UnknownComponentRenderer`).
+
+## Итог
+
+Сломали и выпрямили, как и решили: булево `drawnAsFallback` заменено на
+`KompotDegradationOutcome` с тремя исходами — `NOTHING`, `PLACEHOLDER`, `SERVER_FALLBACK`. Два
+исхода, делившие один `true`, разъехались: заглушка, которую нарисовал тулкит, и эквивалент, который
+**выбрал сервер**, — разные события для всякого, кто читает логи.
+
+Имя типа выправлено во втором месте: `UNRENDERABLE_COMPONENT` теперь называет **wire-имя**
+(`text`, `promo_banner`), а не имя Kotlin-класса. Берётся через `serializerOrNull().descriptor.serialName`
+— там живёт `@SerialName` в рантайме; у типа без `@SerialName` это полное имя класса, то есть ровно
+то, что и уедет на провод. Цена — `@OptIn(InternalSerializationApi::class)` в одном месте с падением
+назад на `simpleName`, если поиск однажды перестанет работать. `UnknownComponent` отвечает своим
+`originalType`, не спрашивая никого.
+
+**Провод не тронут.** Это ломающее изменение Kotlin-интерфейса, а не протокола: `schema/` не
+менялась, `checkSchemaCompatibility` отвечает «0 changes», записи в §13 не требуется — тот журнал
+про провод.
+
+Что это разблокировало сразу: пометка узла в дереве плейграунда теперь работает и для «сборки без
+рендерера» ([B-27](B-27-playground-tree.md) закрывал это с оговоркой «до B-34»). Раньше включить её
+было нельзя — сопоставление имён не совпало бы никогда, и получилась бы пометка, которая молча не
+срабатывает.
+
+Потребителей у интерфейса ровно столько, сколько нашёл grep: `kompot-client` (сам сток и два места,
+где он зовётся), `kompot-preview` (мост от `onDegraded`), плейграунд и три теста. Все переписаны в
+этом же изменении.

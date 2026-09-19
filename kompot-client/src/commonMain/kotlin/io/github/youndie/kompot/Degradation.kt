@@ -23,22 +23,44 @@ public enum class KompotDegradationKind {
     UNKNOWN_ACTION,
 }
 
+// WHAT THE PERSON IN FRONT OF THE SCREEN ACTUALLY SAW. Three outcomes, because the two that used to
+// share a `true` are not the same event to anybody reading a log: a placeholder this build drew
+// because it lacks a renderer, and a component the SERVER chose as a stand-in.
+//
+// It replaced a boolean named drawnAsFallback, which answered "was anything drawn" and was read as
+// "was the server's fallback drawn". The default sink printed "drawn through its fallback" for a
+// missing renderer, where no fallback existed and none had been sent.
+public enum class KompotDegradationOutcome {
+    // The node is a hole. The screen survived it, which is the point of degrading at all, and nothing
+    // stands where the component would have been.
+    NOTHING,
+
+    // The toolkit's own placeholder: this build understands the type and has no renderer for it, so
+    // it says so on the screen rather than leaving a gap.
+    PLACEHOLDER,
+
+    // The equivalent the server named for a type it knew a client might not have (SPEC.md §2.1). The
+    // only outcome of the three that somebody chose deliberately.
+    SERVER_FALLBACK,
+}
+
 // Defaulted to what the toolkit did before, so nothing changes for a deployment that does not set
 // one; a deployment that does gets its breadcrumbs, its crash context and its counters.
 public fun interface KompotDegradationSink {
     public fun onUnknown(
         kind: KompotDegradationKind,
+        // The WIRE name, in every kind: it is the string a server writes, a schema declares and a
+        // person greps for. A Kotlin class name here would leave one of the two kinds unsearchable by
+        // the only name its reader has.
         originalType: String,
-        // Whether anything was drawn in its place. A hole and a placeholder are different facts about
-        // a screen, and only the client knows which happened.
-        drawnAsFallback: Boolean,
+        outcome: KompotDegradationOutcome,
     )
 }
 
 public val LocalKompotDegradationSink: ProvidableCompositionLocal<KompotDegradationSink> =
     staticCompositionLocalOf {
-        KompotDegradationSink { kind, originalType, drawnAsFallback ->
-            println("[Kompot] $kind \"$originalType\"" + if (drawnAsFallback) " drawn through its fallback" else " skipped")
+        KompotDegradationSink { kind, originalType, outcome ->
+            println("[Kompot] $kind \"$originalType\" ${outcome.name.lowercase()}")
         }
     }
 
@@ -51,7 +73,7 @@ internal class ReportingActionHandler(
 ) : KompotActionHandler {
     override fun handle(action: KompotAction) {
         if (action is UnknownAction) {
-            sink.onUnknown(KompotDegradationKind.UNKNOWN_ACTION, action.originalType, drawnAsFallback = false)
+            sink.onUnknown(KompotDegradationKind.UNKNOWN_ACTION, action.originalType, KompotDegradationOutcome.NOTHING)
         }
         delegate.handle(action)
     }

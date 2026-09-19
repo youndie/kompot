@@ -47,14 +47,13 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (2)
+## Открыто (1)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-31](backlog/B-31-question-placeholder-for-unknown.md) `[?]` | Должен ли незнакомый тип без fallback рисовать заглушку? | playground | P2 | S | — |
-| [B-34](backlog/B-34-degradation-vocabulary-is-ambiguous.md) `[ ]` | Сток деградации называет тип по-разному и путает «нарисован фолбэк» с «нарисована заглушка» | — | P3 | S | — |
 
-## Сделано (32)
+## Сделано (33)
 
 **Швы в toolkit'е**
 
@@ -108,6 +107,7 @@
 **Без этапа**
 
 - [B-33](backlog/B-33-dokka-reads-ksp-output-too-early.md) — Dokka читает сгенерированное KSP раньше, чем оно появляется
+- [B-34](backlog/B-34-degradation-vocabulary-is-ambiguous.md) — Сток деградации называет тип по-разному и путает «нарисован фолбэк» с «нарисована заглушка»
 
 <!-- END INDEX -->
 
