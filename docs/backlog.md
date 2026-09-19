@@ -47,13 +47,11 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (1)
+## Открыто (0)
 
-| Задача | | Этап | Приоритет | Размер | Ждёт |
-|---|---|---|---|---|---|
-| [B-39](backlog/B-39-nothing-guards-the-published-kotlin-api.md) `[ ]` | Молчаливую поломку Kotlin-API не ловит ничто | — | P2 | M | — |
+Открытых задач нет.
 
-## Сделано (38)
+## Сделано (39)
 
 **Швы в toolkit'е**
 
@@ -113,6 +111,7 @@
 - [B-36](backlog/B-36-kompot-client-readme.md) — У kompot-client нет README, и рассказать про реестр и сток негде
 - [B-37](backlog/B-37-readme-snippets-are-unchecked.md) — Kotlin-сниппеты в README ничем не компилируются и разойдутся молча
 - [B-38](backlog/B-38-wire-name-is-not-obtainable.md) — Проводное имя компонента получить нечем, а студия его требует
+- [B-39](backlog/B-39-nothing-guards-the-published-kotlin-api.md) — Молчаливую поломку Kotlin-API не ловит ничто
 
 <!-- END INDEX -->
 

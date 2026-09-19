@@ -1,0 +1,72 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-images>
+final enum class io.github.youndie.kompot.images/ImageScaleType : kotlin/Enum<io.github.youndie.kompot.images/ImageScaleType> { // io.github.youndie.kompot.images/ImageScaleType|null[0]
+    enum entry Crop // io.github.youndie.kompot.images/ImageScaleType.Crop|null[0]
+    enum entry FillBounds // io.github.youndie.kompot.images/ImageScaleType.FillBounds|null[0]
+    enum entry Fit // io.github.youndie.kompot.images/ImageScaleType.Fit|null[0]
+
+    final val entries // io.github.youndie.kompot.images/ImageScaleType.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.youndie.kompot.images/ImageScaleType> // io.github.youndie.kompot.images/ImageScaleType.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.youndie.kompot.images/ImageScaleType // io.github.youndie.kompot.images/ImageScaleType.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.youndie.kompot.images/ImageScaleType> // io.github.youndie.kompot.images/ImageScaleType.values|values#static(){}[0]
+
+    final object Companion : kotlinx.serialization.internal/SerializerFactory { // io.github.youndie.kompot.images/ImageScaleType.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.images/ImageScaleType> // io.github.youndie.kompot.images/ImageScaleType.Companion.serializer|serializer(){}[0]
+        final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // io.github.youndie.kompot.images/ImageScaleType.Companion.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.images/KompotImageComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.images/KompotImageComponent|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin/String? = ..., io.github.youndie.kompot.images/ImageScaleType = ..., io.github.youndie.kompot/ColorToken? = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ...) // io.github.youndie.kompot.images/KompotImageComponent.<init>|<init>(kotlin.String;kotlin.String;kotlin.String?;io.github.youndie.kompot.images.ImageScaleType;io.github.youndie.kompot.ColorToken?;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>){}[0]
+
+    final val contentDescription // io.github.youndie.kompot.images/KompotImageComponent.contentDescription|{}contentDescription[0]
+        final fun <get-contentDescription>(): kotlin/String? // io.github.youndie.kompot.images/KompotImageComponent.contentDescription.<get-contentDescription>|<get-contentDescription>(){}[0]
+    final val id // io.github.youndie.kompot.images/KompotImageComponent.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot.images/KompotImageComponent.id.<get-id>|<get-id>(){}[0]
+    final val modifiers // io.github.youndie.kompot.images/KompotImageComponent.modifiers|{}modifiers[0]
+        final fun <get-modifiers>(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.images/KompotImageComponent.modifiers.<get-modifiers>|<get-modifiers>(){}[0]
+    final val scaleType // io.github.youndie.kompot.images/KompotImageComponent.scaleType|{}scaleType[0]
+        final fun <get-scaleType>(): io.github.youndie.kompot.images/ImageScaleType // io.github.youndie.kompot.images/KompotImageComponent.scaleType.<get-scaleType>|<get-scaleType>(){}[0]
+    final val tint // io.github.youndie.kompot.images/KompotImageComponent.tint|{}tint[0]
+        final fun <get-tint>(): io.github.youndie.kompot/ColorToken? // io.github.youndie.kompot.images/KompotImageComponent.tint.<get-tint>|<get-tint>(){}[0]
+    final val url // io.github.youndie.kompot.images/KompotImageComponent.url|{}url[0]
+        final fun <get-url>(): kotlin/String // io.github.youndie.kompot.images/KompotImageComponent.url.<get-url>|<get-url>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.images/KompotImageComponent.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.youndie.kompot.images/KompotImageComponent.component2|component2(){}[0]
+    final fun component3(): kotlin/String? // io.github.youndie.kompot.images/KompotImageComponent.component3|component3(){}[0]
+    final fun component4(): io.github.youndie.kompot.images/ImageScaleType // io.github.youndie.kompot.images/KompotImageComponent.component4|component4(){}[0]
+    final fun component5(): io.github.youndie.kompot/ColorToken? // io.github.youndie.kompot.images/KompotImageComponent.component5|component5(){}[0]
+    final fun component6(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.images/KompotImageComponent.component6|component6(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/String? = ..., io.github.youndie.kompot.images/ImageScaleType = ..., io.github.youndie.kompot/ColorToken? = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ...): io.github.youndie.kompot.images/KompotImageComponent // io.github.youndie.kompot.images/KompotImageComponent.copy|copy(kotlin.String;kotlin.String;kotlin.String?;io.github.youndie.kompot.images.ImageScaleType;io.github.youndie.kompot.ColorToken?;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.images/KompotImageComponent.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.images/KompotImageComponent.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.images/KompotImageComponent.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.images/KompotImageComponent> { // io.github.youndie.kompot.images/KompotImageComponent.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.images/KompotImageComponent.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.images/KompotImageComponent.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.images/KompotImageComponent.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.images/KompotImageComponent // io.github.youndie.kompot.images/KompotImageComponent.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.images/KompotImageComponent) // io.github.youndie.kompot.images/KompotImageComponent.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.images.KompotImageComponent){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.images/KompotImageComponent.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.images/KompotImageComponent.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.images/KompotImageComponent> // io.github.youndie.kompot.images/KompotImageComponent.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final val io.github.youndie.kompot.generated/generatedImagesSerializersModule // io.github.youndie.kompot.generated/generatedImagesSerializersModule|{}generatedImagesSerializersModule[0]
+    final fun <get-generatedImagesSerializersModule>(): kotlinx.serialization.modules/SerializersModule // io.github.youndie.kompot.generated/generatedImagesSerializersModule.<get-generatedImagesSerializersModule>|<get-generatedImagesSerializersModule>(){}[0]
+
+final fun (io.github.youndie.kompot.dsl/KompotContainerContext).io.github.youndie.kompot.images/image(kotlin/String, kotlin/String? = ..., io.github.youndie.kompot.images/ImageScaleType = ..., io.github.youndie.kompot/ColorToken? = ..., kotlin/String? = ..., kotlin/Function1<io.github.youndie.kompot.dsl/KompotModifierBuilder, kotlin/Unit>? = ...) // io.github.youndie.kompot.images/image|image@io.github.youndie.kompot.dsl.KompotContainerContext(kotlin.String;kotlin.String?;io.github.youndie.kompot.images.ImageScaleType;io.github.youndie.kompot.ColorToken?;kotlin.String?;kotlin.Function1<io.github.youndie.kompot.dsl.KompotModifierBuilder,kotlin.Unit>?){}[0]

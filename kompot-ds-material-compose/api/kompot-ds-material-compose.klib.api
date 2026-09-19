@@ -1,0 +1,20 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-ds-material-compose>
+final class io.github.youndie.kompot.ds.material/Material3DesignSystem : io.github.youndie.kompot/KompotDesignSystem { // io.github.youndie.kompot.ds.material/Material3DesignSystem|null[0]
+    constructor <init>() // io.github.youndie.kompot.ds.material/Material3DesignSystem.<init>|<init>(){}[0]
+
+    final fun resolveColor(io.github.youndie.kompot/ColorToken, androidx.compose.runtime/Composer?, kotlin/Int): androidx.compose.ui.graphics/Color // io.github.youndie.kompot.ds.material/Material3DesignSystem.resolveColor|resolveColor(io.github.youndie.kompot.ColorToken;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+    final fun resolveTypography(io.github.youndie.kompot/TypographyToken, androidx.compose.runtime/Composer?, kotlin/Int): androidx.compose.ui.text/TextStyle // io.github.youndie.kompot.ds.material/Material3DesignSystem.resolveTypography|resolveTypography(io.github.youndie.kompot.TypographyToken;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final val io.github.youndie.kompot.ds.material/io_github_youndie_kompot_ds_material_Material3DesignSystem$stableprop // io.github.youndie.kompot.ds.material/io_github_youndie_kompot_ds_material_Material3DesignSystem$stableprop|#static{}io_github_youndie_kompot_ds_material_Material3DesignSystem$stableprop[0]
+
+final fun (io.github.youndie.kompot.theme/KompotTheme).io.github.youndie.kompot.ds.material/toMaterialColorScheme(androidx.compose.material3/ColorScheme, kotlin/Boolean): androidx.compose.material3/ColorScheme // io.github.youndie.kompot.ds.material/toMaterialColorScheme|toMaterialColorScheme@io.github.youndie.kompot.theme.KompotTheme(androidx.compose.material3.ColorScheme;kotlin.Boolean){}[0]
+final fun io.github.youndie.kompot.ds.material/io_github_youndie_kompot_ds_material_Material3DesignSystem$stableprop_getter(): kotlin/Int // io.github.youndie.kompot.ds.material/io_github_youndie_kompot_ds_material_Material3DesignSystem$stableprop_getter|io_github_youndie_kompot_ds_material_Material3DesignSystem$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot.ds.material/rememberMaterialColorScheme(io.github.youndie.kompot.theme/KompotTheme?, kotlin/Boolean, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int): androidx.compose.material3/ColorScheme // io.github.youndie.kompot.ds.material/rememberMaterialColorScheme|rememberMaterialColorScheme(io.github.youndie.kompot.theme.KompotTheme?;kotlin.Boolean;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]

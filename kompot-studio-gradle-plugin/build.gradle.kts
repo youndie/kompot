@@ -31,3 +31,8 @@ dependencies {
     // build classpath is how two versions of it meet.
     compileOnly(libs.kotlin.gradlePlugin)
 }
+
+kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation { }
+}

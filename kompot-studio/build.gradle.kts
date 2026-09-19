@@ -14,6 +14,9 @@ plugins {
 // where the whole toolkit, a real Compose runtime and a file system meet. Publishing it is B-09's
 // question; this module answers B-08's, which is whether the window can exist at all.
 kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation { }
+
     jvm("desktop")
 
     sourceSets {

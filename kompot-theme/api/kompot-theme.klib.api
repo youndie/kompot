@@ -1,0 +1,144 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-theme>
+open annotation class io.github.youndie.kompot.theme/KompotThemeDsl : kotlin/Annotation { // io.github.youndie.kompot.theme/KompotThemeDsl|null[0]
+    constructor <init>() // io.github.youndie.kompot.theme/KompotThemeDsl.<init>|<init>(){}[0]
+}
+
+final class io.github.youndie.kompot.theme/KompotPalette { // io.github.youndie.kompot.theme/KompotPalette|null[0]
+    constructor <init>(kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // io.github.youndie.kompot.theme/KompotPalette.<init>|<init>(kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+
+    final val colors // io.github.youndie.kompot.theme/KompotPalette.colors|{}colors[0]
+        final fun <get-colors>(): kotlin.collections/Map<kotlin/String, kotlin/String> // io.github.youndie.kompot.theme/KompotPalette.colors.<get-colors>|<get-colors>(){}[0]
+
+    final fun argbFor(io.github.youndie.kompot/ColorToken): kotlin/Int? // io.github.youndie.kompot.theme/KompotPalette.argbFor|argbFor(io.github.youndie.kompot.ColorToken){}[0]
+    final fun component1(): kotlin.collections/Map<kotlin/String, kotlin/String> // io.github.youndie.kompot.theme/KompotPalette.component1|component1(){}[0]
+    final fun copy(kotlin.collections/Map<kotlin/String, kotlin/String> = ...): io.github.youndie.kompot.theme/KompotPalette // io.github.youndie.kompot.theme/KompotPalette.copy|copy(kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.theme/KompotPalette.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.theme/KompotPalette.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.theme/KompotPalette.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.theme/KompotPalette> { // io.github.youndie.kompot.theme/KompotPalette.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.theme/KompotPalette.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.theme/KompotPalette.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.theme/KompotPalette.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.theme/KompotPalette // io.github.youndie.kompot.theme/KompotPalette.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.theme/KompotPalette) // io.github.youndie.kompot.theme/KompotPalette.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.theme.KompotPalette){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.theme/KompotPalette.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.theme/KompotPalette.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.theme/KompotPalette> // io.github.youndie.kompot.theme/KompotPalette.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.theme/KompotPaletteBuilder { // io.github.youndie.kompot.theme/KompotPaletteBuilder|null[0]
+    constructor <init>() // io.github.youndie.kompot.theme/KompotPaletteBuilder.<init>|<init>(){}[0]
+
+    final fun build(): io.github.youndie.kompot.theme/KompotPalette // io.github.youndie.kompot.theme/KompotPaletteBuilder.build|build(){}[0]
+    final fun color(io.github.youndie.kompot/ColorToken, kotlin/String) // io.github.youndie.kompot.theme/KompotPaletteBuilder.color|color(io.github.youndie.kompot.ColorToken;kotlin.String){}[0]
+}
+
+final class io.github.youndie.kompot.theme/KompotTextStyle { // io.github.youndie.kompot.theme/KompotTextStyle|null[0]
+    constructor <init>(kotlin/Float? = ..., kotlin/Float? = ..., kotlin/Int? = ..., kotlin/Float? = ..., kotlin/String? = ...) // io.github.youndie.kompot.theme/KompotTextStyle.<init>|<init>(kotlin.Float?;kotlin.Float?;kotlin.Int?;kotlin.Float?;kotlin.String?){}[0]
+
+    final val color // io.github.youndie.kompot.theme/KompotTextStyle.color|{}color[0]
+        final fun <get-color>(): kotlin/String? // io.github.youndie.kompot.theme/KompotTextStyle.color.<get-color>|<get-color>(){}[0]
+    final val fontSizeSp // io.github.youndie.kompot.theme/KompotTextStyle.fontSizeSp|{}fontSizeSp[0]
+        final fun <get-fontSizeSp>(): kotlin/Float? // io.github.youndie.kompot.theme/KompotTextStyle.fontSizeSp.<get-fontSizeSp>|<get-fontSizeSp>(){}[0]
+    final val fontWeight // io.github.youndie.kompot.theme/KompotTextStyle.fontWeight|{}fontWeight[0]
+        final fun <get-fontWeight>(): kotlin/Int? // io.github.youndie.kompot.theme/KompotTextStyle.fontWeight.<get-fontWeight>|<get-fontWeight>(){}[0]
+    final val letterSpacingSp // io.github.youndie.kompot.theme/KompotTextStyle.letterSpacingSp|{}letterSpacingSp[0]
+        final fun <get-letterSpacingSp>(): kotlin/Float? // io.github.youndie.kompot.theme/KompotTextStyle.letterSpacingSp.<get-letterSpacingSp>|<get-letterSpacingSp>(){}[0]
+    final val lineHeightSp // io.github.youndie.kompot.theme/KompotTextStyle.lineHeightSp|{}lineHeightSp[0]
+        final fun <get-lineHeightSp>(): kotlin/Float? // io.github.youndie.kompot.theme/KompotTextStyle.lineHeightSp.<get-lineHeightSp>|<get-lineHeightSp>(){}[0]
+
+    final fun component1(): kotlin/Float? // io.github.youndie.kompot.theme/KompotTextStyle.component1|component1(){}[0]
+    final fun component2(): kotlin/Float? // io.github.youndie.kompot.theme/KompotTextStyle.component2|component2(){}[0]
+    final fun component3(): kotlin/Int? // io.github.youndie.kompot.theme/KompotTextStyle.component3|component3(){}[0]
+    final fun component4(): kotlin/Float? // io.github.youndie.kompot.theme/KompotTextStyle.component4|component4(){}[0]
+    final fun component5(): kotlin/String? // io.github.youndie.kompot.theme/KompotTextStyle.component5|component5(){}[0]
+    final fun copy(kotlin/Float? = ..., kotlin/Float? = ..., kotlin/Int? = ..., kotlin/Float? = ..., kotlin/String? = ...): io.github.youndie.kompot.theme/KompotTextStyle // io.github.youndie.kompot.theme/KompotTextStyle.copy|copy(kotlin.Float?;kotlin.Float?;kotlin.Int?;kotlin.Float?;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.theme/KompotTextStyle.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.theme/KompotTextStyle.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.theme/KompotTextStyle.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.theme/KompotTextStyle> { // io.github.youndie.kompot.theme/KompotTextStyle.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.theme/KompotTextStyle.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.theme/KompotTextStyle.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.theme/KompotTextStyle.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.theme/KompotTextStyle // io.github.youndie.kompot.theme/KompotTextStyle.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.theme/KompotTextStyle) // io.github.youndie.kompot.theme/KompotTextStyle.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.theme.KompotTextStyle){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.theme/KompotTextStyle.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.theme/KompotTextStyle> // io.github.youndie.kompot.theme/KompotTextStyle.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.theme/KompotTheme { // io.github.youndie.kompot.theme/KompotTheme|null[0]
+    constructor <init>(kotlin/String, io.github.youndie.kompot.theme/KompotPalette = ..., io.github.youndie.kompot.theme/KompotPalette? = ..., kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.theme/KompotTextStyle> = ...) // io.github.youndie.kompot.theme/KompotTheme.<init>|<init>(kotlin.String;io.github.youndie.kompot.theme.KompotPalette;io.github.youndie.kompot.theme.KompotPalette?;kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.theme.KompotTextStyle>){}[0]
+
+    final val dark // io.github.youndie.kompot.theme/KompotTheme.dark|{}dark[0]
+        final fun <get-dark>(): io.github.youndie.kompot.theme/KompotPalette? // io.github.youndie.kompot.theme/KompotTheme.dark.<get-dark>|<get-dark>(){}[0]
+    final val id // io.github.youndie.kompot.theme/KompotTheme.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot.theme/KompotTheme.id.<get-id>|<get-id>(){}[0]
+    final val light // io.github.youndie.kompot.theme/KompotTheme.light|{}light[0]
+        final fun <get-light>(): io.github.youndie.kompot.theme/KompotPalette // io.github.youndie.kompot.theme/KompotTheme.light.<get-light>|<get-light>(){}[0]
+    final val typography // io.github.youndie.kompot.theme/KompotTheme.typography|{}typography[0]
+        final fun <get-typography>(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.theme/KompotTextStyle> // io.github.youndie.kompot.theme/KompotTheme.typography.<get-typography>|<get-typography>(){}[0]
+
+    final fun colorFor(io.github.youndie.kompot/ColorToken, kotlin/Boolean): kotlin/Int? // io.github.youndie.kompot.theme/KompotTheme.colorFor|colorFor(io.github.youndie.kompot.ColorToken;kotlin.Boolean){}[0]
+    final fun component1(): kotlin/String // io.github.youndie.kompot.theme/KompotTheme.component1|component1(){}[0]
+    final fun component2(): io.github.youndie.kompot.theme/KompotPalette // io.github.youndie.kompot.theme/KompotTheme.component2|component2(){}[0]
+    final fun component3(): io.github.youndie.kompot.theme/KompotPalette? // io.github.youndie.kompot.theme/KompotTheme.component3|component3(){}[0]
+    final fun component4(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.theme/KompotTextStyle> // io.github.youndie.kompot.theme/KompotTheme.component4|component4(){}[0]
+    final fun copy(kotlin/String = ..., io.github.youndie.kompot.theme/KompotPalette = ..., io.github.youndie.kompot.theme/KompotPalette? = ..., kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.theme/KompotTextStyle> = ...): io.github.youndie.kompot.theme/KompotTheme // io.github.youndie.kompot.theme/KompotTheme.copy|copy(kotlin.String;io.github.youndie.kompot.theme.KompotPalette;io.github.youndie.kompot.theme.KompotPalette?;kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.theme.KompotTextStyle>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.theme/KompotTheme.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.theme/KompotTheme.hashCode|hashCode(){}[0]
+    final fun paletteFor(kotlin/Boolean): io.github.youndie.kompot.theme/KompotPalette? // io.github.youndie.kompot.theme/KompotTheme.paletteFor|paletteFor(kotlin.Boolean){}[0]
+    final fun styleFor(io.github.youndie.kompot/TypographyToken): io.github.youndie.kompot.theme/KompotTextStyle? // io.github.youndie.kompot.theme/KompotTheme.styleFor|styleFor(io.github.youndie.kompot.TypographyToken){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.theme/KompotTheme.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.theme/KompotTheme> { // io.github.youndie.kompot.theme/KompotTheme.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.theme/KompotTheme.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.theme/KompotTheme.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.theme/KompotTheme.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.theme/KompotTheme // io.github.youndie.kompot.theme/KompotTheme.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.theme/KompotTheme) // io.github.youndie.kompot.theme/KompotTheme.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.theme.KompotTheme){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.theme/KompotTheme.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.theme/KompotTheme.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.theme/KompotTheme> // io.github.youndie.kompot.theme/KompotTheme.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.theme/KompotThemeBuilder { // io.github.youndie.kompot.theme/KompotThemeBuilder|null[0]
+    constructor <init>(kotlin/String) // io.github.youndie.kompot.theme/KompotThemeBuilder.<init>|<init>(kotlin.String){}[0]
+
+    final fun build(): io.github.youndie.kompot.theme/KompotTheme // io.github.youndie.kompot.theme/KompotThemeBuilder.build|build(){}[0]
+    final fun dark(kotlin/Function1<io.github.youndie.kompot.theme/KompotPaletteBuilder, kotlin/Unit>) // io.github.youndie.kompot.theme/KompotThemeBuilder.dark|dark(kotlin.Function1<io.github.youndie.kompot.theme.KompotPaletteBuilder,kotlin.Unit>){}[0]
+    final fun light(kotlin/Function1<io.github.youndie.kompot.theme/KompotPaletteBuilder, kotlin/Unit>) // io.github.youndie.kompot.theme/KompotThemeBuilder.light|light(kotlin.Function1<io.github.youndie.kompot.theme.KompotPaletteBuilder,kotlin.Unit>){}[0]
+    final fun typography(kotlin/Function1<io.github.youndie.kompot.theme/KompotTypographyBuilder, kotlin/Unit>) // io.github.youndie.kompot.theme/KompotThemeBuilder.typography|typography(kotlin.Function1<io.github.youndie.kompot.theme.KompotTypographyBuilder,kotlin.Unit>){}[0]
+}
+
+final class io.github.youndie.kompot.theme/KompotTypographyBuilder { // io.github.youndie.kompot.theme/KompotTypographyBuilder|null[0]
+    constructor <init>() // io.github.youndie.kompot.theme/KompotTypographyBuilder.<init>|<init>(){}[0]
+
+    final fun build(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.theme/KompotTextStyle> // io.github.youndie.kompot.theme/KompotTypographyBuilder.build|build(){}[0]
+    final fun style(io.github.youndie.kompot/TypographyToken, kotlin/Float? = ..., kotlin/Float? = ..., kotlin/Int? = ..., kotlin/Float? = ..., kotlin/String? = ...) // io.github.youndie.kompot.theme/KompotTypographyBuilder.style|style(io.github.youndie.kompot.TypographyToken;kotlin.Float?;kotlin.Float?;kotlin.Int?;kotlin.Float?;kotlin.String?){}[0]
+}
+
+final fun io.github.youndie.kompot.theme/kompotTheme(kotlin/String, kotlin/Function1<io.github.youndie.kompot.theme/KompotThemeBuilder, kotlin/Unit>): io.github.youndie.kompot.theme/KompotTheme // io.github.youndie.kompot.theme/kompotTheme|kompotTheme(kotlin.String;kotlin.Function1<io.github.youndie.kompot.theme.KompotThemeBuilder,kotlin.Unit>){}[0]
+final fun io.github.youndie.kompot.theme/parseArgbHex(kotlin/String): kotlin/Int? // io.github.youndie.kompot.theme/parseArgbHex|parseArgbHex(kotlin.String){}[0]

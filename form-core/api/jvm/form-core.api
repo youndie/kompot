@@ -1,0 +1,151 @@
+public final class io/github/youndie/kompot/form/FieldState {
+	public fun <init> (Lio/github/youndie/kompot/form/FieldValue;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Lio/github/youndie/kompot/form/FieldValue;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/github/youndie/kompot/form/FieldValue;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Z
+	public final fun copy (Lio/github/youndie/kompot/form/FieldValue;Ljava/lang/String;Z)Lio/github/youndie/kompot/form/FieldState;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/form/FieldState;Lio/github/youndie/kompot/form/FieldValue;Ljava/lang/String;ZILjava/lang/Object;)Lio/github/youndie/kompot/form/FieldState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChanged ()Z
+	public final fun getError ()Ljava/lang/String;
+	public final fun getValue ()Lio/github/youndie/kompot/form/FieldValue;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/kompot/form/FieldValue {
+	public fun getPlainValue ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/form/FieldValue$DefaultImpls {
+	public static fun getPlainValue (Lio/github/youndie/kompot/form/FieldValue;)Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/kompot/form/FormCondition {
+	public abstract fun evaluate (Lkotlin/jvm/functions/Function1;)Z
+}
+
+public final class io/github/youndie/kompot/form/FormController {
+	public fun <init> (Lio/github/youndie/kompot/form/FormSchema;Ljava/util/Map;Lkotlin/jvm/functions/Function3;Lio/github/youndie/kompot/form/RemoteDataSourceResolver;Lkotlinx/coroutines/CoroutineScope;)V
+	public synthetic fun <init> (Lio/github/youndie/kompot/form/FormSchema;Ljava/util/Map;Lkotlin/jvm/functions/Function3;Lio/github/youndie/kompot/form/RemoteDataSourceResolver;Lkotlinx/coroutines/CoroutineScope;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun applyPatch (Lio/github/youndie/kompot/form/FormPatch;)V
+	public final fun getFieldsState ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getFocusRequests ()Lkotlinx/coroutines/flow/SharedFlow;
+	public final fun getPayload ()Ljava/util/Map;
+	public final fun getRawValues ()Ljava/util/Map;
+	public final fun getVisibilityFlow (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
+	public final fun isFieldVisible (Ljava/lang/String;)Z
+	public final fun isLoading ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun markAllAsChanged ()V
+	public final fun onFieldBlurred (Ljava/lang/String;)V
+	public final fun onValueChanged (Ljava/lang/String;Lio/github/youndie/kompot/form/FieldValue;)V
+	public final fun requestPatchIfNeeded (Ljava/lang/String;)V
+	public final fun searchOptions (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setFieldError (Ljava/lang/String;Ljava/lang/String;)V
+}
+
+public abstract interface annotation class io/github/youndie/kompot/form/FormDsl : java/lang/annotation/Annotation {
+}
+
+public abstract interface class io/github/youndie/kompot/form/FormFieldDefinition {
+	public abstract fun getFieldId ()Ljava/lang/String;
+	public fun getInitialValue ()Lio/github/youndie/kompot/form/FieldValue;
+	public abstract fun getRules ()Ljava/util/List;
+	public fun getTriggersPatch ()Z
+	public fun getVisibleIf ()Lio/github/youndie/kompot/form/FormCondition;
+}
+
+public final class io/github/youndie/kompot/form/FormFieldDefinition$DefaultImpls {
+	public static fun getInitialValue (Lio/github/youndie/kompot/form/FormFieldDefinition;)Lio/github/youndie/kompot/form/FieldValue;
+	public static fun getTriggersPatch (Lio/github/youndie/kompot/form/FormFieldDefinition;)Z
+	public static fun getVisibleIf (Lio/github/youndie/kompot/form/FormFieldDefinition;)Lio/github/youndie/kompot/form/FormCondition;
+}
+
+public final class io/github/youndie/kompot/form/FormPatch {
+	public static final field Companion Lio/github/youndie/kompot/form/FormPatch$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;Ljava/util/List;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/util/Map;Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/Map;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/util/Map;Ljava/util/List;Ljava/lang/String;)Lio/github/youndie/kompot/form/FormPatch;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/form/FormPatch;Ljava/util/Map;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/form/FormPatch;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getClearFields ()Ljava/util/List;
+	public final fun getFocusOn ()Ljava/lang/String;
+	public final fun getUpdates ()Ljava/util/Map;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/form/FormPatch$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/form/FormPatch$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/form/FormPatch;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/form/FormPatch;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/form/FormPatch$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/form/FormSchema {
+	public static final field Companion Lio/github/youndie/kompot/form/FormSchema$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;)Lio/github/youndie/kompot/form/FormSchema;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/form/FormSchema;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lio/github/youndie/kompot/form/FormSchema;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFields ()Ljava/util/List;
+	public final fun getFormId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/form/FormSchema$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/form/FormSchema$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/form/FormSchema;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/form/FormSchema;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/form/FormSchema$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/form/FormSchemaBuilder {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun build ()Lio/github/youndie/kompot/form/FormSchema;
+	public final fun field (Lio/github/youndie/kompot/form/FormFieldDefinition;)V
+}
+
+public final class io/github/youndie/kompot/form/FormSchemaDslKt {
+	public static final fun formSchema (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lio/github/youndie/kompot/form/FormSchema;
+}
+
+public abstract interface class io/github/youndie/kompot/form/RemoteDataSourceResolver {
+	public abstract fun search (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class io/github/youndie/kompot/form/ValidationRule {
+	public abstract fun getErrorMessage ()Ljava/lang/String;
+	public abstract fun validate (Lio/github/youndie/kompot/form/FieldValue;Lkotlin/jvm/functions/Function1;)Z
+}
+
+public final class io/github/youndie/kompot/form/ValidationRulesBuilder {
+	public fun <init> ()V
+	public final fun build ()Ljava/util/List;
+	public final fun rule (Lio/github/youndie/kompot/form/ValidationRule;)V
+}
+

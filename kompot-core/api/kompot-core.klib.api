@@ -1,0 +1,348 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-core>
+open annotation class io.github.youndie.kompot.dsl/KompotDsl : kotlin/Annotation { // io.github.youndie.kompot.dsl/KompotDsl|null[0]
+    constructor <init>() // io.github.youndie.kompot.dsl/KompotDsl.<init>|<init>(){}[0]
+}
+
+final enum class io.github.youndie.kompot/SizeType : kotlin/Enum<io.github.youndie.kompot/SizeType> { // io.github.youndie.kompot/SizeType|null[0]
+    enum entry Fill // io.github.youndie.kompot/SizeType.Fill|null[0]
+    enum entry Wrap // io.github.youndie.kompot/SizeType.Wrap|null[0]
+
+    final val entries // io.github.youndie.kompot/SizeType.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.youndie.kompot/SizeType> // io.github.youndie.kompot/SizeType.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.youndie.kompot/SizeType // io.github.youndie.kompot/SizeType.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.youndie.kompot/SizeType> // io.github.youndie.kompot/SizeType.values|values#static(){}[0]
+
+    final object Companion : kotlinx.serialization.internal/SerializerFactory { // io.github.youndie.kompot/SizeType.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot/SizeType> // io.github.youndie.kompot/SizeType.Companion.serializer|serializer(){}[0]
+        final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // io.github.youndie.kompot/SizeType.Companion.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
+    }
+}
+
+abstract interface io.github.youndie.kompot.dsl/KompotContainerContext { // io.github.youndie.kompot.dsl/KompotContainerContext|null[0]
+    abstract fun addComponent(io.github.youndie.kompot/KompotComponent) // io.github.youndie.kompot.dsl/KompotContainerContext.addComponent|addComponent(io.github.youndie.kompot.KompotComponent){}[0]
+    open fun nextChildPath(): kotlin/String // io.github.youndie.kompot.dsl/KompotContainerContext.nextChildPath|nextChildPath(){}[0]
+}
+
+abstract interface io.github.youndie.kompot/KompotAction // io.github.youndie.kompot/KompotAction|null[0]
+
+abstract interface io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot/KompotComponent|null[0]
+    abstract val id // io.github.youndie.kompot/KompotComponent.id|{}id[0]
+        abstract fun <get-id>(): kotlin/String // io.github.youndie.kompot/KompotComponent.id.<get-id>|<get-id>(){}[0]
+    abstract val modifiers // io.github.youndie.kompot/KompotComponent.modifiers|{}modifiers[0]
+        abstract fun <get-modifiers>(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot/KompotComponent.modifiers.<get-modifiers>|<get-modifiers>(){}[0]
+}
+
+sealed interface io.github.youndie.kompot/KompotModifierNode { // io.github.youndie.kompot/KompotModifierNode|null[0]
+    final class Background : io.github.youndie.kompot/KompotModifierNode { // io.github.youndie.kompot/KompotModifierNode.Background|null[0]
+        constructor <init>(io.github.youndie.kompot/ColorToken, kotlin/String? = ...) // io.github.youndie.kompot/KompotModifierNode.Background.<init>|<init>(io.github.youndie.kompot.ColorToken;kotlin.String?){}[0]
+
+        final val color // io.github.youndie.kompot/KompotModifierNode.Background.color|{}color[0]
+            final fun <get-color>(): io.github.youndie.kompot/ColorToken // io.github.youndie.kompot/KompotModifierNode.Background.color.<get-color>|<get-color>(){}[0]
+        final val role // io.github.youndie.kompot/KompotModifierNode.Background.role|{}role[0]
+            final fun <get-role>(): kotlin/String? // io.github.youndie.kompot/KompotModifierNode.Background.role.<get-role>|<get-role>(){}[0]
+
+        final fun component1(): io.github.youndie.kompot/ColorToken // io.github.youndie.kompot/KompotModifierNode.Background.component1|component1(){}[0]
+        final fun component2(): kotlin/String? // io.github.youndie.kompot/KompotModifierNode.Background.component2|component2(){}[0]
+        final fun copy(io.github.youndie.kompot/ColorToken = ..., kotlin/String? = ...): io.github.youndie.kompot/KompotModifierNode.Background // io.github.youndie.kompot/KompotModifierNode.Background.copy|copy(io.github.youndie.kompot.ColorToken;kotlin.String?){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot/KompotModifierNode.Background.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot/KompotModifierNode.Background.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot/KompotModifierNode.Background.toString|toString(){}[0]
+
+        final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot/KompotModifierNode.Background> { // io.github.youndie.kompot/KompotModifierNode.Background.$serializer|null[0]
+            final val descriptor // io.github.youndie.kompot/KompotModifierNode.Background.$serializer.descriptor|{}descriptor[0]
+                final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot/KompotModifierNode.Background.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+            final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot/KompotModifierNode.Background.$serializer.childSerializers|childSerializers(){}[0]
+            final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot/KompotModifierNode.Background // io.github.youndie.kompot/KompotModifierNode.Background.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+            final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot/KompotModifierNode.Background) // io.github.youndie.kompot/KompotModifierNode.Background.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.KompotModifierNode.Background){}[0]
+        }
+
+        final object Companion { // io.github.youndie.kompot/KompotModifierNode.Background.Companion|null[0]
+            final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot/KompotModifierNode.Background> // io.github.youndie.kompot/KompotModifierNode.Background.Companion.serializer|serializer(){}[0]
+        }
+    }
+
+    final class Gradient : io.github.youndie.kompot/KompotModifierNode { // io.github.youndie.kompot/KompotModifierNode.Gradient|null[0]
+        constructor <init>(kotlin.collections/List<io.github.youndie.kompot/ColorToken>) // io.github.youndie.kompot/KompotModifierNode.Gradient.<init>|<init>(kotlin.collections.List<io.github.youndie.kompot.ColorToken>){}[0]
+
+        final val colors // io.github.youndie.kompot/KompotModifierNode.Gradient.colors|{}colors[0]
+            final fun <get-colors>(): kotlin.collections/List<io.github.youndie.kompot/ColorToken> // io.github.youndie.kompot/KompotModifierNode.Gradient.colors.<get-colors>|<get-colors>(){}[0]
+
+        final fun component1(): kotlin.collections/List<io.github.youndie.kompot/ColorToken> // io.github.youndie.kompot/KompotModifierNode.Gradient.component1|component1(){}[0]
+        final fun copy(kotlin.collections/List<io.github.youndie.kompot/ColorToken> = ...): io.github.youndie.kompot/KompotModifierNode.Gradient // io.github.youndie.kompot/KompotModifierNode.Gradient.copy|copy(kotlin.collections.List<io.github.youndie.kompot.ColorToken>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot/KompotModifierNode.Gradient.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot/KompotModifierNode.Gradient.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot/KompotModifierNode.Gradient.toString|toString(){}[0]
+
+        final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot/KompotModifierNode.Gradient> { // io.github.youndie.kompot/KompotModifierNode.Gradient.$serializer|null[0]
+            final val descriptor // io.github.youndie.kompot/KompotModifierNode.Gradient.$serializer.descriptor|{}descriptor[0]
+                final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot/KompotModifierNode.Gradient.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+            final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot/KompotModifierNode.Gradient.$serializer.childSerializers|childSerializers(){}[0]
+            final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot/KompotModifierNode.Gradient // io.github.youndie.kompot/KompotModifierNode.Gradient.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+            final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot/KompotModifierNode.Gradient) // io.github.youndie.kompot/KompotModifierNode.Gradient.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.KompotModifierNode.Gradient){}[0]
+        }
+
+        final object Companion { // io.github.youndie.kompot/KompotModifierNode.Gradient.Companion|null[0]
+            final val $childSerializers // io.github.youndie.kompot/KompotModifierNode.Gradient.Companion.$childSerializers|{}$childSerializers[0]
+
+            final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot/KompotModifierNode.Gradient> // io.github.youndie.kompot/KompotModifierNode.Gradient.Companion.serializer|serializer(){}[0]
+        }
+    }
+
+    final class Padding : io.github.youndie.kompot/KompotModifierNode { // io.github.youndie.kompot/KompotModifierNode.Padding|null[0]
+        constructor <init>(kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ...) // io.github.youndie.kompot/KompotModifierNode.Padding.<init>|<init>(kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?){}[0]
+
+        final val all // io.github.youndie.kompot/KompotModifierNode.Padding.all|{}all[0]
+            final fun <get-all>(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Padding.all.<get-all>|<get-all>(){}[0]
+        final val bottom // io.github.youndie.kompot/KompotModifierNode.Padding.bottom|{}bottom[0]
+            final fun <get-bottom>(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Padding.bottom.<get-bottom>|<get-bottom>(){}[0]
+        final val end // io.github.youndie.kompot/KompotModifierNode.Padding.end|{}end[0]
+            final fun <get-end>(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Padding.end.<get-end>|<get-end>(){}[0]
+        final val start // io.github.youndie.kompot/KompotModifierNode.Padding.start|{}start[0]
+            final fun <get-start>(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Padding.start.<get-start>|<get-start>(){}[0]
+        final val top // io.github.youndie.kompot/KompotModifierNode.Padding.top|{}top[0]
+            final fun <get-top>(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Padding.top.<get-top>|<get-top>(){}[0]
+
+        final fun component1(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Padding.component1|component1(){}[0]
+        final fun component2(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Padding.component2|component2(){}[0]
+        final fun component3(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Padding.component3|component3(){}[0]
+        final fun component4(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Padding.component4|component4(){}[0]
+        final fun component5(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Padding.component5|component5(){}[0]
+        final fun copy(kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ...): io.github.youndie.kompot/KompotModifierNode.Padding // io.github.youndie.kompot/KompotModifierNode.Padding.copy|copy(kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot/KompotModifierNode.Padding.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot/KompotModifierNode.Padding.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot/KompotModifierNode.Padding.toString|toString(){}[0]
+
+        final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot/KompotModifierNode.Padding> { // io.github.youndie.kompot/KompotModifierNode.Padding.$serializer|null[0]
+            final val descriptor // io.github.youndie.kompot/KompotModifierNode.Padding.$serializer.descriptor|{}descriptor[0]
+                final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot/KompotModifierNode.Padding.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+            final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot/KompotModifierNode.Padding.$serializer.childSerializers|childSerializers(){}[0]
+            final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot/KompotModifierNode.Padding // io.github.youndie.kompot/KompotModifierNode.Padding.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+            final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot/KompotModifierNode.Padding) // io.github.youndie.kompot/KompotModifierNode.Padding.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.KompotModifierNode.Padding){}[0]
+        }
+
+        final object Companion { // io.github.youndie.kompot/KompotModifierNode.Padding.Companion|null[0]
+            final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot/KompotModifierNode.Padding> // io.github.youndie.kompot/KompotModifierNode.Padding.Companion.serializer|serializer(){}[0]
+        }
+    }
+
+    final class Size : io.github.youndie.kompot/KompotModifierNode { // io.github.youndie.kompot/KompotModifierNode.Size|null[0]
+        constructor <init>(io.github.youndie.kompot/SizeType? = ..., io.github.youndie.kompot/SizeType? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ...) // io.github.youndie.kompot/KompotModifierNode.Size.<init>|<init>(io.github.youndie.kompot.SizeType?;io.github.youndie.kompot.SizeType?;kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?){}[0]
+
+        final val height // io.github.youndie.kompot/KompotModifierNode.Size.height|{}height[0]
+            final fun <get-height>(): io.github.youndie.kompot/SizeType? // io.github.youndie.kompot/KompotModifierNode.Size.height.<get-height>|<get-height>(){}[0]
+        final val heightDp // io.github.youndie.kompot/KompotModifierNode.Size.heightDp|{}heightDp[0]
+            final fun <get-heightDp>(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Size.heightDp.<get-heightDp>|<get-heightDp>(){}[0]
+        final val maxHeightDp // io.github.youndie.kompot/KompotModifierNode.Size.maxHeightDp|{}maxHeightDp[0]
+            final fun <get-maxHeightDp>(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Size.maxHeightDp.<get-maxHeightDp>|<get-maxHeightDp>(){}[0]
+        final val maxWidthDp // io.github.youndie.kompot/KompotModifierNode.Size.maxWidthDp|{}maxWidthDp[0]
+            final fun <get-maxWidthDp>(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Size.maxWidthDp.<get-maxWidthDp>|<get-maxWidthDp>(){}[0]
+        final val width // io.github.youndie.kompot/KompotModifierNode.Size.width|{}width[0]
+            final fun <get-width>(): io.github.youndie.kompot/SizeType? // io.github.youndie.kompot/KompotModifierNode.Size.width.<get-width>|<get-width>(){}[0]
+        final val widthDp // io.github.youndie.kompot/KompotModifierNode.Size.widthDp|{}widthDp[0]
+            final fun <get-widthDp>(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Size.widthDp.<get-widthDp>|<get-widthDp>(){}[0]
+
+        final fun component1(): io.github.youndie.kompot/SizeType? // io.github.youndie.kompot/KompotModifierNode.Size.component1|component1(){}[0]
+        final fun component2(): io.github.youndie.kompot/SizeType? // io.github.youndie.kompot/KompotModifierNode.Size.component2|component2(){}[0]
+        final fun component3(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Size.component3|component3(){}[0]
+        final fun component4(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Size.component4|component4(){}[0]
+        final fun component5(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Size.component5|component5(){}[0]
+        final fun component6(): kotlin/Int? // io.github.youndie.kompot/KompotModifierNode.Size.component6|component6(){}[0]
+        final fun copy(io.github.youndie.kompot/SizeType? = ..., io.github.youndie.kompot/SizeType? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ...): io.github.youndie.kompot/KompotModifierNode.Size // io.github.youndie.kompot/KompotModifierNode.Size.copy|copy(io.github.youndie.kompot.SizeType?;io.github.youndie.kompot.SizeType?;kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot/KompotModifierNode.Size.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot/KompotModifierNode.Size.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot/KompotModifierNode.Size.toString|toString(){}[0]
+
+        final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot/KompotModifierNode.Size> { // io.github.youndie.kompot/KompotModifierNode.Size.$serializer|null[0]
+            final val descriptor // io.github.youndie.kompot/KompotModifierNode.Size.$serializer.descriptor|{}descriptor[0]
+                final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot/KompotModifierNode.Size.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+            final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot/KompotModifierNode.Size.$serializer.childSerializers|childSerializers(){}[0]
+            final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot/KompotModifierNode.Size // io.github.youndie.kompot/KompotModifierNode.Size.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+            final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot/KompotModifierNode.Size) // io.github.youndie.kompot/KompotModifierNode.Size.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.KompotModifierNode.Size){}[0]
+        }
+
+        final object Companion { // io.github.youndie.kompot/KompotModifierNode.Size.Companion|null[0]
+            final val $childSerializers // io.github.youndie.kompot/KompotModifierNode.Size.Companion.$childSerializers|{}$childSerializers[0]
+
+            final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot/KompotModifierNode.Size> // io.github.youndie.kompot/KompotModifierNode.Size.Companion.serializer|serializer(){}[0]
+        }
+    }
+
+    final class Weight : io.github.youndie.kompot/KompotModifierNode { // io.github.youndie.kompot/KompotModifierNode.Weight|null[0]
+        constructor <init>(kotlin/Float) // io.github.youndie.kompot/KompotModifierNode.Weight.<init>|<init>(kotlin.Float){}[0]
+
+        final val value // io.github.youndie.kompot/KompotModifierNode.Weight.value|{}value[0]
+            final fun <get-value>(): kotlin/Float // io.github.youndie.kompot/KompotModifierNode.Weight.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): kotlin/Float // io.github.youndie.kompot/KompotModifierNode.Weight.component1|component1(){}[0]
+        final fun copy(kotlin/Float = ...): io.github.youndie.kompot/KompotModifierNode.Weight // io.github.youndie.kompot/KompotModifierNode.Weight.copy|copy(kotlin.Float){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot/KompotModifierNode.Weight.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot/KompotModifierNode.Weight.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot/KompotModifierNode.Weight.toString|toString(){}[0]
+
+        final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot/KompotModifierNode.Weight> { // io.github.youndie.kompot/KompotModifierNode.Weight.$serializer|null[0]
+            final val descriptor // io.github.youndie.kompot/KompotModifierNode.Weight.$serializer.descriptor|{}descriptor[0]
+                final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot/KompotModifierNode.Weight.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+            final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot/KompotModifierNode.Weight.$serializer.childSerializers|childSerializers(){}[0]
+            final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot/KompotModifierNode.Weight // io.github.youndie.kompot/KompotModifierNode.Weight.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+            final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot/KompotModifierNode.Weight) // io.github.youndie.kompot/KompotModifierNode.Weight.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.KompotModifierNode.Weight){}[0]
+        }
+
+        final object Companion { // io.github.youndie.kompot/KompotModifierNode.Weight.Companion|null[0]
+            final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot/KompotModifierNode.Weight> // io.github.youndie.kompot/KompotModifierNode.Weight.Companion.serializer|serializer(){}[0]
+        }
+    }
+
+    final object Companion : kotlinx.serialization.internal/SerializerFactory { // io.github.youndie.kompot/KompotModifierNode.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot/KompotModifierNode.Companion.serializer|serializer(){}[0]
+        final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // io.github.youndie.kompot/KompotModifierNode.Companion.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.dsl/KompotModifierBuilder { // io.github.youndie.kompot.dsl/KompotModifierBuilder|null[0]
+    constructor <init>() // io.github.youndie.kompot.dsl/KompotModifierBuilder.<init>|<init>(){}[0]
+
+    final fun background(io.github.youndie.kompot/ColorToken) // io.github.youndie.kompot.dsl/KompotModifierBuilder.background|background(io.github.youndie.kompot.ColorToken){}[0]
+    final fun build(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.dsl/KompotModifierBuilder.build|build(){}[0]
+    final fun fillMaxHeight() // io.github.youndie.kompot.dsl/KompotModifierBuilder.fillMaxHeight|fillMaxHeight(){}[0]
+    final fun fillMaxWidth() // io.github.youndie.kompot.dsl/KompotModifierBuilder.fillMaxWidth|fillMaxWidth(){}[0]
+    final fun gradientBackground(kotlin.collections/List<io.github.youndie.kompot/ColorToken>) // io.github.youndie.kompot.dsl/KompotModifierBuilder.gradientBackground|gradientBackground(kotlin.collections.List<io.github.youndie.kompot.ColorToken>){}[0]
+    final fun height(kotlin/Int) // io.github.youndie.kompot.dsl/KompotModifierBuilder.height|height(kotlin.Int){}[0]
+    final fun maxHeight(kotlin/Int) // io.github.youndie.kompot.dsl/KompotModifierBuilder.maxHeight|maxHeight(kotlin.Int){}[0]
+    final fun maxWidth(kotlin/Int) // io.github.youndie.kompot.dsl/KompotModifierBuilder.maxWidth|maxWidth(kotlin.Int){}[0]
+    final fun padding(kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ...) // io.github.youndie.kompot.dsl/KompotModifierBuilder.padding|padding(kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int){}[0]
+    final fun size(kotlin/Int, kotlin/Int) // io.github.youndie.kompot.dsl/KompotModifierBuilder.size|size(kotlin.Int;kotlin.Int){}[0]
+    final fun weight(kotlin/Float) // io.github.youndie.kompot.dsl/KompotModifierBuilder.weight|weight(kotlin.Float){}[0]
+    final fun width(kotlin/Int) // io.github.youndie.kompot.dsl/KompotModifierBuilder.width|width(kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/UnknownAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot/UnknownAction|null[0]
+    constructor <init>(kotlin/String = ...) // io.github.youndie.kompot/UnknownAction.<init>|<init>(kotlin.String){}[0]
+
+    final val originalType // io.github.youndie.kompot/UnknownAction.originalType|{}originalType[0]
+        final fun <get-originalType>(): kotlin/String // io.github.youndie.kompot/UnknownAction.originalType.<get-originalType>|<get-originalType>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot/UnknownAction.component1|component1(){}[0]
+    final fun copy(kotlin/String = ...): io.github.youndie.kompot/UnknownAction // io.github.youndie.kompot/UnknownAction.copy|copy(kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot/UnknownAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot/UnknownAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot/UnknownAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot/UnknownAction> { // io.github.youndie.kompot/UnknownAction.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot/UnknownAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot/UnknownAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot/UnknownAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot/UnknownAction // io.github.youndie.kompot/UnknownAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot/UnknownAction) // io.github.youndie.kompot/UnknownAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.UnknownAction){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot/UnknownAction.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot/UnknownAction> // io.github.youndie.kompot/UnknownAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot/UnknownComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot/UnknownComponent|null[0]
+    constructor <init>(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., io.github.youndie.kompot/KompotComponent? = ...) // io.github.youndie.kompot/UnknownComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;io.github.youndie.kompot.KompotComponent?){}[0]
+
+    final val fallback // io.github.youndie.kompot/UnknownComponent.fallback|{}fallback[0]
+        final fun <get-fallback>(): io.github.youndie.kompot/KompotComponent? // io.github.youndie.kompot/UnknownComponent.fallback.<get-fallback>|<get-fallback>(){}[0]
+    final val id // io.github.youndie.kompot/UnknownComponent.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot/UnknownComponent.id.<get-id>|<get-id>(){}[0]
+    final val modifiers // io.github.youndie.kompot/UnknownComponent.modifiers|{}modifiers[0]
+        final fun <get-modifiers>(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot/UnknownComponent.modifiers.<get-modifiers>|<get-modifiers>(){}[0]
+    final val originalType // io.github.youndie.kompot/UnknownComponent.originalType|{}originalType[0]
+        final fun <get-originalType>(): kotlin/String // io.github.youndie.kompot/UnknownComponent.originalType.<get-originalType>|<get-originalType>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot/UnknownComponent.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot/UnknownComponent.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.youndie.kompot/UnknownComponent.component3|component3(){}[0]
+    final fun component4(): io.github.youndie.kompot/KompotComponent? // io.github.youndie.kompot/UnknownComponent.component4|component4(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., io.github.youndie.kompot/KompotComponent? = ...): io.github.youndie.kompot/UnknownComponent // io.github.youndie.kompot/UnknownComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;io.github.youndie.kompot.KompotComponent?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot/UnknownComponent.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot/UnknownComponent.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot/UnknownComponent.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot/UnknownComponent> { // io.github.youndie.kompot/UnknownComponent.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot/UnknownComponent.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot/UnknownComponent.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot/UnknownComponent.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot/UnknownComponent // io.github.youndie.kompot/UnknownComponent.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot/UnknownComponent) // io.github.youndie.kompot/UnknownComponent.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.UnknownComponent){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot/UnknownComponent.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot/UnknownComponent.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot/UnknownComponent> // io.github.youndie.kompot/UnknownComponent.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final value class io.github.youndie.kompot/ColorToken { // io.github.youndie.kompot/ColorToken|null[0]
+    constructor <init>(kotlin/String) // io.github.youndie.kompot/ColorToken.<init>|<init>(kotlin.String){}[0]
+
+    final val key // io.github.youndie.kompot/ColorToken.key|{}key[0]
+        final fun <get-key>(): kotlin/String // io.github.youndie.kompot/ColorToken.key.<get-key>|<get-key>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot/ColorToken.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot/ColorToken.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot/ColorToken.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot/ColorToken> { // io.github.youndie.kompot/ColorToken.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot/ColorToken.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot/ColorToken.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot/ColorToken.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot/ColorToken // io.github.youndie.kompot/ColorToken.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot/ColorToken) // io.github.youndie.kompot/ColorToken.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.ColorToken){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot/ColorToken.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot/ColorToken> // io.github.youndie.kompot/ColorToken.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final value class io.github.youndie.kompot/TypographyToken { // io.github.youndie.kompot/TypographyToken|null[0]
+    constructor <init>(kotlin/String) // io.github.youndie.kompot/TypographyToken.<init>|<init>(kotlin.String){}[0]
+
+    final val key // io.github.youndie.kompot/TypographyToken.key|{}key[0]
+        final fun <get-key>(): kotlin/String // io.github.youndie.kompot/TypographyToken.key.<get-key>|<get-key>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot/TypographyToken.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot/TypographyToken.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot/TypographyToken.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot/TypographyToken> { // io.github.youndie.kompot/TypographyToken.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot/TypographyToken.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot/TypographyToken.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot/TypographyToken.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot/TypographyToken // io.github.youndie.kompot/TypographyToken.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot/TypographyToken) // io.github.youndie.kompot/TypographyToken.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.TypographyToken){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot/TypographyToken.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot/TypographyToken> // io.github.youndie.kompot/TypographyToken.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final val io.github.youndie.kompot/kompotCoreSerializersModule // io.github.youndie.kompot/kompotCoreSerializersModule|{}kompotCoreSerializersModule[0]
+    final fun <get-kompotCoreSerializersModule>(): kotlinx.serialization.modules/SerializersModule // io.github.youndie.kompot/kompotCoreSerializersModule.<get-kompotCoreSerializersModule>|<get-kompotCoreSerializersModule>(){}[0]
+
+final fun (kotlinx.serialization.json/Json).io.github.youndie.kompot/decodeKompotAction(kotlin/String): io.github.youndie.kompot/KompotAction // io.github.youndie.kompot/decodeKompotAction|decodeKompotAction@kotlinx.serialization.json.Json(kotlin.String){}[0]
+final fun (kotlinx.serialization.json/Json).io.github.youndie.kompot/decodeKompotComponent(kotlin/String): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot/decodeKompotComponent|decodeKompotComponent@kotlinx.serialization.json.Json(kotlin.String){}[0]
+final fun (kotlinx.serialization.json/Json).io.github.youndie.kompot/encodeKompotAction(io.github.youndie.kompot/KompotAction): kotlin/String // io.github.youndie.kompot/encodeKompotAction|encodeKompotAction@kotlinx.serialization.json.Json(io.github.youndie.kompot.KompotAction){}[0]
+final fun (kotlinx.serialization.json/Json).io.github.youndie.kompot/encodeKompotComponent(io.github.youndie.kompot/KompotComponent): kotlin/String // io.github.youndie.kompot/encodeKompotComponent|encodeKompotComponent@kotlinx.serialization.json.Json(io.github.youndie.kompot.KompotComponent){}[0]

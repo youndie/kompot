@@ -1,0 +1,33 @@
+public final class io/github/youndie/kompot/auth/SerializersKt {
+	public static final fun getKompotAuthSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+}
+
+public final class io/github/youndie/kompot/auth/UpdateSessionAction : io/github/youndie/kompot/KompotAction {
+	public static final field Companion Lio/github/youndie/kompot/auth/UpdateSessionAction$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/auth/UpdateSessionAction;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/auth/UpdateSessionAction;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/auth/UpdateSessionAction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccessToken ()Ljava/lang/String;
+	public final fun getRefreshToken ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/auth/UpdateSessionAction$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/auth/UpdateSessionAction$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/auth/UpdateSessionAction;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/auth/UpdateSessionAction;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/auth/UpdateSessionAction$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+

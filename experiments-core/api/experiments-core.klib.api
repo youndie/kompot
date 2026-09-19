@@ -1,0 +1,53 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:experiments-core>
+final class io.github.youndie.kompot.experiments/Experiment { // io.github.youndie.kompot.experiments/Experiment|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot.experiments/Variant>) // io.github.youndie.kompot.experiments/Experiment.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.experiments.Variant>){}[0]
+
+    final val id // io.github.youndie.kompot.experiments/Experiment.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot.experiments/Experiment.id.<get-id>|<get-id>(){}[0]
+    final val totalWeight // io.github.youndie.kompot.experiments/Experiment.totalWeight|{}totalWeight[0]
+        final fun <get-totalWeight>(): kotlin/Int // io.github.youndie.kompot.experiments/Experiment.totalWeight.<get-totalWeight>|<get-totalWeight>(){}[0]
+    final val variants // io.github.youndie.kompot.experiments/Experiment.variants|{}variants[0]
+        final fun <get-variants>(): kotlin.collections/List<io.github.youndie.kompot.experiments/Variant> // io.github.youndie.kompot.experiments/Experiment.variants.<get-variants>|<get-variants>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.experiments/Experiment.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.youndie.kompot.experiments/Variant> // io.github.youndie.kompot.experiments/Experiment.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot.experiments/Variant> = ...): io.github.youndie.kompot.experiments/Experiment // io.github.youndie.kompot.experiments/Experiment.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.experiments.Variant>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.experiments/Experiment.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.experiments/Experiment.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.experiments/Experiment.toString|toString(){}[0]
+}
+
+final class io.github.youndie.kompot.experiments/Variant { // io.github.youndie.kompot.experiments/Variant|null[0]
+    constructor <init>(kotlin/String, kotlin/Int = ...) // io.github.youndie.kompot.experiments/Variant.<init>|<init>(kotlin.String;kotlin.Int){}[0]
+
+    final val id // io.github.youndie.kompot.experiments/Variant.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot.experiments/Variant.id.<get-id>|<get-id>(){}[0]
+    final val weight // io.github.youndie.kompot.experiments/Variant.weight|{}weight[0]
+        final fun <get-weight>(): kotlin/Int // io.github.youndie.kompot.experiments/Variant.weight.<get-weight>|<get-weight>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.experiments/Variant.component1|component1(){}[0]
+    final fun component2(): kotlin/Int // io.github.youndie.kompot.experiments/Variant.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/Int = ...): io.github.youndie.kompot.experiments/Variant // io.github.youndie.kompot.experiments/Variant.copy|copy(kotlin.String;kotlin.Int){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.experiments/Variant.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.experiments/Variant.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.experiments/Variant.toString|toString(){}[0]
+}
+
+final object io.github.youndie.kompot.experiments/ExperimentAssigner { // io.github.youndie.kompot.experiments/ExperimentAssigner|null[0]
+    final fun assign(io.github.youndie.kompot.experiments/Experiment, kotlin/String): kotlin/String // io.github.youndie.kompot.experiments/ExperimentAssigner.assign|assign(io.github.youndie.kompot.experiments.Experiment;kotlin.String){}[0]
+}
+
+final object io.github.youndie.kompot.experiments/ExperimentHeaderCodec { // io.github.youndie.kompot.experiments/ExperimentHeaderCodec|null[0]
+    final const val HEADER_NAME // io.github.youndie.kompot.experiments/ExperimentHeaderCodec.HEADER_NAME|{}HEADER_NAME[0]
+        final fun <get-HEADER_NAME>(): kotlin/String // io.github.youndie.kompot.experiments/ExperimentHeaderCodec.HEADER_NAME.<get-HEADER_NAME>|<get-HEADER_NAME>(){}[0]
+
+    final fun decode(kotlin/String?): kotlin.collections/Map<kotlin/String, kotlin/String> // io.github.youndie.kompot.experiments/ExperimentHeaderCodec.decode|decode(kotlin.String?){}[0]
+    final fun encode(kotlin.collections/Map<kotlin/String, kotlin/String>): kotlin/String // io.github.youndie.kompot.experiments/ExperimentHeaderCodec.encode|encode(kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+}

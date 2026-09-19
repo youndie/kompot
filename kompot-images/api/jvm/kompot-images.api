@@ -1,0 +1,61 @@
+public final class io/github/youndie/kompot/generated/GeneratedImagesKompotRegistrationKt {
+	public static final fun getGeneratedImagesSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+}
+
+public final class io/github/youndie/kompot/images/DslKt {
+	public static final fun image-sqIU7Ac (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/images/ImageScaleType;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun image-sqIU7Ac$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/images/ImageScaleType;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+}
+
+public final class io/github/youndie/kompot/images/ImageScaleType : java/lang/Enum {
+	public static final field Companion Lio/github/youndie/kompot/images/ImageScaleType$Companion;
+	public static final field Crop Lio/github/youndie/kompot/images/ImageScaleType;
+	public static final field FillBounds Lio/github/youndie/kompot/images/ImageScaleType;
+	public static final field Fit Lio/github/youndie/kompot/images/ImageScaleType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/youndie/kompot/images/ImageScaleType;
+	public static fun values ()[Lio/github/youndie/kompot/images/ImageScaleType;
+}
+
+public final class io/github/youndie/kompot/images/ImageScaleType$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/images/KompotImageComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/images/KompotImageComponent$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/images/ImageScaleType;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/images/ImageScaleType;Ljava/lang/String;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lio/github/youndie/kompot/images/ImageScaleType;
+	public final fun component5-R3uu6jg ()Ljava/lang/String;
+	public final fun component6 ()Ljava/util/List;
+	public final fun copy-a2SQGHA (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/images/ImageScaleType;Ljava/lang/String;Ljava/util/List;)Lio/github/youndie/kompot/images/KompotImageComponent;
+	public static synthetic fun copy-a2SQGHA$default (Lio/github/youndie/kompot/images/KompotImageComponent;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/images/ImageScaleType;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lio/github/youndie/kompot/images/KompotImageComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContentDescription ()Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public final fun getScaleType ()Lio/github/youndie/kompot/images/ImageScaleType;
+	public final fun getTint-R3uu6jg ()Ljava/lang/String;
+	public final fun getUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/images/KompotImageComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/images/KompotImageComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/images/KompotImageComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/images/KompotImageComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/images/KompotImageComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+

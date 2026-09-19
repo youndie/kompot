@@ -1,0 +1,15 @@
+public final class io/github/youndie/kompot/generated/GeneratedImagesClientKompotRegistrationKt {
+	public static final fun getGeneratedImagesClientRenderers ()Ljava/util/Map;
+}
+
+public final class io/github/youndie/kompot/images/coil/ImageLoaderKt {
+	public static final fun createKompotImageLoader (Ljava/lang/String;)Lcoil3/ImageLoader;
+}
+
+public final class io/github/youndie/kompot/images/coil/KompotImageRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/images/KompotImageComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+

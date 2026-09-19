@@ -1,0 +1,73 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-realtime>
+abstract fun interface io.github.youndie.kompot.realtime/KompotRealtimeSource { // io.github.youndie.kompot.realtime/KompotRealtimeSource|null[0]
+    abstract fun subscribe(kotlin/String): kotlinx.coroutines.flow/Flow<io.github.youndie.kompot.realtime/UpdateComponentMessage> // io.github.youndie.kompot.realtime/KompotRealtimeSource.subscribe|subscribe(kotlin.String){}[0]
+}
+
+final class io.github.youndie.kompot.realtime/KompotScreenResponse { // io.github.youndie.kompot.realtime/KompotScreenResponse|null[0]
+    constructor <init>(io.github.youndie.kompot/KompotComponent, kotlin/String? = ...) // io.github.youndie.kompot.realtime/KompotScreenResponse.<init>|<init>(io.github.youndie.kompot.KompotComponent;kotlin.String?){}[0]
+
+    final val realtimeTopic // io.github.youndie.kompot.realtime/KompotScreenResponse.realtimeTopic|{}realtimeTopic[0]
+        final fun <get-realtimeTopic>(): kotlin/String? // io.github.youndie.kompot.realtime/KompotScreenResponse.realtimeTopic.<get-realtimeTopic>|<get-realtimeTopic>(){}[0]
+    final val screen // io.github.youndie.kompot.realtime/KompotScreenResponse.screen|{}screen[0]
+        final fun <get-screen>(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.realtime/KompotScreenResponse.screen.<get-screen>|<get-screen>(){}[0]
+
+    final fun component1(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.realtime/KompotScreenResponse.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // io.github.youndie.kompot.realtime/KompotScreenResponse.component2|component2(){}[0]
+    final fun copy(io.github.youndie.kompot/KompotComponent = ..., kotlin/String? = ...): io.github.youndie.kompot.realtime/KompotScreenResponse // io.github.youndie.kompot.realtime/KompotScreenResponse.copy|copy(io.github.youndie.kompot.KompotComponent;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.realtime/KompotScreenResponse.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.realtime/KompotScreenResponse.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.realtime/KompotScreenResponse.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.realtime/KompotScreenResponse> { // io.github.youndie.kompot.realtime/KompotScreenResponse.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.realtime/KompotScreenResponse.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.realtime/KompotScreenResponse.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.realtime/KompotScreenResponse.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.realtime/KompotScreenResponse // io.github.youndie.kompot.realtime/KompotScreenResponse.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.realtime/KompotScreenResponse) // io.github.youndie.kompot.realtime/KompotScreenResponse.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.realtime.KompotScreenResponse){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.realtime/KompotScreenResponse.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.realtime/KompotScreenResponse.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.realtime/KompotScreenResponse> // io.github.youndie.kompot.realtime/KompotScreenResponse.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.realtime/UpdateComponentMessage { // io.github.youndie.kompot.realtime/UpdateComponentMessage|null[0]
+    constructor <init>(kotlin/String, io.github.youndie.kompot/KompotComponent) // io.github.youndie.kompot.realtime/UpdateComponentMessage.<init>|<init>(kotlin.String;io.github.youndie.kompot.KompotComponent){}[0]
+
+    final val component // io.github.youndie.kompot.realtime/UpdateComponentMessage.component|{}component[0]
+        final fun <get-component>(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.realtime/UpdateComponentMessage.component.<get-component>|<get-component>(){}[0]
+    final val componentId // io.github.youndie.kompot.realtime/UpdateComponentMessage.componentId|{}componentId[0]
+        final fun <get-componentId>(): kotlin/String // io.github.youndie.kompot.realtime/UpdateComponentMessage.componentId.<get-componentId>|<get-componentId>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.realtime/UpdateComponentMessage.component1|component1(){}[0]
+    final fun component2(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.realtime/UpdateComponentMessage.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., io.github.youndie.kompot/KompotComponent = ...): io.github.youndie.kompot.realtime/UpdateComponentMessage // io.github.youndie.kompot.realtime/UpdateComponentMessage.copy|copy(kotlin.String;io.github.youndie.kompot.KompotComponent){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.realtime/UpdateComponentMessage.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.realtime/UpdateComponentMessage.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.realtime/UpdateComponentMessage.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.realtime/UpdateComponentMessage> { // io.github.youndie.kompot.realtime/UpdateComponentMessage.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.realtime/UpdateComponentMessage.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.realtime/UpdateComponentMessage.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.realtime/UpdateComponentMessage.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.realtime/UpdateComponentMessage // io.github.youndie.kompot.realtime/UpdateComponentMessage.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.realtime/UpdateComponentMessage) // io.github.youndie.kompot.realtime/UpdateComponentMessage.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.realtime.UpdateComponentMessage){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.realtime/UpdateComponentMessage.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.realtime/UpdateComponentMessage.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.realtime/UpdateComponentMessage> // io.github.youndie.kompot.realtime/UpdateComponentMessage.Companion.serializer|serializer(){}[0]
+    }
+}

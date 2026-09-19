@@ -1,0 +1,42 @@
+public final class io/github/youndie/kompot/interop/CoroutineScopeFactoryKt {
+	public static final fun mainCoroutineScope ()Lkotlinx/coroutines/CoroutineScope;
+}
+
+public final class io/github/youndie/kompot/interop/FormControllerBridgeKt {
+	public static final fun fieldFlow (Lio/github/youndie/kompot/form/FormController;Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
+	public static final fun fieldState (Lio/github/youndie/kompot/form/FormController;Ljava/lang/String;)Lio/github/youndie/kompot/form/FieldState;
+}
+
+public final class io/github/youndie/kompot/interop/KompotJsonBridgeKt {
+	public static final fun decodeFormPatch (Lkotlinx/serialization/json/Json;Ljava/lang/String;)Lio/github/youndie/kompot/form/FormPatch;
+	public static final fun decodeKompotAction (Lkotlinx/serialization/json/Json;Ljava/lang/String;)Lio/github/youndie/kompot/KompotAction;
+	public static final fun decodeKompotComponent (Lkotlinx/serialization/json/Json;Ljava/lang/String;)Lio/github/youndie/kompot/KompotComponent;
+	public static final fun decodeKompotFormResponse (Lkotlinx/serialization/json/Json;Ljava/lang/String;)Lio/github/youndie/kompot/forms/KompotFormResponse;
+	public static final fun decodeKompotPageResponse (Lkotlinx/serialization/json/Json;Ljava/lang/String;)Lio/github/youndie/kompot/standard/KompotPageResponse;
+	public static final fun encodeFormPatchRequest (Lkotlinx/serialization/json/Json;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;)Ljava/lang/String;
+	public static final fun encodeKompotAction (Lkotlinx/serialization/json/Json;Lio/github/youndie/kompot/KompotAction;)Ljava/lang/String;
+	public static final fun encodeKompotComponent (Lkotlinx/serialization/json/Json;Lio/github/youndie/kompot/KompotComponent;)Ljava/lang/String;
+	public static final fun encodeWizardResumeRequest (Lkotlinx/serialization/json/Json;Lio/github/youndie/kompot/wizard/core/WizardTransition;Ljava/util/Map;)Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/interop/KompotRealtimeBridgeKt {
+	public static final fun decodeUpdateComponentMessage (Lkotlinx/serialization/json/Json;Ljava/lang/String;)Lio/github/youndie/kompot/realtime/UpdateComponentMessage;
+}
+
+public final class io/github/youndie/kompot/interop/KompotTokenBridgeKt {
+	public static final fun colorKey (Lio/github/youndie/kompot/KompotModifierNode$Background;)Ljava/lang/String;
+	public static final fun colorKeys (Lio/github/youndie/kompot/KompotModifierNode$Gradient;)Ljava/util/List;
+	public static final fun styleKey (Lio/github/youndie/kompot/standard/TextComponent;)Ljava/lang/String;
+	public static final fun tintKey (Lio/github/youndie/kompot/images/KompotImageComponent;)Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/interop/KompotTypeNameKt {
+	public static final fun kompotActionTypeName (Lio/github/youndie/kompot/KompotAction;Lkotlinx/serialization/json/Json;)Ljava/lang/String;
+	public static final fun kompotComponentTypeName (Lio/github/youndie/kompot/KompotComponent;Lkotlinx/serialization/json/Json;)Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/interop/SwiftFormDataSourcesKt {
+	public static final fun swiftPatchFetcher (Lkotlin/jvm/functions/Function4;)Lkotlin/jvm/functions/Function3;
+	public static final fun swiftRemoteDataSourceResolver (Lkotlin/jvm/functions/Function4;)Lio/github/youndie/kompot/form/RemoteDataSourceResolver;
+}
+

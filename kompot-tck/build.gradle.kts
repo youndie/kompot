@@ -21,3 +21,8 @@ dependencies {
 
     testImplementation(kotlin("test"))
 }
+
+kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation { }
+}

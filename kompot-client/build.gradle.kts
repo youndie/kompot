@@ -11,6 +11,9 @@ plugins {
     id("io.github.youndie.sborka.publish")
 }
 kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation { }
+
     jvm("desktop")
     // Two Apple targets rather than the three the protocol modules carry: compose.runtime published
     // its last iosX64 artefact at 1.11.0-alpha01, so an Intel simulator is not reachable for anything

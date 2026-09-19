@@ -1,0 +1,103 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-navigation>
+final class io.github.youndie.kompot.navigation/NavigationBackStack { // io.github.youndie.kompot.navigation/NavigationBackStack|null[0]
+    constructor <init>(kotlin.collections/List<kotlin/String>) // io.github.youndie.kompot.navigation/NavigationBackStack.<init>|<init>(kotlin.collections.List<kotlin.String>){}[0]
+    constructor <init>(kotlin/String) // io.github.youndie.kompot.navigation/NavigationBackStack.<init>|<init>(kotlin.String){}[0]
+
+    final val canGoBack // io.github.youndie.kompot.navigation/NavigationBackStack.canGoBack|{}canGoBack[0]
+        final fun <get-canGoBack>(): kotlin/Boolean // io.github.youndie.kompot.navigation/NavigationBackStack.canGoBack.<get-canGoBack>|<get-canGoBack>(){}[0]
+    final val current // io.github.youndie.kompot.navigation/NavigationBackStack.current|{}current[0]
+        final fun <get-current>(): kotlin/String // io.github.youndie.kompot.navigation/NavigationBackStack.current.<get-current>|<get-current>(){}[0]
+    final val entries // io.github.youndie.kompot.navigation/NavigationBackStack.entries|{}entries[0]
+        final fun <get-entries>(): kotlin.collections/List<kotlin/String> // io.github.youndie.kompot.navigation/NavigationBackStack.entries.<get-entries>|<get-entries>(){}[0]
+
+    final fun component1(): kotlin.collections/List<kotlin/String> // io.github.youndie.kompot.navigation/NavigationBackStack.component1|component1(){}[0]
+    final fun copy(kotlin.collections/List<kotlin/String> = ...): io.github.youndie.kompot.navigation/NavigationBackStack // io.github.youndie.kompot.navigation/NavigationBackStack.copy|copy(kotlin.collections.List<kotlin.String>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.navigation/NavigationBackStack.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.navigation/NavigationBackStack.hashCode|hashCode(){}[0]
+    final fun pop(): io.github.youndie.kompot.navigation/NavigationBackStack // io.github.youndie.kompot.navigation/NavigationBackStack.pop|pop(){}[0]
+    final fun push(kotlin/String): io.github.youndie.kompot.navigation/NavigationBackStack // io.github.youndie.kompot.navigation/NavigationBackStack.push|push(kotlin.String){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.navigation/NavigationBackStack.toString|toString(){}[0]
+}
+
+final class io.github.youndie.kompot.navigation/NavigationGraph { // io.github.youndie.kompot.navigation/NavigationGraph|null[0]
+    constructor <init>(kotlin.collections/List<io.github.youndie.kompot.navigation/ScreenRoute>) // io.github.youndie.kompot.navigation/NavigationGraph.<init>|<init>(kotlin.collections.List<io.github.youndie.kompot.navigation.ScreenRoute>){}[0]
+
+    final val routes // io.github.youndie.kompot.navigation/NavigationGraph.routes|{}routes[0]
+        final fun <get-routes>(): kotlin.collections/List<io.github.youndie.kompot.navigation/ScreenRoute> // io.github.youndie.kompot.navigation/NavigationGraph.routes.<get-routes>|<get-routes>(){}[0]
+
+    final fun component1(): kotlin.collections/List<io.github.youndie.kompot.navigation/ScreenRoute> // io.github.youndie.kompot.navigation/NavigationGraph.component1|component1(){}[0]
+    final fun copy(kotlin.collections/List<io.github.youndie.kompot.navigation/ScreenRoute> = ...): io.github.youndie.kompot.navigation/NavigationGraph // io.github.youndie.kompot.navigation/NavigationGraph.copy|copy(kotlin.collections.List<io.github.youndie.kompot.navigation.ScreenRoute>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.navigation/NavigationGraph.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.navigation/NavigationGraph.hashCode|hashCode(){}[0]
+    final fun routeFor(kotlin/String, kotlin.collections/Set<kotlin/String> = ...): io.github.youndie.kompot.navigation/ScreenRoute? // io.github.youndie.kompot.navigation/NavigationGraph.routeFor|routeFor(kotlin.String;kotlin.collections.Set<kotlin.String>){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.navigation/NavigationGraph.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.navigation/NavigationGraph> { // io.github.youndie.kompot.navigation/NavigationGraph.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.navigation/NavigationGraph.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.navigation/NavigationGraph.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.navigation/NavigationGraph.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.navigation/NavigationGraph // io.github.youndie.kompot.navigation/NavigationGraph.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.navigation/NavigationGraph) // io.github.youndie.kompot.navigation/NavigationGraph.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.navigation.NavigationGraph){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.navigation/NavigationGraph.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.navigation/NavigationGraph.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.navigation/NavigationGraph> // io.github.youndie.kompot.navigation/NavigationGraph.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.navigation/ScreenRoute { // io.github.youndie.kompot.navigation/ScreenRoute|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/String = ...) // io.github.youndie.kompot.navigation/ScreenRoute.<init>|<init>(kotlin.String;kotlin.String;kotlin.String?;kotlin.String){}[0]
+
+    final val deeplink // io.github.youndie.kompot.navigation/ScreenRoute.deeplink|{}deeplink[0]
+        final fun <get-deeplink>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.deeplink.<get-deeplink>|<get-deeplink>(){}[0]
+    final val endpoint // io.github.youndie.kompot.navigation/ScreenRoute.endpoint|{}endpoint[0]
+        final fun <get-endpoint>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.endpoint.<get-endpoint>|<get-endpoint>(){}[0]
+    final val kind // io.github.youndie.kompot.navigation/ScreenRoute.kind|{}kind[0]
+        final fun <get-kind>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.kind.<get-kind>|<get-kind>(){}[0]
+    final val title // io.github.youndie.kompot.navigation/ScreenRoute.title|{}title[0]
+        final fun <get-title>(): kotlin/String? // io.github.youndie.kompot.navigation/ScreenRoute.title.<get-title>|<get-title>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.component2|component2(){}[0]
+    final fun component3(): kotlin/String? // io.github.youndie.kompot.navigation/ScreenRoute.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.component4|component4(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/String? = ..., kotlin/String = ...): io.github.youndie.kompot.navigation/ScreenRoute // io.github.youndie.kompot.navigation/ScreenRoute.copy|copy(kotlin.String;kotlin.String;kotlin.String?;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.navigation/ScreenRoute.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.navigation/ScreenRoute.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.navigation/ScreenRoute> { // io.github.youndie.kompot.navigation/ScreenRoute.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.navigation/ScreenRoute.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.navigation/ScreenRoute.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.navigation/ScreenRoute.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.navigation/ScreenRoute // io.github.youndie.kompot.navigation/ScreenRoute.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.navigation/ScreenRoute) // io.github.youndie.kompot.navigation/ScreenRoute.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.navigation.ScreenRoute){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.navigation/ScreenRoute.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.navigation/ScreenRoute> // io.github.youndie.kompot.navigation/ScreenRoute.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final object io.github.youndie.kompot.navigation/ScreenRouteKind { // io.github.youndie.kompot.navigation/ScreenRouteKind|null[0]
+    final const val FORM // io.github.youndie.kompot.navigation/ScreenRouteKind.FORM|{}FORM[0]
+        final fun <get-FORM>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRouteKind.FORM.<get-FORM>|<get-FORM>(){}[0]
+    final const val LIVE_SCREEN // io.github.youndie.kompot.navigation/ScreenRouteKind.LIVE_SCREEN|{}LIVE_SCREEN[0]
+        final fun <get-LIVE_SCREEN>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRouteKind.LIVE_SCREEN.<get-LIVE_SCREEN>|<get-LIVE_SCREEN>(){}[0]
+    final const val SCREEN // io.github.youndie.kompot.navigation/ScreenRouteKind.SCREEN|{}SCREEN[0]
+        final fun <get-SCREEN>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRouteKind.SCREEN.<get-SCREEN>|<get-SCREEN>(){}[0]
+
+    final val known // io.github.youndie.kompot.navigation/ScreenRouteKind.known|{}known[0]
+        final fun <get-known>(): kotlin.collections/Set<kotlin/String> // io.github.youndie.kompot.navigation/ScreenRouteKind.known.<get-known>|<get-known>(){}[0]
+}

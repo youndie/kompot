@@ -1,0 +1,87 @@
+public final class io/github/youndie/kompot/wizard/core/WizardEngine {
+	public fun <init> (Ljava/lang/String;Lio/github/youndie/kompot/wizard/core/WizardStepResolver;)V
+	public final fun start (Ljava/lang/Object;)Lio/github/youndie/kompot/wizard/core/WizardSession;
+	public final fun transition (Lio/github/youndie/kompot/wizard/core/WizardSession;Lio/github/youndie/kompot/wizard/core/WizardTransition;Ljava/lang/Object;)Lio/github/youndie/kompot/wizard/core/WizardSession;
+}
+
+public final class io/github/youndie/kompot/wizard/core/WizardSession {
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/Object;
+	public final fun component4 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;Z)Lio/github/youndie/kompot/wizard/core/WizardSession;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/wizard/core/WizardSession;Ljava/lang/String;Ljava/util/List;Ljava/lang/Object;ZILjava/lang/Object;)Lio/github/youndie/kompot/wizard/core/WizardSession;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCurrentStepId ()Ljava/lang/String;
+	public final fun getDraft ()Ljava/lang/Object;
+	public final fun getHistory ()Ljava/util/List;
+	public fun hashCode ()I
+	public final fun isFinished ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/kompot/wizard/core/WizardStepResolver {
+	public abstract fun resolveNext (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/kompot/wizard/core/WizardTransition {
+	public static final field Companion Lio/github/youndie/kompot/wizard/core/WizardTransition$Companion;
+}
+
+public final class io/github/youndie/kompot/wizard/core/WizardTransition$Back : io/github/youndie/kompot/wizard/core/WizardTransition {
+	public static final field INSTANCE Lio/github/youndie/kompot/wizard/core/WizardTransition$Back;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/wizard/core/WizardTransition$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/core/WizardTransition$Finish : io/github/youndie/kompot/wizard/core/WizardTransition {
+	public static final field INSTANCE Lio/github/youndie/kompot/wizard/core/WizardTransition$Finish;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/wizard/core/WizardTransition$JumpTo : io/github/youndie/kompot/wizard/core/WizardTransition {
+	public static final field Companion Lio/github/youndie/kompot/wizard/core/WizardTransition$JumpTo$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/youndie/kompot/wizard/core/WizardTransition$JumpTo;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/wizard/core/WizardTransition$JumpTo;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/wizard/core/WizardTransition$JumpTo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getStepId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/wizard/core/WizardTransition$JumpTo$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/wizard/core/WizardTransition$JumpTo$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/wizard/core/WizardTransition$JumpTo;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/wizard/core/WizardTransition$JumpTo;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/core/WizardTransition$JumpTo$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/core/WizardTransition$Next : io/github/youndie/kompot/wizard/core/WizardTransition {
+	public static final field INSTANCE Lio/github/youndie/kompot/wizard/core/WizardTransition$Next;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+

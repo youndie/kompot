@@ -1,0 +1,463 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-forms>
+final class io.github.youndie.kompot.forms/AmountInputComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.forms/AmountInputComponent|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ...) // io.github.youndie.kompot.forms/AmountInputComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.String?;kotlin.String?;kotlin.String?;kotlin.Boolean){}[0]
+
+    final val currencyFromField // io.github.youndie.kompot.forms/AmountInputComponent.currencyFromField|{}currencyFromField[0]
+        final fun <get-currencyFromField>(): kotlin/String? // io.github.youndie.kompot.forms/AmountInputComponent.currencyFromField.<get-currencyFromField>|<get-currencyFromField>(){}[0]
+    final val currencyPrefix // io.github.youndie.kompot.forms/AmountInputComponent.currencyPrefix|{}currencyPrefix[0]
+        final fun <get-currencyPrefix>(): kotlin/String? // io.github.youndie.kompot.forms/AmountInputComponent.currencyPrefix.<get-currencyPrefix>|<get-currencyPrefix>(){}[0]
+    final val currencySpaced // io.github.youndie.kompot.forms/AmountInputComponent.currencySpaced|{}currencySpaced[0]
+        final fun <get-currencySpaced>(): kotlin/Boolean // io.github.youndie.kompot.forms/AmountInputComponent.currencySpaced.<get-currencySpaced>|<get-currencySpaced>(){}[0]
+    final val currencySuffix // io.github.youndie.kompot.forms/AmountInputComponent.currencySuffix|{}currencySuffix[0]
+        final fun <get-currencySuffix>(): kotlin/String? // io.github.youndie.kompot.forms/AmountInputComponent.currencySuffix.<get-currencySuffix>|<get-currencySuffix>(){}[0]
+    final val fieldId // io.github.youndie.kompot.forms/AmountInputComponent.fieldId|{}fieldId[0]
+        final fun <get-fieldId>(): kotlin/String // io.github.youndie.kompot.forms/AmountInputComponent.fieldId.<get-fieldId>|<get-fieldId>(){}[0]
+    final val id // io.github.youndie.kompot.forms/AmountInputComponent.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot.forms/AmountInputComponent.id.<get-id>|<get-id>(){}[0]
+    final val label // io.github.youndie.kompot.forms/AmountInputComponent.label|{}label[0]
+        final fun <get-label>(): kotlin/String // io.github.youndie.kompot.forms/AmountInputComponent.label.<get-label>|<get-label>(){}[0]
+    final val modifiers // io.github.youndie.kompot.forms/AmountInputComponent.modifiers|{}modifiers[0]
+        final fun <get-modifiers>(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/AmountInputComponent.modifiers.<get-modifiers>|<get-modifiers>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.forms/AmountInputComponent.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/AmountInputComponent.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.youndie.kompot.forms/AmountInputComponent.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.youndie.kompot.forms/AmountInputComponent.component4|component4(){}[0]
+    final fun component5(): kotlin/String? // io.github.youndie.kompot.forms/AmountInputComponent.component5|component5(){}[0]
+    final fun component6(): kotlin/String? // io.github.youndie.kompot.forms/AmountInputComponent.component6|component6(){}[0]
+    final fun component7(): kotlin/String? // io.github.youndie.kompot.forms/AmountInputComponent.component7|component7(){}[0]
+    final fun component8(): kotlin/Boolean // io.github.youndie.kompot.forms/AmountInputComponent.component8|component8(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ...): io.github.youndie.kompot.forms/AmountInputComponent // io.github.youndie.kompot.forms/AmountInputComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.String?;kotlin.String?;kotlin.String?;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.forms/AmountInputComponent.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.forms/AmountInputComponent.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.forms/AmountInputComponent.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.forms/AmountInputComponent> { // io.github.youndie.kompot.forms/AmountInputComponent.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.forms/AmountInputComponent.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.forms/AmountInputComponent.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.forms/AmountInputComponent.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.forms/AmountInputComponent // io.github.youndie.kompot.forms/AmountInputComponent.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.forms/AmountInputComponent) // io.github.youndie.kompot.forms/AmountInputComponent.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.forms.AmountInputComponent){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.forms/AmountInputComponent.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.forms/AmountInputComponent.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.forms/AmountInputComponent> // io.github.youndie.kompot.forms/AmountInputComponent.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.forms/AutocompleteInputComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.forms/AutocompleteInputComponent|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String, kotlin/String, kotlin/String, kotlin/String? = ...) // io.github.youndie.kompot.forms/AutocompleteInputComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.String;kotlin.String?){}[0]
+
+    final val dataSourceId // io.github.youndie.kompot.forms/AutocompleteInputComponent.dataSourceId|{}dataSourceId[0]
+        final fun <get-dataSourceId>(): kotlin/String // io.github.youndie.kompot.forms/AutocompleteInputComponent.dataSourceId.<get-dataSourceId>|<get-dataSourceId>(){}[0]
+    final val fieldId // io.github.youndie.kompot.forms/AutocompleteInputComponent.fieldId|{}fieldId[0]
+        final fun <get-fieldId>(): kotlin/String // io.github.youndie.kompot.forms/AutocompleteInputComponent.fieldId.<get-fieldId>|<get-fieldId>(){}[0]
+    final val id // io.github.youndie.kompot.forms/AutocompleteInputComponent.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot.forms/AutocompleteInputComponent.id.<get-id>|<get-id>(){}[0]
+    final val label // io.github.youndie.kompot.forms/AutocompleteInputComponent.label|{}label[0]
+        final fun <get-label>(): kotlin/String // io.github.youndie.kompot.forms/AutocompleteInputComponent.label.<get-label>|<get-label>(){}[0]
+    final val modifiers // io.github.youndie.kompot.forms/AutocompleteInputComponent.modifiers|{}modifiers[0]
+        final fun <get-modifiers>(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/AutocompleteInputComponent.modifiers.<get-modifiers>|<get-modifiers>(){}[0]
+    final val placeholder // io.github.youndie.kompot.forms/AutocompleteInputComponent.placeholder|{}placeholder[0]
+        final fun <get-placeholder>(): kotlin/String? // io.github.youndie.kompot.forms/AutocompleteInputComponent.placeholder.<get-placeholder>|<get-placeholder>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.forms/AutocompleteInputComponent.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/AutocompleteInputComponent.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.youndie.kompot.forms/AutocompleteInputComponent.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.youndie.kompot.forms/AutocompleteInputComponent.component4|component4(){}[0]
+    final fun component5(): kotlin/String // io.github.youndie.kompot.forms/AutocompleteInputComponent.component5|component5(){}[0]
+    final fun component6(): kotlin/String? // io.github.youndie.kompot.forms/AutocompleteInputComponent.component6|component6(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String? = ...): io.github.youndie.kompot.forms/AutocompleteInputComponent // io.github.youndie.kompot.forms/AutocompleteInputComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.String;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.forms/AutocompleteInputComponent.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.forms/AutocompleteInputComponent.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.forms/AutocompleteInputComponent.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.forms/AutocompleteInputComponent> { // io.github.youndie.kompot.forms/AutocompleteInputComponent.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.forms/AutocompleteInputComponent.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.forms/AutocompleteInputComponent.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.forms/AutocompleteInputComponent.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.forms/AutocompleteInputComponent // io.github.youndie.kompot.forms/AutocompleteInputComponent.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.forms/AutocompleteInputComponent) // io.github.youndie.kompot.forms/AutocompleteInputComponent.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.forms.AutocompleteInputComponent){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.forms/AutocompleteInputComponent.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.forms/AutocompleteInputComponent.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.forms/AutocompleteInputComponent> // io.github.youndie.kompot.forms/AutocompleteInputComponent.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.forms/CheckboxInputComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.forms/CheckboxInputComponent|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String, kotlin/String, kotlin/String? = ...) // io.github.youndie.kompot.forms/CheckboxInputComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.String?){}[0]
+
+    final val fieldId // io.github.youndie.kompot.forms/CheckboxInputComponent.fieldId|{}fieldId[0]
+        final fun <get-fieldId>(): kotlin/String // io.github.youndie.kompot.forms/CheckboxInputComponent.fieldId.<get-fieldId>|<get-fieldId>(){}[0]
+    final val id // io.github.youndie.kompot.forms/CheckboxInputComponent.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot.forms/CheckboxInputComponent.id.<get-id>|<get-id>(){}[0]
+    final val label // io.github.youndie.kompot.forms/CheckboxInputComponent.label|{}label[0]
+        final fun <get-label>(): kotlin/String // io.github.youndie.kompot.forms/CheckboxInputComponent.label.<get-label>|<get-label>(){}[0]
+    final val modifiers // io.github.youndie.kompot.forms/CheckboxInputComponent.modifiers|{}modifiers[0]
+        final fun <get-modifiers>(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/CheckboxInputComponent.modifiers.<get-modifiers>|<get-modifiers>(){}[0]
+    final val variant // io.github.youndie.kompot.forms/CheckboxInputComponent.variant|{}variant[0]
+        final fun <get-variant>(): kotlin/String? // io.github.youndie.kompot.forms/CheckboxInputComponent.variant.<get-variant>|<get-variant>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.forms/CheckboxInputComponent.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/CheckboxInputComponent.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.youndie.kompot.forms/CheckboxInputComponent.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.youndie.kompot.forms/CheckboxInputComponent.component4|component4(){}[0]
+    final fun component5(): kotlin/String? // io.github.youndie.kompot.forms/CheckboxInputComponent.component5|component5(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String? = ...): io.github.youndie.kompot.forms/CheckboxInputComponent // io.github.youndie.kompot.forms/CheckboxInputComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.forms/CheckboxInputComponent.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.forms/CheckboxInputComponent.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.forms/CheckboxInputComponent.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.forms/CheckboxInputComponent> { // io.github.youndie.kompot.forms/CheckboxInputComponent.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.forms/CheckboxInputComponent.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.forms/CheckboxInputComponent.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.forms/CheckboxInputComponent.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.forms/CheckboxInputComponent // io.github.youndie.kompot.forms/CheckboxInputComponent.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.forms/CheckboxInputComponent) // io.github.youndie.kompot.forms/CheckboxInputComponent.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.forms.CheckboxInputComponent){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.forms/CheckboxInputComponent.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.forms/CheckboxInputComponent.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.forms/CheckboxInputComponent> // io.github.youndie.kompot.forms/CheckboxInputComponent.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.forms/FormPatchRequest { // io.github.youndie.kompot.forms/FormPatchRequest|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue>) // io.github.youndie.kompot.forms/FormPatchRequest.<init>|<init>(kotlin.String;kotlin.String;kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>){}[0]
+
+    final val fieldId // io.github.youndie.kompot.forms/FormPatchRequest.fieldId|{}fieldId[0]
+        final fun <get-fieldId>(): kotlin/String // io.github.youndie.kompot.forms/FormPatchRequest.fieldId.<get-fieldId>|<get-fieldId>(){}[0]
+    final val formId // io.github.youndie.kompot.forms/FormPatchRequest.formId|{}formId[0]
+        final fun <get-formId>(): kotlin/String // io.github.youndie.kompot.forms/FormPatchRequest.formId.<get-formId>|<get-formId>(){}[0]
+    final val values // io.github.youndie.kompot.forms/FormPatchRequest.values|{}values[0]
+        final fun <get-values>(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> // io.github.youndie.kompot.forms/FormPatchRequest.values.<get-values>|<get-values>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.forms/FormPatchRequest.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.youndie.kompot.forms/FormPatchRequest.component2|component2(){}[0]
+    final fun component3(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> // io.github.youndie.kompot.forms/FormPatchRequest.component3|component3(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> = ...): io.github.youndie.kompot.forms/FormPatchRequest // io.github.youndie.kompot.forms/FormPatchRequest.copy|copy(kotlin.String;kotlin.String;kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.forms/FormPatchRequest.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.forms/FormPatchRequest.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.forms/FormPatchRequest.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.forms/FormPatchRequest> { // io.github.youndie.kompot.forms/FormPatchRequest.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.forms/FormPatchRequest.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.forms/FormPatchRequest.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.forms/FormPatchRequest.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.forms/FormPatchRequest // io.github.youndie.kompot.forms/FormPatchRequest.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.forms/FormPatchRequest) // io.github.youndie.kompot.forms/FormPatchRequest.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.forms.FormPatchRequest){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.forms/FormPatchRequest.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.forms/FormPatchRequest.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.forms/FormPatchRequest> // io.github.youndie.kompot.forms/FormPatchRequest.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.forms/KompotFormResponse { // io.github.youndie.kompot.forms/KompotFormResponse|null[0]
+    constructor <init>(io.github.youndie.kompot.form/FormSchema, io.github.youndie.kompot/KompotComponent, kotlin/String? = ...) // io.github.youndie.kompot.forms/KompotFormResponse.<init>|<init>(io.github.youndie.kompot.form.FormSchema;io.github.youndie.kompot.KompotComponent;kotlin.String?){}[0]
+
+    final val realtimeTopic // io.github.youndie.kompot.forms/KompotFormResponse.realtimeTopic|{}realtimeTopic[0]
+        final fun <get-realtimeTopic>(): kotlin/String? // io.github.youndie.kompot.forms/KompotFormResponse.realtimeTopic.<get-realtimeTopic>|<get-realtimeTopic>(){}[0]
+    final val schema // io.github.youndie.kompot.forms/KompotFormResponse.schema|{}schema[0]
+        final fun <get-schema>(): io.github.youndie.kompot.form/FormSchema // io.github.youndie.kompot.forms/KompotFormResponse.schema.<get-schema>|<get-schema>(){}[0]
+    final val screen // io.github.youndie.kompot.forms/KompotFormResponse.screen|{}screen[0]
+        final fun <get-screen>(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.forms/KompotFormResponse.screen.<get-screen>|<get-screen>(){}[0]
+
+    final fun component1(): io.github.youndie.kompot.form/FormSchema // io.github.youndie.kompot.forms/KompotFormResponse.component1|component1(){}[0]
+    final fun component2(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.forms/KompotFormResponse.component2|component2(){}[0]
+    final fun component3(): kotlin/String? // io.github.youndie.kompot.forms/KompotFormResponse.component3|component3(){}[0]
+    final fun copy(io.github.youndie.kompot.form/FormSchema = ..., io.github.youndie.kompot/KompotComponent = ..., kotlin/String? = ...): io.github.youndie.kompot.forms/KompotFormResponse // io.github.youndie.kompot.forms/KompotFormResponse.copy|copy(io.github.youndie.kompot.form.FormSchema;io.github.youndie.kompot.KompotComponent;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.forms/KompotFormResponse.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.forms/KompotFormResponse.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.forms/KompotFormResponse.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.forms/KompotFormResponse> { // io.github.youndie.kompot.forms/KompotFormResponse.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.forms/KompotFormResponse.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.forms/KompotFormResponse.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.forms/KompotFormResponse.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.forms/KompotFormResponse // io.github.youndie.kompot.forms/KompotFormResponse.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.forms/KompotFormResponse) // io.github.youndie.kompot.forms/KompotFormResponse.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.forms.KompotFormResponse){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.forms/KompotFormResponse.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.forms/KompotFormResponse.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.forms/KompotFormResponse> // io.github.youndie.kompot.forms/KompotFormResponse.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.forms/RadioGroupComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.forms/RadioGroupComponent|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String, kotlin/String, kotlin.collections/List<io.github.youndie.kompot.forms/SelectOption>) // io.github.youndie.kompot.forms/RadioGroupComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.collections.List<io.github.youndie.kompot.forms.SelectOption>){}[0]
+
+    final val fieldId // io.github.youndie.kompot.forms/RadioGroupComponent.fieldId|{}fieldId[0]
+        final fun <get-fieldId>(): kotlin/String // io.github.youndie.kompot.forms/RadioGroupComponent.fieldId.<get-fieldId>|<get-fieldId>(){}[0]
+    final val id // io.github.youndie.kompot.forms/RadioGroupComponent.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot.forms/RadioGroupComponent.id.<get-id>|<get-id>(){}[0]
+    final val label // io.github.youndie.kompot.forms/RadioGroupComponent.label|{}label[0]
+        final fun <get-label>(): kotlin/String // io.github.youndie.kompot.forms/RadioGroupComponent.label.<get-label>|<get-label>(){}[0]
+    final val modifiers // io.github.youndie.kompot.forms/RadioGroupComponent.modifiers|{}modifiers[0]
+        final fun <get-modifiers>(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/RadioGroupComponent.modifiers.<get-modifiers>|<get-modifiers>(){}[0]
+    final val options // io.github.youndie.kompot.forms/RadioGroupComponent.options|{}options[0]
+        final fun <get-options>(): kotlin.collections/List<io.github.youndie.kompot.forms/SelectOption> // io.github.youndie.kompot.forms/RadioGroupComponent.options.<get-options>|<get-options>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.forms/RadioGroupComponent.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/RadioGroupComponent.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.youndie.kompot.forms/RadioGroupComponent.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.youndie.kompot.forms/RadioGroupComponent.component4|component4(){}[0]
+    final fun component5(): kotlin.collections/List<io.github.youndie.kompot.forms/SelectOption> // io.github.youndie.kompot.forms/RadioGroupComponent.component5|component5(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot.forms/SelectOption> = ...): io.github.youndie.kompot.forms/RadioGroupComponent // io.github.youndie.kompot.forms/RadioGroupComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.collections.List<io.github.youndie.kompot.forms.SelectOption>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.forms/RadioGroupComponent.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.forms/RadioGroupComponent.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.forms/RadioGroupComponent.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.forms/RadioGroupComponent> { // io.github.youndie.kompot.forms/RadioGroupComponent.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.forms/RadioGroupComponent.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.forms/RadioGroupComponent.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.forms/RadioGroupComponent.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.forms/RadioGroupComponent // io.github.youndie.kompot.forms/RadioGroupComponent.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.forms/RadioGroupComponent) // io.github.youndie.kompot.forms/RadioGroupComponent.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.forms.RadioGroupComponent){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.forms/RadioGroupComponent.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.forms/RadioGroupComponent.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.forms/RadioGroupComponent> // io.github.youndie.kompot.forms/RadioGroupComponent.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.forms/ReadOnlyFieldComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.forms/ReadOnlyFieldComponent|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/String? = ...) // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.String?;kotlin.String?){}[0]
+
+    final val fieldId // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.fieldId|{}fieldId[0]
+        final fun <get-fieldId>(): kotlin/String? // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.fieldId.<get-fieldId>|<get-fieldId>(){}[0]
+    final val helperText // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.helperText|{}helperText[0]
+        final fun <get-helperText>(): kotlin/String? // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.helperText.<get-helperText>|<get-helperText>(){}[0]
+    final val id // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.id.<get-id>|<get-id>(){}[0]
+    final val label // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.label|{}label[0]
+        final fun <get-label>(): kotlin/String // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.label.<get-label>|<get-label>(){}[0]
+    final val modifiers // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.modifiers|{}modifiers[0]
+        final fun <get-modifiers>(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.modifiers.<get-modifiers>|<get-modifiers>(){}[0]
+    final val value // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.value|{}value[0]
+        final fun <get-value>(): kotlin/String // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.value.<get-value>|<get-value>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.component4|component4(){}[0]
+    final fun component5(): kotlin/String? // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.component5|component5(){}[0]
+    final fun component6(): kotlin/String? // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.component6|component6(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String? = ..., kotlin/String? = ...): io.github.youndie.kompot.forms/ReadOnlyFieldComponent // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.String?;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.forms/ReadOnlyFieldComponent> { // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.forms/ReadOnlyFieldComponent // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.forms/ReadOnlyFieldComponent) // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.forms.ReadOnlyFieldComponent){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.forms/ReadOnlyFieldComponent> // io.github.youndie.kompot.forms/ReadOnlyFieldComponent.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.forms/SelectInputComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.forms/SelectInputComponent|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String, kotlin/String, kotlin.collections/List<io.github.youndie.kompot.forms/SelectOption>, kotlin/String? = ...) // io.github.youndie.kompot.forms/SelectInputComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.collections.List<io.github.youndie.kompot.forms.SelectOption>;kotlin.String?){}[0]
+
+    final val fieldId // io.github.youndie.kompot.forms/SelectInputComponent.fieldId|{}fieldId[0]
+        final fun <get-fieldId>(): kotlin/String // io.github.youndie.kompot.forms/SelectInputComponent.fieldId.<get-fieldId>|<get-fieldId>(){}[0]
+    final val id // io.github.youndie.kompot.forms/SelectInputComponent.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot.forms/SelectInputComponent.id.<get-id>|<get-id>(){}[0]
+    final val label // io.github.youndie.kompot.forms/SelectInputComponent.label|{}label[0]
+        final fun <get-label>(): kotlin/String // io.github.youndie.kompot.forms/SelectInputComponent.label.<get-label>|<get-label>(){}[0]
+    final val modifiers // io.github.youndie.kompot.forms/SelectInputComponent.modifiers|{}modifiers[0]
+        final fun <get-modifiers>(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/SelectInputComponent.modifiers.<get-modifiers>|<get-modifiers>(){}[0]
+    final val options // io.github.youndie.kompot.forms/SelectInputComponent.options|{}options[0]
+        final fun <get-options>(): kotlin.collections/List<io.github.youndie.kompot.forms/SelectOption> // io.github.youndie.kompot.forms/SelectInputComponent.options.<get-options>|<get-options>(){}[0]
+    final val placeholder // io.github.youndie.kompot.forms/SelectInputComponent.placeholder|{}placeholder[0]
+        final fun <get-placeholder>(): kotlin/String? // io.github.youndie.kompot.forms/SelectInputComponent.placeholder.<get-placeholder>|<get-placeholder>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.forms/SelectInputComponent.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/SelectInputComponent.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.youndie.kompot.forms/SelectInputComponent.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.youndie.kompot.forms/SelectInputComponent.component4|component4(){}[0]
+    final fun component5(): kotlin.collections/List<io.github.youndie.kompot.forms/SelectOption> // io.github.youndie.kompot.forms/SelectInputComponent.component5|component5(){}[0]
+    final fun component6(): kotlin/String? // io.github.youndie.kompot.forms/SelectInputComponent.component6|component6(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot.forms/SelectOption> = ..., kotlin/String? = ...): io.github.youndie.kompot.forms/SelectInputComponent // io.github.youndie.kompot.forms/SelectInputComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.collections.List<io.github.youndie.kompot.forms.SelectOption>;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.forms/SelectInputComponent.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.forms/SelectInputComponent.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.forms/SelectInputComponent.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.forms/SelectInputComponent> { // io.github.youndie.kompot.forms/SelectInputComponent.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.forms/SelectInputComponent.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.forms/SelectInputComponent.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.forms/SelectInputComponent.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.forms/SelectInputComponent // io.github.youndie.kompot.forms/SelectInputComponent.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.forms/SelectInputComponent) // io.github.youndie.kompot.forms/SelectInputComponent.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.forms.SelectInputComponent){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.forms/SelectInputComponent.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.forms/SelectInputComponent.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.forms/SelectInputComponent> // io.github.youndie.kompot.forms/SelectInputComponent.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.forms/SelectOption { // io.github.youndie.kompot.forms/SelectOption|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String>? = ...) // io.github.youndie.kompot.forms/SelectOption.<init>|<init>(kotlin.String;kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>?){}[0]
+
+    final val id // io.github.youndie.kompot.forms/SelectOption.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot.forms/SelectOption.id.<get-id>|<get-id>(){}[0]
+    final val label // io.github.youndie.kompot.forms/SelectOption.label|{}label[0]
+        final fun <get-label>(): kotlin/String // io.github.youndie.kompot.forms/SelectOption.label.<get-label>|<get-label>(){}[0]
+    final val rawMetadata // io.github.youndie.kompot.forms/SelectOption.rawMetadata|{}rawMetadata[0]
+        final fun <get-rawMetadata>(): kotlin.collections/Map<kotlin/String, kotlin/String>? // io.github.youndie.kompot.forms/SelectOption.rawMetadata.<get-rawMetadata>|<get-rawMetadata>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.forms/SelectOption.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.youndie.kompot.forms/SelectOption.component2|component2(){}[0]
+    final fun component3(): kotlin.collections/Map<kotlin/String, kotlin/String>? // io.github.youndie.kompot.forms/SelectOption.component3|component3(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin.collections/Map<kotlin/String, kotlin/String>? = ...): io.github.youndie.kompot.forms/SelectOption // io.github.youndie.kompot.forms/SelectOption.copy|copy(kotlin.String;kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.forms/SelectOption.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.forms/SelectOption.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.forms/SelectOption.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.forms/SelectOption> { // io.github.youndie.kompot.forms/SelectOption.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.forms/SelectOption.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.forms/SelectOption.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.forms/SelectOption.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.forms/SelectOption // io.github.youndie.kompot.forms/SelectOption.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.forms/SelectOption) // io.github.youndie.kompot.forms/SelectOption.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.forms.SelectOption){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.forms/SelectOption.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.forms/SelectOption.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.forms/SelectOption> // io.github.youndie.kompot.forms/SelectOption.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.forms/SubmitFormAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot.forms/SubmitFormAction|null[0]
+    constructor <init>(kotlin/String) // io.github.youndie.kompot.forms/SubmitFormAction.<init>|<init>(kotlin.String){}[0]
+
+    final val formId // io.github.youndie.kompot.forms/SubmitFormAction.formId|{}formId[0]
+        final fun <get-formId>(): kotlin/String // io.github.youndie.kompot.forms/SubmitFormAction.formId.<get-formId>|<get-formId>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.forms/SubmitFormAction.component1|component1(){}[0]
+    final fun copy(kotlin/String = ...): io.github.youndie.kompot.forms/SubmitFormAction // io.github.youndie.kompot.forms/SubmitFormAction.copy|copy(kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.forms/SubmitFormAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.forms/SubmitFormAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.forms/SubmitFormAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.forms/SubmitFormAction> { // io.github.youndie.kompot.forms/SubmitFormAction.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.forms/SubmitFormAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.forms/SubmitFormAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.forms/SubmitFormAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.forms/SubmitFormAction // io.github.youndie.kompot.forms/SubmitFormAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.forms/SubmitFormAction) // io.github.youndie.kompot.forms/SubmitFormAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.forms.SubmitFormAction){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.forms/SubmitFormAction.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.forms/SubmitFormAction> // io.github.youndie.kompot.forms/SubmitFormAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.forms/TextInputComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.forms/TextInputComponent|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/Boolean = ...) // io.github.youndie.kompot.forms/TextInputComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.String?;kotlin.String?;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean){}[0]
+
+    final val fieldId // io.github.youndie.kompot.forms/TextInputComponent.fieldId|{}fieldId[0]
+        final fun <get-fieldId>(): kotlin/String // io.github.youndie.kompot.forms/TextInputComponent.fieldId.<get-fieldId>|<get-fieldId>(){}[0]
+    final val id // io.github.youndie.kompot.forms/TextInputComponent.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot.forms/TextInputComponent.id.<get-id>|<get-id>(){}[0]
+    final val label // io.github.youndie.kompot.forms/TextInputComponent.label|{}label[0]
+        final fun <get-label>(): kotlin/String // io.github.youndie.kompot.forms/TextInputComponent.label.<get-label>|<get-label>(){}[0]
+    final val mask // io.github.youndie.kompot.forms/TextInputComponent.mask|{}mask[0]
+        final fun <get-mask>(): kotlin/String? // io.github.youndie.kompot.forms/TextInputComponent.mask.<get-mask>|<get-mask>(){}[0]
+    final val modifiers // io.github.youndie.kompot.forms/TextInputComponent.modifiers|{}modifiers[0]
+        final fun <get-modifiers>(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/TextInputComponent.modifiers.<get-modifiers>|<get-modifiers>(){}[0]
+    final val multiline // io.github.youndie.kompot.forms/TextInputComponent.multiline|{}multiline[0]
+        final fun <get-multiline>(): kotlin/Boolean // io.github.youndie.kompot.forms/TextInputComponent.multiline.<get-multiline>|<get-multiline>(){}[0]
+    final val placeholder // io.github.youndie.kompot.forms/TextInputComponent.placeholder|{}placeholder[0]
+        final fun <get-placeholder>(): kotlin/String? // io.github.youndie.kompot.forms/TextInputComponent.placeholder.<get-placeholder>|<get-placeholder>(){}[0]
+    final val secret // io.github.youndie.kompot.forms/TextInputComponent.secret|{}secret[0]
+        final fun <get-secret>(): kotlin/Boolean // io.github.youndie.kompot.forms/TextInputComponent.secret.<get-secret>|<get-secret>(){}[0]
+    final val uppercase // io.github.youndie.kompot.forms/TextInputComponent.uppercase|{}uppercase[0]
+        final fun <get-uppercase>(): kotlin/Boolean // io.github.youndie.kompot.forms/TextInputComponent.uppercase.<get-uppercase>|<get-uppercase>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.forms/TextInputComponent.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.forms/TextInputComponent.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.youndie.kompot.forms/TextInputComponent.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.youndie.kompot.forms/TextInputComponent.component4|component4(){}[0]
+    final fun component5(): kotlin/String? // io.github.youndie.kompot.forms/TextInputComponent.component5|component5(){}[0]
+    final fun component6(): kotlin/String? // io.github.youndie.kompot.forms/TextInputComponent.component6|component6(){}[0]
+    final fun component7(): kotlin/Boolean // io.github.youndie.kompot.forms/TextInputComponent.component7|component7(){}[0]
+    final fun component8(): kotlin/Boolean // io.github.youndie.kompot.forms/TextInputComponent.component8|component8(){}[0]
+    final fun component9(): kotlin/Boolean // io.github.youndie.kompot.forms/TextInputComponent.component9|component9(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/Boolean = ...): io.github.youndie.kompot.forms/TextInputComponent // io.github.youndie.kompot.forms/TextInputComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.String?;kotlin.String?;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.forms/TextInputComponent.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.forms/TextInputComponent.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.forms/TextInputComponent.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.forms/TextInputComponent> { // io.github.youndie.kompot.forms/TextInputComponent.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.forms/TextInputComponent.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.forms/TextInputComponent.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.forms/TextInputComponent.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.forms/TextInputComponent // io.github.youndie.kompot.forms/TextInputComponent.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.forms/TextInputComponent) // io.github.youndie.kompot.forms/TextInputComponent.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.forms.TextInputComponent){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.forms/TextInputComponent.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.forms/TextInputComponent.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.forms/TextInputComponent> // io.github.youndie.kompot.forms/TextInputComponent.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final object io.github.youndie.kompot.forms/KompotCheckboxVariants { // io.github.youndie.kompot.forms/KompotCheckboxVariants|null[0]
+    final const val SWITCH // io.github.youndie.kompot.forms/KompotCheckboxVariants.SWITCH|{}SWITCH[0]
+        final fun <get-SWITCH>(): kotlin/String // io.github.youndie.kompot.forms/KompotCheckboxVariants.SWITCH.<get-SWITCH>|<get-SWITCH>(){}[0]
+}
+
+final val io.github.youndie.kompot.forms/kompotFormsSerializersModule // io.github.youndie.kompot.forms/kompotFormsSerializersModule|{}kompotFormsSerializersModule[0]
+    final fun <get-kompotFormsSerializersModule>(): kotlinx.serialization.modules/SerializersModule // io.github.youndie.kompot.forms/kompotFormsSerializersModule.<get-kompotFormsSerializersModule>|<get-kompotFormsSerializersModule>(){}[0]
+final val io.github.youndie.kompot.generated/generatedFormsSerializersModule // io.github.youndie.kompot.generated/generatedFormsSerializersModule|{}generatedFormsSerializersModule[0]
+    final fun <get-generatedFormsSerializersModule>(): kotlinx.serialization.modules/SerializersModule // io.github.youndie.kompot.generated/generatedFormsSerializersModule.<get-generatedFormsSerializersModule>|<get-generatedFormsSerializersModule>(){}[0]
+
+final fun (io.github.youndie.kompot.dsl/KompotContainerContext).io.github.youndie.kompot.forms/amountInput(kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/Function1<io.github.youndie.kompot.dsl/KompotModifierBuilder, kotlin/Unit>? = ...) // io.github.youndie.kompot.forms/amountInput|amountInput@io.github.youndie.kompot.dsl.KompotContainerContext(kotlin.String;kotlin.String;kotlin.String?;kotlin.String?;kotlin.Boolean;kotlin.String?;kotlin.String?;kotlin.Function1<io.github.youndie.kompot.dsl.KompotModifierBuilder,kotlin.Unit>?){}[0]
+final fun (io.github.youndie.kompot.dsl/KompotContainerContext).io.github.youndie.kompot.forms/autocompleteInput(kotlin/String, kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/String? = ..., kotlin/Function1<io.github.youndie.kompot.dsl/KompotModifierBuilder, kotlin/Unit>? = ...) // io.github.youndie.kompot.forms/autocompleteInput|autocompleteInput@io.github.youndie.kompot.dsl.KompotContainerContext(kotlin.String;kotlin.String;kotlin.String;kotlin.String?;kotlin.String?;kotlin.Function1<io.github.youndie.kompot.dsl.KompotModifierBuilder,kotlin.Unit>?){}[0]
+final fun (io.github.youndie.kompot.dsl/KompotContainerContext).io.github.youndie.kompot.forms/checkboxInput(kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/Function1<io.github.youndie.kompot.dsl/KompotModifierBuilder, kotlin/Unit>? = ...) // io.github.youndie.kompot.forms/checkboxInput|checkboxInput@io.github.youndie.kompot.dsl.KompotContainerContext(kotlin.String;kotlin.String;kotlin.String?;kotlin.Function1<io.github.youndie.kompot.dsl.KompotModifierBuilder,kotlin.Unit>?){}[0]
+final fun (io.github.youndie.kompot.dsl/KompotContainerContext).io.github.youndie.kompot.forms/radioGroup(kotlin/String, kotlin/String, kotlin.collections/List<io.github.youndie.kompot.forms/SelectOption>, kotlin/String? = ..., kotlin/Function1<io.github.youndie.kompot.dsl/KompotModifierBuilder, kotlin/Unit>? = ...) // io.github.youndie.kompot.forms/radioGroup|radioGroup@io.github.youndie.kompot.dsl.KompotContainerContext(kotlin.String;kotlin.String;kotlin.collections.List<io.github.youndie.kompot.forms.SelectOption>;kotlin.String?;kotlin.Function1<io.github.youndie.kompot.dsl.KompotModifierBuilder,kotlin.Unit>?){}[0]
+final fun (io.github.youndie.kompot.dsl/KompotContainerContext).io.github.youndie.kompot.forms/readOnlyField(kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/String? = ..., kotlin/Function1<io.github.youndie.kompot.dsl/KompotModifierBuilder, kotlin/Unit>? = ...) // io.github.youndie.kompot.forms/readOnlyField|readOnlyField@io.github.youndie.kompot.dsl.KompotContainerContext(kotlin.String;kotlin.String;kotlin.String?;kotlin.String?;kotlin.Function1<io.github.youndie.kompot.dsl.KompotModifierBuilder,kotlin.Unit>?){}[0]
+final fun (io.github.youndie.kompot.dsl/KompotContainerContext).io.github.youndie.kompot.forms/selectInput(kotlin/String, kotlin/String, kotlin.collections/List<io.github.youndie.kompot.forms/SelectOption>, kotlin/String? = ..., kotlin/String? = ..., kotlin/Function1<io.github.youndie.kompot.dsl/KompotModifierBuilder, kotlin/Unit>? = ...) // io.github.youndie.kompot.forms/selectInput|selectInput@io.github.youndie.kompot.dsl.KompotContainerContext(kotlin.String;kotlin.String;kotlin.collections.List<io.github.youndie.kompot.forms.SelectOption>;kotlin.String?;kotlin.String?;kotlin.Function1<io.github.youndie.kompot.dsl.KompotModifierBuilder,kotlin.Unit>?){}[0]
+final fun (io.github.youndie.kompot.dsl/KompotContainerContext).io.github.youndie.kompot.forms/textInput(kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/String? = ..., kotlin/Function1<io.github.youndie.kompot.dsl/KompotModifierBuilder, kotlin/Unit>? = ...) // io.github.youndie.kompot.forms/textInput|textInput@io.github.youndie.kompot.dsl.KompotContainerContext(kotlin.String;kotlin.String;kotlin.String?;kotlin.String?;kotlin.Boolean;kotlin.Boolean;kotlin.String?;kotlin.Function1<io.github.youndie.kompot.dsl.KompotModifierBuilder,kotlin.Unit>?){}[0]

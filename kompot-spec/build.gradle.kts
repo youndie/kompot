@@ -7,6 +7,11 @@ plugins {
 }
 
 
+kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation { }
+}
+
 // JVM-only on purpose: the spec is a build-time and review-time artefact. It never travels into an
 // iOS framework or a client application — the only runtime consumer of a schema is somebody else's
 // server, and it gets finished .schema.json files rather than this module.

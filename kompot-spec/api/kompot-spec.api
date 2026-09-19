@@ -1,0 +1,340 @@
+public final class io/github/youndie/kompot/spec/BodyFinding {
+	public fun <init> (Ljava/lang/String;Lio/github/youndie/kompot/spec/JsonPath;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/youndie/kompot/spec/JsonPath;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Lio/github/youndie/kompot/spec/JsonPath;Ljava/lang/String;)Lio/github/youndie/kompot/spec/BodyFinding;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/spec/BodyFinding;Ljava/lang/String;Lio/github/youndie/kompot/spec/JsonPath;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/spec/BodyFinding;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getPath ()Lio/github/youndie/kompot/spec/JsonPath;
+	public final fun getRule ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/BodyRules {
+	public static final field INSTANCE Lio/github/youndie/kompot/spec/BodyRules;
+	public final fun check (Lkotlinx/serialization/json/JsonElement;Ljava/util/Set;Ljava/util/Map;)Ljava/util/List;
+	public static synthetic fun check$default (Lio/github/youndie/kompot/spec/BodyRules;Lkotlinx/serialization/json/JsonElement;Ljava/util/Set;Ljava/util/Map;ILjava/lang/Object;)Ljava/util/List;
+	public final fun componentIds (Lkotlinx/serialization/json/JsonElement;Ljava/util/Set;)Ljava/util/List;
+	public final fun formFields (Lkotlinx/serialization/json/JsonElement;Ljava/util/Map;)Ljava/util/List;
+	public static synthetic fun formFields$default (Lio/github/youndie/kompot/spec/BodyRules;Lkotlinx/serialization/json/JsonElement;Ljava/util/Map;ILjava/lang/Object;)Ljava/util/List;
+	public final fun textSpans (Lkotlinx/serialization/json/JsonElement;)Ljava/util/List;
+}
+
+public final class io/github/youndie/kompot/spec/Compatibility : java/lang/Enum {
+	public static final field BREAKING Lio/github/youndie/kompot/spec/Compatibility;
+	public static final field COMPATIBLE Lio/github/youndie/kompot/spec/Compatibility;
+	public static final field UNCLASSIFIED Lio/github/youndie/kompot/spec/Compatibility;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/youndie/kompot/spec/Compatibility;
+	public static fun values ()[Lio/github/youndie/kompot/spec/Compatibility;
+}
+
+public final class io/github/youndie/kompot/spec/ExampleFiles {
+	public static final field INSTANCE Lio/github/youndie/kompot/spec/ExampleFiles;
+	public final fun getDirectory ()Ljava/io/File;
+	public final fun names ()Ljava/util/List;
+	public final fun parse (Ljava/lang/String;)Lkotlinx/serialization/json/JsonElement;
+	public final fun read (Ljava/lang/String;)Ljava/lang/String;
+	public final fun render (Lkotlinx/serialization/json/JsonElement;)Ljava/lang/String;
+	public final fun write (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)V
+}
+
+public final class io/github/youndie/kompot/spec/GeneratedSchema {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/util/Set;Ljava/util/Map;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun component4 ()Ljava/util/Set;
+	public final fun component5 ()Ljava/util/Map;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/util/Set;Ljava/util/Map;)Lio/github/youndie/kompot/spec/GeneratedSchema;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/spec/GeneratedSchema;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/util/Set;Ljava/util/Map;ILjava/lang/Object;)Lio/github/youndie/kompot/spec/GeneratedSchema;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContributions ()Ljava/util/Map;
+	public final fun getDefKeys ()Ljava/util/Set;
+	public final fun getDocument ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getFileName ()Ljava/lang/String;
+	public final fun getModuleName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/JsonNode {
+	public fun <init> (Lio/github/youndie/kompot/spec/JsonPath;Lkotlinx/serialization/json/JsonObject;)V
+	public final fun component1 ()Lio/github/youndie/kompot/spec/JsonPath;
+	public final fun component2 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun copy (Lio/github/youndie/kompot/spec/JsonPath;Lkotlinx/serialization/json/JsonObject;)Lio/github/youndie/kompot/spec/JsonNode;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/spec/JsonNode;Lio/github/youndie/kompot/spec/JsonPath;Lkotlinx/serialization/json/JsonObject;ILjava/lang/Object;)Lio/github/youndie/kompot/spec/JsonNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPath ()Lio/github/youndie/kompot/spec/JsonPath;
+	public final fun getValue ()Lkotlinx/serialization/json/JsonObject;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/JsonPath {
+	public static final field Companion Lio/github/youndie/kompot/spec/JsonPath$Companion;
+	public final fun append (Lio/github/youndie/kompot/spec/JsonPath;)Lio/github/youndie/kompot/spec/JsonPath;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSegments ()Ljava/util/List;
+	public fun hashCode ()I
+	public final fun plus (I)Lio/github/youndie/kompot/spec/JsonPath;
+	public final fun plus (Ljava/lang/String;)Lio/github/youndie/kompot/spec/JsonPath;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/JsonPath$Companion {
+	public final fun getROOT ()Lio/github/youndie/kompot/spec/JsonPath;
+}
+
+public abstract interface class io/github/youndie/kompot/spec/JsonPath$Segment {
+}
+
+public final class io/github/youndie/kompot/spec/JsonPath$Segment$Index : io/github/youndie/kompot/spec/JsonPath$Segment {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lio/github/youndie/kompot/spec/JsonPath$Segment$Index;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/spec/JsonPath$Segment$Index;IILjava/lang/Object;)Lio/github/youndie/kompot/spec/JsonPath$Segment$Index;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getIndex ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/JsonPath$Segment$Name : io/github/youndie/kompot/spec/JsonPath$Segment {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/youndie/kompot/spec/JsonPath$Segment$Name;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/spec/JsonPath$Segment$Name;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/spec/JsonPath$Segment$Name;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/JsonSchemaValidator {
+	public fun <init> (Ljava/util/Map;Lkotlinx/serialization/json/JsonObject;Ljava/util/Set;)V
+	public synthetic fun <init> (Ljava/util/Map;Lkotlinx/serialization/json/JsonObject;Ljava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun validate (Lkotlinx/serialization/json/JsonElement;Ljava/lang/String;)Ljava/util/List;
+}
+
+public final class io/github/youndie/kompot/spec/JsonWalkKt {
+	public static final fun childSlots (Ljava/util/Map;Ljava/lang/String;)Ljava/util/Map;
+	public static synthetic fun childSlots$default (Ljava/util/Map;Ljava/lang/String;ILjava/lang/Object;)Ljava/util/Map;
+	public static final fun collectJsonObjects (Lkotlinx/serialization/json/JsonElement;)Ljava/util/List;
+	public static final fun paginatingTypes (Ljava/util/Map;Ljava/lang/String;)Ljava/util/Set;
+	public static synthetic fun paginatingTypes$default (Ljava/util/Map;Ljava/lang/String;ILjava/lang/Object;)Ljava/util/Set;
+	public static final fun walkJsonObjects (Lkotlinx/serialization/json/JsonElement;)Lkotlin/sequences/Sequence;
+}
+
+public final class io/github/youndie/kompot/spec/KompotProtocol {
+	public static final field ACTION_PERFORM Ljava/lang/String;
+	public static final field COMPONENT_HIERARCHY Ljava/lang/String;
+	public static final field DEEPLINK_FORBIDDEN_PATTERN Ljava/lang/String;
+	public static final field DEEPLINK_PATTERN Ljava/lang/String;
+	public static final field DISCRIMINATOR Ljava/lang/String;
+	public static final field ENDPOINT_PATTERN Ljava/lang/String;
+	public static final field EXAMPLES_INDEX_FILE_NAME Ljava/lang/String;
+	public static final field EXTENSION_SUFFIX Ljava/lang/String;
+	public static final field EXTERNAL_URL_PATTERN Ljava/lang/String;
+	public static final field ID_PREFIX Ljava/lang/String;
+	public static final field INSTANCE Lio/github/youndie/kompot/spec/KompotProtocol;
+	public static final field METADATA_KEY_BALANCE Ljava/lang/String;
+	public static final field METADATA_KEY_CURRENCY Ljava/lang/String;
+	public static final field OPENAPI_FILE_NAME Ljava/lang/String;
+	public static final field PROFILE_FILE_NAME Ljava/lang/String;
+	public static final field REALTIME_TOPIC_PATTERN Ljava/lang/String;
+	public static final field SCHEMA_DIALECT Ljava/lang/String;
+	public static final field SPEC_FILE_NAME Ljava/lang/String;
+	public final fun fileNameFor (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/KompotProtocolKt {
+	public static final fun pascal (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/KompotSchemaGenerator {
+	public fun <init> (Lio/github/youndie/kompot/spec/KompotSpecModule;Ljava/util/Map;)V
+	public final fun generate ()Lio/github/youndie/kompot/spec/GeneratedSchema;
+}
+
+public final class io/github/youndie/kompot/spec/KompotSpec {
+	public static final field INSTANCE Lio/github/youndie/kompot/spec/KompotSpec;
+	public final fun constrained (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lkotlinx/serialization/json/JsonObject;
+	public static synthetic fun constrained$default (Lio/github/youndie/kompot/spec/KompotSpec;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lkotlinx/serialization/json/JsonObject;
+	public final fun generateAll (Ljava/util/List;)Ljava/util/List;
+	public final fun openHierarchy (Ljava/lang/String;ZLjava/util/List;Lkotlinx/serialization/json/JsonObject;)Lkotlinx/serialization/json/JsonObject;
+	public static synthetic fun openHierarchy$default (Lio/github/youndie/kompot/spec/KompotSpec;Ljava/lang/String;ZLjava/util/List;Lkotlinx/serialization/json/JsonObject;ILjava/lang/Object;)Lkotlinx/serialization/json/JsonObject;
+	public final fun profile (Ljava/util/List;Ljava/util/Map;)Lkotlinx/serialization/json/JsonObject;
+	public static synthetic fun profile$default (Lio/github/youndie/kompot/spec/KompotSpec;Ljava/util/List;Ljava/util/Map;ILjava/lang/Object;)Lkotlinx/serialization/json/JsonObject;
+	public final fun reservedMetadata ()Lkotlinx/serialization/json/JsonObject;
+}
+
+public final class io/github/youndie/kompot/spec/KompotSpecModule {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/modules/SerializersModule;Ljava/util/List;Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/modules/SerializersModule;Ljava/util/List;Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lkotlinx/serialization/modules/SerializersModule;
+	public final fun component4 ()Ljava/util/List;
+	public final fun component5 ()Ljava/util/Map;
+	public final fun component6 ()Ljava/util/Map;
+	public final fun component7 ()Ljava/util/Map;
+	public final fun component8 ()Ljava/lang/String;
+	public final fun component9 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/modules/SerializersModule;Ljava/util/List;Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;Ljava/lang/String;Z)Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/spec/KompotSpecModule;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/modules/SerializersModule;Ljava/util/List;Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;Ljava/lang/String;ZILjava/lang/Object;)Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAnnotations ()Ljava/util/Map;
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getDiscriminator ()Ljava/lang/String;
+	public final fun getDocs ()Ljava/util/Map;
+	public final fun getHandWritten ()Ljava/util/Map;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getOpenObjects ()Z
+	public final fun getRoots ()Ljava/util/List;
+	public final fun getSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/KompotSpecResources {
+	public fun <init> (Ljava/lang/String;Ljava/lang/ClassLoader;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/ClassLoader;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun example (Ljava/lang/String;)Lkotlinx/serialization/json/JsonElement;
+	public final fun examplesIndex ()Lkotlinx/serialization/json/JsonObject;
+	public final fun openApi ()Lkotlinx/serialization/json/JsonObject;
+	public final fun rule (Ljava/lang/String;)Ljava/lang/String;
+	public final fun rules ()Ljava/util/Map;
+	public final fun schemas ()Ljava/util/Map;
+	public final fun specification ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/KompotToolkitSpec {
+	public static final field INSTANCE Lio/github/youndie/kompot/spec/KompotToolkitSpec;
+	public final fun auth ()Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public final fun commands ()Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public final fun core ()Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public final fun formCore ()Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public final fun formStandard ()Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public final fun forms ()Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public final fun getModules ()Ljava/util/List;
+	public final fun images ()Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public final fun navigation ()Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public final fun realtime ()Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public final fun standard ()Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public final fun theme ()Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public final fun wizard ()Lio/github/youndie/kompot/spec/KompotSpecModule;
+	public final fun wizardCore ()Lio/github/youndie/kompot/spec/KompotSpecModule;
+}
+
+public final class io/github/youndie/kompot/spec/SchemaChange {
+	public fun <init> (Ljava/lang/String;Lio/github/youndie/kompot/spec/Compatibility;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/youndie/kompot/spec/Compatibility;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Lio/github/youndie/kompot/spec/Compatibility;Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/spec/SchemaChange;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/spec/SchemaChange;Ljava/lang/String;Lio/github/youndie/kompot/spec/Compatibility;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/spec/SchemaChange;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getRule ()Ljava/lang/String;
+	public final fun getSubject ()Ljava/lang/String;
+	public final fun getVerdict ()Lio/github/youndie/kompot/spec/Compatibility;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/SchemaCompatibility {
+	public static final field INSTANCE Lio/github/youndie/kompot/spec/SchemaCompatibility;
+	public final fun compare (Ljava/util/Map;Ljava/util/Map;)Ljava/util/List;
+}
+
+public final class io/github/youndie/kompot/spec/SchemaCompatibilityCliKt {
+	public static final fun main ([Ljava/lang/String;)V
+}
+
+public final class io/github/youndie/kompot/spec/SchemaCompatibilityRules {
+	public static final field CLOSED_HIERARCHY_EXTENDED Ljava/lang/String;
+	public static final field DEFINITION_ADDED Ljava/lang/String;
+	public static final field DEFINITION_KIND_CHANGED Ljava/lang/String;
+	public static final field DISCRIMINATOR_RENAMED Ljava/lang/String;
+	public static final field FIELD_ADDED_OPTIONAL Ljava/lang/String;
+	public static final field FIELD_REMOVED Ljava/lang/String;
+	public static final field FIELD_TYPE_CHANGED Ljava/lang/String;
+	public static final field HIERARCHY_CONTRACT_CHANGED Ljava/lang/String;
+	public static final field INSTANCE Lio/github/youndie/kompot/spec/SchemaCompatibilityRules;
+	public static final field REQUIRED_ADDED Ljava/lang/String;
+	public static final field REQUIRED_REMOVED Ljava/lang/String;
+	public static final field TYPE_ADDED_DEGRADING Ljava/lang/String;
+	public static final field TYPE_ADDED_NO_DEGRADATION Ljava/lang/String;
+	public static final field TYPE_REMOVED Ljava/lang/String;
+	public static final field UNCLASSIFIED_CHANGE Ljava/lang/String;
+	public static final field UNKNOWN_FIELDS_CLOSED Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/SchemaFiles {
+	public static final field INSTANCE Lio/github/youndie/kompot/spec/SchemaFiles;
+	public static final field RECORD_ENV Ljava/lang/String;
+	public final fun getDirectory ()Ljava/io/File;
+	public final fun getRecordMode ()Z
+	public final fun loadAll ()Ljava/util/Map;
+	public final fun names ()Ljava/util/List;
+	public final fun parse (Ljava/lang/String;)Lkotlinx/serialization/json/JsonObject;
+	public final fun read (Ljava/lang/String;)Ljava/lang/String;
+	public final fun render (Lkotlinx/serialization/json/JsonObject;)Ljava/lang/String;
+	public final fun write (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;)V
+}
+
+public final class io/github/youndie/kompot/spec/SchemaFinding {
+	public fun <init> (Lio/github/youndie/kompot/spec/JsonPath;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Lio/github/youndie/kompot/spec/JsonPath;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Lio/github/youndie/kompot/spec/JsonPath;Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/spec/SchemaFinding;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/spec/SchemaFinding;Lio/github/youndie/kompot/spec/JsonPath;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/spec/SchemaFinding;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKeyword ()Ljava/lang/String;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getPath ()Lio/github/youndie/kompot/spec/JsonPath;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/Slot {
+	public fun <init> (Ljava/lang/String;ZZ)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun copy (Ljava/lang/String;ZZ)Lio/github/youndie/kompot/spec/Slot;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/spec/Slot;Ljava/lang/String;ZZILjava/lang/Object;)Lio/github/youndie/kompot/spec/Slot;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMany ()Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getRequired ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/TokenUse {
+	public fun <init> (Lio/github/youndie/kompot/spec/JsonPath;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Lio/github/youndie/kompot/spec/JsonPath;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Lio/github/youndie/kompot/spec/JsonPath;Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/spec/TokenUse;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/spec/TokenUse;Lio/github/youndie/kompot/spec/JsonPath;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/spec/TokenUse;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKind ()Ljava/lang/String;
+	public final fun getPath ()Lio/github/youndie/kompot/spec/JsonPath;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/spec/TokenUsesKt {
+	public static final fun tokenUses (Lkotlinx/serialization/json/JsonElement;Ljava/util/Map;Ljava/lang/String;)Ljava/util/List;
+	public static synthetic fun tokenUses$default (Lkotlinx/serialization/json/JsonElement;Ljava/util/Map;Ljava/lang/String;ILjava/lang/Object;)Ljava/util/List;
+}
+

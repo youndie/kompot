@@ -1,0 +1,15 @@
+public final class io/github/youndie/kompot/WizardScreenRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/wizard/WizardScreenComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/youndie/kompot/WizardSubmitKt {
+	public static final fun withWizardNavigation (Lio/github/youndie/kompot/KompotActionHandler;Lkotlinx/coroutines/CoroutineScope;Lio/github/youndie/kompot/form/FormController;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;)Lio/github/youndie/kompot/KompotActionHandler;
+}
+
+public final class io/github/youndie/kompot/generated/GeneratedWizardClientKompotRegistrationKt {
+	public static final fun getGeneratedWizardClientRenderers ()Ljava/util/Map;
+}
+

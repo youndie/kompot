@@ -11,6 +11,9 @@ plugins {
 // headless server authors trees with the very same constants. That is the point of a token being an
 // open string — see SPEC.md §6.
 kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation { }
+
     jvm()
     androidLibrary {
         namespace = "io.github.youndie.kompot.ds.material"

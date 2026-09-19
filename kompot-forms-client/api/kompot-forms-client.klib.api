@@ -1,0 +1,67 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-forms-client>
+final class io.github.youndie.kompot/AmountInputRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.forms/AmountInputComponent> { // io.github.youndie.kompot/AmountInputRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/AmountInputRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.forms/AmountInputComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/AmountInputRenderer.Render|Render(io.github.youndie.kompot.forms.AmountInputComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/AutocompleteInputRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.forms/AutocompleteInputComponent> { // io.github.youndie.kompot/AutocompleteInputRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/AutocompleteInputRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.forms/AutocompleteInputComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/AutocompleteInputRenderer.Render|Render(io.github.youndie.kompot.forms.AutocompleteInputComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/CheckboxInputRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.forms/CheckboxInputComponent> { // io.github.youndie.kompot/CheckboxInputRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/CheckboxInputRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.forms/CheckboxInputComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/CheckboxInputRenderer.Render|Render(io.github.youndie.kompot.forms.CheckboxInputComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/RadioGroupRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.forms/RadioGroupComponent> { // io.github.youndie.kompot/RadioGroupRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/RadioGroupRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.forms/RadioGroupComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/RadioGroupRenderer.Render|Render(io.github.youndie.kompot.forms.RadioGroupComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/ReadOnlyFieldRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.forms/ReadOnlyFieldComponent> { // io.github.youndie.kompot/ReadOnlyFieldRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/ReadOnlyFieldRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.forms/ReadOnlyFieldComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/ReadOnlyFieldRenderer.Render|Render(io.github.youndie.kompot.forms.ReadOnlyFieldComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/SelectInputRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.forms/SelectInputComponent> { // io.github.youndie.kompot/SelectInputRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/SelectInputRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.forms/SelectInputComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/SelectInputRenderer.Render|Render(io.github.youndie.kompot.forms.SelectInputComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/TextInputRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.forms/TextInputComponent> { // io.github.youndie.kompot/TextInputRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/TextInputRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.forms/TextInputComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/TextInputRenderer.Render|Render(io.github.youndie.kompot.forms.TextInputComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final val io.github.youndie.kompot.generated/generatedFormsClientRenderers // io.github.youndie.kompot.generated/generatedFormsClientRenderers|{}generatedFormsClientRenderers[0]
+    final fun <get-generatedFormsClientRenderers>(): kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot/KompotComponentRenderer<out io.github.youndie.kompot/KompotComponent>> // io.github.youndie.kompot.generated/generatedFormsClientRenderers.<get-generatedFormsClientRenderers>|<get-generatedFormsClientRenderers>(){}[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_AmountInputRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_AmountInputRenderer$stableprop|#static{}io_github_youndie_kompot_AmountInputRenderer$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_AutocompleteInputRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_AutocompleteInputRenderer$stableprop|#static{}io_github_youndie_kompot_AutocompleteInputRenderer$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_CheckboxInputRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_CheckboxInputRenderer$stableprop|#static{}io_github_youndie_kompot_CheckboxInputRenderer$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_RadioGroupRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_RadioGroupRenderer$stableprop|#static{}io_github_youndie_kompot_RadioGroupRenderer$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_ReadOnlyFieldRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_ReadOnlyFieldRenderer$stableprop|#static{}io_github_youndie_kompot_ReadOnlyFieldRenderer$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_SelectInputRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_SelectInputRenderer$stableprop|#static{}io_github_youndie_kompot_SelectInputRenderer$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_TextInputRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_TextInputRenderer$stableprop|#static{}io_github_youndie_kompot_TextInputRenderer$stableprop[0]
+
+final fun io.github.youndie.kompot/io_github_youndie_kompot_AmountInputRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_AmountInputRenderer$stableprop_getter|io_github_youndie_kompot_AmountInputRenderer$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_AutocompleteInputRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_AutocompleteInputRenderer$stableprop_getter|io_github_youndie_kompot_AutocompleteInputRenderer$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_CheckboxInputRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_CheckboxInputRenderer$stableprop_getter|io_github_youndie_kompot_CheckboxInputRenderer$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_RadioGroupRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_RadioGroupRenderer$stableprop_getter|io_github_youndie_kompot_RadioGroupRenderer$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_ReadOnlyFieldRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_ReadOnlyFieldRenderer$stableprop_getter|io_github_youndie_kompot_ReadOnlyFieldRenderer$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_SelectInputRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_SelectInputRenderer$stableprop_getter|io_github_youndie_kompot_SelectInputRenderer$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_TextInputRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_TextInputRenderer$stableprop_getter|io_github_youndie_kompot_TextInputRenderer$stableprop_getter(){}[0]

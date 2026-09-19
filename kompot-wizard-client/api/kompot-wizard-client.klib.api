@@ -1,0 +1,20 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-wizard-client>
+final class io.github.youndie.kompot/WizardScreenRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.wizard/WizardScreenComponent> { // io.github.youndie.kompot/WizardScreenRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/WizardScreenRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.wizard/WizardScreenComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/WizardScreenRenderer.Render|Render(io.github.youndie.kompot.wizard.WizardScreenComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final val io.github.youndie.kompot.generated/generatedWizardClientRenderers // io.github.youndie.kompot.generated/generatedWizardClientRenderers|{}generatedWizardClientRenderers[0]
+    final fun <get-generatedWizardClientRenderers>(): kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot/KompotComponentRenderer<out io.github.youndie.kompot/KompotComponent>> // io.github.youndie.kompot.generated/generatedWizardClientRenderers.<get-generatedWizardClientRenderers>|<get-generatedWizardClientRenderers>(){}[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_WizardScreenRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_WizardScreenRenderer$stableprop|#static{}io_github_youndie_kompot_WizardScreenRenderer$stableprop[0]
+
+final fun (io.github.youndie.kompot/KompotActionHandler).io.github.youndie.kompot/withWizardNavigation(kotlinx.coroutines/CoroutineScope, io.github.youndie.kompot.form/FormController, kotlin/String, kotlin.coroutines/SuspendFunction1<kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue>, kotlin/Unit>, kotlin.coroutines/SuspendFunction1<kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue>, kotlin/Unit>, kotlin.coroutines/SuspendFunction1<kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue>, kotlin/Unit>): io.github.youndie.kompot/KompotActionHandler // io.github.youndie.kompot/withWizardNavigation|withWizardNavigation@io.github.youndie.kompot.KompotActionHandler(kotlinx.coroutines.CoroutineScope;io.github.youndie.kompot.form.FormController;kotlin.String;kotlin.coroutines.SuspendFunction1<kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>,kotlin.Unit>;kotlin.coroutines.SuspendFunction1<kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>,kotlin.Unit>;kotlin.coroutines.SuspendFunction1<kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>,kotlin.Unit>){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_WizardScreenRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_WizardScreenRenderer$stableprop_getter|io_github_youndie_kompot_WizardScreenRenderer$stableprop_getter(){}[0]

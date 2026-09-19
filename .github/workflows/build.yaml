@@ -89,6 +89,13 @@ jobs:
       - name: The names in the readmes still exist
         run: python3 docs/scripts/readme_snippets.py
 
+      # `./gradlew build` above already runs checkKotlinAbi: KGP wires it into `check`, so a public
+      # declaration that moved without its dump being updated is red there, named. What that cannot
+      # say is where the guard is ABSENT — it is two lines in a module's build file, and the module
+      # that never got them looks exactly like one with nothing to report.
+      - name: Every published module has its API under guard
+        run: python3 docs/scripts/abi_coverage.py
+
       # Only on a pull request, and this is the case the check was written for: `B-NN` is taken from
       # the index when the branch is cut, and a branch merged in the meantime can take that same
       # number. Neither tree holds a duplicate on its own — both are legal, and the collision exists

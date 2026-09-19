@@ -8,6 +8,9 @@ plugins {
 
 
 kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation { }
+
     jvm()
     androidLibrary {
         namespace = "io.github.youndie.kompot.registry.annotations"

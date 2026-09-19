@@ -1,0 +1,187 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-analytics>
+abstract fun interface io.github.youndie.kompot.analytics/AnalyticsTracker { // io.github.youndie.kompot.analytics/AnalyticsTracker|null[0]
+    abstract fun track(io.github.youndie.kompot.analytics/AnalyticsEvent) // io.github.youndie.kompot.analytics/AnalyticsTracker.track|track(io.github.youndie.kompot.analytics.AnalyticsEvent){}[0]
+}
+
+abstract fun interface io.github.youndie.kompot.analytics/KompotActionEventNaming { // io.github.youndie.kompot.analytics/KompotActionEventNaming|null[0]
+    abstract fun describe(io.github.youndie.kompot/KompotAction): io.github.youndie.kompot.analytics/KompotEventDescriptor // io.github.youndie.kompot.analytics/KompotActionEventNaming.describe|describe(io.github.youndie.kompot.KompotAction){}[0]
+}
+
+abstract fun interface io.github.youndie.kompot.analytics/KompotComponentEventNaming { // io.github.youndie.kompot.analytics/KompotComponentEventNaming|null[0]
+    abstract fun describe(io.github.youndie.kompot/KompotComponent): io.github.youndie.kompot.analytics/KompotEventDescriptor // io.github.youndie.kompot.analytics/KompotComponentEventNaming.describe|describe(io.github.youndie.kompot.KompotComponent){}[0]
+}
+
+final class io.github.youndie.kompot.analytics/CompositeAnalyticsTracker : io.github.youndie.kompot.analytics/AnalyticsTracker { // io.github.youndie.kompot.analytics/CompositeAnalyticsTracker|null[0]
+    constructor <init>(kotlin.collections/List<io.github.youndie.kompot.analytics/AnalyticsTracker>) // io.github.youndie.kompot.analytics/CompositeAnalyticsTracker.<init>|<init>(kotlin.collections.List<io.github.youndie.kompot.analytics.AnalyticsTracker>){}[0]
+
+    final fun track(io.github.youndie.kompot.analytics/AnalyticsEvent) // io.github.youndie.kompot.analytics/CompositeAnalyticsTracker.track|track(io.github.youndie.kompot.analytics.AnalyticsEvent){}[0]
+}
+
+final class io.github.youndie.kompot.analytics/ConsoleAnalyticsTracker : io.github.youndie.kompot.analytics/AnalyticsTracker { // io.github.youndie.kompot.analytics/ConsoleAnalyticsTracker|null[0]
+    constructor <init>(kotlin/String = ...) // io.github.youndie.kompot.analytics/ConsoleAnalyticsTracker.<init>|<init>(kotlin.String){}[0]
+
+    final fun track(io.github.youndie.kompot.analytics/AnalyticsEvent) // io.github.youndie.kompot.analytics/ConsoleAnalyticsTracker.track|track(io.github.youndie.kompot.analytics.AnalyticsEvent){}[0]
+}
+
+final class io.github.youndie.kompot.analytics/KompotEventDescriptor { // io.github.youndie.kompot.analytics/KompotEventDescriptor|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // io.github.youndie.kompot.analytics/KompotEventDescriptor.<init>|<init>(kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+
+    final val eventName // io.github.youndie.kompot.analytics/KompotEventDescriptor.eventName|{}eventName[0]
+        final fun <get-eventName>(): kotlin/String // io.github.youndie.kompot.analytics/KompotEventDescriptor.eventName.<get-eventName>|<get-eventName>(){}[0]
+    final val properties // io.github.youndie.kompot.analytics/KompotEventDescriptor.properties|{}properties[0]
+        final fun <get-properties>(): kotlin.collections/Map<kotlin/String, kotlin/String> // io.github.youndie.kompot.analytics/KompotEventDescriptor.properties.<get-properties>|<get-properties>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.analytics/KompotEventDescriptor.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/Map<kotlin/String, kotlin/String> // io.github.youndie.kompot.analytics/KompotEventDescriptor.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/Map<kotlin/String, kotlin/String> = ...): io.github.youndie.kompot.analytics/KompotEventDescriptor // io.github.youndie.kompot.analytics/KompotEventDescriptor.copy|copy(kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.analytics/KompotEventDescriptor.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.analytics/KompotEventDescriptor.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.analytics/KompotEventDescriptor.toString|toString(){}[0]
+}
+
+final class io.github.youndie.kompot.analytics/KompotEventNamingRegistry { // io.github.youndie.kompot.analytics/KompotEventNamingRegistry|null[0]
+    constructor <init>(kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot.analytics/KompotComponentEventNaming> = ..., kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotAction>, io.github.youndie.kompot.analytics/KompotActionEventNaming> = ...) // io.github.youndie.kompot.analytics/KompotEventNamingRegistry.<init>|<init>(kotlin.collections.Map<kotlin.reflect.KClass<out|io.github.youndie.kompot.KompotComponent>,io.github.youndie.kompot.analytics.KompotComponentEventNaming>;kotlin.collections.Map<kotlin.reflect.KClass<out|io.github.youndie.kompot.KompotAction>,io.github.youndie.kompot.analytics.KompotActionEventNaming>){}[0]
+
+    final fun describe(io.github.youndie.kompot/KompotAction): io.github.youndie.kompot.analytics/KompotEventDescriptor // io.github.youndie.kompot.analytics/KompotEventNamingRegistry.describe|describe(io.github.youndie.kompot.KompotAction){}[0]
+    final fun describe(io.github.youndie.kompot/KompotComponent): io.github.youndie.kompot.analytics/KompotEventDescriptor // io.github.youndie.kompot.analytics/KompotEventNamingRegistry.describe|describe(io.github.youndie.kompot.KompotComponent){}[0]
+}
+
+sealed class io.github.youndie.kompot.analytics/AnalyticsEvent { // io.github.youndie.kompot.analytics/AnalyticsEvent|null[0]
+    final class ActionTracked : io.github.youndie.kompot.analytics/AnalyticsEvent { // io.github.youndie.kompot.analytics/AnalyticsEvent.ActionTracked|null[0]
+        constructor <init>(io.github.youndie.kompot.analytics/KompotEventDescriptor) // io.github.youndie.kompot.analytics/AnalyticsEvent.ActionTracked.<init>|<init>(io.github.youndie.kompot.analytics.KompotEventDescriptor){}[0]
+
+        final val descriptor // io.github.youndie.kompot.analytics/AnalyticsEvent.ActionTracked.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): io.github.youndie.kompot.analytics/KompotEventDescriptor // io.github.youndie.kompot.analytics/AnalyticsEvent.ActionTracked.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun component1(): io.github.youndie.kompot.analytics/KompotEventDescriptor // io.github.youndie.kompot.analytics/AnalyticsEvent.ActionTracked.component1|component1(){}[0]
+        final fun copy(io.github.youndie.kompot.analytics/KompotEventDescriptor = ...): io.github.youndie.kompot.analytics/AnalyticsEvent.ActionTracked // io.github.youndie.kompot.analytics/AnalyticsEvent.ActionTracked.copy|copy(io.github.youndie.kompot.analytics.KompotEventDescriptor){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.analytics/AnalyticsEvent.ActionTracked.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.analytics/AnalyticsEvent.ActionTracked.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.ActionTracked.toString|toString(){}[0]
+    }
+
+    final class ComponentImpression : io.github.youndie.kompot.analytics/AnalyticsEvent { // io.github.youndie.kompot.analytics/AnalyticsEvent.ComponentImpression|null[0]
+        constructor <init>(io.github.youndie.kompot.analytics/KompotEventDescriptor) // io.github.youndie.kompot.analytics/AnalyticsEvent.ComponentImpression.<init>|<init>(io.github.youndie.kompot.analytics.KompotEventDescriptor){}[0]
+
+        final val descriptor // io.github.youndie.kompot.analytics/AnalyticsEvent.ComponentImpression.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): io.github.youndie.kompot.analytics/KompotEventDescriptor // io.github.youndie.kompot.analytics/AnalyticsEvent.ComponentImpression.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun component1(): io.github.youndie.kompot.analytics/KompotEventDescriptor // io.github.youndie.kompot.analytics/AnalyticsEvent.ComponentImpression.component1|component1(){}[0]
+        final fun copy(io.github.youndie.kompot.analytics/KompotEventDescriptor = ...): io.github.youndie.kompot.analytics/AnalyticsEvent.ComponentImpression // io.github.youndie.kompot.analytics/AnalyticsEvent.ComponentImpression.copy|copy(io.github.youndie.kompot.analytics.KompotEventDescriptor){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.analytics/AnalyticsEvent.ComponentImpression.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.analytics/AnalyticsEvent.ComponentImpression.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.ComponentImpression.toString|toString(){}[0]
+    }
+
+    final class ExperimentExposure : io.github.youndie.kompot.analytics/AnalyticsEvent { // io.github.youndie.kompot.analytics/AnalyticsEvent.ExperimentExposure|null[0]
+        constructor <init>(kotlin/String, kotlin/String) // io.github.youndie.kompot.analytics/AnalyticsEvent.ExperimentExposure.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+        final val experimentId // io.github.youndie.kompot.analytics/AnalyticsEvent.ExperimentExposure.experimentId|{}experimentId[0]
+            final fun <get-experimentId>(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.ExperimentExposure.experimentId.<get-experimentId>|<get-experimentId>(){}[0]
+        final val variantId // io.github.youndie.kompot.analytics/AnalyticsEvent.ExperimentExposure.variantId|{}variantId[0]
+            final fun <get-variantId>(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.ExperimentExposure.variantId.<get-variantId>|<get-variantId>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.ExperimentExposure.component1|component1(){}[0]
+        final fun component2(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.ExperimentExposure.component2|component2(){}[0]
+        final fun copy(kotlin/String = ..., kotlin/String = ...): io.github.youndie.kompot.analytics/AnalyticsEvent.ExperimentExposure // io.github.youndie.kompot.analytics/AnalyticsEvent.ExperimentExposure.copy|copy(kotlin.String;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.analytics/AnalyticsEvent.ExperimentExposure.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.analytics/AnalyticsEvent.ExperimentExposure.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.ExperimentExposure.toString|toString(){}[0]
+    }
+
+    final class FieldChanged : io.github.youndie.kompot.analytics/AnalyticsEvent { // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldChanged|null[0]
+        constructor <init>(kotlin/String, kotlin/String) // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldChanged.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+        final val fieldId // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldChanged.fieldId|{}fieldId[0]
+            final fun <get-fieldId>(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldChanged.fieldId.<get-fieldId>|<get-fieldId>(){}[0]
+        final val formId // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldChanged.formId|{}formId[0]
+            final fun <get-formId>(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldChanged.formId.<get-formId>|<get-formId>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldChanged.component1|component1(){}[0]
+        final fun component2(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldChanged.component2|component2(){}[0]
+        final fun copy(kotlin/String = ..., kotlin/String = ...): io.github.youndie.kompot.analytics/AnalyticsEvent.FieldChanged // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldChanged.copy|copy(kotlin.String;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldChanged.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldChanged.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldChanged.toString|toString(){}[0]
+    }
+
+    final class FieldValidationErrorShown : io.github.youndie.kompot.analytics/AnalyticsEvent { // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown|null[0]
+        constructor <init>(kotlin/String, kotlin/String, kotlin/String) // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.<init>|<init>(kotlin.String;kotlin.String;kotlin.String){}[0]
+
+        final val fieldId // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.fieldId|{}fieldId[0]
+            final fun <get-fieldId>(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.fieldId.<get-fieldId>|<get-fieldId>(){}[0]
+        final val formId // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.formId|{}formId[0]
+            final fun <get-formId>(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.formId.<get-formId>|<get-formId>(){}[0]
+        final val message // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.message|{}message[0]
+            final fun <get-message>(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.message.<get-message>|<get-message>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.component1|component1(){}[0]
+        final fun component2(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.component2|component2(){}[0]
+        final fun component3(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.component3|component3(){}[0]
+        final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/String = ...): io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.copy|copy(kotlin.String;kotlin.String;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FieldValidationErrorShown.toString|toString(){}[0]
+    }
+
+    final class FormSubmitAttempted : io.github.youndie.kompot.analytics/AnalyticsEvent { // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitAttempted|null[0]
+        constructor <init>(kotlin/String) // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitAttempted.<init>|<init>(kotlin.String){}[0]
+
+        final val formId // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitAttempted.formId|{}formId[0]
+            final fun <get-formId>(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitAttempted.formId.<get-formId>|<get-formId>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitAttempted.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitAttempted // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitAttempted.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitAttempted.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitAttempted.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitAttempted.toString|toString(){}[0]
+    }
+
+    final class FormSubmitBlocked : io.github.youndie.kompot.analytics/AnalyticsEvent { // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitBlocked|null[0]
+        constructor <init>(kotlin/String) // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitBlocked.<init>|<init>(kotlin.String){}[0]
+
+        final val formId // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitBlocked.formId|{}formId[0]
+            final fun <get-formId>(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitBlocked.formId.<get-formId>|<get-formId>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitBlocked.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitBlocked // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitBlocked.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitBlocked.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitBlocked.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitBlocked.toString|toString(){}[0]
+    }
+
+    final class FormSubmitSucceeded : io.github.youndie.kompot.analytics/AnalyticsEvent { // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitSucceeded|null[0]
+        constructor <init>(kotlin/String) // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitSucceeded.<init>|<init>(kotlin.String){}[0]
+
+        final val formId // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitSucceeded.formId|{}formId[0]
+            final fun <get-formId>(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitSucceeded.formId.<get-formId>|<get-formId>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitSucceeded.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitSucceeded // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitSucceeded.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitSucceeded.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitSucceeded.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.FormSubmitSucceeded.toString|toString(){}[0]
+    }
+
+    final class ScreenView : io.github.youndie.kompot.analytics/AnalyticsEvent { // io.github.youndie.kompot.analytics/AnalyticsEvent.ScreenView|null[0]
+        constructor <init>(kotlin/String) // io.github.youndie.kompot.analytics/AnalyticsEvent.ScreenView.<init>|<init>(kotlin.String){}[0]
+
+        final val screenName // io.github.youndie.kompot.analytics/AnalyticsEvent.ScreenView.screenName|{}screenName[0]
+            final fun <get-screenName>(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.ScreenView.screenName.<get-screenName>|<get-screenName>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.ScreenView.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.youndie.kompot.analytics/AnalyticsEvent.ScreenView // io.github.youndie.kompot.analytics/AnalyticsEvent.ScreenView.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.analytics/AnalyticsEvent.ScreenView.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.analytics/AnalyticsEvent.ScreenView.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.analytics/AnalyticsEvent.ScreenView.toString|toString(){}[0]
+    }
+}
+
+final fun io.github.youndie.kompot.analytics/observeFormAnalytics(io.github.youndie.kompot.form/FormController, io.github.youndie.kompot.analytics/AnalyticsTracker, kotlinx.coroutines/CoroutineScope, kotlin/String): kotlinx.coroutines/Job // io.github.youndie.kompot.analytics/observeFormAnalytics|observeFormAnalytics(io.github.youndie.kompot.form.FormController;io.github.youndie.kompot.analytics.AnalyticsTracker;kotlinx.coroutines.CoroutineScope;kotlin.String){}[0]

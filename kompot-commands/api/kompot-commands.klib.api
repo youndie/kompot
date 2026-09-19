@@ -1,0 +1,41 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-commands>
+final class io.github.youndie.kompot.commands/PerformAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot.commands/PerformAction|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> = ...) // io.github.youndie.kompot.commands/PerformAction.<init>|<init>(kotlin.String;kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>){}[0]
+
+    final val payload // io.github.youndie.kompot.commands/PerformAction.payload|{}payload[0]
+        final fun <get-payload>(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> // io.github.youndie.kompot.commands/PerformAction.payload.<get-payload>|<get-payload>(){}[0]
+    final val url // io.github.youndie.kompot.commands/PerformAction.url|{}url[0]
+        final fun <get-url>(): kotlin/String // io.github.youndie.kompot.commands/PerformAction.url.<get-url>|<get-url>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.commands/PerformAction.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> // io.github.youndie.kompot.commands/PerformAction.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> = ...): io.github.youndie.kompot.commands/PerformAction // io.github.youndie.kompot.commands/PerformAction.copy|copy(kotlin.String;kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.commands/PerformAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.commands/PerformAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.commands/PerformAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.commands/PerformAction> { // io.github.youndie.kompot.commands/PerformAction.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.commands/PerformAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.commands/PerformAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.commands/PerformAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.commands/PerformAction // io.github.youndie.kompot.commands/PerformAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.commands/PerformAction) // io.github.youndie.kompot.commands/PerformAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.commands.PerformAction){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.commands/PerformAction.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.commands/PerformAction.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.commands/PerformAction> // io.github.youndie.kompot.commands/PerformAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final val io.github.youndie.kompot.commands/kompotCommandsSerializersModule // io.github.youndie.kompot.commands/kompotCommandsSerializersModule|{}kompotCommandsSerializersModule[0]
+    final fun <get-kompotCommandsSerializersModule>(): kotlinx.serialization.modules/SerializersModule // io.github.youndie.kompot.commands/kompotCommandsSerializersModule.<get-kompotCommandsSerializersModule>|<get-kompotCommandsSerializersModule>(){}[0]
