@@ -1,0 +1,212 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-wizard>
+final class io.github.youndie.kompot.wizard/FinishWizardAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot.wizard/FinishWizardAction|null[0]
+    constructor <init>(kotlin/String) // io.github.youndie.kompot.wizard/FinishWizardAction.<init>|<init>(kotlin.String){}[0]
+
+    final val formId // io.github.youndie.kompot.wizard/FinishWizardAction.formId|{}formId[0]
+        final fun <get-formId>(): kotlin/String // io.github.youndie.kompot.wizard/FinishWizardAction.formId.<get-formId>|<get-formId>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.wizard/FinishWizardAction.component1|component1(){}[0]
+    final fun copy(kotlin/String = ...): io.github.youndie.kompot.wizard/FinishWizardAction // io.github.youndie.kompot.wizard/FinishWizardAction.copy|copy(kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.wizard/FinishWizardAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.wizard/FinishWizardAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.wizard/FinishWizardAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.wizard/FinishWizardAction> { // io.github.youndie.kompot.wizard/FinishWizardAction.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.wizard/FinishWizardAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.wizard/FinishWizardAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.wizard/FinishWizardAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.wizard/FinishWizardAction // io.github.youndie.kompot.wizard/FinishWizardAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.wizard/FinishWizardAction) // io.github.youndie.kompot.wizard/FinishWizardAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.wizard.FinishWizardAction){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.wizard/FinishWizardAction.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.wizard/FinishWizardAction> // io.github.youndie.kompot.wizard/FinishWizardAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.wizard/NextStepAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot.wizard/NextStepAction|null[0]
+    constructor <init>(kotlin/String) // io.github.youndie.kompot.wizard/NextStepAction.<init>|<init>(kotlin.String){}[0]
+
+    final val formId // io.github.youndie.kompot.wizard/NextStepAction.formId|{}formId[0]
+        final fun <get-formId>(): kotlin/String // io.github.youndie.kompot.wizard/NextStepAction.formId.<get-formId>|<get-formId>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.wizard/NextStepAction.component1|component1(){}[0]
+    final fun copy(kotlin/String = ...): io.github.youndie.kompot.wizard/NextStepAction // io.github.youndie.kompot.wizard/NextStepAction.copy|copy(kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.wizard/NextStepAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.wizard/NextStepAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.wizard/NextStepAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.wizard/NextStepAction> { // io.github.youndie.kompot.wizard/NextStepAction.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.wizard/NextStepAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.wizard/NextStepAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.wizard/NextStepAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.wizard/NextStepAction // io.github.youndie.kompot.wizard/NextStepAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.wizard/NextStepAction) // io.github.youndie.kompot.wizard/NextStepAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.wizard.NextStepAction){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.wizard/NextStepAction.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.wizard/NextStepAction> // io.github.youndie.kompot.wizard/NextStepAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.wizard/PrevStepAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot.wizard/PrevStepAction|null[0]
+    constructor <init>(kotlin/String) // io.github.youndie.kompot.wizard/PrevStepAction.<init>|<init>(kotlin.String){}[0]
+
+    final val formId // io.github.youndie.kompot.wizard/PrevStepAction.formId|{}formId[0]
+        final fun <get-formId>(): kotlin/String // io.github.youndie.kompot.wizard/PrevStepAction.formId.<get-formId>|<get-formId>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.wizard/PrevStepAction.component1|component1(){}[0]
+    final fun copy(kotlin/String = ...): io.github.youndie.kompot.wizard/PrevStepAction // io.github.youndie.kompot.wizard/PrevStepAction.copy|copy(kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.wizard/PrevStepAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.wizard/PrevStepAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.wizard/PrevStepAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.wizard/PrevStepAction> { // io.github.youndie.kompot.wizard/PrevStepAction.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.wizard/PrevStepAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.wizard/PrevStepAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.wizard/PrevStepAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.wizard/PrevStepAction // io.github.youndie.kompot.wizard/PrevStepAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.wizard/PrevStepAction) // io.github.youndie.kompot.wizard/PrevStepAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.wizard.PrevStepAction){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.wizard/PrevStepAction.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.wizard/PrevStepAction> // io.github.youndie.kompot.wizard/PrevStepAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.wizard/WizardResumeRequest { // io.github.youndie.kompot.wizard/WizardResumeRequest|null[0]
+    constructor <init>(io.github.youndie.kompot.wizard.core/WizardTransition, kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> = ..., kotlin/String? = ...) // io.github.youndie.kompot.wizard/WizardResumeRequest.<init>|<init>(io.github.youndie.kompot.wizard.core.WizardTransition;kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>;kotlin.String?){}[0]
+
+    final val transition // io.github.youndie.kompot.wizard/WizardResumeRequest.transition|{}transition[0]
+        final fun <get-transition>(): io.github.youndie.kompot.wizard.core/WizardTransition // io.github.youndie.kompot.wizard/WizardResumeRequest.transition.<get-transition>|<get-transition>(){}[0]
+    final val values // io.github.youndie.kompot.wizard/WizardResumeRequest.values|{}values[0]
+        final fun <get-values>(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> // io.github.youndie.kompot.wizard/WizardResumeRequest.values.<get-values>|<get-values>(){}[0]
+    final val wizardId // io.github.youndie.kompot.wizard/WizardResumeRequest.wizardId|{}wizardId[0]
+        final fun <get-wizardId>(): kotlin/String? // io.github.youndie.kompot.wizard/WizardResumeRequest.wizardId.<get-wizardId>|<get-wizardId>(){}[0]
+
+    final fun component1(): io.github.youndie.kompot.wizard.core/WizardTransition // io.github.youndie.kompot.wizard/WizardResumeRequest.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> // io.github.youndie.kompot.wizard/WizardResumeRequest.component2|component2(){}[0]
+    final fun component3(): kotlin/String? // io.github.youndie.kompot.wizard/WizardResumeRequest.component3|component3(){}[0]
+    final fun copy(io.github.youndie.kompot.wizard.core/WizardTransition = ..., kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> = ..., kotlin/String? = ...): io.github.youndie.kompot.wizard/WizardResumeRequest // io.github.youndie.kompot.wizard/WizardResumeRequest.copy|copy(io.github.youndie.kompot.wizard.core.WizardTransition;kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.wizard/WizardResumeRequest.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.wizard/WizardResumeRequest.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.wizard/WizardResumeRequest.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.wizard/WizardResumeRequest> { // io.github.youndie.kompot.wizard/WizardResumeRequest.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.wizard/WizardResumeRequest.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.wizard/WizardResumeRequest.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.wizard/WizardResumeRequest.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.wizard/WizardResumeRequest // io.github.youndie.kompot.wizard/WizardResumeRequest.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.wizard/WizardResumeRequest) // io.github.youndie.kompot.wizard/WizardResumeRequest.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.wizard.WizardResumeRequest){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.wizard/WizardResumeRequest.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.wizard/WizardResumeRequest.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.wizard/WizardResumeRequest> // io.github.youndie.kompot.wizard/WizardResumeRequest.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.wizard/WizardScreenComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.wizard/WizardScreenComponent|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String, kotlin/String, kotlin/Int, kotlin/Int? = ..., kotlin/Boolean = ..., io.github.youndie.kompot/KompotComponent, kotlin/String? = ...) // io.github.youndie.kompot.wizard/WizardScreenComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.Int;kotlin.Int?;kotlin.Boolean;io.github.youndie.kompot.KompotComponent;kotlin.String?){}[0]
+
+    final val canGoBack // io.github.youndie.kompot.wizard/WizardScreenComponent.canGoBack|{}canGoBack[0]
+        final fun <get-canGoBack>(): kotlin/Boolean // io.github.youndie.kompot.wizard/WizardScreenComponent.canGoBack.<get-canGoBack>|<get-canGoBack>(){}[0]
+    final val content // io.github.youndie.kompot.wizard/WizardScreenComponent.content|{}content[0]
+        final fun <get-content>(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.wizard/WizardScreenComponent.content.<get-content>|<get-content>(){}[0]
+    final val finishLabel // io.github.youndie.kompot.wizard/WizardScreenComponent.finishLabel|{}finishLabel[0]
+        final fun <get-finishLabel>(): kotlin/String? // io.github.youndie.kompot.wizard/WizardScreenComponent.finishLabel.<get-finishLabel>|<get-finishLabel>(){}[0]
+    final val formId // io.github.youndie.kompot.wizard/WizardScreenComponent.formId|{}formId[0]
+        final fun <get-formId>(): kotlin/String // io.github.youndie.kompot.wizard/WizardScreenComponent.formId.<get-formId>|<get-formId>(){}[0]
+    final val id // io.github.youndie.kompot.wizard/WizardScreenComponent.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.youndie.kompot.wizard/WizardScreenComponent.id.<get-id>|<get-id>(){}[0]
+    final val modifiers // io.github.youndie.kompot.wizard/WizardScreenComponent.modifiers|{}modifiers[0]
+        final fun <get-modifiers>(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.wizard/WizardScreenComponent.modifiers.<get-modifiers>|<get-modifiers>(){}[0]
+    final val stepId // io.github.youndie.kompot.wizard/WizardScreenComponent.stepId|{}stepId[0]
+        final fun <get-stepId>(): kotlin/String // io.github.youndie.kompot.wizard/WizardScreenComponent.stepId.<get-stepId>|<get-stepId>(){}[0]
+    final val stepIndex // io.github.youndie.kompot.wizard/WizardScreenComponent.stepIndex|{}stepIndex[0]
+        final fun <get-stepIndex>(): kotlin/Int // io.github.youndie.kompot.wizard/WizardScreenComponent.stepIndex.<get-stepIndex>|<get-stepIndex>(){}[0]
+    final val totalSteps // io.github.youndie.kompot.wizard/WizardScreenComponent.totalSteps|{}totalSteps[0]
+        final fun <get-totalSteps>(): kotlin/Int? // io.github.youndie.kompot.wizard/WizardScreenComponent.totalSteps.<get-totalSteps>|<get-totalSteps>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.wizard/WizardScreenComponent.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.wizard/WizardScreenComponent.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.youndie.kompot.wizard/WizardScreenComponent.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.youndie.kompot.wizard/WizardScreenComponent.component4|component4(){}[0]
+    final fun component5(): kotlin/Int // io.github.youndie.kompot.wizard/WizardScreenComponent.component5|component5(){}[0]
+    final fun component6(): kotlin/Int? // io.github.youndie.kompot.wizard/WizardScreenComponent.component6|component6(){}[0]
+    final fun component7(): kotlin/Boolean // io.github.youndie.kompot.wizard/WizardScreenComponent.component7|component7(){}[0]
+    final fun component8(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.wizard/WizardScreenComponent.component8|component8(){}[0]
+    final fun component9(): kotlin/String? // io.github.youndie.kompot.wizard/WizardScreenComponent.component9|component9(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., kotlin/String = ..., kotlin/Int = ..., kotlin/Int? = ..., kotlin/Boolean = ..., io.github.youndie.kompot/KompotComponent = ..., kotlin/String? = ...): io.github.youndie.kompot.wizard/WizardScreenComponent // io.github.youndie.kompot.wizard/WizardScreenComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.Int;kotlin.Int?;kotlin.Boolean;io.github.youndie.kompot.KompotComponent;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.wizard/WizardScreenComponent.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.wizard/WizardScreenComponent.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.wizard/WizardScreenComponent.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.wizard/WizardScreenComponent> { // io.github.youndie.kompot.wizard/WizardScreenComponent.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.wizard/WizardScreenComponent.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.wizard/WizardScreenComponent.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.wizard/WizardScreenComponent.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.wizard/WizardScreenComponent // io.github.youndie.kompot.wizard/WizardScreenComponent.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.wizard/WizardScreenComponent) // io.github.youndie.kompot.wizard/WizardScreenComponent.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.wizard.WizardScreenComponent){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.wizard/WizardScreenComponent.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.wizard/WizardScreenComponent.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.wizard/WizardScreenComponent> // io.github.youndie.kompot.wizard/WizardScreenComponent.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.wizard/WizardStepAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot.wizard/WizardStepAction|null[0]
+    constructor <init>(kotlin/String, io.github.youndie.kompot.form/FormSchema, io.github.youndie.kompot/KompotComponent) // io.github.youndie.kompot.wizard/WizardStepAction.<init>|<init>(kotlin.String;io.github.youndie.kompot.form.FormSchema;io.github.youndie.kompot.KompotComponent){}[0]
+
+    final val formId // io.github.youndie.kompot.wizard/WizardStepAction.formId|{}formId[0]
+        final fun <get-formId>(): kotlin/String // io.github.youndie.kompot.wizard/WizardStepAction.formId.<get-formId>|<get-formId>(){}[0]
+    final val schema // io.github.youndie.kompot.wizard/WizardStepAction.schema|{}schema[0]
+        final fun <get-schema>(): io.github.youndie.kompot.form/FormSchema // io.github.youndie.kompot.wizard/WizardStepAction.schema.<get-schema>|<get-schema>(){}[0]
+    final val screen // io.github.youndie.kompot.wizard/WizardStepAction.screen|{}screen[0]
+        final fun <get-screen>(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.wizard/WizardStepAction.screen.<get-screen>|<get-screen>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.wizard/WizardStepAction.component1|component1(){}[0]
+    final fun component2(): io.github.youndie.kompot.form/FormSchema // io.github.youndie.kompot.wizard/WizardStepAction.component2|component2(){}[0]
+    final fun component3(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.wizard/WizardStepAction.component3|component3(){}[0]
+    final fun copy(kotlin/String = ..., io.github.youndie.kompot.form/FormSchema = ..., io.github.youndie.kompot/KompotComponent = ...): io.github.youndie.kompot.wizard/WizardStepAction // io.github.youndie.kompot.wizard/WizardStepAction.copy|copy(kotlin.String;io.github.youndie.kompot.form.FormSchema;io.github.youndie.kompot.KompotComponent){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.wizard/WizardStepAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.wizard/WizardStepAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.wizard/WizardStepAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.wizard/WizardStepAction> { // io.github.youndie.kompot.wizard/WizardStepAction.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.wizard/WizardStepAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.wizard/WizardStepAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.wizard/WizardStepAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.wizard/WizardStepAction // io.github.youndie.kompot.wizard/WizardStepAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.wizard/WizardStepAction) // io.github.youndie.kompot.wizard/WizardStepAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.wizard.WizardStepAction){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.wizard/WizardStepAction.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.wizard/WizardStepAction.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.wizard/WizardStepAction> // io.github.youndie.kompot.wizard/WizardStepAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final val io.github.youndie.kompot.generated/generatedWizardSerializersModule // io.github.youndie.kompot.generated/generatedWizardSerializersModule|{}generatedWizardSerializersModule[0]
+    final fun <get-generatedWizardSerializersModule>(): kotlinx.serialization.modules/SerializersModule // io.github.youndie.kompot.generated/generatedWizardSerializersModule.<get-generatedWizardSerializersModule>|<get-generatedWizardSerializersModule>(){}[0]
+final val io.github.youndie.kompot.wizard/kompotWizardSerializersModule // io.github.youndie.kompot.wizard/kompotWizardSerializersModule|{}kompotWizardSerializersModule[0]
+    final fun <get-kompotWizardSerializersModule>(): kotlinx.serialization.modules/SerializersModule // io.github.youndie.kompot.wizard/kompotWizardSerializersModule.<get-kompotWizardSerializersModule>|<get-kompotWizardSerializersModule>(){}[0]
+
+final fun io.github.youndie.kompot.wizard/wizardScreen(kotlin/String, kotlin/String, kotlin/Int, io.github.youndie.kompot/KompotComponent, kotlin/Int? = ..., kotlin/Boolean = ..., kotlin/String? = ..., kotlin/Function1<io.github.youndie.kompot.dsl/KompotModifierBuilder, kotlin/Unit>? = ...): io.github.youndie.kompot.wizard/WizardScreenComponent // io.github.youndie.kompot.wizard/wizardScreen|wizardScreen(kotlin.String;kotlin.String;kotlin.Int;io.github.youndie.kompot.KompotComponent;kotlin.Int?;kotlin.Boolean;kotlin.String?;kotlin.Function1<io.github.youndie.kompot.dsl.KompotModifierBuilder,kotlin.Unit>?){}[0]

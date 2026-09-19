@@ -1,0 +1,266 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-client>
+final enum class io.github.youndie.kompot/KompotDegradationKind : kotlin/Enum<io.github.youndie.kompot/KompotDegradationKind> { // io.github.youndie.kompot/KompotDegradationKind|null[0]
+    enum entry UNKNOWN_ACTION // io.github.youndie.kompot/KompotDegradationKind.UNKNOWN_ACTION|null[0]
+    enum entry UNKNOWN_COMPONENT // io.github.youndie.kompot/KompotDegradationKind.UNKNOWN_COMPONENT|null[0]
+    enum entry UNRENDERABLE_COMPONENT // io.github.youndie.kompot/KompotDegradationKind.UNRENDERABLE_COMPONENT|null[0]
+
+    final val entries // io.github.youndie.kompot/KompotDegradationKind.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.youndie.kompot/KompotDegradationKind> // io.github.youndie.kompot/KompotDegradationKind.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.youndie.kompot/KompotDegradationKind // io.github.youndie.kompot/KompotDegradationKind.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.youndie.kompot/KompotDegradationKind> // io.github.youndie.kompot/KompotDegradationKind.values|values#static(){}[0]
+}
+
+final enum class io.github.youndie.kompot/KompotDegradationOutcome : kotlin/Enum<io.github.youndie.kompot/KompotDegradationOutcome> { // io.github.youndie.kompot/KompotDegradationOutcome|null[0]
+    enum entry NOTHING // io.github.youndie.kompot/KompotDegradationOutcome.NOTHING|null[0]
+    enum entry PLACEHOLDER // io.github.youndie.kompot/KompotDegradationOutcome.PLACEHOLDER|null[0]
+    enum entry SERVER_FALLBACK // io.github.youndie.kompot/KompotDegradationOutcome.SERVER_FALLBACK|null[0]
+
+    final val entries // io.github.youndie.kompot/KompotDegradationOutcome.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.youndie.kompot/KompotDegradationOutcome> // io.github.youndie.kompot/KompotDegradationOutcome.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.youndie.kompot/KompotDegradationOutcome // io.github.youndie.kompot/KompotDegradationOutcome.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.youndie.kompot/KompotDegradationOutcome> // io.github.youndie.kompot/KompotDegradationOutcome.values|values#static(){}[0]
+}
+
+abstract fun interface io.github.youndie.kompot/KompotActionHandler { // io.github.youndie.kompot/KompotActionHandler|null[0]
+    abstract fun handle(io.github.youndie.kompot/KompotAction) // io.github.youndie.kompot/KompotActionHandler.handle|handle(io.github.youndie.kompot.KompotAction){}[0]
+}
+
+abstract fun interface io.github.youndie.kompot/KompotActionInterceptor { // io.github.youndie.kompot/KompotActionInterceptor|null[0]
+    abstract fun intercept(io.github.youndie.kompot/KompotActionChain) // io.github.youndie.kompot/KompotActionInterceptor.intercept|intercept(io.github.youndie.kompot.KompotActionChain){}[0]
+}
+
+abstract fun interface io.github.youndie.kompot/KompotDegradationSink { // io.github.youndie.kompot/KompotDegradationSink|null[0]
+    abstract fun onUnknown(io.github.youndie.kompot/KompotDegradationKind, kotlin/String, io.github.youndie.kompot/KompotDegradationOutcome) // io.github.youndie.kompot/KompotDegradationSink.onUnknown|onUnknown(io.github.youndie.kompot.KompotDegradationKind;kotlin.String;io.github.youndie.kompot.KompotDegradationOutcome){}[0]
+}
+
+abstract interface <#A: io.github.youndie.kompot/KompotComponent> io.github.youndie.kompot/KompotComponentRenderer { // io.github.youndie.kompot/KompotComponentRenderer|null[0]
+    abstract fun Render(#A, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/KompotComponentRenderer.Render|Render(1:0;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+abstract interface io.github.youndie.kompot/KompotActionChain { // io.github.youndie.kompot/KompotActionChain|null[0]
+    abstract val action // io.github.youndie.kompot/KompotActionChain.action|{}action[0]
+        abstract fun <get-action>(): io.github.youndie.kompot/KompotAction // io.github.youndie.kompot/KompotActionChain.action.<get-action>|<get-action>(){}[0]
+
+    abstract fun proceed(io.github.youndie.kompot/KompotAction = ...) // io.github.youndie.kompot/KompotActionChain.proceed|proceed(io.github.youndie.kompot.KompotAction){}[0]
+}
+
+abstract interface io.github.youndie.kompot/KompotDesignSystem { // io.github.youndie.kompot/KompotDesignSystem|null[0]
+    abstract fun resolveColor(io.github.youndie.kompot/ColorToken, androidx.compose.runtime/Composer?, kotlin/Int): androidx.compose.ui.graphics/Color // io.github.youndie.kompot/KompotDesignSystem.resolveColor|resolveColor(io.github.youndie.kompot.ColorToken;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+    abstract fun resolveTypography(io.github.youndie.kompot/TypographyToken, androidx.compose.runtime/Composer?, kotlin/Int): androidx.compose.ui.text/TextStyle // io.github.youndie.kompot/KompotDesignSystem.resolveTypography|resolveTypography(io.github.youndie.kompot.TypographyToken;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+    open fun resolveSurface(io.github.youndie.kompot/SurfaceRole, androidx.compose.runtime/Composer?, kotlin/Int): io.github.youndie.kompot/KompotSurface // io.github.youndie.kompot/KompotDesignSystem.resolveSurface|resolveSurface(io.github.youndie.kompot.SurfaceRole;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/AmountVisualTransformation : androidx.compose.ui.text.input/VisualTransformation { // io.github.youndie.kompot/AmountVisualTransformation|null[0]
+    constructor <init>(kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ...) // io.github.youndie.kompot/AmountVisualTransformation.<init>|<init>(kotlin.String?;kotlin.String?;kotlin.Boolean){}[0]
+
+    final fun filter(androidx.compose.ui.text/AnnotatedString): androidx.compose.ui.text.input/TransformedText // io.github.youndie.kompot/AmountVisualTransformation.filter|filter(androidx.compose.ui.text.AnnotatedString){}[0]
+}
+
+final class io.github.youndie.kompot/AnalyticsActionInterceptor : io.github.youndie.kompot/KompotActionInterceptor { // io.github.youndie.kompot/AnalyticsActionInterceptor|null[0]
+    constructor <init>(io.github.youndie.kompot.analytics/AnalyticsTracker, io.github.youndie.kompot.analytics/KompotEventNamingRegistry) // io.github.youndie.kompot/AnalyticsActionInterceptor.<init>|<init>(io.github.youndie.kompot.analytics.AnalyticsTracker;io.github.youndie.kompot.analytics.KompotEventNamingRegistry){}[0]
+
+    final fun intercept(io.github.youndie.kompot/KompotActionChain) // io.github.youndie.kompot/AnalyticsActionInterceptor.intercept|intercept(io.github.youndie.kompot.KompotActionChain){}[0]
+}
+
+final class io.github.youndie.kompot/ButtonRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.standard/ButtonComponent> { // io.github.youndie.kompot/ButtonRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/ButtonRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.standard/ButtonComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/ButtonRenderer.Render|Render(io.github.youndie.kompot.standard.ButtonComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/ColumnRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.standard/ColumnComponent> { // io.github.youndie.kompot/ColumnRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/ColumnRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.standard/ColumnComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/ColumnRenderer.Render|Render(io.github.youndie.kompot.standard.ColumnComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/KompotRegistry { // io.github.youndie.kompot/KompotRegistry|null[0]
+    constructor <init>(kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot/KompotComponentRenderer<out io.github.youndie.kompot/KompotComponent>>) // io.github.youndie.kompot/KompotRegistry.<init>|<init>(kotlin.collections.Map<kotlin.reflect.KClass<out|io.github.youndie.kompot.KompotComponent>,io.github.youndie.kompot.KompotComponentRenderer<out|io.github.youndie.kompot.KompotComponent>>){}[0]
+
+    final fun <#A1: io.github.youndie.kompot/KompotComponent> RenderNode(#A1, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/KompotRegistry.RenderNode|RenderNode(0:0;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){0§<io.github.youndie.kompot.KompotComponent>}[0]
+    final fun decorated(kotlin/Function1<kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot/KompotComponentRenderer<out io.github.youndie.kompot/KompotComponent>>, kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot/KompotComponentRenderer<out io.github.youndie.kompot/KompotComponent>>>): io.github.youndie.kompot/KompotRegistry // io.github.youndie.kompot/KompotRegistry.decorated|decorated(kotlin.Function1<kotlin.collections.Map<kotlin.reflect.KClass<out|io.github.youndie.kompot.KompotComponent>,io.github.youndie.kompot.KompotComponentRenderer<out|io.github.youndie.kompot.KompotComponent>>,kotlin.collections.Map<kotlin.reflect.KClass<out|io.github.youndie.kompot.KompotComponent>,io.github.youndie.kompot.KompotComponentRenderer<out|io.github.youndie.kompot.KompotComponent>>>){}[0]
+
+    final object Companion { // io.github.youndie.kompot/KompotRegistry.Companion|null[0]
+        final fun invoke(kotlin/Array<out kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot/KompotComponentRenderer<out io.github.youndie.kompot/KompotComponent>>>..., kotlin/Function1<kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot/KompotComponentRenderer<out io.github.youndie.kompot/KompotComponent>>, kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot/KompotComponentRenderer<out io.github.youndie.kompot/KompotComponent>>> = ...): io.github.youndie.kompot/KompotRegistry // io.github.youndie.kompot/KompotRegistry.Companion.invoke|invoke(kotlin.Array<out|kotlin.collections.Map<kotlin.reflect.KClass<out|io.github.youndie.kompot.KompotComponent>,io.github.youndie.kompot.KompotComponentRenderer<out|io.github.youndie.kompot.KompotComponent>>>...;kotlin.Function1<kotlin.collections.Map<kotlin.reflect.KClass<out|io.github.youndie.kompot.KompotComponent>,io.github.youndie.kompot.KompotComponentRenderer<out|io.github.youndie.kompot.KompotComponent>>,kotlin.collections.Map<kotlin.reflect.KClass<out|io.github.youndie.kompot.KompotComponent>,io.github.youndie.kompot.KompotComponentRenderer<out|io.github.youndie.kompot.KompotComponent>>>){}[0]
+    }
+}
+
+final class io.github.youndie.kompot/KompotSurface { // io.github.youndie.kompot/KompotSurface|null[0]
+    constructor <init>(androidx.compose.ui.graphics/Shape? = ..., androidx.compose.ui.graphics/Color = ..., androidx.compose.ui.graphics/Color = ..., androidx.compose.ui.graphics/Color = ..., androidx.compose.ui.text/TextStyle? = ..., androidx.compose.ui.unit/Dp = ..., androidx.compose.foundation.layout/PaddingValues? = ...) // io.github.youndie.kompot/KompotSurface.<init>|<init>(androidx.compose.ui.graphics.Shape?;androidx.compose.ui.graphics.Color;androidx.compose.ui.graphics.Color;androidx.compose.ui.graphics.Color;androidx.compose.ui.text.TextStyle?;androidx.compose.ui.unit.Dp;androidx.compose.foundation.layout.PaddingValues?){}[0]
+
+    final val container // io.github.youndie.kompot/KompotSurface.container|{}container[0]
+        final fun <get-container>(): androidx.compose.ui.graphics/Color // io.github.youndie.kompot/KompotSurface.container.<get-container>|<get-container>(){}[0]
+    final val content // io.github.youndie.kompot/KompotSurface.content|{}content[0]
+        final fun <get-content>(): androidx.compose.ui.graphics/Color // io.github.youndie.kompot/KompotSurface.content.<get-content>|<get-content>(){}[0]
+    final val contentPadding // io.github.youndie.kompot/KompotSurface.contentPadding|{}contentPadding[0]
+        final fun <get-contentPadding>(): androidx.compose.foundation.layout/PaddingValues? // io.github.youndie.kompot/KompotSurface.contentPadding.<get-contentPadding>|<get-contentPadding>(){}[0]
+    final val minHeight // io.github.youndie.kompot/KompotSurface.minHeight|{}minHeight[0]
+        final fun <get-minHeight>(): androidx.compose.ui.unit/Dp // io.github.youndie.kompot/KompotSurface.minHeight.<get-minHeight>|<get-minHeight>(){}[0]
+    final val outline // io.github.youndie.kompot/KompotSurface.outline|{}outline[0]
+        final fun <get-outline>(): androidx.compose.ui.graphics/Color // io.github.youndie.kompot/KompotSurface.outline.<get-outline>|<get-outline>(){}[0]
+    final val shape // io.github.youndie.kompot/KompotSurface.shape|{}shape[0]
+        final fun <get-shape>(): androidx.compose.ui.graphics/Shape? // io.github.youndie.kompot/KompotSurface.shape.<get-shape>|<get-shape>(){}[0]
+    final val textStyle // io.github.youndie.kompot/KompotSurface.textStyle|{}textStyle[0]
+        final fun <get-textStyle>(): androidx.compose.ui.text/TextStyle? // io.github.youndie.kompot/KompotSurface.textStyle.<get-textStyle>|<get-textStyle>(){}[0]
+
+    final fun component1(): androidx.compose.ui.graphics/Shape? // io.github.youndie.kompot/KompotSurface.component1|component1(){}[0]
+    final fun component2(): androidx.compose.ui.graphics/Color // io.github.youndie.kompot/KompotSurface.component2|component2(){}[0]
+    final fun component3(): androidx.compose.ui.graphics/Color // io.github.youndie.kompot/KompotSurface.component3|component3(){}[0]
+    final fun component4(): androidx.compose.ui.graphics/Color // io.github.youndie.kompot/KompotSurface.component4|component4(){}[0]
+    final fun component5(): androidx.compose.ui.text/TextStyle? // io.github.youndie.kompot/KompotSurface.component5|component5(){}[0]
+    final fun component6(): androidx.compose.ui.unit/Dp // io.github.youndie.kompot/KompotSurface.component6|component6(){}[0]
+    final fun component7(): androidx.compose.foundation.layout/PaddingValues? // io.github.youndie.kompot/KompotSurface.component7|component7(){}[0]
+    final fun copy(androidx.compose.ui.graphics/Shape? = ..., androidx.compose.ui.graphics/Color = ..., androidx.compose.ui.graphics/Color = ..., androidx.compose.ui.graphics/Color = ..., androidx.compose.ui.text/TextStyle? = ..., androidx.compose.ui.unit/Dp = ..., androidx.compose.foundation.layout/PaddingValues? = ...): io.github.youndie.kompot/KompotSurface // io.github.youndie.kompot/KompotSurface.copy|copy(androidx.compose.ui.graphics.Shape?;androidx.compose.ui.graphics.Color;androidx.compose.ui.graphics.Color;androidx.compose.ui.graphics.Color;androidx.compose.ui.text.TextStyle?;androidx.compose.ui.unit.Dp;androidx.compose.foundation.layout.PaddingValues?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot/KompotSurface.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot/KompotSurface.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot/KompotSurface.toString|toString(){}[0]
+}
+
+final class io.github.youndie.kompot/MaskVisualTransformation : androidx.compose.ui.text.input/VisualTransformation { // io.github.youndie.kompot/MaskVisualTransformation|null[0]
+    constructor <init>(kotlin/String, kotlin/Char = ...) // io.github.youndie.kompot/MaskVisualTransformation.<init>|<init>(kotlin.String;kotlin.Char){}[0]
+
+    final val rawLength // io.github.youndie.kompot/MaskVisualTransformation.rawLength|{}rawLength[0]
+        final fun <get-rawLength>(): kotlin/Int // io.github.youndie.kompot/MaskVisualTransformation.rawLength.<get-rawLength>|<get-rawLength>(){}[0]
+
+    final fun filter(androidx.compose.ui.text/AnnotatedString): androidx.compose.ui.text.input/TransformedText // io.github.youndie.kompot/MaskVisualTransformation.filter|filter(androidx.compose.ui.text.AnnotatedString){}[0]
+}
+
+final class io.github.youndie.kompot/PaginatedListRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.standard/PaginatedListComponent> { // io.github.youndie.kompot/PaginatedListRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/PaginatedListRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.standard/PaginatedListComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/PaginatedListRenderer.Render|Render(io.github.youndie.kompot.standard.PaginatedListComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/RowRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.standard/RowComponent> { // io.github.youndie.kompot/RowRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/RowRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.standard/RowComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/RowRenderer.Render|Render(io.github.youndie.kompot.standard.RowComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/TableRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.standard/TableComponent> { // io.github.youndie.kompot/TableRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/TableRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.standard/TableComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/TableRenderer.Render|Render(io.github.youndie.kompot.standard.TableComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/TextRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.standard/TextComponent> { // io.github.youndie.kompot/TextRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/TextRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.standard/TextComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/TextRenderer.Render|Render(io.github.youndie.kompot.standard.TextComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.youndie.kompot/UnknownComponentRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot/UnknownComponent> { // io.github.youndie.kompot/UnknownComponentRenderer|null[0]
+    constructor <init>(kotlin/Boolean = ...) // io.github.youndie.kompot/UnknownComponentRenderer.<init>|<init>(kotlin.Boolean){}[0]
+
+    final fun Render(io.github.youndie.kompot/UnknownComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/UnknownComponentRenderer.Render|Render(io.github.youndie.kompot.UnknownComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final value class io.github.youndie.kompot/SurfaceRole { // io.github.youndie.kompot/SurfaceRole|null[0]
+    constructor <init>(kotlin/String) // io.github.youndie.kompot/SurfaceRole.<init>|<init>(kotlin.String){}[0]
+
+    final val key // io.github.youndie.kompot/SurfaceRole.key|{}key[0]
+        final fun <get-key>(): kotlin/String // io.github.youndie.kompot/SurfaceRole.key.<get-key>|<get-key>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot/SurfaceRole.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot/SurfaceRole.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot/SurfaceRole.toString|toString(){}[0]
+}
+
+final object io.github.youndie.kompot/KompotSurfaceRoles { // io.github.youndie.kompot/KompotSurfaceRoles|null[0]
+    final val Button // io.github.youndie.kompot/KompotSurfaceRoles.Button|{}Button[0]
+        final fun <get-Button>(): io.github.youndie.kompot/SurfaceRole // io.github.youndie.kompot/KompotSurfaceRoles.Button.<get-Button>|<get-Button>(){}[0]
+    final val CheckboxInput // io.github.youndie.kompot/KompotSurfaceRoles.CheckboxInput|{}CheckboxInput[0]
+        final fun <get-CheckboxInput>(): io.github.youndie.kompot/SurfaceRole // io.github.youndie.kompot/KompotSurfaceRoles.CheckboxInput.<get-CheckboxInput>|<get-CheckboxInput>(){}[0]
+    final val Container // io.github.youndie.kompot/KompotSurfaceRoles.Container|{}Container[0]
+        final fun <get-Container>(): io.github.youndie.kompot/SurfaceRole // io.github.youndie.kompot/KompotSurfaceRoles.Container.<get-Container>|<get-Container>(){}[0]
+    final val Field // io.github.youndie.kompot/KompotSurfaceRoles.Field|{}Field[0]
+        final fun <get-Field>(): io.github.youndie.kompot/SurfaceRole // io.github.youndie.kompot/KompotSurfaceRoles.Field.<get-Field>|<get-Field>(){}[0]
+    final val ReadOnlyField // io.github.youndie.kompot/KompotSurfaceRoles.ReadOnlyField|{}ReadOnlyField[0]
+        final fun <get-ReadOnlyField>(): io.github.youndie.kompot/SurfaceRole // io.github.youndie.kompot/KompotSurfaceRoles.ReadOnlyField.<get-ReadOnlyField>|<get-ReadOnlyField>(){}[0]
+
+    final fun button(kotlin/String?): io.github.youndie.kompot/SurfaceRole // io.github.youndie.kompot/KompotSurfaceRoles.button|button(kotlin.String?){}[0]
+    final fun checkboxInput(kotlin/String?): io.github.youndie.kompot/SurfaceRole // io.github.youndie.kompot/KompotSurfaceRoles.checkboxInput|checkboxInput(kotlin.String?){}[0]
+}
+
+final val io.github.youndie.kompot/LocalAnalyticsTracker // io.github.youndie.kompot/LocalAnalyticsTracker|{}LocalAnalyticsTracker[0]
+    final fun <get-LocalAnalyticsTracker>(): androidx.compose.runtime/ProvidableCompositionLocal<io.github.youndie.kompot.analytics/AnalyticsTracker> // io.github.youndie.kompot/LocalAnalyticsTracker.<get-LocalAnalyticsTracker>|<get-LocalAnalyticsTracker>(){}[0]
+final val io.github.youndie.kompot/LocalKompotActionHandler // io.github.youndie.kompot/LocalKompotActionHandler|{}LocalKompotActionHandler[0]
+    final fun <get-LocalKompotActionHandler>(): androidx.compose.runtime/ProvidableCompositionLocal<io.github.youndie.kompot/KompotActionHandler> // io.github.youndie.kompot/LocalKompotActionHandler.<get-LocalKompotActionHandler>|<get-LocalKompotActionHandler>(){}[0]
+final val io.github.youndie.kompot/LocalKompotDegradationSink // io.github.youndie.kompot/LocalKompotDegradationSink|{}LocalKompotDegradationSink[0]
+    final fun <get-LocalKompotDegradationSink>(): androidx.compose.runtime/ProvidableCompositionLocal<io.github.youndie.kompot/KompotDegradationSink> // io.github.youndie.kompot/LocalKompotDegradationSink.<get-LocalKompotDegradationSink>|<get-LocalKompotDegradationSink>(){}[0]
+final val io.github.youndie.kompot/LocalKompotDesignSystem // io.github.youndie.kompot/LocalKompotDesignSystem|{}LocalKompotDesignSystem[0]
+    final fun <get-LocalKompotDesignSystem>(): androidx.compose.runtime/ProvidableCompositionLocal<io.github.youndie.kompot/KompotDesignSystem> // io.github.youndie.kompot/LocalKompotDesignSystem.<get-LocalKompotDesignSystem>|<get-LocalKompotDesignSystem>(){}[0]
+final val io.github.youndie.kompot/LocalKompotPageLoader // io.github.youndie.kompot/LocalKompotPageLoader|{}LocalKompotPageLoader[0]
+    final fun <get-LocalKompotPageLoader>(): androidx.compose.runtime/ProvidableCompositionLocal<io.github.youndie.kompot.standard/KompotPageLoader> // io.github.youndie.kompot/LocalKompotPageLoader.<get-LocalKompotPageLoader>|<get-LocalKompotPageLoader>(){}[0]
+final val io.github.youndie.kompot/LocalKompotRealtimeUpdates // io.github.youndie.kompot/LocalKompotRealtimeUpdates|{}LocalKompotRealtimeUpdates[0]
+    final fun <get-LocalKompotRealtimeUpdates>(): androidx.compose.runtime/ProvidableCompositionLocal<kotlin.collections/Map<kotlin/String, io.github.youndie.kompot/KompotComponent>> // io.github.youndie.kompot/LocalKompotRealtimeUpdates.<get-LocalKompotRealtimeUpdates>|<get-LocalKompotRealtimeUpdates>(){}[0]
+final val io.github.youndie.kompot/LocalKompotRegistry // io.github.youndie.kompot/LocalKompotRegistry|{}LocalKompotRegistry[0]
+    final fun <get-LocalKompotRegistry>(): androidx.compose.runtime/ProvidableCompositionLocal<io.github.youndie.kompot/KompotRegistry> // io.github.youndie.kompot/LocalKompotRegistry.<get-LocalKompotRegistry>|<get-LocalKompotRegistry>(){}[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_AmountVisualTransformation$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_AmountVisualTransformation$stableprop|#static{}io_github_youndie_kompot_AmountVisualTransformation$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_AnalyticsActionInterceptor$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_AnalyticsActionInterceptor$stableprop|#static{}io_github_youndie_kompot_AnalyticsActionInterceptor$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_ButtonRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_ButtonRenderer$stableprop|#static{}io_github_youndie_kompot_ButtonRenderer$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_ColumnRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_ColumnRenderer$stableprop|#static{}io_github_youndie_kompot_ColumnRenderer$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_KompotRegistry$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_KompotRegistry$stableprop|#static{}io_github_youndie_kompot_KompotRegistry$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_KompotSurface$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_KompotSurface$stableprop|#static{}io_github_youndie_kompot_KompotSurface$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_KompotSurfaceRoles$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_KompotSurfaceRoles$stableprop|#static{}io_github_youndie_kompot_KompotSurfaceRoles$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_MaskVisualTransformation$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_MaskVisualTransformation$stableprop|#static{}io_github_youndie_kompot_MaskVisualTransformation$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_PaginatedListRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_PaginatedListRenderer$stableprop|#static{}io_github_youndie_kompot_PaginatedListRenderer$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_RowRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_RowRenderer$stableprop|#static{}io_github_youndie_kompot_RowRenderer$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_TableRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_TableRenderer$stableprop|#static{}io_github_youndie_kompot_TableRenderer$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_TextRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_TextRenderer$stableprop|#static{}io_github_youndie_kompot_TextRenderer$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_UnknownComponentRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_UnknownComponentRenderer$stableprop|#static{}io_github_youndie_kompot_UnknownComponentRenderer$stableprop[0]
+final val io.github.youndie.kompot/kompotCoreRenderers // io.github.youndie.kompot/kompotCoreRenderers|{}kompotCoreRenderers[0]
+    final fun <get-kompotCoreRenderers>(): kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot/KompotComponentRenderer<out io.github.youndie.kompot/KompotComponent>> // io.github.youndie.kompot/kompotCoreRenderers.<get-kompotCoreRenderers>|<get-kompotCoreRenderers>(){}[0]
+final val io.github.youndie.kompot/kompotEngineSerializersModule // io.github.youndie.kompot/kompotEngineSerializersModule|{}kompotEngineSerializersModule[0]
+    final fun <get-kompotEngineSerializersModule>(): kotlinx.serialization.modules/SerializersModule // io.github.youndie.kompot/kompotEngineSerializersModule.<get-kompotEngineSerializersModule>|<get-kompotEngineSerializersModule>(){}[0]
+final val io.github.youndie.kompot/kompotStandardRenderers // io.github.youndie.kompot/kompotStandardRenderers|{}kompotStandardRenderers[0]
+    final fun <get-kompotStandardRenderers>(): kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot/KompotComponentRenderer<out io.github.youndie.kompot/KompotComponent>> // io.github.youndie.kompot/kompotStandardRenderers.<get-kompotStandardRenderers>|<get-kompotStandardRenderers>(){}[0]
+final val io.github.youndie.kompot/kompotVisiblePlaceholderRenderers // io.github.youndie.kompot/kompotVisiblePlaceholderRenderers|{}kompotVisiblePlaceholderRenderers[0]
+    final fun <get-kompotVisiblePlaceholderRenderers>(): kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot/KompotComponentRenderer<out io.github.youndie.kompot/KompotComponent>> // io.github.youndie.kompot/kompotVisiblePlaceholderRenderers.<get-kompotVisiblePlaceholderRenderers>|<get-kompotVisiblePlaceholderRenderers>(){}[0]
+final val io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_array$stableprop // io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_array$stableprop|#static{}io_github_youndie_kompot_client_generated_resources_Res_array$stableprop[0]
+final val io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_drawable$stableprop // io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_drawable$stableprop|#static{}io_github_youndie_kompot_client_generated_resources_Res_drawable$stableprop[0]
+final val io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_font$stableprop // io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_font$stableprop|#static{}io_github_youndie_kompot_client_generated_resources_Res_font$stableprop[0]
+final val io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_plurals$stableprop // io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_plurals$stableprop|#static{}io_github_youndie_kompot_client_generated_resources_Res_plurals$stableprop[0]
+final val io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_string$stableprop // io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_string$stableprop|#static{}io_github_youndie_kompot_client_generated_resources_Res_string$stableprop[0]
+
+final fun (androidx.compose.ui/Modifier).io.github.youndie.kompot/minHeightOf(io.github.youndie.kompot/KompotSurface): androidx.compose.ui/Modifier // io.github.youndie.kompot/minHeightOf|minHeightOf@androidx.compose.ui.Modifier(io.github.youndie.kompot.KompotSurface){}[0]
+final fun (io.github.youndie.kompot.form/FormController).io.github.youndie.kompot.form/collectVisibility(kotlin/String, androidx.compose.runtime/Composer?, kotlin/Int): androidx.compose.runtime/State<kotlin/Boolean> // io.github.youndie.kompot.form/collectVisibility|collectVisibility@io.github.youndie.kompot.form.FormController(kotlin.String;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final fun (io.github.youndie.kompot/KompotActionHandler).io.github.youndie.kompot/withFormSubmitTracking(io.github.youndie.kompot.form/FormController, io.github.youndie.kompot.analytics/AnalyticsTracker, kotlin/String): io.github.youndie.kompot/KompotActionHandler // io.github.youndie.kompot/withFormSubmitTracking|withFormSubmitTracking@io.github.youndie.kompot.KompotActionHandler(io.github.youndie.kompot.form.FormController;io.github.youndie.kompot.analytics.AnalyticsTracker;kotlin.String){}[0]
+final fun (io.github.youndie.kompot/KompotActionHandler).io.github.youndie.kompot/withLoginSubmit(kotlinx.coroutines/CoroutineScope, io.github.youndie.kompot.form/FormController, kotlin/String, kotlin.coroutines/SuspendFunction1<kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue>, io.github.youndie.kompot/KompotAction>): io.github.youndie.kompot/KompotActionHandler // io.github.youndie.kompot/withLoginSubmit|withLoginSubmit@io.github.youndie.kompot.KompotActionHandler(kotlinx.coroutines.CoroutineScope;io.github.youndie.kompot.form.FormController;kotlin.String;kotlin.coroutines.SuspendFunction1<kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>,io.github.youndie.kompot.KompotAction>){}[0]
+final fun (io.github.youndie.kompot/KompotActionHandler).io.github.youndie.kompot/withPerform(kotlinx.coroutines/CoroutineScope, kotlin.coroutines/SuspendFunction2<kotlin/String, kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue>, io.github.youndie.kompot/KompotAction>): io.github.youndie.kompot/KompotActionHandler // io.github.youndie.kompot/withPerform|withPerform@io.github.youndie.kompot.KompotActionHandler(kotlinx.coroutines.CoroutineScope;kotlin.coroutines.SuspendFunction2<kotlin.String,kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>,io.github.youndie.kompot.KompotAction>){}[0]
+final fun (kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode>).io.github.youndie.kompot/toComposeModifier(androidx.compose.runtime/Composer?, kotlin/Int): androidx.compose.ui/Modifier // io.github.youndie.kompot/toComposeModifier|toComposeModifier@kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>(androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final fun (kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot/KompotComponentRenderer<out io.github.youndie.kompot/KompotComponent>>).io.github.youndie.kompot/withImpressionTracking(io.github.youndie.kompot.analytics/AnalyticsTracker, io.github.youndie.kompot.analytics/KompotEventNamingRegistry): kotlin.collections/Map<kotlin.reflect/KClass<out io.github.youndie.kompot/KompotComponent>, io.github.youndie.kompot/KompotComponentRenderer<out io.github.youndie.kompot/KompotComponent>> // io.github.youndie.kompot/withImpressionTracking|withImpressionTracking@kotlin.collections.Map<kotlin.reflect.KClass<out|io.github.youndie.kompot.KompotComponent>,io.github.youndie.kompot.KompotComponentRenderer<out|io.github.youndie.kompot.KompotComponent>>(io.github.youndie.kompot.analytics.AnalyticsTracker;io.github.youndie.kompot.analytics.KompotEventNamingRegistry){}[0]
+final fun io.github.youndie.kompot/KompotLazyScreen(io.github.youndie.kompot/KompotComponent, io.github.youndie.kompot/KompotRegistry, io.github.youndie.kompot.form/FormController, io.github.youndie.kompot/KompotActionHandler, androidx.compose.ui/Modifier?, androidx.compose.foundation.layout/PaddingValues?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.youndie.kompot/KompotLazyScreen|KompotLazyScreen(io.github.youndie.kompot.KompotComponent;io.github.youndie.kompot.KompotRegistry;io.github.youndie.kompot.form.FormController;io.github.youndie.kompot.KompotActionHandler;androidx.compose.ui.Modifier?;androidx.compose.foundation.layout.PaddingValues?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun io.github.youndie.kompot/KompotNode(io.github.youndie.kompot/KompotRegistry, io.github.youndie.kompot.form/FormController, io.github.youndie.kompot/KompotComponent, io.github.youndie.kompot/KompotActionHandler, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/KompotNode|KompotNode(io.github.youndie.kompot.KompotRegistry;io.github.youndie.kompot.form.FormController;io.github.youndie.kompot.KompotComponent;io.github.youndie.kompot.KompotActionHandler;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final fun io.github.youndie.kompot/KompotRealtimeProvider(kotlin/String, io.github.youndie.kompot.realtime/KompotRealtimeSource, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, kotlin.coroutines/SuspendFunction0<kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.youndie.kompot/KompotRealtimeProvider|KompotRealtimeProvider(kotlin.String;io.github.youndie.kompot.realtime.KompotRealtimeSource;kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>;kotlin.coroutines.SuspendFunction0<kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun io.github.youndie.kompot/KompotScreen(io.github.youndie.kompot/KompotComponent, io.github.youndie.kompot/KompotRegistry, io.github.youndie.kompot.form/FormController, io.github.youndie.kompot/KompotActionHandler, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/KompotScreen|KompotScreen(io.github.youndie.kompot.KompotComponent;io.github.youndie.kompot.KompotRegistry;io.github.youndie.kompot.form.FormController;io.github.youndie.kompot.KompotActionHandler;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_AmountVisualTransformation$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_AmountVisualTransformation$stableprop_getter|io_github_youndie_kompot_AmountVisualTransformation$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_AnalyticsActionInterceptor$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_AnalyticsActionInterceptor$stableprop_getter|io_github_youndie_kompot_AnalyticsActionInterceptor$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_ButtonRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_ButtonRenderer$stableprop_getter|io_github_youndie_kompot_ButtonRenderer$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_ColumnRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_ColumnRenderer$stableprop_getter|io_github_youndie_kompot_ColumnRenderer$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_KompotRegistry$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_KompotRegistry$stableprop_getter|io_github_youndie_kompot_KompotRegistry$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_KompotSurface$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_KompotSurface$stableprop_getter|io_github_youndie_kompot_KompotSurface$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_KompotSurfaceRoles$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_KompotSurfaceRoles$stableprop_getter|io_github_youndie_kompot_KompotSurfaceRoles$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_MaskVisualTransformation$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_MaskVisualTransformation$stableprop_getter|io_github_youndie_kompot_MaskVisualTransformation$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_PaginatedListRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_PaginatedListRenderer$stableprop_getter|io_github_youndie_kompot_PaginatedListRenderer$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_RowRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_RowRenderer$stableprop_getter|io_github_youndie_kompot_RowRenderer$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_TableRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_TableRenderer$stableprop_getter|io_github_youndie_kompot_TableRenderer$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_TextRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_TextRenderer$stableprop_getter|io_github_youndie_kompot_TextRenderer$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_UnknownComponentRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_UnknownComponentRenderer$stableprop_getter|io_github_youndie_kompot_UnknownComponentRenderer$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/kompotActionHandler(kotlin.collections/List<io.github.youndie.kompot/KompotActionInterceptor>): io.github.youndie.kompot/KompotActionHandler // io.github.youndie.kompot/kompotActionHandler|kompotActionHandler(kotlin.collections.List<io.github.youndie.kompot.KompotActionInterceptor>){}[0]
+final fun io.github.youndie.kompot/kompotJson(kotlinx.serialization.modules/SerializersModule = ...): kotlinx.serialization.json/Json // io.github.youndie.kompot/kompotJson|kompotJson(kotlinx.serialization.modules.SerializersModule){}[0]
+final fun io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_array$stableprop_getter(): kotlin/Int // io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_array$stableprop_getter|io_github_youndie_kompot_client_generated_resources_Res_array$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_drawable$stableprop_getter(): kotlin/Int // io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_drawable$stableprop_getter|io_github_youndie_kompot_client_generated_resources_Res_drawable$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_font$stableprop_getter(): kotlin/Int // io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_font$stableprop_getter|io_github_youndie_kompot_client_generated_resources_Res_font$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_plurals$stableprop_getter(): kotlin/Int // io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_plurals$stableprop_getter|io_github_youndie_kompot_client_generated_resources_Res_plurals$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_string$stableprop_getter(): kotlin/Int // io.github.youndie.kompot_client.generated.resources/io_github_youndie_kompot_client_generated_resources_Res_string$stableprop_getter|io_github_youndie_kompot_client_generated_resources_Res_string$stableprop_getter(){}[0]
+final inline fun <#A: reified io.github.youndie.kompot.form/FieldValue> (io.github.youndie.kompot.form/FormController).io.github.youndie.kompot.form/collectFieldState(kotlin/String, androidx.compose.runtime/Composer?, kotlin/Int): androidx.compose.runtime/State<io.github.youndie.kompot.form/FieldState<#A>> // io.github.youndie.kompot.form/collectFieldState|collectFieldState@io.github.youndie.kompot.form.FormController(kotlin.String;androidx.compose.runtime.Composer?;kotlin.Int){0§<io.github.youndie.kompot.form.FieldValue>}[0]

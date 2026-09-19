@@ -10,6 +10,9 @@ plugins {
 }
 
 kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation { }
+
     jvm("desktop")
     // Two Apple targets rather than three, for the reason every Compose module here has two:
     // compose.runtime published its last iosX64 artefact at 1.11.0-alpha01.

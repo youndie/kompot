@@ -1,0 +1,201 @@
+public final class io/github/youndie/kompot/generated/GeneratedWizardKompotRegistrationKt {
+	public static final fun getGeneratedWizardSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+}
+
+public final class io/github/youndie/kompot/wizard/DslKt {
+	public static final fun wizardScreen (Ljava/lang/String;Ljava/lang/String;ILio/github/youndie/kompot/KompotComponent;Ljava/lang/Integer;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;)Lio/github/youndie/kompot/wizard/WizardScreenComponent;
+	public static synthetic fun wizardScreen$default (Ljava/lang/String;Ljava/lang/String;ILio/github/youndie/kompot/KompotComponent;Ljava/lang/Integer;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/youndie/kompot/wizard/WizardScreenComponent;
+}
+
+public final class io/github/youndie/kompot/wizard/FinishWizardAction : io/github/youndie/kompot/KompotAction {
+	public static final field Companion Lio/github/youndie/kompot/wizard/FinishWizardAction$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/youndie/kompot/wizard/FinishWizardAction;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/wizard/FinishWizardAction;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/wizard/FinishWizardAction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFormId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/wizard/FinishWizardAction$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/wizard/FinishWizardAction$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/wizard/FinishWizardAction;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/wizard/FinishWizardAction;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/FinishWizardAction$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/NextStepAction : io/github/youndie/kompot/KompotAction {
+	public static final field Companion Lio/github/youndie/kompot/wizard/NextStepAction$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/youndie/kompot/wizard/NextStepAction;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/wizard/NextStepAction;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/wizard/NextStepAction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFormId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/wizard/NextStepAction$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/wizard/NextStepAction$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/wizard/NextStepAction;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/wizard/NextStepAction;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/NextStepAction$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/PrevStepAction : io/github/youndie/kompot/KompotAction {
+	public static final field Companion Lio/github/youndie/kompot/wizard/PrevStepAction$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/youndie/kompot/wizard/PrevStepAction;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/wizard/PrevStepAction;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/wizard/PrevStepAction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFormId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/wizard/PrevStepAction$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/wizard/PrevStepAction$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/wizard/PrevStepAction;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/wizard/PrevStepAction;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/PrevStepAction$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/SerializersKt {
+	public static final fun getKompotWizardSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+}
+
+public final class io/github/youndie/kompot/wizard/WizardResumeRequest {
+	public static final field Companion Lio/github/youndie/kompot/wizard/WizardResumeRequest$Companion;
+	public fun <init> (Lio/github/youndie/kompot/wizard/core/WizardTransition;Ljava/util/Map;Ljava/lang/String;)V
+	public synthetic fun <init> (Lio/github/youndie/kompot/wizard/core/WizardTransition;Ljava/util/Map;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/github/youndie/kompot/wizard/core/WizardTransition;
+	public final fun component2 ()Ljava/util/Map;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Lio/github/youndie/kompot/wizard/core/WizardTransition;Ljava/util/Map;Ljava/lang/String;)Lio/github/youndie/kompot/wizard/WizardResumeRequest;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/wizard/WizardResumeRequest;Lio/github/youndie/kompot/wizard/core/WizardTransition;Ljava/util/Map;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/wizard/WizardResumeRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTransition ()Lio/github/youndie/kompot/wizard/core/WizardTransition;
+	public final fun getValues ()Ljava/util/Map;
+	public final fun getWizardId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/wizard/WizardResumeRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/wizard/WizardResumeRequest$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/wizard/WizardResumeRequest;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/wizard/WizardResumeRequest;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/WizardResumeRequest$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/WizardScreenComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/wizard/WizardScreenComponent$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Integer;ZLio/github/youndie/kompot/KompotComponent;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Integer;ZLio/github/youndie/kompot/KompotComponent;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()I
+	public final fun component6 ()Ljava/lang/Integer;
+	public final fun component7 ()Z
+	public final fun component8 ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun component9 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Integer;ZLio/github/youndie/kompot/KompotComponent;Ljava/lang/String;)Lio/github/youndie/kompot/wizard/WizardScreenComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/wizard/WizardScreenComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Integer;ZLio/github/youndie/kompot/KompotComponent;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/wizard/WizardScreenComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCanGoBack ()Z
+	public final fun getContent ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun getFinishLabel ()Ljava/lang/String;
+	public final fun getFormId ()Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public final fun getStepId ()Ljava/lang/String;
+	public final fun getStepIndex ()I
+	public final fun getTotalSteps ()Ljava/lang/Integer;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/wizard/WizardScreenComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/wizard/WizardScreenComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/wizard/WizardScreenComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/wizard/WizardScreenComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/WizardScreenComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/WizardStepAction : io/github/youndie/kompot/KompotAction {
+	public static final field Companion Lio/github/youndie/kompot/wizard/WizardStepAction$Companion;
+	public fun <init> (Ljava/lang/String;Lio/github/youndie/kompot/form/FormSchema;Lio/github/youndie/kompot/KompotComponent;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/youndie/kompot/form/FormSchema;
+	public final fun component3 ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun copy (Ljava/lang/String;Lio/github/youndie/kompot/form/FormSchema;Lio/github/youndie/kompot/KompotComponent;)Lio/github/youndie/kompot/wizard/WizardStepAction;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/wizard/WizardStepAction;Ljava/lang/String;Lio/github/youndie/kompot/form/FormSchema;Lio/github/youndie/kompot/KompotComponent;ILjava/lang/Object;)Lio/github/youndie/kompot/wizard/WizardStepAction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFormId ()Ljava/lang/String;
+	public final fun getSchema ()Lio/github/youndie/kompot/form/FormSchema;
+	public final fun getScreen ()Lio/github/youndie/kompot/KompotComponent;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/wizard/WizardStepAction$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/wizard/WizardStepAction$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/wizard/WizardStepAction;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/wizard/WizardStepAction;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/wizard/WizardStepAction$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+

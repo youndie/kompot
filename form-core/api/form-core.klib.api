@@ -1,0 +1,169 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:form-core>
+open annotation class io.github.youndie.kompot.form/FormDsl : kotlin/Annotation { // io.github.youndie.kompot.form/FormDsl|null[0]
+    constructor <init>() // io.github.youndie.kompot.form/FormDsl.<init>|<init>(){}[0]
+}
+
+abstract interface io.github.youndie.kompot.form/FieldValue { // io.github.youndie.kompot.form/FieldValue|null[0]
+    open val plainValue // io.github.youndie.kompot.form/FieldValue.plainValue|{}plainValue[0]
+        open fun <get-plainValue>(): kotlin/String // io.github.youndie.kompot.form/FieldValue.plainValue.<get-plainValue>|<get-plainValue>(){}[0]
+}
+
+abstract interface io.github.youndie.kompot.form/FormCondition { // io.github.youndie.kompot.form/FormCondition|null[0]
+    abstract fun evaluate(kotlin/Function1<kotlin/String, io.github.youndie.kompot.form/FieldValue?>): kotlin/Boolean // io.github.youndie.kompot.form/FormCondition.evaluate|evaluate(kotlin.Function1<kotlin.String,io.github.youndie.kompot.form.FieldValue?>){}[0]
+}
+
+abstract interface io.github.youndie.kompot.form/FormFieldDefinition { // io.github.youndie.kompot.form/FormFieldDefinition|null[0]
+    abstract val fieldId // io.github.youndie.kompot.form/FormFieldDefinition.fieldId|{}fieldId[0]
+        abstract fun <get-fieldId>(): kotlin/String // io.github.youndie.kompot.form/FormFieldDefinition.fieldId.<get-fieldId>|<get-fieldId>(){}[0]
+    abstract val rules // io.github.youndie.kompot.form/FormFieldDefinition.rules|{}rules[0]
+        abstract fun <get-rules>(): kotlin.collections/List<io.github.youndie.kompot.form/ValidationRule> // io.github.youndie.kompot.form/FormFieldDefinition.rules.<get-rules>|<get-rules>(){}[0]
+    open val initialValue // io.github.youndie.kompot.form/FormFieldDefinition.initialValue|{}initialValue[0]
+        open fun <get-initialValue>(): io.github.youndie.kompot.form/FieldValue? // io.github.youndie.kompot.form/FormFieldDefinition.initialValue.<get-initialValue>|<get-initialValue>(){}[0]
+    open val triggersPatch // io.github.youndie.kompot.form/FormFieldDefinition.triggersPatch|{}triggersPatch[0]
+        open fun <get-triggersPatch>(): kotlin/Boolean // io.github.youndie.kompot.form/FormFieldDefinition.triggersPatch.<get-triggersPatch>|<get-triggersPatch>(){}[0]
+    open val visibleIf // io.github.youndie.kompot.form/FormFieldDefinition.visibleIf|{}visibleIf[0]
+        open fun <get-visibleIf>(): io.github.youndie.kompot.form/FormCondition? // io.github.youndie.kompot.form/FormFieldDefinition.visibleIf.<get-visibleIf>|<get-visibleIf>(){}[0]
+}
+
+abstract interface io.github.youndie.kompot.form/RemoteDataSourceResolver { // io.github.youndie.kompot.form/RemoteDataSourceResolver|null[0]
+    abstract suspend fun search(kotlin/String, kotlin/String): kotlin.collections/List<io.github.youndie.kompot.form/FieldValue> // io.github.youndie.kompot.form/RemoteDataSourceResolver.search|search(kotlin.String;kotlin.String){}[0]
+}
+
+abstract interface io.github.youndie.kompot.form/ValidationRule { // io.github.youndie.kompot.form/ValidationRule|null[0]
+    abstract val errorMessage // io.github.youndie.kompot.form/ValidationRule.errorMessage|{}errorMessage[0]
+        abstract fun <get-errorMessage>(): kotlin/String // io.github.youndie.kompot.form/ValidationRule.errorMessage.<get-errorMessage>|<get-errorMessage>(){}[0]
+
+    abstract fun validate(io.github.youndie.kompot.form/FieldValue?, kotlin/Function1<kotlin/String, io.github.youndie.kompot.form/FieldValue?>): kotlin/Boolean // io.github.youndie.kompot.form/ValidationRule.validate|validate(io.github.youndie.kompot.form.FieldValue?;kotlin.Function1<kotlin.String,io.github.youndie.kompot.form.FieldValue?>){}[0]
+}
+
+final class <#A: out io.github.youndie.kompot.form/FieldValue> io.github.youndie.kompot.form/FieldState { // io.github.youndie.kompot.form/FieldState|null[0]
+    constructor <init>(#A?, kotlin/String? = ..., kotlin/Boolean = ...) // io.github.youndie.kompot.form/FieldState.<init>|<init>(1:0?;kotlin.String?;kotlin.Boolean){}[0]
+
+    final val changed // io.github.youndie.kompot.form/FieldState.changed|{}changed[0]
+        final fun <get-changed>(): kotlin/Boolean // io.github.youndie.kompot.form/FieldState.changed.<get-changed>|<get-changed>(){}[0]
+    final val error // io.github.youndie.kompot.form/FieldState.error|{}error[0]
+        final fun <get-error>(): kotlin/String? // io.github.youndie.kompot.form/FieldState.error.<get-error>|<get-error>(){}[0]
+    final val value // io.github.youndie.kompot.form/FieldState.value|{}value[0]
+        final fun <get-value>(): #A? // io.github.youndie.kompot.form/FieldState.value.<get-value>|<get-value>(){}[0]
+
+    final fun component1(): #A? // io.github.youndie.kompot.form/FieldState.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // io.github.youndie.kompot.form/FieldState.component2|component2(){}[0]
+    final fun component3(): kotlin/Boolean // io.github.youndie.kompot.form/FieldState.component3|component3(){}[0]
+    final fun copy(#A? = ..., kotlin/String? = ..., kotlin/Boolean = ...): io.github.youndie.kompot.form/FieldState<#A> // io.github.youndie.kompot.form/FieldState.copy|copy(1:0?;kotlin.String?;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.form/FieldState.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.form/FieldState.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.form/FieldState.toString|toString(){}[0]
+}
+
+final class io.github.youndie.kompot.form/FormController { // io.github.youndie.kompot.form/FormController|null[0]
+    constructor <init>(io.github.youndie.kompot.form/FormSchema, kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> = ..., kotlin.coroutines/SuspendFunction2<kotlin/String, kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue>, io.github.youndie.kompot.form/FormPatch>? = ..., io.github.youndie.kompot.form/RemoteDataSourceResolver? = ..., kotlinx.coroutines/CoroutineScope = ...) // io.github.youndie.kompot.form/FormController.<init>|<init>(io.github.youndie.kompot.form.FormSchema;kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>;kotlin.coroutines.SuspendFunction2<kotlin.String,kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>,io.github.youndie.kompot.form.FormPatch>?;io.github.youndie.kompot.form.RemoteDataSourceResolver?;kotlinx.coroutines.CoroutineScope){}[0]
+
+    final val fieldsState // io.github.youndie.kompot.form/FormController.fieldsState|{}fieldsState[0]
+        final fun <get-fieldsState>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldState<io.github.youndie.kompot.form/FieldValue>>> // io.github.youndie.kompot.form/FormController.fieldsState.<get-fieldsState>|<get-fieldsState>(){}[0]
+    final val focusRequests // io.github.youndie.kompot.form/FormController.focusRequests|{}focusRequests[0]
+        final fun <get-focusRequests>(): kotlinx.coroutines.flow/SharedFlow<kotlin/String> // io.github.youndie.kompot.form/FormController.focusRequests.<get-focusRequests>|<get-focusRequests>(){}[0]
+    final val isLoading // io.github.youndie.kompot.form/FormController.isLoading|{}isLoading[0]
+        final fun <get-isLoading>(): kotlinx.coroutines.flow/StateFlow<kotlin/Boolean> // io.github.youndie.kompot.form/FormController.isLoading.<get-isLoading>|<get-isLoading>(){}[0]
+
+    final fun applyPatch(io.github.youndie.kompot.form/FormPatch) // io.github.youndie.kompot.form/FormController.applyPatch|applyPatch(io.github.youndie.kompot.form.FormPatch){}[0]
+    final fun getPayload(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue>? // io.github.youndie.kompot.form/FormController.getPayload|getPayload(){}[0]
+    final fun getRawValues(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> // io.github.youndie.kompot.form/FormController.getRawValues|getRawValues(){}[0]
+    final fun getVisibilityFlow(kotlin/String): kotlinx.coroutines.flow/Flow<kotlin/Boolean> // io.github.youndie.kompot.form/FormController.getVisibilityFlow|getVisibilityFlow(kotlin.String){}[0]
+    final fun isFieldVisible(kotlin/String): kotlin/Boolean // io.github.youndie.kompot.form/FormController.isFieldVisible|isFieldVisible(kotlin.String){}[0]
+    final fun markAllAsChanged() // io.github.youndie.kompot.form/FormController.markAllAsChanged|markAllAsChanged(){}[0]
+    final fun onFieldBlurred(kotlin/String) // io.github.youndie.kompot.form/FormController.onFieldBlurred|onFieldBlurred(kotlin.String){}[0]
+    final fun onValueChanged(kotlin/String, io.github.youndie.kompot.form/FieldValue) // io.github.youndie.kompot.form/FormController.onValueChanged|onValueChanged(kotlin.String;io.github.youndie.kompot.form.FieldValue){}[0]
+    final fun requestPatchIfNeeded(kotlin/String) // io.github.youndie.kompot.form/FormController.requestPatchIfNeeded|requestPatchIfNeeded(kotlin.String){}[0]
+    final fun setFieldError(kotlin/String, kotlin/String?) // io.github.youndie.kompot.form/FormController.setFieldError|setFieldError(kotlin.String;kotlin.String?){}[0]
+    final inline fun <#A1: reified io.github.youndie.kompot.form/FieldValue> getFieldFlow(kotlin/String): kotlinx.coroutines.flow/Flow<io.github.youndie.kompot.form/FieldState<#A1>> // io.github.youndie.kompot.form/FormController.getFieldFlow|getFieldFlow(kotlin.String){0§<io.github.youndie.kompot.form.FieldValue>}[0]
+    final inline fun <#A1: reified io.github.youndie.kompot.form/FieldValue> getTypedState(kotlin/String): io.github.youndie.kompot.form/FieldState<#A1> // io.github.youndie.kompot.form/FormController.getTypedState|getTypedState(kotlin.String){0§<io.github.youndie.kompot.form.FieldValue>}[0]
+    final suspend fun searchOptions(kotlin/String, kotlin/String): kotlin.collections/List<io.github.youndie.kompot.form/FieldValue> // io.github.youndie.kompot.form/FormController.searchOptions|searchOptions(kotlin.String;kotlin.String){}[0]
+}
+
+final class io.github.youndie.kompot.form/FormPatch { // io.github.youndie.kompot.form/FormPatch|null[0]
+    constructor <init>(kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> = ..., kotlin.collections/List<kotlin/String> = ..., kotlin/String? = ...) // io.github.youndie.kompot.form/FormPatch.<init>|<init>(kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>;kotlin.collections.List<kotlin.String>;kotlin.String?){}[0]
+
+    final val clearFields // io.github.youndie.kompot.form/FormPatch.clearFields|{}clearFields[0]
+        final fun <get-clearFields>(): kotlin.collections/List<kotlin/String> // io.github.youndie.kompot.form/FormPatch.clearFields.<get-clearFields>|<get-clearFields>(){}[0]
+    final val focusOn // io.github.youndie.kompot.form/FormPatch.focusOn|{}focusOn[0]
+        final fun <get-focusOn>(): kotlin/String? // io.github.youndie.kompot.form/FormPatch.focusOn.<get-focusOn>|<get-focusOn>(){}[0]
+    final val updates // io.github.youndie.kompot.form/FormPatch.updates|{}updates[0]
+        final fun <get-updates>(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> // io.github.youndie.kompot.form/FormPatch.updates.<get-updates>|<get-updates>(){}[0]
+
+    final fun component1(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> // io.github.youndie.kompot.form/FormPatch.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<kotlin/String> // io.github.youndie.kompot.form/FormPatch.component2|component2(){}[0]
+    final fun component3(): kotlin/String? // io.github.youndie.kompot.form/FormPatch.component3|component3(){}[0]
+    final fun copy(kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> = ..., kotlin.collections/List<kotlin/String> = ..., kotlin/String? = ...): io.github.youndie.kompot.form/FormPatch // io.github.youndie.kompot.form/FormPatch.copy|copy(kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>;kotlin.collections.List<kotlin.String>;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.form/FormPatch.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.form/FormPatch.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.form/FormPatch.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.form/FormPatch> { // io.github.youndie.kompot.form/FormPatch.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.form/FormPatch.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.form/FormPatch.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.form/FormPatch.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.form/FormPatch // io.github.youndie.kompot.form/FormPatch.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.form/FormPatch) // io.github.youndie.kompot.form/FormPatch.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.form.FormPatch){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.form/FormPatch.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.form/FormPatch.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.form/FormPatch> // io.github.youndie.kompot.form/FormPatch.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.form/FormSchema { // io.github.youndie.kompot.form/FormSchema|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot.form/FormFieldDefinition>) // io.github.youndie.kompot.form/FormSchema.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.form.FormFieldDefinition>){}[0]
+
+    final val fields // io.github.youndie.kompot.form/FormSchema.fields|{}fields[0]
+        final fun <get-fields>(): kotlin.collections/List<io.github.youndie.kompot.form/FormFieldDefinition> // io.github.youndie.kompot.form/FormSchema.fields.<get-fields>|<get-fields>(){}[0]
+    final val formId // io.github.youndie.kompot.form/FormSchema.formId|{}formId[0]
+        final fun <get-formId>(): kotlin/String // io.github.youndie.kompot.form/FormSchema.formId.<get-formId>|<get-formId>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.form/FormSchema.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.youndie.kompot.form/FormFieldDefinition> // io.github.youndie.kompot.form/FormSchema.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot.form/FormFieldDefinition> = ...): io.github.youndie.kompot.form/FormSchema // io.github.youndie.kompot.form/FormSchema.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.form.FormFieldDefinition>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.form/FormSchema.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.form/FormSchema.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.form/FormSchema.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.form/FormSchema> { // io.github.youndie.kompot.form/FormSchema.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.form/FormSchema.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.form/FormSchema.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.form/FormSchema.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.form/FormSchema // io.github.youndie.kompot.form/FormSchema.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.form/FormSchema) // io.github.youndie.kompot.form/FormSchema.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.form.FormSchema){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.form/FormSchema.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.form/FormSchema.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.form/FormSchema> // io.github.youndie.kompot.form/FormSchema.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.form/FormSchemaBuilder { // io.github.youndie.kompot.form/FormSchemaBuilder|null[0]
+    constructor <init>(kotlin/String) // io.github.youndie.kompot.form/FormSchemaBuilder.<init>|<init>(kotlin.String){}[0]
+
+    final fun build(): io.github.youndie.kompot.form/FormSchema // io.github.youndie.kompot.form/FormSchemaBuilder.build|build(){}[0]
+    final fun field(io.github.youndie.kompot.form/FormFieldDefinition) // io.github.youndie.kompot.form/FormSchemaBuilder.field|field(io.github.youndie.kompot.form.FormFieldDefinition){}[0]
+}
+
+final class io.github.youndie.kompot.form/ValidationRulesBuilder { // io.github.youndie.kompot.form/ValidationRulesBuilder|null[0]
+    constructor <init>() // io.github.youndie.kompot.form/ValidationRulesBuilder.<init>|<init>(){}[0]
+
+    final fun build(): kotlin.collections/List<io.github.youndie.kompot.form/ValidationRule> // io.github.youndie.kompot.form/ValidationRulesBuilder.build|build(){}[0]
+    final fun rule(io.github.youndie.kompot.form/ValidationRule) // io.github.youndie.kompot.form/ValidationRulesBuilder.rule|rule(io.github.youndie.kompot.form.ValidationRule){}[0]
+}
+
+final fun io.github.youndie.kompot.form/formSchema(kotlin/String, kotlin/Function1<io.github.youndie.kompot.form/FormSchemaBuilder, kotlin/Unit>): io.github.youndie.kompot.form/FormSchema // io.github.youndie.kompot.form/formSchema|formSchema(kotlin.String;kotlin.Function1<io.github.youndie.kompot.form.FormSchemaBuilder,kotlin.Unit>){}[0]

@@ -1,0 +1,70 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-client-cache>
+abstract fun interface io.github.youndie.kompot.cache/KompotScreenFetcher { // io.github.youndie.kompot.cache/KompotScreenFetcher|null[0]
+    abstract suspend fun fetch(kotlin/String, kotlin/String?): io.github.youndie.kompot.cache/KompotFetchResult // io.github.youndie.kompot.cache/KompotScreenFetcher.fetch|fetch(kotlin.String;kotlin.String?){}[0]
+}
+
+abstract interface io.github.youndie.kompot.cache/KompotScreenCacheStore { // io.github.youndie.kompot.cache/KompotScreenCacheStore|null[0]
+    abstract suspend fun clear(kotlin/String) // io.github.youndie.kompot.cache/KompotScreenCacheStore.clear|clear(kotlin.String){}[0]
+    abstract suspend fun get(kotlin/String): io.github.youndie.kompot.cache/CachedScreenEntry? // io.github.youndie.kompot.cache/KompotScreenCacheStore.get|get(kotlin.String){}[0]
+    abstract suspend fun put(io.github.youndie.kompot.cache/CachedScreenEntry) // io.github.youndie.kompot.cache/KompotScreenCacheStore.put|put(io.github.youndie.kompot.cache.CachedScreenEntry){}[0]
+}
+
+final class io.github.youndie.kompot.cache/CachedKompotScreenProvider { // io.github.youndie.kompot.cache/CachedKompotScreenProvider|null[0]
+    constructor <init>(io.github.youndie.kompot.cache/KompotScreenCacheStore, io.github.youndie.kompot.cache/KompotScreenFetcher, kotlinx.serialization.json/Json, kotlinx.coroutines/CoroutineScope) // io.github.youndie.kompot.cache/CachedKompotScreenProvider.<init>|<init>(io.github.youndie.kompot.cache.KompotScreenCacheStore;io.github.youndie.kompot.cache.KompotScreenFetcher;kotlinx.serialization.json.Json;kotlinx.coroutines.CoroutineScope){}[0]
+
+    final suspend fun getScreen(kotlin/String): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.cache/CachedKompotScreenProvider.getScreen|getScreen(kotlin.String){}[0]
+    final suspend fun invalidate(kotlin/String) // io.github.youndie.kompot.cache/CachedKompotScreenProvider.invalidate|invalidate(kotlin.String){}[0]
+}
+
+final class io.github.youndie.kompot.cache/CachedScreenEntry { // io.github.youndie.kompot.cache/CachedScreenEntry|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin/String?, kotlin/Long) // io.github.youndie.kompot.cache/CachedScreenEntry.<init>|<init>(kotlin.String;kotlin.String;kotlin.String?;kotlin.Long){}[0]
+
+    final val etag // io.github.youndie.kompot.cache/CachedScreenEntry.etag|{}etag[0]
+        final fun <get-etag>(): kotlin/String? // io.github.youndie.kompot.cache/CachedScreenEntry.etag.<get-etag>|<get-etag>(){}[0]
+    final val fetchedAt // io.github.youndie.kompot.cache/CachedScreenEntry.fetchedAt|{}fetchedAt[0]
+        final fun <get-fetchedAt>(): kotlin/Long // io.github.youndie.kompot.cache/CachedScreenEntry.fetchedAt.<get-fetchedAt>|<get-fetchedAt>(){}[0]
+    final val key // io.github.youndie.kompot.cache/CachedScreenEntry.key|{}key[0]
+        final fun <get-key>(): kotlin/String // io.github.youndie.kompot.cache/CachedScreenEntry.key.<get-key>|<get-key>(){}[0]
+    final val payload // io.github.youndie.kompot.cache/CachedScreenEntry.payload|{}payload[0]
+        final fun <get-payload>(): kotlin/String // io.github.youndie.kompot.cache/CachedScreenEntry.payload.<get-payload>|<get-payload>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.cache/CachedScreenEntry.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.youndie.kompot.cache/CachedScreenEntry.component2|component2(){}[0]
+    final fun component3(): kotlin/String? // io.github.youndie.kompot.cache/CachedScreenEntry.component3|component3(){}[0]
+    final fun component4(): kotlin/Long // io.github.youndie.kompot.cache/CachedScreenEntry.component4|component4(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/String? = ..., kotlin/Long = ...): io.github.youndie.kompot.cache/CachedScreenEntry // io.github.youndie.kompot.cache/CachedScreenEntry.copy|copy(kotlin.String;kotlin.String;kotlin.String?;kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.cache/CachedScreenEntry.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.cache/CachedScreenEntry.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.cache/CachedScreenEntry.toString|toString(){}[0]
+}
+
+sealed class io.github.youndie.kompot.cache/KompotFetchResult { // io.github.youndie.kompot.cache/KompotFetchResult|null[0]
+    final class Modified : io.github.youndie.kompot.cache/KompotFetchResult { // io.github.youndie.kompot.cache/KompotFetchResult.Modified|null[0]
+        constructor <init>(io.github.youndie.kompot/KompotComponent, kotlin/String?) // io.github.youndie.kompot.cache/KompotFetchResult.Modified.<init>|<init>(io.github.youndie.kompot.KompotComponent;kotlin.String?){}[0]
+
+        final val component // io.github.youndie.kompot.cache/KompotFetchResult.Modified.component|{}component[0]
+            final fun <get-component>(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.cache/KompotFetchResult.Modified.component.<get-component>|<get-component>(){}[0]
+        final val etag // io.github.youndie.kompot.cache/KompotFetchResult.Modified.etag|{}etag[0]
+            final fun <get-etag>(): kotlin/String? // io.github.youndie.kompot.cache/KompotFetchResult.Modified.etag.<get-etag>|<get-etag>(){}[0]
+
+        final fun component1(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.cache/KompotFetchResult.Modified.component1|component1(){}[0]
+        final fun component2(): kotlin/String? // io.github.youndie.kompot.cache/KompotFetchResult.Modified.component2|component2(){}[0]
+        final fun copy(io.github.youndie.kompot/KompotComponent = ..., kotlin/String? = ...): io.github.youndie.kompot.cache/KompotFetchResult.Modified // io.github.youndie.kompot.cache/KompotFetchResult.Modified.copy|copy(io.github.youndie.kompot.KompotComponent;kotlin.String?){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.cache/KompotFetchResult.Modified.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.cache/KompotFetchResult.Modified.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.cache/KompotFetchResult.Modified.toString|toString(){}[0]
+    }
+
+    final object NotModified : io.github.youndie.kompot.cache/KompotFetchResult { // io.github.youndie.kompot.cache/KompotFetchResult.NotModified|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.cache/KompotFetchResult.NotModified.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.cache/KompotFetchResult.NotModified.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.cache/KompotFetchResult.NotModified.toString|toString(){}[0]
+    }
+}

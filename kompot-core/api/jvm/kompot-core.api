@@ -1,0 +1,353 @@
+public final class io/github/youndie/kompot/ColorToken {
+	public static final field Companion Lio/github/youndie/kompot/ColorToken$Companion;
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/youndie/kompot/ColorToken;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getKey ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/ColorToken$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/ColorToken$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize--COjFlU (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/String;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize-ab5vnNQ (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/String;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/ColorToken$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class io/github/youndie/kompot/KompotAction {
+}
+
+public abstract interface class io/github/youndie/kompot/KompotComponent {
+	public abstract fun getId ()Ljava/lang/String;
+	public abstract fun getModifiers ()Ljava/util/List;
+}
+
+public final class io/github/youndie/kompot/KompotJsonKt {
+	public static final fun decodeKompotAction (Lkotlinx/serialization/json/Json;Ljava/lang/String;)Lio/github/youndie/kompot/KompotAction;
+	public static final fun decodeKompotComponent (Lkotlinx/serialization/json/Json;Ljava/lang/String;)Lio/github/youndie/kompot/KompotComponent;
+	public static final fun encodeKompotAction (Lkotlinx/serialization/json/Json;Lio/github/youndie/kompot/KompotAction;)Ljava/lang/String;
+	public static final fun encodeKompotComponent (Lkotlinx/serialization/json/Json;Lio/github/youndie/kompot/KompotComponent;)Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/kompot/KompotModifierNode {
+	public static final field Companion Lio/github/youndie/kompot/KompotModifierNode$Companion;
+}
+
+public final class io/github/youndie/kompot/KompotModifierNode$Background : io/github/youndie/kompot/KompotModifierNode {
+	public static final field Companion Lio/github/youndie/kompot/KompotModifierNode$Background$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1--eiS8h0 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy-JP0uIUw (Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/KompotModifierNode$Background;
+	public static synthetic fun copy-JP0uIUw$default (Lio/github/youndie/kompot/KompotModifierNode$Background;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/KompotModifierNode$Background;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getColor--eiS8h0 ()Ljava/lang/String;
+	public final fun getRole ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/KompotModifierNode$Background$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/KompotModifierNode$Background$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/KompotModifierNode$Background;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/KompotModifierNode$Background;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/KompotModifierNode$Background$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/KompotModifierNode$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/KompotModifierNode$Gradient : io/github/youndie/kompot/KompotModifierNode {
+	public static final field Companion Lio/github/youndie/kompot/KompotModifierNode$Gradient$Companion;
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lio/github/youndie/kompot/KompotModifierNode$Gradient;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/KompotModifierNode$Gradient;Ljava/util/List;ILjava/lang/Object;)Lio/github/youndie/kompot/KompotModifierNode$Gradient;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getColors ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/KompotModifierNode$Gradient$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/KompotModifierNode$Gradient$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/KompotModifierNode$Gradient;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/KompotModifierNode$Gradient;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/KompotModifierNode$Gradient$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/KompotModifierNode$Padding : io/github/youndie/kompot/KompotModifierNode {
+	public static final field Companion Lio/github/youndie/kompot/KompotModifierNode$Padding$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)V
+	public synthetic fun <init> (Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/Integer;
+	public final fun component2 ()Ljava/lang/Integer;
+	public final fun component3 ()Ljava/lang/Integer;
+	public final fun component4 ()Ljava/lang/Integer;
+	public final fun component5 ()Ljava/lang/Integer;
+	public final fun copy (Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)Lio/github/youndie/kompot/KompotModifierNode$Padding;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/KompotModifierNode$Padding;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/youndie/kompot/KompotModifierNode$Padding;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAll ()Ljava/lang/Integer;
+	public final fun getBottom ()Ljava/lang/Integer;
+	public final fun getEnd ()Ljava/lang/Integer;
+	public final fun getStart ()Ljava/lang/Integer;
+	public final fun getTop ()Ljava/lang/Integer;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/KompotModifierNode$Padding$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/KompotModifierNode$Padding$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/KompotModifierNode$Padding;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/KompotModifierNode$Padding;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/KompotModifierNode$Padding$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/KompotModifierNode$Size : io/github/youndie/kompot/KompotModifierNode {
+	public static final field Companion Lio/github/youndie/kompot/KompotModifierNode$Size$Companion;
+	public fun <init> ()V
+	public fun <init> (Lio/github/youndie/kompot/SizeType;Lio/github/youndie/kompot/SizeType;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)V
+	public synthetic fun <init> (Lio/github/youndie/kompot/SizeType;Lio/github/youndie/kompot/SizeType;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/github/youndie/kompot/SizeType;
+	public final fun component2 ()Lio/github/youndie/kompot/SizeType;
+	public final fun component3 ()Ljava/lang/Integer;
+	public final fun component4 ()Ljava/lang/Integer;
+	public final fun component5 ()Ljava/lang/Integer;
+	public final fun component6 ()Ljava/lang/Integer;
+	public final fun copy (Lio/github/youndie/kompot/SizeType;Lio/github/youndie/kompot/SizeType;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)Lio/github/youndie/kompot/KompotModifierNode$Size;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/KompotModifierNode$Size;Lio/github/youndie/kompot/SizeType;Lio/github/youndie/kompot/SizeType;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/youndie/kompot/KompotModifierNode$Size;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHeight ()Lio/github/youndie/kompot/SizeType;
+	public final fun getHeightDp ()Ljava/lang/Integer;
+	public final fun getMaxHeightDp ()Ljava/lang/Integer;
+	public final fun getMaxWidthDp ()Ljava/lang/Integer;
+	public final fun getWidth ()Lio/github/youndie/kompot/SizeType;
+	public final fun getWidthDp ()Ljava/lang/Integer;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/KompotModifierNode$Size$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/KompotModifierNode$Size$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/KompotModifierNode$Size;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/KompotModifierNode$Size;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/KompotModifierNode$Size$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/KompotModifierNode$Weight : io/github/youndie/kompot/KompotModifierNode {
+	public static final field Companion Lio/github/youndie/kompot/KompotModifierNode$Weight$Companion;
+	public fun <init> (F)V
+	public final fun component1 ()F
+	public final fun copy (F)Lio/github/youndie/kompot/KompotModifierNode$Weight;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/KompotModifierNode$Weight;FILjava/lang/Object;)Lio/github/youndie/kompot/KompotModifierNode$Weight;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/KompotModifierNode$Weight$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/KompotModifierNode$Weight$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/KompotModifierNode$Weight;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/KompotModifierNode$Weight;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/KompotModifierNode$Weight$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/SizeType : java/lang/Enum {
+	public static final field Companion Lio/github/youndie/kompot/SizeType$Companion;
+	public static final field Fill Lio/github/youndie/kompot/SizeType;
+	public static final field Wrap Lio/github/youndie/kompot/SizeType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/youndie/kompot/SizeType;
+	public static fun values ()[Lio/github/youndie/kompot/SizeType;
+}
+
+public final class io/github/youndie/kompot/SizeType$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/TypographyToken {
+	public static final field Companion Lio/github/youndie/kompot/TypographyToken$Companion;
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/youndie/kompot/TypographyToken;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getKey ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/TypographyToken$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/TypographyToken$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize-BApcteg (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/String;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize-OsAMovc (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/String;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/TypographyToken$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/UnknownAction : io/github/youndie/kompot/KompotAction {
+	public static final field Companion Lio/github/youndie/kompot/UnknownAction$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/youndie/kompot/UnknownAction;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/UnknownAction;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/UnknownAction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getOriginalType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/UnknownAction$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/UnknownAction$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/UnknownAction;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/UnknownAction;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/UnknownAction$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/UnknownComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/UnknownComponent$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;)Lio/github/youndie/kompot/UnknownComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/UnknownComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;ILjava/lang/Object;)Lio/github/youndie/kompot/UnknownComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFallback ()Lio/github/youndie/kompot/KompotComponent;
+	public fun getId ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public final fun getOriginalType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/UnknownComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/UnknownComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/UnknownComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/UnknownComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/UnknownComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/UnknownComponentKt {
+	public static final fun getKompotCoreSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+}
+
+public abstract interface class io/github/youndie/kompot/dsl/KompotContainerContext {
+	public abstract fun addComponent (Lio/github/youndie/kompot/KompotComponent;)V
+	public fun nextChildPath ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/dsl/KompotContainerContext$DefaultImpls {
+	public static fun nextChildPath (Lio/github/youndie/kompot/dsl/KompotContainerContext;)Ljava/lang/String;
+}
+
+public abstract interface annotation class io/github/youndie/kompot/dsl/KompotDsl : java/lang/annotation/Annotation {
+}
+
+public final class io/github/youndie/kompot/dsl/KompotModifierBuilder {
+	public fun <init> ()V
+	public final fun background-6668UE8 (Ljava/lang/String;)V
+	public final fun build ()Ljava/util/List;
+	public final fun fillMaxHeight ()V
+	public final fun fillMaxWidth ()V
+	public final fun gradientBackground (Ljava/util/List;)V
+	public final fun height (I)V
+	public final fun maxHeight (I)V
+	public final fun maxWidth (I)V
+	public final fun padding (IIII)V
+	public static synthetic fun padding$default (Lio/github/youndie/kompot/dsl/KompotModifierBuilder;IIIIILjava/lang/Object;)V
+	public final fun size (II)V
+	public final fun weight (F)V
+	public final fun width (I)V
+}
+

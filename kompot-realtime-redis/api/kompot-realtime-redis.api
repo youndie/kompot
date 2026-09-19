@@ -1,0 +1,14 @@
+public final class io/github/youndie/kompot/realtime/redis/RedisKompotUpdateBus : io/github/youndie/kompot/realtime/server/KompotUpdateBus {
+	public static final field Companion Lio/github/youndie/kompot/realtime/redis/RedisKompotUpdateBus$Companion;
+	public fun <init> (Lio/lettuce/core/RedisClient;Ljava/lang/String;)V
+	public synthetic fun <init> (Lio/lettuce/core/RedisClient;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun close ()V
+	public fun messages ()Lkotlinx/coroutines/flow/Flow;
+	public fun publish (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/kompot/realtime/redis/RedisKompotUpdateBus$Companion {
+	public final fun create (Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/realtime/redis/RedisKompotUpdateBus;
+	public static synthetic fun create$default (Lio/github/youndie/kompot/realtime/redis/RedisKompotUpdateBus$Companion;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/realtime/redis/RedisKompotUpdateBus;
+}
+

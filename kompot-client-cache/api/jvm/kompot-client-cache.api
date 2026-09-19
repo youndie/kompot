@@ -1,0 +1,56 @@
+public final class io/github/youndie/kompot/cache/CachedKompotScreenProvider {
+	public fun <init> (Lio/github/youndie/kompot/cache/KompotScreenCacheStore;Lio/github/youndie/kompot/cache/KompotScreenFetcher;Lkotlinx/serialization/json/Json;Lkotlinx/coroutines/CoroutineScope;)V
+	public final fun getScreen (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun invalidate (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/kompot/cache/CachedScreenEntry {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;J)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()J
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;J)Lio/github/youndie/kompot/cache/CachedScreenEntry;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/cache/CachedScreenEntry;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JILjava/lang/Object;)Lio/github/youndie/kompot/cache/CachedScreenEntry;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEtag ()Ljava/lang/String;
+	public final fun getFetchedAt ()J
+	public final fun getKey ()Ljava/lang/String;
+	public final fun getPayload ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class io/github/youndie/kompot/cache/KompotFetchResult {
+}
+
+public final class io/github/youndie/kompot/cache/KompotFetchResult$Modified : io/github/youndie/kompot/cache/KompotFetchResult {
+	public fun <init> (Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;)V
+	public final fun component1 ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;)Lio/github/youndie/kompot/cache/KompotFetchResult$Modified;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/cache/KompotFetchResult$Modified;Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/cache/KompotFetchResult$Modified;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getComponent ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun getEtag ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/cache/KompotFetchResult$NotModified : io/github/youndie/kompot/cache/KompotFetchResult {
+	public static final field INSTANCE Lio/github/youndie/kompot/cache/KompotFetchResult$NotModified;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/kompot/cache/KompotScreenCacheStore {
+	public abstract fun clear (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun get (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun put (Lio/github/youndie/kompot/cache/CachedScreenEntry;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class io/github/youndie/kompot/cache/KompotScreenFetcher {
+	public abstract fun fetch (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+

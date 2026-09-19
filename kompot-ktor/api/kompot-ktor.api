@@ -1,0 +1,21 @@
+public final class io/github/youndie/kompot/ktor/ETagResponsesKt {
+	public static final fun respondKompotComponentCached (Lio/ktor/server/application/ApplicationCall;Lkotlinx/serialization/json/Json;Lio/github/youndie/kompot/KompotComponent;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun respondWithETag (Lio/ktor/server/application/ApplicationCall;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/kompot/ktor/ExperimentHeadersKt {
+	public static final fun setExperimentHeader (Lio/ktor/server/application/ApplicationCall;Ljava/util/Map;)V
+}
+
+public final class io/github/youndie/kompot/ktor/ReceiveKompotComponentKt {
+	public static final fun receiveKompotComponent (Lio/ktor/server/application/ApplicationCall;Lkotlinx/serialization/json/Json;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/kompot/ktor/RespondKompotActionKt {
+	public static final fun respondKompotAction (Lio/ktor/server/application/ApplicationCall;Lkotlinx/serialization/json/Json;Lio/github/youndie/kompot/KompotAction;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/kompot/ktor/RespondKompotComponentKt {
+	public static final fun respondKompotComponent (Lio/ktor/server/application/ApplicationCall;Lkotlinx/serialization/json/Json;Lio/github/youndie/kompot/KompotComponent;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+

@@ -1,0 +1,50 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-preview>
+final enum class io.github.youndie.kompot.preview/KompotBodyShape : kotlin/Enum<io.github.youndie.kompot.preview/KompotBodyShape> { // io.github.youndie.kompot.preview/KompotBodyShape|null[0]
+    enum entry COMPONENT // io.github.youndie.kompot.preview/KompotBodyShape.COMPONENT|null[0]
+    enum entry FORM // io.github.youndie.kompot.preview/KompotBodyShape.FORM|null[0]
+    enum entry SCREEN // io.github.youndie.kompot.preview/KompotBodyShape.SCREEN|null[0]
+
+    final val entries // io.github.youndie.kompot.preview/KompotBodyShape.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.youndie.kompot.preview/KompotBodyShape> // io.github.youndie.kompot.preview/KompotBodyShape.entries.<get-entries>|<get-entries>#static(){}[0]
+    final val screenProperty // io.github.youndie.kompot.preview/KompotBodyShape.screenProperty|{}screenProperty[0]
+        final fun <get-screenProperty>(): kotlin/String? // io.github.youndie.kompot.preview/KompotBodyShape.screenProperty.<get-screenProperty>|<get-screenProperty>(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.youndie.kompot.preview/KompotBodyShape // io.github.youndie.kompot.preview/KompotBodyShape.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.youndie.kompot.preview/KompotBodyShape> // io.github.youndie.kompot.preview/KompotBodyShape.values|values#static(){}[0]
+}
+
+final class io.github.youndie.kompot.preview/KompotDecodedBody { // io.github.youndie.kompot.preview/KompotDecodedBody|null[0]
+    constructor <init>(io.github.youndie.kompot/KompotComponent, io.github.youndie.kompot.form/FormSchema, kotlin/String?) // io.github.youndie.kompot.preview/KompotDecodedBody.<init>|<init>(io.github.youndie.kompot.KompotComponent;io.github.youndie.kompot.form.FormSchema;kotlin.String?){}[0]
+
+    final val realtimeTopic // io.github.youndie.kompot.preview/KompotDecodedBody.realtimeTopic|{}realtimeTopic[0]
+        final fun <get-realtimeTopic>(): kotlin/String? // io.github.youndie.kompot.preview/KompotDecodedBody.realtimeTopic.<get-realtimeTopic>|<get-realtimeTopic>(){}[0]
+    final val schema // io.github.youndie.kompot.preview/KompotDecodedBody.schema|{}schema[0]
+        final fun <get-schema>(): io.github.youndie.kompot.form/FormSchema // io.github.youndie.kompot.preview/KompotDecodedBody.schema.<get-schema>|<get-schema>(){}[0]
+    final val screen // io.github.youndie.kompot.preview/KompotDecodedBody.screen|{}screen[0]
+        final fun <get-screen>(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.preview/KompotDecodedBody.screen.<get-screen>|<get-screen>(){}[0]
+}
+
+final class io.github.youndie.kompot.preview/KompotPreviewState { // io.github.youndie.kompot.preview/KompotPreviewState|null[0]
+    constructor <init>(kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> = ..., kotlin/Boolean = ...) // io.github.youndie.kompot.preview/KompotPreviewState.<init>|<init>(kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>;kotlin.Boolean){}[0]
+
+    final val allFieldsChanged // io.github.youndie.kompot.preview/KompotPreviewState.allFieldsChanged|{}allFieldsChanged[0]
+        final fun <get-allFieldsChanged>(): kotlin/Boolean // io.github.youndie.kompot.preview/KompotPreviewState.allFieldsChanged.<get-allFieldsChanged>|<get-allFieldsChanged>(){}[0]
+    final val values // io.github.youndie.kompot.preview/KompotPreviewState.values|{}values[0]
+        final fun <get-values>(): kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> // io.github.youndie.kompot.preview/KompotPreviewState.values.<get-values>|<get-values>(){}[0]
+}
+
+final val io.github.youndie.kompot.preview/io_github_youndie_kompot_preview_KompotDecodedBody$stableprop // io.github.youndie.kompot.preview/io_github_youndie_kompot_preview_KompotDecodedBody$stableprop|#static{}io_github_youndie_kompot_preview_KompotDecodedBody$stableprop[0]
+final val io.github.youndie.kompot.preview/io_github_youndie_kompot_preview_KompotPreviewState$stableprop // io.github.youndie.kompot.preview/io_github_youndie_kompot_preview_KompotPreviewState$stableprop|#static{}io_github_youndie_kompot_preview_KompotPreviewState$stableprop[0]
+
+final fun (kotlinx.serialization.json/Json).io.github.youndie.kompot.preview/decodeKompotBody(kotlin/String): io.github.youndie.kompot.preview/KompotDecodedBody // io.github.youndie.kompot.preview/decodeKompotBody|decodeKompotBody@kotlinx.serialization.json.Json(kotlin.String){}[0]
+final fun io.github.youndie.kompot.preview/KompotPreview(kotlin/String, io.github.youndie.kompot/KompotRegistry, io.github.youndie.kompot/KompotDesignSystem, io.github.youndie.kompot.preview/KompotPreviewState?, kotlinx.serialization.json/Json?, io.github.youndie.kompot/KompotActionHandler?, kotlin/Function2<io.github.youndie.kompot/KompotDegradationKind, kotlin/String, kotlin/Unit>?, io.github.youndie.kompot.standard/KompotPageLoader?, io.github.youndie.kompot/KompotDegradationSink?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.youndie.kompot.preview/KompotPreview|KompotPreview(kotlin.String;io.github.youndie.kompot.KompotRegistry;io.github.youndie.kompot.KompotDesignSystem;io.github.youndie.kompot.preview.KompotPreviewState?;kotlinx.serialization.json.Json?;io.github.youndie.kompot.KompotActionHandler?;kotlin.Function2<io.github.youndie.kompot.KompotDegradationKind,kotlin.String,kotlin.Unit>?;io.github.youndie.kompot.standard.KompotPageLoader?;io.github.youndie.kompot.KompotDegradationSink?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun io.github.youndie.kompot.preview/io_github_youndie_kompot_preview_KompotDecodedBody$stableprop_getter(): kotlin/Int // io.github.youndie.kompot.preview/io_github_youndie_kompot_preview_KompotDecodedBody$stableprop_getter|io_github_youndie_kompot_preview_KompotDecodedBody$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot.preview/io_github_youndie_kompot_preview_KompotPreviewState$stableprop_getter(): kotlin/Int // io.github.youndie.kompot.preview/io_github_youndie_kompot_preview_KompotPreviewState$stableprop_getter|io_github_youndie_kompot_preview_KompotPreviewState$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot.preview/kompotBodyShape(kotlinx.serialization.json/JsonObject): io.github.youndie.kompot.preview/KompotBodyShape // io.github.youndie.kompot.preview/kompotBodyShape|kompotBodyShape(kotlinx.serialization.json.JsonObject){}[0]

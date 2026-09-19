@@ -1,0 +1,97 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:wizard-core>
+abstract fun interface <#A: kotlin/Any?> io.github.youndie.kompot.wizard.core/WizardStepResolver { // io.github.youndie.kompot.wizard.core/WizardStepResolver|null[0]
+    abstract fun resolveNext(kotlin/String, #A): kotlin/String? // io.github.youndie.kompot.wizard.core/WizardStepResolver.resolveNext|resolveNext(kotlin.String;1:0){}[0]
+}
+
+sealed interface io.github.youndie.kompot.wizard.core/WizardTransition { // io.github.youndie.kompot.wizard.core/WizardTransition|null[0]
+    final class JumpTo : io.github.youndie.kompot.wizard.core/WizardTransition { // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo|null[0]
+        constructor <init>(kotlin/String) // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.<init>|<init>(kotlin.String){}[0]
+
+        final val stepId // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.stepId|{}stepId[0]
+            final fun <get-stepId>(): kotlin/String // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.stepId.<get-stepId>|<get-stepId>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.toString|toString(){}[0]
+
+        final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo> { // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.$serializer|null[0]
+            final val descriptor // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.$serializer.descriptor|{}descriptor[0]
+                final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+            final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.$serializer.childSerializers|childSerializers(){}[0]
+            final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+            final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo) // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.wizard.core.WizardTransition.JumpTo){}[0]
+        }
+
+        final object Companion { // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.Companion|null[0]
+            final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo> // io.github.youndie.kompot.wizard.core/WizardTransition.JumpTo.Companion.serializer|serializer(){}[0]
+        }
+    }
+
+    final object Back : io.github.youndie.kompot.wizard.core/WizardTransition, kotlinx.serialization.internal/SerializerFactory { // io.github.youndie.kompot.wizard.core/WizardTransition.Back|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.wizard.core/WizardTransition.Back.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.wizard.core/WizardTransition.Back.hashCode|hashCode(){}[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.wizard.core/WizardTransition.Back> // io.github.youndie.kompot.wizard.core/WizardTransition.Back.serializer|serializer(){}[0]
+        final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // io.github.youndie.kompot.wizard.core/WizardTransition.Back.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.wizard.core/WizardTransition.Back.toString|toString(){}[0]
+    }
+
+    final object Companion : kotlinx.serialization.internal/SerializerFactory { // io.github.youndie.kompot.wizard.core/WizardTransition.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.wizard.core/WizardTransition> // io.github.youndie.kompot.wizard.core/WizardTransition.Companion.serializer|serializer(){}[0]
+        final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // io.github.youndie.kompot.wizard.core/WizardTransition.Companion.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
+    }
+
+    final object Finish : io.github.youndie.kompot.wizard.core/WizardTransition, kotlinx.serialization.internal/SerializerFactory { // io.github.youndie.kompot.wizard.core/WizardTransition.Finish|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.wizard.core/WizardTransition.Finish.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.wizard.core/WizardTransition.Finish.hashCode|hashCode(){}[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.wizard.core/WizardTransition.Finish> // io.github.youndie.kompot.wizard.core/WizardTransition.Finish.serializer|serializer(){}[0]
+        final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // io.github.youndie.kompot.wizard.core/WizardTransition.Finish.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.wizard.core/WizardTransition.Finish.toString|toString(){}[0]
+    }
+
+    final object Next : io.github.youndie.kompot.wizard.core/WizardTransition, kotlinx.serialization.internal/SerializerFactory { // io.github.youndie.kompot.wizard.core/WizardTransition.Next|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.wizard.core/WizardTransition.Next.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.kompot.wizard.core/WizardTransition.Next.hashCode|hashCode(){}[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.wizard.core/WizardTransition.Next> // io.github.youndie.kompot.wizard.core/WizardTransition.Next.serializer|serializer(){}[0]
+        final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // io.github.youndie.kompot.wizard.core/WizardTransition.Next.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.kompot.wizard.core/WizardTransition.Next.toString|toString(){}[0]
+    }
+}
+
+final class <#A: kotlin/Any?> io.github.youndie.kompot.wizard.core/WizardEngine { // io.github.youndie.kompot.wizard.core/WizardEngine|null[0]
+    constructor <init>(kotlin/String, io.github.youndie.kompot.wizard.core/WizardStepResolver<#A>) // io.github.youndie.kompot.wizard.core/WizardEngine.<init>|<init>(kotlin.String;io.github.youndie.kompot.wizard.core.WizardStepResolver<1:0>){}[0]
+
+    final fun start(#A): io.github.youndie.kompot.wizard.core/WizardSession<#A> // io.github.youndie.kompot.wizard.core/WizardEngine.start|start(1:0){}[0]
+    final fun transition(io.github.youndie.kompot.wizard.core/WizardSession<#A>, io.github.youndie.kompot.wizard.core/WizardTransition, #A): io.github.youndie.kompot.wizard.core/WizardSession<#A> // io.github.youndie.kompot.wizard.core/WizardEngine.transition|transition(io.github.youndie.kompot.wizard.core.WizardSession<1:0>;io.github.youndie.kompot.wizard.core.WizardTransition;1:0){}[0]
+}
+
+final class <#A: kotlin/Any?> io.github.youndie.kompot.wizard.core/WizardSession { // io.github.youndie.kompot.wizard.core/WizardSession|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<kotlin/String> = ..., #A, kotlin/Boolean = ...) // io.github.youndie.kompot.wizard.core/WizardSession.<init>|<init>(kotlin.String;kotlin.collections.List<kotlin.String>;1:0;kotlin.Boolean){}[0]
+
+    final val currentStepId // io.github.youndie.kompot.wizard.core/WizardSession.currentStepId|{}currentStepId[0]
+        final fun <get-currentStepId>(): kotlin/String // io.github.youndie.kompot.wizard.core/WizardSession.currentStepId.<get-currentStepId>|<get-currentStepId>(){}[0]
+    final val draft // io.github.youndie.kompot.wizard.core/WizardSession.draft|{}draft[0]
+        final fun <get-draft>(): #A // io.github.youndie.kompot.wizard.core/WizardSession.draft.<get-draft>|<get-draft>(){}[0]
+    final val history // io.github.youndie.kompot.wizard.core/WizardSession.history|{}history[0]
+        final fun <get-history>(): kotlin.collections/List<kotlin/String> // io.github.youndie.kompot.wizard.core/WizardSession.history.<get-history>|<get-history>(){}[0]
+    final val isFinished // io.github.youndie.kompot.wizard.core/WizardSession.isFinished|{}isFinished[0]
+        final fun <get-isFinished>(): kotlin/Boolean // io.github.youndie.kompot.wizard.core/WizardSession.isFinished.<get-isFinished>|<get-isFinished>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.wizard.core/WizardSession.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<kotlin/String> // io.github.youndie.kompot.wizard.core/WizardSession.component2|component2(){}[0]
+    final fun component3(): #A // io.github.youndie.kompot.wizard.core/WizardSession.component3|component3(){}[0]
+    final fun component4(): kotlin/Boolean // io.github.youndie.kompot.wizard.core/WizardSession.component4|component4(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<kotlin/String> = ..., #A = ..., kotlin/Boolean = ...): io.github.youndie.kompot.wizard.core/WizardSession<#A> // io.github.youndie.kompot.wizard.core/WizardSession.copy|copy(kotlin.String;kotlin.collections.List<kotlin.String>;1:0;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.wizard.core/WizardSession.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.wizard.core/WizardSession.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.wizard.core/WizardSession.toString|toString(){}[0]
+}

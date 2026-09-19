@@ -1,0 +1,27 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-registry-annotations>
+open annotation class io.github.youndie.kompot.registry/KompotComponentMarker : kotlin/Annotation { // io.github.youndie.kompot.registry/KompotComponentMarker|null[0]
+    constructor <init>() // io.github.youndie.kompot.registry/KompotComponentMarker.<init>|<init>(){}[0]
+}
+
+final class io.github.youndie.kompot.registry/KompotComponentDoc { // io.github.youndie.kompot.registry/KompotComponentDoc|null[0]
+    constructor <init>(kotlin/String? = ..., kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // io.github.youndie.kompot.registry/KompotComponentDoc.<init>|<init>(kotlin.String?;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+
+    final val properties // io.github.youndie.kompot.registry/KompotComponentDoc.properties|{}properties[0]
+        final fun <get-properties>(): kotlin.collections/Map<kotlin/String, kotlin/String> // io.github.youndie.kompot.registry/KompotComponentDoc.properties.<get-properties>|<get-properties>(){}[0]
+    final val summary // io.github.youndie.kompot.registry/KompotComponentDoc.summary|{}summary[0]
+        final fun <get-summary>(): kotlin/String? // io.github.youndie.kompot.registry/KompotComponentDoc.summary.<get-summary>|<get-summary>(){}[0]
+
+    final fun component1(): kotlin/String? // io.github.youndie.kompot.registry/KompotComponentDoc.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/Map<kotlin/String, kotlin/String> // io.github.youndie.kompot.registry/KompotComponentDoc.component2|component2(){}[0]
+    final fun copy(kotlin/String? = ..., kotlin.collections/Map<kotlin/String, kotlin/String> = ...): io.github.youndie.kompot.registry/KompotComponentDoc // io.github.youndie.kompot.registry/KompotComponentDoc.copy|copy(kotlin.String?;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.registry/KompotComponentDoc.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.registry/KompotComponentDoc.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.registry/KompotComponentDoc.toString|toString(){}[0]
+}

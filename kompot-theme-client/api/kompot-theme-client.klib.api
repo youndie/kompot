@@ -1,0 +1,20 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-theme-client>
+final class io.github.youndie.kompot.theme.client/RemoteThemeDesignSystem : io.github.youndie.kompot/KompotDesignSystem { // io.github.youndie.kompot.theme.client/RemoteThemeDesignSystem|null[0]
+    constructor <init>(io.github.youndie.kompot.theme/KompotTheme, io.github.youndie.kompot/KompotDesignSystem, kotlin/Boolean? = ...) // io.github.youndie.kompot.theme.client/RemoteThemeDesignSystem.<init>|<init>(io.github.youndie.kompot.theme.KompotTheme;io.github.youndie.kompot.KompotDesignSystem;kotlin.Boolean?){}[0]
+
+    final fun resolveColor(io.github.youndie.kompot/ColorToken, androidx.compose.runtime/Composer?, kotlin/Int): androidx.compose.ui.graphics/Color // io.github.youndie.kompot.theme.client/RemoteThemeDesignSystem.resolveColor|resolveColor(io.github.youndie.kompot.ColorToken;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+    final fun resolveSurface(io.github.youndie.kompot/SurfaceRole, androidx.compose.runtime/Composer?, kotlin/Int): io.github.youndie.kompot/KompotSurface // io.github.youndie.kompot.theme.client/RemoteThemeDesignSystem.resolveSurface|resolveSurface(io.github.youndie.kompot.SurfaceRole;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+    final fun resolveTypography(io.github.youndie.kompot/TypographyToken, androidx.compose.runtime/Composer?, kotlin/Int): androidx.compose.ui.text/TextStyle // io.github.youndie.kompot.theme.client/RemoteThemeDesignSystem.resolveTypography|resolveTypography(io.github.youndie.kompot.TypographyToken;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final val io.github.youndie.kompot.theme.client/io_github_youndie_kompot_theme_client_RemoteThemeDesignSystem$stableprop // io.github.youndie.kompot.theme.client/io_github_youndie_kompot_theme_client_RemoteThemeDesignSystem$stableprop|#static{}io_github_youndie_kompot_theme_client_RemoteThemeDesignSystem$stableprop[0]
+
+final fun io.github.youndie.kompot.theme.client/io_github_youndie_kompot_theme_client_RemoteThemeDesignSystem$stableprop_getter(): kotlin/Int // io.github.youndie.kompot.theme.client/io_github_youndie_kompot_theme_client_RemoteThemeDesignSystem$stableprop_getter|io_github_youndie_kompot_theme_client_RemoteThemeDesignSystem$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot.theme.client/rememberKompotDesignSystem(io.github.youndie.kompot.theme/KompotTheme?, io.github.youndie.kompot/KompotDesignSystem, kotlin/Boolean?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int): io.github.youndie.kompot/KompotDesignSystem // io.github.youndie.kompot.theme.client/rememberKompotDesignSystem|rememberKompotDesignSystem(io.github.youndie.kompot.theme.KompotTheme?;io.github.youndie.kompot.KompotDesignSystem;kotlin.Boolean?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]

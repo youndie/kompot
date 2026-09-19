@@ -1,0 +1,45 @@
+public final class io/github/youndie/kompot/material3/M3Colors {
+	public static final field INSTANCE Lio/github/youndie/kompot/material3/M3Colors;
+	public final fun getAll ()Ljava/util/List;
+	public final fun getBackground--eiS8h0 ()Ljava/lang/String;
+	public final fun getError--eiS8h0 ()Ljava/lang/String;
+	public final fun getErrorContainer--eiS8h0 ()Ljava/lang/String;
+	public final fun getOnBackground--eiS8h0 ()Ljava/lang/String;
+	public final fun getOnError--eiS8h0 ()Ljava/lang/String;
+	public final fun getOnErrorContainer--eiS8h0 ()Ljava/lang/String;
+	public final fun getOnPrimary--eiS8h0 ()Ljava/lang/String;
+	public final fun getOnPrimaryContainer--eiS8h0 ()Ljava/lang/String;
+	public final fun getOnSecondary--eiS8h0 ()Ljava/lang/String;
+	public final fun getOnSecondaryContainer--eiS8h0 ()Ljava/lang/String;
+	public final fun getOnSurface--eiS8h0 ()Ljava/lang/String;
+	public final fun getOnSurfaceVariant--eiS8h0 ()Ljava/lang/String;
+	public final fun getOutline--eiS8h0 ()Ljava/lang/String;
+	public final fun getOutlineVariant--eiS8h0 ()Ljava/lang/String;
+	public final fun getPrimary--eiS8h0 ()Ljava/lang/String;
+	public final fun getPrimaryContainer--eiS8h0 ()Ljava/lang/String;
+	public final fun getSecondary--eiS8h0 ()Ljava/lang/String;
+	public final fun getSecondaryContainer--eiS8h0 ()Ljava/lang/String;
+	public final fun getSurface--eiS8h0 ()Ljava/lang/String;
+	public final fun getSurfaceVariant--eiS8h0 ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/material3/M3Typography {
+	public static final field INSTANCE Lio/github/youndie/kompot/material3/M3Typography;
+	public final fun getAll ()Ljava/util/List;
+	public final fun getBodyLarge-ZwKbf2c ()Ljava/lang/String;
+	public final fun getBodyMedium-ZwKbf2c ()Ljava/lang/String;
+	public final fun getBodySmall-ZwKbf2c ()Ljava/lang/String;
+	public final fun getDisplayLarge-ZwKbf2c ()Ljava/lang/String;
+	public final fun getDisplayMedium-ZwKbf2c ()Ljava/lang/String;
+	public final fun getDisplaySmall-ZwKbf2c ()Ljava/lang/String;
+	public final fun getHeadlineLarge-ZwKbf2c ()Ljava/lang/String;
+	public final fun getHeadlineMedium-ZwKbf2c ()Ljava/lang/String;
+	public final fun getHeadlineSmall-ZwKbf2c ()Ljava/lang/String;
+	public final fun getLabelLarge-ZwKbf2c ()Ljava/lang/String;
+	public final fun getLabelMedium-ZwKbf2c ()Ljava/lang/String;
+	public final fun getLabelSmall-ZwKbf2c ()Ljava/lang/String;
+	public final fun getTitleLarge-ZwKbf2c ()Ljava/lang/String;
+	public final fun getTitleMedium-ZwKbf2c ()Ljava/lang/String;
+	public final fun getTitleSmall-ZwKbf2c ()Ljava/lang/String;
+}
+

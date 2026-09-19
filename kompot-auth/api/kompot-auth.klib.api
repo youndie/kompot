@@ -1,0 +1,39 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie:kompot-auth>
+final class io.github.youndie.kompot.auth/UpdateSessionAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot.auth/UpdateSessionAction|null[0]
+    constructor <init>(kotlin/String, kotlin/String) // io.github.youndie.kompot.auth/UpdateSessionAction.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+    final val accessToken // io.github.youndie.kompot.auth/UpdateSessionAction.accessToken|{}accessToken[0]
+        final fun <get-accessToken>(): kotlin/String // io.github.youndie.kompot.auth/UpdateSessionAction.accessToken.<get-accessToken>|<get-accessToken>(){}[0]
+    final val refreshToken // io.github.youndie.kompot.auth/UpdateSessionAction.refreshToken|{}refreshToken[0]
+        final fun <get-refreshToken>(): kotlin/String // io.github.youndie.kompot.auth/UpdateSessionAction.refreshToken.<get-refreshToken>|<get-refreshToken>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.auth/UpdateSessionAction.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.youndie.kompot.auth/UpdateSessionAction.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ...): io.github.youndie.kompot.auth/UpdateSessionAction // io.github.youndie.kompot.auth/UpdateSessionAction.copy|copy(kotlin.String;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.auth/UpdateSessionAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.auth/UpdateSessionAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.auth/UpdateSessionAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.auth/UpdateSessionAction> { // io.github.youndie.kompot.auth/UpdateSessionAction.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.auth/UpdateSessionAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.auth/UpdateSessionAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.auth/UpdateSessionAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.auth/UpdateSessionAction // io.github.youndie.kompot.auth/UpdateSessionAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.auth/UpdateSessionAction) // io.github.youndie.kompot.auth/UpdateSessionAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.auth.UpdateSessionAction){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.auth/UpdateSessionAction.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.auth/UpdateSessionAction> // io.github.youndie.kompot.auth/UpdateSessionAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final val io.github.youndie.kompot.auth/kompotAuthSerializersModule // io.github.youndie.kompot.auth/kompotAuthSerializersModule|{}kompotAuthSerializersModule[0]
+    final fun <get-kompotAuthSerializersModule>(): kotlinx.serialization.modules/SerializersModule // io.github.youndie.kompot.auth/kompotAuthSerializersModule.<get-kompotAuthSerializersModule>|<get-kompotAuthSerializersModule>(){}[0]

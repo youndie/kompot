@@ -1,0 +1,273 @@
+public final class io/github/youndie/kompot/client/tck/ClientCase {
+	public static final field Companion Lio/github/youndie/kompot/client/tck/ClientCase$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/util/List;Lio/github/youndie/kompot/client/tck/ClientExpectation;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/util/List;Lio/github/youndie/kompot/client/tck/ClientExpectation;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun component7 ()Ljava/util/List;
+	public final fun component8 ()Lio/github/youndie/kompot/client/tck/ClientExpectation;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/util/List;Lio/github/youndie/kompot/client/tck/ClientExpectation;)Lio/github/youndie/kompot/client/tck/ClientCase;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/client/tck/ClientCase;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/util/List;Lio/github/youndie/kompot/client/tck/ClientExpectation;ILjava/lang/Object;)Lio/github/youndie/kompot/client/tck/ClientCase;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getClause ()Ljava/lang/String;
+	public final fun getExpect ()Lio/github/youndie/kompot/client/tck/ClientExpectation;
+	public final fun getForm ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getHolds ()Ljava/util/List;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getSteps ()Ljava/util/List;
+	public final fun getTitle ()Ljava/lang/String;
+	public final fun getWhy ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/client/tck/ClientCase$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/client/tck/ClientCase$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/client/tck/ClientCase;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/client/tck/ClientCase;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientCase$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientCorpusIndex {
+	public static final field Companion Lio/github/youndie/kompot/client/tck/ClientCorpusIndex$Companion;
+	public fun <init> (Ljava/util/List;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/util/List;Ljava/lang/String;)Lio/github/youndie/kompot/client/tck/ClientCorpusIndex;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/client/tck/ClientCorpusIndex;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/client/tck/ClientCorpusIndex;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCases ()Ljava/util/List;
+	public final fun getSchema ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/client/tck/ClientCorpusIndex$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/client/tck/ClientCorpusIndex$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/client/tck/ClientCorpusIndex;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/client/tck/ClientCorpusIndex;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientCorpusIndex$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientCorpusResources {
+	public static final field INSTANCE Lio/github/youndie/kompot/client/tck/ClientCorpusResources;
+	public final fun cases ()Ljava/util/List;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientCorpusRunner {
+	public static final field Companion Lio/github/youndie/kompot/client/tck/ClientCorpusRunner$Companion;
+	public fun <init> (Ljava/util/List;Lkotlin/jvm/functions/Function0;)V
+	public final fun run ()Lio/github/youndie/kompot/client/tck/ClientReport;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientCorpusRunner$Companion {
+	public final fun casesFrom (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Ljava/util/List;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientExpectation {
+	public static final field Companion Lio/github/youndie/kompot/client/tck/ClientExpectation$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;Lkotlinx/serialization/json/JsonObject;Ljava/lang/Boolean;Ljava/util/Map;Ljava/util/List;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;Lkotlinx/serialization/json/JsonObject;Ljava/lang/Boolean;Ljava/util/Map;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun component3 ()Ljava/lang/Boolean;
+	public final fun component4 ()Ljava/util/Map;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;Lkotlinx/serialization/json/JsonObject;Ljava/lang/Boolean;Ljava/util/Map;Ljava/util/List;Ljava/util/List;)Lio/github/youndie/kompot/client/tck/ClientExpectation;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/client/tck/ClientExpectation;Ljava/util/List;Lkotlinx/serialization/json/JsonObject;Ljava/lang/Boolean;Ljava/util/Map;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lio/github/youndie/kompot/client/tck/ClientExpectation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getErrors ()Ljava/util/Map;
+	public final fun getNoErrors ()Ljava/util/List;
+	public final fun getPayload ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getPayloadBlocked ()Ljava/lang/Boolean;
+	public final fun getRequests ()Ljava/util/List;
+	public final fun getVisibleFields ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/client/tck/ClientExpectation$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/client/tck/ClientExpectation$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/client/tck/ClientExpectation;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/client/tck/ClientExpectation;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientExpectation$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientFinding {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/client/tck/ClientFinding;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/client/tck/ClientFinding;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/client/tck/ClientFinding;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCase ()Ljava/lang/String;
+	public final fun getClause ()Ljava/lang/String;
+	public final fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientReport {
+	public fun <init> (Ljava/util/List;ILjava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;ILjava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()I
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;ILjava/util/List;)Lio/github/youndie/kompot/client/tck/ClientReport;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/client/tck/ClientReport;Ljava/util/List;ILjava/util/List;ILjava/lang/Object;)Lio/github/youndie/kompot/client/tck/ClientReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCasesRun ()I
+	public final fun getFindings ()Ljava/util/List;
+	public final fun getUnchecked ()Ljava/util/List;
+	public fun hashCode ()I
+	public final fun isClean ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/kompot/client/tck/ClientStep {
+	public static final field Companion Lio/github/youndie/kompot/client/tck/ClientStep$Companion;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientStep$Blur : io/github/youndie/kompot/client/tck/ClientStep {
+	public static final field Companion Lio/github/youndie/kompot/client/tck/ClientStep$Blur$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/youndie/kompot/client/tck/ClientStep$Blur;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/client/tck/ClientStep$Blur;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/client/tck/ClientStep$Blur;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFieldId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/client/tck/ClientStep$Blur$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/client/tck/ClientStep$Blur$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/client/tck/ClientStep$Blur;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/client/tck/ClientStep$Blur;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientStep$Blur$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientStep$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientStep$Patch : io/github/youndie/kompot/client/tck/ClientStep {
+	public static final field Companion Lio/github/youndie/kompot/client/tck/ClientStep$Patch$Companion;
+	public fun <init> (Lkotlinx/serialization/json/JsonObject;)V
+	public final fun component1 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun copy (Lkotlinx/serialization/json/JsonObject;)Lio/github/youndie/kompot/client/tck/ClientStep$Patch;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/client/tck/ClientStep$Patch;Lkotlinx/serialization/json/JsonObject;ILjava/lang/Object;)Lio/github/youndie/kompot/client/tck/ClientStep$Patch;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPatch ()Lkotlinx/serialization/json/JsonObject;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/client/tck/ClientStep$Patch$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/client/tck/ClientStep$Patch$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/client/tck/ClientStep$Patch;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/client/tck/ClientStep$Patch;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientStep$Patch$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientStep$Set : io/github/youndie/kompot/client/tck/ClientStep {
+	public static final field Companion Lio/github/youndie/kompot/client/tck/ClientStep$Set$Companion;
+	public fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun copy (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;)Lio/github/youndie/kompot/client/tck/ClientStep$Set;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/client/tck/ClientStep$Set;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;ILjava/lang/Object;)Lio/github/youndie/kompot/client/tck/ClientStep$Set;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFieldId ()Ljava/lang/String;
+	public final fun getValue ()Lkotlinx/serialization/json/JsonObject;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/client/tck/ClientStep$Set$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/client/tck/ClientStep$Set$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/client/tck/ClientStep$Set;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/client/tck/ClientStep$Set;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientStep$Set$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/client/tck/ClientStep$Submit : io/github/youndie/kompot/client/tck/ClientStep {
+	public static final field INSTANCE Lio/github/youndie/kompot/client/tck/ClientStep$Submit;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/kompot/client/tck/KompotFormClient {
+	public abstract fun applyPatch (Lkotlinx/serialization/json/JsonObject;)V
+	public abstract fun blur (Ljava/lang/String;)V
+	public abstract fun errors ()Ljava/util/Map;
+	public abstract fun load (Lkotlinx/serialization/json/JsonObject;)V
+	public abstract fun payload ()Lkotlinx/serialization/json/JsonObject;
+	public fun requests ()Ljava/util/List;
+	public abstract fun set (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;)V
+	public abstract fun submit ()V
+	public abstract fun visibleFields ()Ljava/util/List;
+}
+
+public final class io/github/youndie/kompot/client/tck/KompotFormClient$DefaultImpls {
+	public static fun requests (Lio/github/youndie/kompot/client/tck/KompotFormClient;)Ljava/util/List;
+}
+

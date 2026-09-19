@@ -1,0 +1,63 @@
+public final class io/github/youndie/kompot/forms/standard/BoundFieldsKt {
+	public static final fun boundAmountInput (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Lio/github/youndie/kompot/form/FormCondition;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun boundAmountInput$default (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Lio/github/youndie/kompot/form/FormCondition;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun boundAutocompleteInput (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/form/FormCondition;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun boundAutocompleteInput$default (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/form/FormCondition;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun boundCheckboxInput (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/form/FormCondition;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun boundCheckboxInput$default (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/form/FormCondition;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun boundRadioGroup (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lio/github/youndie/kompot/form/FormCondition;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun boundRadioGroup$default (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lio/github/youndie/kompot/form/FormCondition;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun boundSelectInput (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/form/FormCondition;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun boundSelectInput$default (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/form/FormCondition;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun boundTextInput (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZLio/github/youndie/kompot/form/standard/KeyboardType;Lio/github/youndie/kompot/form/FormCondition;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun boundTextInput$default (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZLio/github/youndie/kompot/form/standard/KeyboardType;Lio/github/youndie/kompot/form/FormCondition;ZLjava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+}
+
+public final class io/github/youndie/kompot/forms/standard/FormColumnBuilder : io/github/youndie/kompot/forms/standard/KompotFormContext {
+	public fun <init> (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun addComponent (Lio/github/youndie/kompot/KompotComponent;)V
+	public final fun build ()Lio/github/youndie/kompot/standard/ColumnComponent;
+	public fun field (Lio/github/youndie/kompot/form/FormFieldDefinition;)V
+	public final fun modifier (Lkotlin/jvm/functions/Function1;)V
+	public fun nextChildPath ()Ljava/lang/String;
+	public final fun spacing (I)V
+}
+
+public final class io/github/youndie/kompot/forms/standard/FormRowBuilder : io/github/youndie/kompot/forms/standard/KompotFormContext {
+	public fun <init> (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun addComponent (Lio/github/youndie/kompot/KompotComponent;)V
+	public final fun build ()Lio/github/youndie/kompot/standard/RowComponent;
+	public fun field (Lio/github/youndie/kompot/form/FormFieldDefinition;)V
+	public final fun modifier (Lkotlin/jvm/functions/Function1;)V
+	public fun nextChildPath ()Ljava/lang/String;
+	public final fun spacing (I)V
+}
+
+public final class io/github/youndie/kompot/forms/standard/KompotFormBuilder : io/github/youndie/kompot/forms/standard/KompotFormContext {
+	public fun <init> (Ljava/lang/String;)V
+	public fun addComponent (Lio/github/youndie/kompot/KompotComponent;)V
+	public final fun build ()Lio/github/youndie/kompot/forms/KompotFormResponse;
+	public fun field (Lio/github/youndie/kompot/form/FormFieldDefinition;)V
+	public final fun modifier (Lkotlin/jvm/functions/Function1;)V
+	public fun nextChildPath ()Ljava/lang/String;
+	public final fun spacing (I)V
+}
+
+public final class io/github/youndie/kompot/forms/standard/KompotFormBuilderKt {
+	public static final fun buildFormScreen (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lio/github/youndie/kompot/forms/KompotFormResponse;
+	public static final fun column (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun column$default (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun row (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun row$default (Lio/github/youndie/kompot/forms/standard/KompotFormContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+}
+
+public abstract interface class io/github/youndie/kompot/forms/standard/KompotFormContext : io/github/youndie/kompot/dsl/KompotContainerContext {
+	public abstract fun field (Lio/github/youndie/kompot/form/FormFieldDefinition;)V
+}
+
+public final class io/github/youndie/kompot/forms/standard/KompotFormContext$DefaultImpls {
+	public static fun nextChildPath (Lio/github/youndie/kompot/forms/standard/KompotFormContext;)Ljava/lang/String;
+}
+
