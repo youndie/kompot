@@ -16,11 +16,25 @@ plugins {
 // configured before some of the others, their publications do not exist yet and their `version` still
 // reads "unspecified" — and none of that fails anything: the first attempt produced a perfectly valid
 // BOM with 69 of 97 coordinates, several of them pinned to a version by that name.
+
+// The modules that publish nothing, NAMED here rather than detected. Detecting is what blinded the
+// guard below once already: an unevaluated project answers "no" to every question about its plugins,
+// so "skip the ones that do not publish" quietly became "skip the ones not configured yet". A name is
+// true before anything is configured.
+//
+// A page is the only thing on this list so far: it has no coordinate, and nobody resolves it.
+val unpublished = setOf(":kompot-playground")
+
 val published =
     rootProject.subprojects
-        .filter { it.path != path }
+        .filter { it.path != path && it.path !in unpublished }
         .sortedBy { it.path }
         .onEach { evaluationDependsOn(it.path) }
+
+// Both directions, because an exemption that is never re-read is how a module leaves the BOM for good:
+// the day the playground starts publishing, its absence here would look exactly like the silence this
+// file exists to catch.
+val exempt = unpublished.map { rootProject.project(it) }.onEach { evaluationDependsOn(it.path) }
 
 val contributed = mutableMapOf<String, Int>()
 
@@ -51,8 +65,23 @@ dependencies {
 // evaluated. An earlier version of this guard asked each module whether it applies the publishing
 // convention — and an unevaluated project answers "no", so the guard went blind in exactly the
 // situation it exists for and passed a nineteen-coordinate BOM.
+val publishingExemptions =
+    exempt
+        .filter {
+            it.extensions
+                .findByType(PublishingExtension::class.java)
+                ?.publications
+                ?.withType(MavenPublication::class.java)
+                .orEmpty()
+                .isNotEmpty()
+        }.map { it.path }
+        .sorted()
+
 val silent = contributed.filterValues { it == 0 }.keys.sorted()
 require(contributed.isNotEmpty()) { "the BOM found no module at all — it would ship empty and green" }
+require(publishingExemptions.isEmpty()) {
+    "these modules publish now and are still named as unpublished, so the BOM is silently missing them: $publishingExemptions"
+}
 require(silent.isEmpty()) {
     "these modules registered no publication when the BOM read them, which means they were read before they were " +
         "configured: $silent"

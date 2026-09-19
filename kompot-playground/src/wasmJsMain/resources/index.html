@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOMPOT — server-driven UI, and what an old client does with it</title>
+    <style>
+        html, body { margin: 0; padding: 0; height: 100%; background: #fdfcff; }
+        /* The canvas Compose draws into. It is sized by the page rather than by the composition:
+           a viewport that collapses to zero height draws nothing and reports nothing. */
+        #kompotPlayground { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+<div id="kompotPlayground"></div>
+<script src="kompot-playground.js"></script>
+</body>
+</html>

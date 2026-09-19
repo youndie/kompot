@@ -85,6 +85,17 @@ dependencyResolutionManagement {
             metadataSources { artifact() }
             content { includeModule("com.yarnpkg", "yarn") }
         }
+
+        // The wasm optimiser a PRODUCTION distribution runs — the first executable wasm target in this
+        // build is what asked for it (:kompot-playground). Same story as the two above: the Kotlin
+        // plugin registers its own repository for it, PREFER_SETTINGS overrides that, and the lookup
+        // falls through to Maven Central, where "com.github.webassembly:binaryen" has never existed.
+        ivy("https://github.com/WebAssembly/binaryen/releases/download") {
+            name = "Binaryen distributions"
+            patternLayout { artifact("version_[revision]/[artifact]-version_[revision]-[classifier].[ext]") }
+            metadataSources { artifact() }
+            content { includeModule("com.github.webassembly", "binaryen") }
+        }
     }
 }
 
@@ -224,3 +235,10 @@ include(":kompot-studio")
 // consumer's IDE. Separate from the studio because it runs in Gradle rather than in the window, and a
 // module cannot be both.
 include(":kompot-studio-gradle-plugin")
+
+// The public showcase: one page in a browser, drawn by the client's own renderers. An application
+// like the studio, and like it not a library — but published NOWHERE, which is why it carries no
+// publish plugin: a page has no coordinate, and a module in :kompot-bom that nobody resolves is a
+// promise to keep for no one. Its single target is the one the client already declares, so the page
+// costs a distribution rather than a port.
+include(":kompot-playground")
