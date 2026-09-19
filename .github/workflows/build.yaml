@@ -17,7 +17,8 @@ jobs:
     steps:
       # The whole history, not the one commit: the schema compatibility check below compares this
       # tree with the revision the branch was cut from, and `git merge-base` has nothing to answer
-      # with in a shallow clone.
+      # with in a shallow clone. The backlog check needs the same depth for a different reason — it
+      # names `origin/main`, and a shallow fetch of one branch never creates that ref at all.
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
@@ -55,3 +56,25 @@ jobs:
           python3 tools/api-metadata-audit.py ci-${{ github.run_number }}
           python3 tools/artifact-name-audit.py ci-${{ github.run_number }}
           python3 tools/jvm-floor-audit.py ci-${{ github.run_number }}
+
+      # The table in docs/backlog.md is generated from the frontmatter of docs/backlog/B-*.md, and
+      # nothing regenerates it on the way in. An item whose status or priority was changed in its own
+      # file leaves the table asserting the old one, and the table is what gets read — the item files
+      # are what gets edited. The same run walks the relative links inside the items: those point one
+      # level up out of backlog/, and a missing `../` costs nothing locally and 404s on GitHub, where
+      # the reader finds it instead of the author.
+      - name: The backlog index still matches the items it is generated from
+        run: python3 docs/scripts/backlog_index.py --check
+
+      # Only on a pull request, and this is the case the check was written for: `B-NN` is taken from
+      # the index when the branch is cut, and a branch merged in the meantime can take that same
+      # number. Neither tree holds a duplicate on its own — both are legal, and the collision exists
+      # only after the second merge, which is why nothing before this point can see it.
+      #
+      # Against origin/main, not the base recorded in the event, and deliberately unlike the schema
+      # check above: there the question is what this branch changed relative to where it started, so
+      # somebody else's merge must not move the answer. Here the question is which numbers are taken
+      # by now, and somebody else's merge is precisely what takes them.
+      - name: The item numbers are not already taken on main
+        if: github.event_name == 'pull_request'
+        run: python3 docs/scripts/backlog_index.py --against origin/main
