@@ -24,6 +24,16 @@ kotlin {
     }
 
     sourceSets {
+        val wasmJsTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                // Composition, because the claim under test is about a CLIENT: which types it decodes
+                // and what its registry does with them. Decoding alone would leave the registry — half
+                // of what a client is — unchecked.
+                implementation(libs.ui.test)
+            }
+        }
+
         val wasmJsMain by getting {
             dependencies {
                 // The rendering path a client takes, and nothing else: the registry and its dispatch,
