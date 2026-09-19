@@ -47,13 +47,11 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (1)
+## Открыто (0)
 
-| Задача | | Этап | Приоритет | Размер | Ждёт |
-|---|---|---|---|---|---|
-| [B-37](backlog/B-37-readme-snippets-are-unchecked.md) `[ ]` | Kotlin-сниппеты в README ничем не компилируются и разойдутся молча | — | P3 | S | — |
+Открытых задач нет.
 
-## Сделано (36)
+## Сделано (37)
 
 **Швы в toolkit'е**
 
@@ -111,6 +109,7 @@
 - [B-34](backlog/B-34-degradation-vocabulary-is-ambiguous.md) — Сток деградации называет тип по-разному и путает «нарисован фолбэк» с «нарисована заглушка»
 - [B-35](backlog/B-35-ksp-wiring-belongs-to-the-convention.md) — Обвязка KSP живёт в семи копиях вместо конвенции сборки
 - [B-36](backlog/B-36-kompot-client-readme.md) — У kompot-client нет README, и рассказать про реестр и сток негде
+- [B-37](backlog/B-37-readme-snippets-are-unchecked.md) — Kotlin-сниппеты в README ничем не компилируются и разойдутся молча
 
 <!-- END INDEX -->
 
