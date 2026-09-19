@@ -42,6 +42,20 @@ jobs:
         env:
           BASE: ${{ github.event.pull_request.base.sha || github.event.before || 'HEAD^' }}
 
+      # The other half of the same question, for the other kind of consumer. §15 above is the wire:
+      # a break there is SILENT, and an old client meets a hole on a screen. A Kotlin break is loud —
+      # the consumer's build stops — but the error names a type and says nothing about why it moved
+      # or what to write instead. That lives in the commit message, which nobody downstream reads,
+      # so it has to land in UPGRADING.md; a journal kept by memory is worse than none, because an
+      # incomplete one looks complete.
+      #
+      # Only DECLARED breaks: `!` after the scope or a BREAKING CHANGE footer. A change that breaks a
+      # consumer without saying so is caught by nothing here — B-39.
+      - name: A declared breaking change is written down in UPGRADING.md
+        run: python3 docs/scripts/breaking_changes.py --base $BASE
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before || 'HEAD^' }}
+
       # Both audits below read real published metadata, which is why they publish locally first, and
       # both exist because the defect they look for is invisible to the build itself: everything
       # compiles, tests and publishes green, and only a consumer finds out.
