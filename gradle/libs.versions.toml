@@ -3,7 +3,7 @@
 # publication come from. Bumping this changes how every module is built, so it is pinned like any
 # other dependency and moved deliberately.
 sborka = "0.4.0.91"
-androidGradlePlugin = "9.3.1"
+androidGradlePlugin = "9.4.1"
 kotlin = "2.4.10"
 ktor = "3.5.2"
 ksp = "2.3.11"
