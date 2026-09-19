@@ -47,11 +47,10 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (7)
+## Открыто (6)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-26](backlog/B-26-playground-body-and-render.md) `[~]` | Живой рендер: текст тела слева, экран справа | playground | P0 | M | B-25 |
 | [B-28](backlog/B-28-playground-demo-plugin.md) `[ ]` | Демо-компонент, объявленный как плагин деплоя | playground | P0 | S | B-25 |
 | [B-29](backlog/B-29-old-client-switch.md) `[ ]` | Переключатель «старый клиент»: три состояния деградации | playground | P0 | M | B-26, B-28 |
 | [B-27](backlog/B-27-playground-tree.md) `[ ]` | Дерево тела слева, выбор узла подсвечивает его в рендере | playground | P1 | M | B-26 |
@@ -59,7 +58,7 @@
 | [B-30](backlog/B-30-playground-examples-and-links.md) `[ ]` | Набор готовых тел и ссылки на витрину | playground | P2 | S | B-29 |
 | [B-31](backlog/B-31-question-placeholder-for-unknown.md) `[?]` | Должен ли незнакомый тип без fallback рисовать заглушку? | playground | P2 | S | — |
 
-## Сделано (25)
+## Сделано (26)
 
 **Швы в toolkit'е**
 
@@ -103,6 +102,7 @@
 **Плейграунд**
 
 - [B-25](backlog/B-25-playground-page.md) — Модуль плейграунда и страница на GH Pages
+- [B-26](backlog/B-26-playground-body-and-render.md) — Живой рендер: текст тела слева, экран справа
 
 <!-- END INDEX -->
 
