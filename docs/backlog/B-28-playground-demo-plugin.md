@@ -1,7 +1,7 @@
 ---
 id: B-28
 title: "Демо-компонент, объявленный как плагин деплоя"
-status: open
+status: wip
 priority: P0
 size: S
 stage: playground
