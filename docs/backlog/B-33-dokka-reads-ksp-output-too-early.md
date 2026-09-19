@@ -1,7 +1,7 @@
 ---
 id: B-33
 title: "Dokka читает сгенерированное KSP раньше, чем оно появляется"
-status: open
+status: wip
 priority: infra
 size: S/M
 ---
