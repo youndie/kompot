@@ -91,14 +91,14 @@ so a declaration reaches you because somebody wrote `public`, not because nobody
 | `kompot-forms-standard` | the glue: one call declares a field and draws the component that fills it | kompot-forms, form-standard |
 | `experiments-core` | deterministic A/B assignment plus its header codec | — |
 | `kompot-spec` | the wire specification: schema generator, validator, and the spec module of every module above | all of them |
-| `kompot-tck` | the conformance kit: walks a running server over HTTP and checks the rules a schema cannot express | kompot-spec |
-| `kompot-client-tck` | the case corpus: input and observable outcome, holding a CLIENT to the rules only it carries | — |
+| [`kompot-tck`](kompot-tck/README.md) | the conformance kit: walks a running server over HTTP and checks the rules a schema cannot express | kompot-spec |
+| [`kompot-client-tck`](kompot-client-tck/README.md) | the case corpus: input and observable outcome, holding a CLIENT to the rules only it carries | — |
 | `kompot-swift-interop` | the Swift bridge: what the Kotlin/Native ObjC export drops — reified calls, suspend contracts, value-class tokens | core, standard, forms, wizard |
-| `kompot-client` | the Compose client: a registry keyed by wire type, the core renderers, live updates, impression tracking | core, standard, forms |
+| [`kompot-client`](kompot-client/README.md) | the Compose client: a registry keyed by wire type, the core renderers, live updates, impression tracking | core, standard, forms |
 | `kompot-forms-client`, `kompot-wizard-client`, `kompot-images-client-coil` | the renderers of the form, wizard and image plug-ins | kompot-client |
 | `kompot-theme-client`, `kompot-ds-material-compose` | the Compose side of a server-driven theme, and the Material3 design system tokens resolve through | kompot-client, kompot-theme |
 | `kompot-preview` | a response body drawn by the real renderers, so a server can see the screen it built | kompot-client, kompot-forms |
-| `kompot-studio`, `kompot-studio-gradle-plugin` | the desktop editor: a body, its tree, its properties and the rendered screen in one window, with the checks a body has to pass — and the Gradle task that opens it on a consumer's build | kompot-preview, kompot-spec |
+| [`kompot-studio`](kompot-studio/README.md), `kompot-studio-gradle-plugin` | the desktop editor: a body, its tree, its properties and the rendered screen in one window, with the checks a body has to pass — and the Gradle task that opens it on a consumer's build | kompot-preview, kompot-spec |
 | `kompot-client-cache` | offline-first screen cache: the store contract and a cache-first provider with ETag revalidation | core |
 | `kompot-analytics` | tracking contracts for screens, actions and form outcomes | — |
 

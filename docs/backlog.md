@@ -51,9 +51,9 @@
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-36](backlog/B-36-kompot-client-readme.md) `[ ]` | У kompot-client нет README, и рассказать про реестр и сток негде | — | P2 | S | — |
+| [B-37](backlog/B-37-readme-snippets-are-unchecked.md) `[ ]` | Kotlin-сниппеты в README ничем не компилируются и разойдутся молча | — | P3 | S | — |
 
-## Сделано (35)
+## Сделано (36)
 
 **Швы в toolkit'е**
 
@@ -110,6 +110,7 @@
 - [B-33](backlog/B-33-dokka-reads-ksp-output-too-early.md) — Dokka читает сгенерированное KSP раньше, чем оно появляется
 - [B-34](backlog/B-34-degradation-vocabulary-is-ambiguous.md) — Сток деградации называет тип по-разному и путает «нарисован фолбэк» с «нарисована заглушка»
 - [B-35](backlog/B-35-ksp-wiring-belongs-to-the-convention.md) — Обвязка KSP живёт в семи копиях вместо конвенции сборки
+- [B-36](backlog/B-36-kompot-client-readme.md) — У kompot-client нет README, и рассказать про реестр и сток негде
 
 <!-- END INDEX -->
 
