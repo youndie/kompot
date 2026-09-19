@@ -47,11 +47,10 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (8)
+## Открыто (7)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-25](backlog/B-25-playground-page.md) `[~]` | Модуль плейграунда и страница на GH Pages | playground | P0 | S/M | — |
 | [B-26](backlog/B-26-playground-body-and-render.md) `[ ]` | Живой рендер: текст тела слева, экран справа | playground | P0 | M | B-25 |
 | [B-28](backlog/B-28-playground-demo-plugin.md) `[ ]` | Демо-компонент, объявленный как плагин деплоя | playground | P0 | S | B-25 |
 | [B-29](backlog/B-29-old-client-switch.md) `[ ]` | Переключатель «старый клиент»: три состояния деградации | playground | P0 | M | B-26, B-28 |
@@ -60,7 +59,7 @@
 | [B-30](backlog/B-30-playground-examples-and-links.md) `[ ]` | Набор готовых тел и ссылки на витрину | playground | P2 | S | B-29 |
 | [B-31](backlog/B-31-question-placeholder-for-unknown.md) `[?]` | Должен ли незнакомый тип без fallback рисовать заглушку? | playground | P2 | S | — |
 
-## Сделано (24)
+## Сделано (25)
 
 **Швы в toolkit'е**
 
@@ -100,6 +99,10 @@
 - [B-21](backlog/B-21-inspector.md) — Инспектор свойств по схеме
 - [B-22](backlog/B-22-palette-dnd.md) — Палитра типов и drag-and-drop в дереве
 - [B-23](backlog/B-23-dsl-export.md) — Экспорт DSL-черновика из тела
+
+**Плейграунд**
+
+- [B-25](backlog/B-25-playground-page.md) — Модуль плейграунда и страница на GH Pages
 
 <!-- END INDEX -->
 
