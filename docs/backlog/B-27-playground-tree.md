@@ -1,7 +1,7 @@
 ---
 id: B-27
 title: "Дерево тела слева, выбор узла подсвечивает его в рендере"
-status: open
+status: wip
 priority: P1
 size: M
 stage: playground
