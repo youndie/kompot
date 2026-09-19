@@ -51,7 +51,7 @@
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-29](backlog/B-29-old-client-switch.md) `[ ]` | Переключатель «старый клиент»: три состояния деградации | playground | P0 | M | B-26, B-28 |
+| [B-29](backlog/B-29-old-client-switch.md) `[~]` | Переключатель «старый клиент»: три состояния деградации | playground | P0 | M | B-26, B-28 |
 | [B-27](backlog/B-27-playground-tree.md) `[ ]` | Дерево тела слева, выбор узла подсвечивает его в рендере | playground | P1 | M | B-26 |
 | [B-32](backlog/B-32-playground-states-under-test.md) `[ ]` | Три состояния витрины проверяются прогоном, а не глазами | playground | P1 | S/M | B-29 |
 | [B-30](backlog/B-30-playground-examples-and-links.md) `[ ]` | Набор готовых тел и ссылки на витрину | playground | P2 | S | B-29 |

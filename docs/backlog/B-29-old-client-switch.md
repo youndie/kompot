@@ -1,7 +1,7 @@
 ---
 id: B-29
 title: "Переключатель «старый клиент»: три состояния деградации"
-status: open
+status: wip
 priority: P0
 size: M
 stage: playground
