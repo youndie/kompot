@@ -155,7 +155,9 @@ val profile = KompotSpec.profile(schemas)
 
 `kompot-tck` is the other half: it points at a **running** server and checks what a schema cannot
 express — ids unique within a tree, a form's screen and schema agreeing on fieldId, a 304 on a
-repeated ETag, pagination that terminates, a 401 without a token, the idempotency contract. It reads
+repeated ETag, pagination that terminates, a 401 without a token, the idempotency contract, and —
+given two identities and a live connection — that the updates of one subscriber never reach another.
+It reads
 endpoint kinds out of your OpenAPI document and never assumes an address, so it runs against an
 implementation on any stack:
 
