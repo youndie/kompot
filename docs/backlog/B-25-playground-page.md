@@ -1,7 +1,7 @@
 ---
 id: B-25
 title: "Модуль плейграунда и страница на GH Pages"
-status: open
+status: wip
 priority: P0
 size: S/M
 stage: playground
