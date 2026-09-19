@@ -58,9 +58,14 @@ public class KompotStudioConfig(
     public val recordingsDirectory: Path? = null,
     // One fully filled instance per wire type — the dictionary a deployment already keeps beside its
     // components, usually for a schema golden or a coverage check. It is a Storybook nobody had a
-    // window for: pairs of (wire name, component), so a type with no sample is visible AS a gap
-    // rather than silently absent.
-    public val samples: List<Pair<String, KompotComponent>> = emptyList(),
+    // window for, and a type with no sample stays visible AS a gap rather than silently absent.
+    //
+    // COMPONENTS, NOT PAIRS. This used to ask for the wire name beside each one, and the toolkit
+    // publishes no way to compute one — so the name was typed by hand, and a typo was silent: the
+    // palette matched it against the profile, missed, and showed no sample, which looks exactly like
+    // a deployment that declared none. The studio derives the name by encoding the sample with the
+    // Json above, which is the string a server would write (B-38).
+    public val samples: List<KompotComponent> = emptyList(),
     // The open words a field of a component accepts: `usage_counter_card.state` to every state that
     // draws differently. The protocol calls these open on purpose — an unknown word draws the neutral
     // thing — so nothing can derive this list, and a deployment that keeps one keeps it in Kotlin.

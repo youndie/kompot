@@ -312,7 +312,8 @@ public class KompotStudioConfig(
     val schemas: Map<String, JsonObject>,         // KompotSpecResources(...).schemas() + модули сборки
     val extensionTypes: Set<String> = emptySet(),
     val vocabulary: Map<String, Map<String, Set<String>>> = emptyMap(), // wireType -> field -> words
-    val samples: List<Pair<String, KompotComponent>> = emptyList(),      // konektDictionary
+    val samples: List<KompotComponent> = emptyList(),                    // konektDictionary; проводное
+                                                  // имя студия выводит сама, см. B-38
     val sources: List<ScreenSource>,              // файлы, каталог записей, HTTP + NavigationGraph
     val pageLoader: KompotPageLoader = StubPageLoader,
 )

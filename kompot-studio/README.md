@@ -49,7 +49,7 @@ class StudioProvider : KompotStudioConfigProvider {
         brands = listOf("brand-a", "brand-b"),
         schemas = mySpec.schemas() + (KompotProtocol.PROFILE_FILE_NAME to mySpec.profile()),
         sources = listOf(ScreenSource.Directory(recordingsDir, name = "recorded")),
-        samples = listOf("product_card" to ProductCardComponent(id = "sample", title = "Sample")),
+        samples = listOf(ProductCardComponent(id = "sample", title = "Sample")),
     )
 }
 ```

@@ -17,7 +17,7 @@ class StoriesTest {
     private val config =
         KompotStudioConfig(
             registry = toolkitRegistry,
-            samples = listOf("text" to TextComponent(id = "sample", text = "Sample")),
+            samples = listOf(TextComponent(id = "sample", text = "Sample")),
             vocabulary =
                 mapOf(
                     "text" to mapOf("color" to setOf("on_surface", "error")),

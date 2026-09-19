@@ -3,6 +3,7 @@ package io.github.youndie.kompot.studio.palette
 import io.github.youndie.kompot.encodeKompotComponent
 import io.github.youndie.kompot.spec.KompotProtocol
 import io.github.youndie.kompot.studio.KompotStudioConfig
+import io.github.youndie.kompot.studio.samplesByWireType
 import io.github.youndie.kompot.studio.inspector.defKeyFor
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
@@ -18,19 +19,29 @@ internal data class PaletteEntry(
     val hasSample: Boolean,
 )
 
-internal fun paletteFor(config: KompotStudioConfig): List<PaletteEntry> {
-    val profile = config.schemas[KompotProtocol.PROFILE_FILE_NAME] ?: return emptyList()
+// The wire types the profile declares, with the schema file each was defined in. Read out of the
+// discriminator mapping, which is the closed list the protocol publishes — the palette IS that list,
+// and `checkSamples` holds a deployment's samples to it.
+internal fun profileMapping(config: KompotStudioConfig): Map<String, String> {
+    val profile = config.schemas[KompotProtocol.PROFILE_FILE_NAME] ?: return emptyMap()
     val base =
         (profile["\$defs"] as? JsonObject)?.get(KompotProtocol.COMPONENT_HIERARCHY)?.jsonObject
-            ?: return emptyList()
-    val mapping = (base["discriminator"] as? JsonObject)?.get("mapping")?.jsonObject ?: return emptyList()
-    val samples = config.samples.map { it.first }.toSet()
+            ?: return emptyMap()
+    val mapping = (base["discriminator"] as? JsonObject)?.get("mapping")?.jsonObject ?: return emptyMap()
+    return mapping.entries.associate { (wireType, reference) -> wireType to (reference as JsonPrimitive).content }
+}
+
+internal fun profileComponentTypes(config: KompotStudioConfig): Set<String> = profileMapping(config).keys
+
+internal fun paletteFor(config: KompotStudioConfig): List<PaletteEntry> {
+    val mapping = profileMapping(config)
+    val samples = samplesByWireType(config).keys
 
     return mapping.entries
         .map { (wireType, reference) ->
             // The schema file a type is defined in IS its module: the generator writes one file per
             // spec module, so the grouping needs no second list to go stale.
-            val file = (reference as JsonPrimitive).content.substringBefore('#')
+            val file = reference.substringBefore('#')
             PaletteEntry(
                 wireType = wireType,
                 group = file.removeSuffix(".schema.json"),
@@ -51,7 +62,7 @@ internal fun newNode(
     wireType: String,
     id: String,
 ): String {
-    config.samples.firstOrNull { it.first == wireType }?.let { (_, sample) ->
+    samplesByWireType(config)[wireType]?.let { sample ->
         return config.json.encodeKompotComponent(sample)
     }
 

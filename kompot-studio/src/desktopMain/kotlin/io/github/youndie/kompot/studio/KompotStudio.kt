@@ -185,6 +185,13 @@ public fun kompotStudio(
     // routes, before this line. `-Dcompose.accessibility.enable=true` turns it back on.
     if (System.getProperty(ACCESSIBILITY_PROPERTY) == null) System.setProperty(ACCESSIBILITY_PROPERTY, "false")
 
+    // BEFORE A WINDOW OPENS, and that is the whole value of it. Every complaint this can make is
+    // about the configuration rather than about a body — a sample that cannot be encoded, two samples
+    // of one type, a sample of a type no schema declares — and each of them used to end as a panel
+    // that silently showed less. A tool that starts and quietly omits things is worse than one that
+    // refuses to start and says which line to fix.
+    checkSamples(config)
+
     application {
         // Two darks, and they are different questions. The PREVIEW's is the screen being edited —
         // a switch in the toolbar, because the point is to look at both. The STUDIO's is the

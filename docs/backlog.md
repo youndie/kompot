@@ -47,13 +47,11 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (1)
+## Открыто (0)
 
-| Задача | | Этап | Приоритет | Размер | Ждёт |
-|---|---|---|---|---|---|
-| [B-38](backlog/B-38-wire-name-is-not-obtainable.md) `[ ]` | Проводное имя компонента получить нечем, а студия его требует | — | P2 | S/M | — |
+Открытых задач нет.
 
-## Сделано (37)
+## Сделано (38)
 
 **Швы в toolkit'е**
 
@@ -112,6 +110,7 @@
 - [B-35](backlog/B-35-ksp-wiring-belongs-to-the-convention.md) — Обвязка KSP живёт в семи копиях вместо конвенции сборки
 - [B-36](backlog/B-36-kompot-client-readme.md) — У kompot-client нет README, и рассказать про реестр и сток негде
 - [B-37](backlog/B-37-readme-snippets-are-unchecked.md) — Kotlin-сниппеты в README ничем не компилируются и разойдутся молча
+- [B-38](backlog/B-38-wire-name-is-not-obtainable.md) — Проводное имя компонента получить нечем, а студия его требует
 
 <!-- END INDEX -->
 
