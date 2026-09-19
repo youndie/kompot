@@ -1,7 +1,7 @@
 ---
 id: B-25
 title: "Модуль плейграунда и страница на GH Pages"
-status: wip
+status: done
 priority: P0
 size: S/M
 stage: playground
@@ -66,3 +66,15 @@ epic: playground
 
 Что осталось: включить Pages (сделано пользователем — источник `GitHub Actions`), влить PR и
 посмотреть, что `https://youndie.github.io/kompot/` отдаёт то же, что отдавал локальный сервер.
+
+## Итог
+
+Страница живёт: `https://youndie.github.io/kompot/` после мержа #138 показывает то же, что показывал
+локальный сервер до него, — заголовок, подзаголовок и material-кнопку, нарисованные
+`kompotCoreRenderers + kompotStandardRenderers` через `KompotPreview`. Ошибок в консоли нет ни одной
+(локально оставались предупреждения skiko про `WEBGL_debug_renderer_info`; в продовой сборке нет и
+их). Вторая половина приёмки, недостижимая до мержа, тем самым пройдена, и задача закрывается.
+
+`pages.yaml` отработал с первого раза — прогон 35445142330. Деплой отдельным workflow, а не шагом в
+`build.yaml`, оправдал себя сразу: `pages: write` и id-токен достались одному прогону на `main`, а не
+каждому PR.
