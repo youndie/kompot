@@ -5,6 +5,9 @@ import io.github.youndie.kompot.navigation.ScreenRouteKind
 import io.github.youndie.kompot.spec.BodyRules
 import io.github.youndie.kompot.spec.KompotProtocol
 import io.github.youndie.kompot.spec.collectJsonObjects
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
@@ -60,6 +63,37 @@ public data class TckReport(
         return if (skipped.isEmpty()) head else head + "\nNot walked:\n" + skipped.joinToString("\n") { "  $it" }
     }
 }
+
+// ONE SUBJECT the run can act as. The kit has always had exactly one session, which is enough for
+// every check that asks what a server answers — and not enough for the one that asks WHOM it answers:
+// a channel is isolated or leaking only in relation to somebody else (SPEC.md §16.9).
+//
+// The second identity must be a DIFFERENT SUBJECT, not a second session of the same one. Two sessions
+// of one person legitimately share a personal topic, and configured that way the check reports a leak
+// where there is none — which is worse than not running it.
+public data class TckIdentity(
+    // How a finding names it. A label, not a credential: "the second tenant", "bob".
+    val name: String,
+    val loginPath: String? = null,
+    val loginValues: Map<String, JsonElement> = emptyMap(),
+    val loginBody: JsonElement? = null,
+    val bearerToken: String? = null,
+)
+
+// What makes the server emit a frame, and whose channel it should appear on.
+//
+// It exists because silence is not evidence. A run that subscribes somebody else to a topic and sees
+// nothing has proved nothing at all unless a frame really was delivered somewhere in the meantime —
+// the same rule §17 states for a case that asserts nothing, and the reason a run without this is
+// reported as inconclusive rather than green.
+public data class TckUpdateTrigger(
+    // The screen whose realtimeTopic the frame belongs to, by the address the description declares.
+    val screenPath: String,
+    // The call that changes something — an ordinary submit, performed AS THE FIRST IDENTITY.
+    val path: String,
+    val body: JsonElement,
+    val method: String = "POST",
+)
 
 // Everything the kit cannot know about the server it is pointed at. Nothing here has a default that
 // belongs to one particular application: a library that ships someone's login path is a library that
@@ -132,6 +166,21 @@ public data class TckConfig(
     // this is "equals" to "fieldId", "required_if" to "targetFieldId" and so on. An empty map leaves
     // the cross-reference half of the form check idle — the report says so.
     val crossReferenceKeys: Map<String, String> = emptyMap(),
+    // A SECOND subject, and with it the only check that can see a leak of the update channel. Without
+    // it the isolation check has no target and the report says so through its counter.
+    val secondIdentity: TckIdentity? = null,
+    // How to make a frame happen. Without it the isolation check stays at what it can prove offline —
+    // that two subjects were not handed the same personal topic — and does not pretend to have
+    // listened.
+    val updateTrigger: TckUpdateTrigger? = null,
+    // Which query parameter of the update endpoint carries the topic. Derived from the description
+    // when it declares exactly one query parameter; spell it here when it declares several. The kit
+    // never guesses the name: the topic travels in the query (§16.6), and what it is called is the
+    // application's, like every address.
+    val topicParameter: String? = null,
+    // How long the listeners stay connected. Long enough for a server to deliver, short enough that a
+    // conformance run does not become a wait: three seconds, and a slow test environment raises it.
+    val updateWindowMillis: Long = 3_000,
 )
 
 public class TckRunner(
@@ -182,6 +231,7 @@ public class TckRunner(
         findings += performTargetsAreSubmitEndpoints()
         findings += patchesNameDeclaredFields()
         findings += recordedUpdateFramesAreValid()
+        findings += updateChannelIsolation()
         findings += textSpansSpellTheirOwnText()
         findings += idempotencyContract()
 
@@ -199,38 +249,52 @@ public class TckRunner(
     // Not a check of the protocol but a precondition of the rest: without a token the secured
     // endpoints are out of reach.
     private suspend fun authenticate(): List<TckFinding> {
+        val (session, findings) = sessionFor(runIdentity())
+        token = session
+        return findings
+    }
+
+    // The identity the run has always had, named so that a finding about it reads like the others.
+    private fun runIdentity() =
+        TckIdentity(
+            name = "the run's own identity",
+            loginPath = config.loginPath,
+            loginValues = config.loginValues,
+            loginBody = config.loginBody,
+            bearerToken = config.bearerToken,
+        )
+
+    // One way in, used for the run's own session and for the second subject alike — a second copy of
+    // the login exchange is how the two come to disagree about what a session even is.
+    private suspend fun sessionFor(identity: TckIdentity): Pair<String?, List<TckFinding>> {
         // A token handed over skips the exchange entirely — there is nothing to ask for and nothing
         // to check about the asking.
-        config.bearerToken?.let {
-            token = it
-            return emptyList()
-        }
+        identity.bearerToken?.let { return it to emptyList() }
 
-        val loginPath = config.loginPath ?: return emptyList()
-        if (config.loginBody == null && config.loginValues.isEmpty()) return emptyList()
+        val loginPath = identity.loginPath ?: return null to emptyList()
+        if (identity.loginBody == null && identity.loginValues.isEmpty()) return null to emptyList()
 
         val body =
-            config.loginBody
+            identity.loginBody
                 ?: buildJsonObjectOf(
                     "formId" to JsonPrimitive("login"),
                     "fieldId" to JsonPrimitive("login"),
-                    "values" to JsonObject(config.loginValues),
+                    "values" to JsonObject(identity.loginValues),
                 )
         visited += "POST $loginPath"
         val response = transport.request("POST", loginPath, body = json.encodeToString(JsonElement.serializer(), body))
 
         if (response.status != 200) {
-            return listOf(TckFinding("auth", loginPath, "login failed: ${response.status} ${response.body.take(200)}"))
+            return null to listOf(TckFinding("auth", loginPath, "login failed: ${response.status} ${response.body.take(200)}"))
         }
 
         val action = parse(response.body)?.jsonObject
         val accessToken = (action?.get("accessToken") as? JsonPrimitive)?.content
         if (action == null || (action[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content != "update_session" || accessToken == null) {
-            return listOf(TckFinding("auth", loginPath, "the login response is not an update_session carrying an accessToken"))
+            return null to listOf(TckFinding("auth", loginPath, "the login response is not an update_session carrying an accessToken"))
         }
 
-        token = accessToken
-        return emptyList()
+        return accessToken to emptyList()
     }
 
     // A secured endpoint must answer 401 without a token, or personal data is available to everyone.
@@ -432,46 +496,280 @@ public class TckRunner(
             .filter { it.kind == UPDATES_KIND && it.path in config.recordedUpdateStreams }
             .exercising("updates")
             .onEach { visited += it.key }
-            .flatMap { endpoint ->
-                val events = TckEventStream.parse(config.recordedUpdateStreams.getValue(endpoint.path))
-                val findings = mutableListOf<TckFinding>()
+            .flatMap { endpoint -> frameFindings(endpoint.path, config.recordedUpdateStreams.getValue(endpoint.path), emptyIsAFinding = true) }
 
-                if (events.isEmpty()) {
-                    findings += TckFinding("updates", endpoint.path, "the recorded stream holds no event at all")
-                }
+    // Every rule about a frame, over a stream from wherever it came: a recording handed to the kit, or
+    // a capture the kit took itself while listening. One reader and one list of rules — a live capture
+    // read by a second, kinder parser would be precisely the stream nobody checks.
+    //
+    // An empty stream is a finding for a RECORDING (somebody offered it as evidence and it holds none)
+    // and not for a capture (a channel with nothing to say during the window is the ordinary case, and
+    // what to make of that silence is the isolation check's business, not this one's).
+    private fun frameFindings(
+        at: String,
+        recording: String,
+        emptyIsAFinding: Boolean,
+    ): List<TckFinding> {
+        val events = TckEventStream.parse(recording)
+        val findings = mutableListOf<TckFinding>()
 
-                events.forEachIndexed { index, event ->
-                    val at = "${endpoint.path} (event #${index + 1})"
+        if (events.isEmpty() && emptyIsAFinding) {
+            findings += TckFinding("updates", at, "the recorded stream holds no event at all")
+        }
 
-                    event.malformed.forEach { line ->
-                        findings += TckFinding("updates", at, "a line belongs to no SSE field and is not a comment: \"$line\"")
-                    }
+        events.forEachIndexed { index, event ->
+            val where = "$at (event #${index + 1})"
 
-                    when {
-                        event.name == HEARTBEAT_EVENT && event.data != null ->
-                            findings += TckFinding("updates", at, "the heartbeat carries data, which gives it a meaning the protocol does not define")
-
-                        event.name == HEARTBEAT_EVENT -> Unit
-
-                        event.data == null ->
-                            findings += TckFinding("updates", at, "an event with no data and no name: a frame that says nothing")
-
-                        else -> {
-                            val payload = parse(event.data)
-                            findings +=
-                                if (payload == null) {
-                                    listOf(TckFinding("updates", at, "the data of the event is not one JSON value"))
-                                } else {
-                                    validator
-                                        .validate(payload, UPDATE_FRAME_SCHEMA)
-                                        .map { TckFinding("updates", at, it.toString()) }
-                                }
-                        }
-                    }
-                }
-
-                findings
+            event.malformed.forEach { line ->
+                findings += TckFinding("updates", where, "a line belongs to no SSE field and is not a comment: \"$line\"")
             }
+
+            when {
+                event.name == HEARTBEAT_EVENT && event.data != null ->
+                    findings += TckFinding("updates", where, "the heartbeat carries data, which gives it a meaning the protocol does not define")
+
+                event.name == HEARTBEAT_EVENT -> Unit
+
+                event.data == null ->
+                    findings += TckFinding("updates", where, "an event with no data and no name: a frame that says nothing")
+
+                else -> {
+                    val payload = parse(event.data)
+                    findings +=
+                        if (payload == null) {
+                            listOf(TckFinding("updates", where, "the data of the event is not one JSON value"))
+                        } else {
+                            validator
+                                .validate(payload, UPDATE_FRAME_SCHEMA)
+                                .map { TckFinding("updates", where, it.toString()) }
+                        }
+                }
+            }
+        }
+
+        return findings
+    }
+
+    // WHO RECEIVES WHICH TOPIC (SPEC.md §16.9, §10.4) — the one question the kit could not ask. Every
+    // other check is about what a server answers; this one is about whom it answers, and a leak is
+    // only visible from the second subject's side. Hence two identities, and hence a live connection:
+    // a recording is one subscriber's stream, and the question is about the other subscriber's.
+    //
+    // It answers in two ways, and the cheaper one needs no connection at all: two subjects handed the
+    // SAME topic already share a channel, and if that topic names a subject the server has called it
+    // personal itself.
+    //
+    // The expensive half listens as both subjects, raises a real frame as the first, and looks at what
+    // the second received. The first subject's own stream is the CONTROL, and it decides whether the
+    // silence on the other side means anything: a trigger that delivered nothing anywhere proves
+    // nothing about isolation, and that outcome is reported rather than passed — a check that asserts
+    // nothing must not report the same green as one that asserted something (§17).
+    private suspend fun updateChannelIsolation(): List<TckFinding> {
+        val endpoint = endpoints.firstOrNull { it.kind == UPDATES_KIND }
+        val second = config.secondIdentity
+        if (endpoint == null || second == null) {
+            exercised[ISOLATION] = 0
+            return emptyList()
+        }
+
+        val first = token
+        if (first == null) {
+            exercised[ISOLATION] = 0
+            return listOf(
+                TckFinding(
+                    ISOLATION,
+                    endpoint.path,
+                    "a second identity is configured while the run itself has no session: there is no first subject " +
+                        "to compare the second one with",
+                ),
+            )
+        }
+
+        val (secondToken, loginFindings) = sessionFor(second)
+        if (secondToken == null) {
+            exercised[ISOLATION] = 0
+            return loginFindings +
+                TckFinding(ISOLATION, endpoint.path, "the second identity \"${second.name}\" obtained no session, so nothing was compared")
+        }
+
+        val findings = mutableListOf<TckFinding>()
+        val topicsOfFirst = topicsSeenBy(first)
+        val topicsOfSecond = topicsSeenBy(secondToken)
+        val compared = topicsOfFirst.keys.intersect(topicsOfSecond.keys)
+        exercised[ISOLATION] = compared.size
+
+        compared.forEach { path ->
+            val topic = topicsOfFirst.getValue(path)
+            if (topic == topicsOfSecond.getValue(path) && SUBJECT_SEPARATOR in topic) {
+                findings +=
+                    TckFinding(
+                        ISOLATION,
+                        path,
+                        "both subjects were given the same topic \"$topic\". It names a subject, which is how the " +
+                            "server itself says the data is personal (§10.4), and one channel for two subjects means " +
+                            "every update of one reaches the other",
+                    )
+            }
+        }
+
+        findings += liveIsolation(endpoint, first, secondToken, second, topicsOfFirst, topicsOfSecond)
+        return findings
+    }
+
+    private suspend fun liveIsolation(
+        endpoint: TckEndpoint,
+        first: String,
+        secondToken: String,
+        second: TckIdentity,
+        topicsOfFirst: Map<String, String>,
+        topicsOfSecond: Map<String, String>,
+    ): List<TckFinding> {
+        val trigger = config.updateTrigger ?: return emptyList()
+
+        val topic =
+            topicsOfFirst[trigger.screenPath]
+                ?: return listOf(
+                    TckFinding(
+                        ISOLATION,
+                        trigger.screenPath,
+                        "the trigger names this screen as the one whose channel the frame belongs to, and it carried " +
+                            "no realtimeTopic for the first subject: there is no channel to listen to",
+                    ),
+                )
+
+        val parameter =
+            config.topicParameter
+                ?: endpoint.queryParameterNames.singleOrNull()
+                ?: return listOf(
+                    TckFinding(
+                        ISOLATION,
+                        endpoint.path,
+                        "which query parameter carries the topic cannot be derived — the description declares " +
+                            "${endpoint.queryParameterNames.size} query parameters for this endpoint. Name it in " +
+                            "TckConfig.topicParameter",
+                    ),
+                )
+
+        val window = config.updateWindowMillis
+        // Enough for two subscriptions to be in place before the frame is raised. The bus behind a
+        // channel has no replay and must not have one, so a frame published into the gap is simply
+        // lost — and a lost frame reads exactly like an isolated channel.
+        val settle = (window / 4).coerceIn(5L, 250L)
+
+        val captures =
+            coroutineScope {
+                val control = async { transport.stream(address(endpoint, parameter, topic), bearer(first), window) }
+                val probe = async { transport.stream(address(endpoint, parameter, topic), bearer(secondToken), window) }
+                val ownTopic = topicsOfSecond[trigger.screenPath]
+                val own =
+                    ownTopic
+                        ?.takeIf { it != topic }
+                        ?.let { async { transport.stream(address(endpoint, parameter, it), bearer(secondToken), window) } }
+
+                delay(settle)
+                fire(trigger, first)
+
+                Triple(control.await(), probe.await(), own?.await())
+            }
+
+        val (control, probe, own) = captures
+        // A transport that cannot listen is not a server defect: the run says so through the list of
+        // what it did not walk, and claims nothing about isolation.
+        if (control == null) return emptyList()
+
+        visited += endpoint.key
+        exercised[ISOLATION] = (exercised[ISOLATION] ?: 0) + 1
+        exercised["updates"] = (exercised["updates"] ?: 0) + 1
+
+        val findings = mutableListOf<TckFinding>()
+        // The capture is a stream like any other, so it is held to the frame rules like any other.
+        findings += frameFindings("${endpoint.path} (live)", control.body, emptyIsAFinding = false)
+
+        val delivered = payloadsOf(control)
+        if (delivered.isEmpty()) {
+            return findings +
+                TckFinding(
+                    ISOLATION,
+                    endpoint.path,
+                    "inconclusive: ${trigger.method} ${trigger.path} raised nothing on the first subject's OWN " +
+                        "channel within ${window}ms (the stream answered ${control.status}), so the silence on the " +
+                        "second subject's channel proves nothing about isolation",
+                )
+        }
+
+        val leaked = probe?.let { payloadsOf(it) }.orEmpty()
+        if (leaked.isNotEmpty()) {
+            findings +=
+                TckFinding(
+                    ISOLATION,
+                    endpoint.path,
+                    "${leaked.size} frame(s) of the topic \"$topic\" arrived for \"${second.name}\", who is another " +
+                        "subject (the stream answered ${probe?.status}): ${leaked.first().take(160)}",
+                )
+        }
+
+        val onItsOwnChannel = own?.let { payloadsOf(it) }.orEmpty().filter { it in delivered }
+        if (onItsOwnChannel.isNotEmpty()) {
+            findings +=
+                TckFinding(
+                    ISOLATION,
+                    endpoint.path,
+                    "a frame raised for the first subject arrived byte for byte on \"${second.name}\"'s own channel: " +
+                        "the topic is not what decides delivery",
+                )
+        }
+
+        return findings
+    }
+
+    // The addresses of the two subjects' screens, by the address the description declares. Only the
+    // kinds whose envelope can carry a topic are asked (§10.4) — a bare tree has nowhere to put one.
+    private suspend fun topicsSeenBy(session: String): Map<String, String> =
+        endpoints
+            .filter { it.method == "GET" && !it.deprecated && it.respondsWithJson && it.kind in TOPIC_KINDS }
+            .mapNotNull { endpoint ->
+                val address = endpoint.walkAddress() ?: return@mapNotNull null
+                val response = transport.request("GET", address, bearer(session))
+                val topic = (parse(response.body) as? JsonObject)?.get(REALTIME_TOPIC) as? JsonPrimitive
+                topic?.takeIf { it.isString }?.content?.let { endpoint.path to it }
+            }.toMap()
+
+    private suspend fun fire(
+        trigger: TckUpdateTrigger,
+        session: String,
+    ) {
+        // §16.5 has a submit refuse a call without an idempotency key, so a trigger without one would
+        // be answered 400 and raise nothing — and the run would report an inconclusive channel while
+        // the channel was never asked to carry anything.
+        val headers =
+            bearer(session) +
+                if (trigger.method.uppercase() == "GET") {
+                    emptyMap()
+                } else {
+                    mapOf(IDEMPOTENCY_HEADER to "tck-isolation-" + trigger.body.hashCode().toString(16))
+                }
+
+        transport.request(trigger.method, trigger.path, headers, json.encodeToString(JsonElement.serializer(), trigger.body))
+    }
+
+    private fun address(
+        endpoint: TckEndpoint,
+        parameter: String,
+        topic: String,
+    ): String {
+        val query = config.queryParameters[endpoint.path].orEmpty() + (parameter to topic)
+        return endpoint.path + "?" + query.entries.joinToString("&") { "${it.key}=${it.value}" }
+    }
+
+    // The payload of every frame that says something: the heartbeat is not a frame, and an event
+    // without data is reported elsewhere rather than counted as delivery.
+    private fun payloadsOf(capture: TckStreamCapture): List<String> =
+        TckEventStream
+            .parse(capture.body)
+            .filter { it.name != HEARTBEAT_EVENT }
+            .mapNotNull { it.data }
+
+    private fun bearer(session: String) = mapOf("Authorization" to "Bearer $session")
 
     // `text` stays the whole string and the spans are its runs, so the two have to agree (SPEC.md §14).
     // One string kept in two places is the shape that drifts, and it drifts INVISIBLY here: a client
@@ -652,7 +950,8 @@ public class TckRunner(
                         endpoint.hasPathParams ->
                             "no value in TckConfig.pathParameters for the placeholders of \"${endpoint.path}\""
                         endpoint.kind == UPDATES_KIND ->
-                            "no recorded stream for it in TckConfig.recordedUpdateStreams"
+                            "neither a recording in TckConfig.recordedUpdateStreams nor a live probe of it " +
+                                "(TckConfig.secondIdentity with updateTrigger, and a transport that can stream)"
 
                         !endpoint.respondsWithJson ->
                             "the response is ${endpoint.successContentType ?: "not declared"}, not one JSON document"
@@ -713,6 +1012,14 @@ public class TckRunner(
         const val MAX_PAGES = 50
         const val IDEMPOTENCY_HEADER = "Idempotency-Key"
         const val UPDATES_KIND = "updates_stream"
+        const val ISOLATION = "updates-isolation"
+
+        // The envelopes that can carry a topic at all (§10.4).
+        val TOPIC_KINDS = setOf("form", "live_screen")
+        const val REALTIME_TOPIC = "realtimeTopic"
+
+        // A topic is a scope and, where the data is personal, a subject after a colon (§10.4).
+        const val SUBJECT_SEPARATOR = ':'
         const val TEXT_TYPE = "text"
 
         // The kinds that change domain state and therefore need an idempotency key (SPEC.md §16.5).

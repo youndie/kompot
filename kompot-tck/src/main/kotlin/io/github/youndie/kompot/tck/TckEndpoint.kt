@@ -1,6 +1,7 @@
 package io.github.youndie.kompot.tck
 
 import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
@@ -27,6 +28,11 @@ public data class TckEndpoint(
     val successContentType: String?,
     val statuses: Set<Int>,
     val deprecated: Boolean,
+    // The names of the query parameters the description declares for this endpoint. Read for one
+    // reason: the update channel takes its topic in the query (SPEC.md §16.6) under a name that
+    // belongs to the application, and a kit that spelled "topic" itself would be a kit that knows an
+    // address.
+    val queryParameterNames: Set<String> = emptySet(),
 ) {
     // How the walk records that it reached this endpoint: method and path together, since one path can
     // carry a GET and a POST with entirely different kinds.
@@ -63,7 +69,10 @@ public object TckEndpoints {
         val documentSecurity = document["security"] as? JsonArray
 
         return paths.flatMap { (path, operations) ->
-            operations.jsonObject.map { (method, operation) ->
+            // By method rather than by every key of the path item: OpenAPI allows `parameters` and
+            // `summary` to sit beside the operations, and reading those as operations fails on a
+            // description that is perfectly valid.
+            operations.jsonObject.filterKeys { it.lowercase() in METHODS }.map { (method, operation) ->
                 val json = operation.jsonObject
                 val responses = json.getValue("responses").jsonObject
                 val statuses = responses.keys.mapNotNull { it.toIntOrNull() }.toSet()
@@ -79,6 +88,7 @@ public object TckEndpoints {
                     successContentType = successContentType(responses.getValue(success.toString()).jsonObject),
                     statuses = statuses,
                     deprecated = (json["deprecated"] as? JsonPrimitive)?.content == "true",
+                    queryParameterNames = queryParameterNames(json, operations.jsonObject["parameters"] as? JsonArray),
                 )
             }
         }
@@ -93,6 +103,23 @@ public object TckEndpoints {
     private fun securedBy(security: JsonArray?): Boolean = security != null && security.isNotEmpty()
 
     private fun successContentType(response: JsonObject): String? = (response["content"] as? JsonObject)?.keys?.firstOrNull()
+
+    // The operation's own parameters plus the ones the path item declares for every method under it:
+    // where a description puts them is its business, and a reader that looked in one place would find
+    // nothing in a description that chose the other.
+    private fun queryParameterNames(
+        operation: JsonObject,
+        shared: JsonArray?,
+    ): Set<String> =
+        ((operation["parameters"] as? JsonArray).orEmpty() + shared.orEmpty())
+            .mapNotNull { it as? JsonObject }
+            .filter { (it["in"] as? JsonPrimitive)?.content == "query" }
+            .mapNotNull { (it["name"] as? JsonPrimitive)?.content }
+            .toSet()
+
+    private fun JsonArray?.orEmpty(): List<JsonElement> = this ?: emptyList()
+
+    private val METHODS = setOf("get", "put", "post", "delete", "options", "head", "patch", "trace")
 
     // The $ref is either directly in the schema or under items of an array — a data source answers a
     // list — and WHICH of the two travels on, because the ref alone describes an element and the body
