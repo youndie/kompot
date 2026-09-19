@@ -56,3 +56,29 @@ tasks.test {
         .withPropertyName("schemaGoldens")
         .withPathSensitivity(org.gradle.api.tasks.PathSensitivity.RELATIVE)
 }
+
+// THE §15 CHECK — a task rather than a test, because it needs a second revision. A test sees one
+// working tree; the question "is this change compatible?" has no meaning without the tree the change
+// was made against, so the check reads that one out of git itself and stays out of `check`: a build
+// on a machine with no history to compare against would otherwise fail for the wrong reason.
+//
+// Run it the way CI does:
+//
+//   ./gradlew :kompot-spec:checkSchemaCompatibility -Pkompot.compat.base=origin/main
+tasks.register<JavaExec>("checkSchemaCompatibility") {
+    group = "verification"
+    description = "Classifies the change of schema/*.json against a base revision by the rules of SPEC.md §15"
+
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("io.github.youndie.kompot.spec.SchemaCompatibilityCliKt")
+
+    // A revision rather than a branch name by default is the caller's business: CI passes the base of
+    // the pull request, so that a run cannot be turned green by somebody else's merge into main.
+    val base = providers.gradleProperty("kompot.compat.base").orElse("origin/main")
+    argumentProviders.add(CommandLineArgumentProvider { listOf("--base", base.get()) })
+
+    // The inputs of this task are the working tree AND a revision of the repository. Gradle watches
+    // neither well enough to skip the run, and a skipped compatibility check reports the verdict of
+    // the previous one.
+    outputs.upToDateWhen { false }
+}
