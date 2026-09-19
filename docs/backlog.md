@@ -47,13 +47,11 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (1)
+## Открыто (0)
 
-| Задача | | Этап | Приоритет | Размер | Ждёт |
-|---|---|---|---|---|---|
-| [B-31](backlog/B-31-question-placeholder-for-unknown.md) `[~]` | Должен ли незнакомый тип без fallback рисовать заглушку? | playground | P2 | S | — |
+Открытых задач нет.
 
-## Сделано (33)
+## Сделано (34)
 
 **Швы в toolkit'е**
 
@@ -102,6 +100,7 @@
 - [B-28](backlog/B-28-playground-demo-plugin.md) — Демо-компонент, объявленный как плагин деплоя
 - [B-29](backlog/B-29-old-client-switch.md) — Переключатель «старый клиент»: три состояния деградации
 - [B-30](backlog/B-30-playground-examples-and-links.md) — Набор готовых тел и ссылки на витрину
+- [B-31](backlog/B-31-question-placeholder-for-unknown.md) — Должен ли незнакомый тип без fallback рисовать заглушку?
 - [B-32](backlog/B-32-playground-states-under-test.md) — Три состояния витрины проверяются прогоном, а не глазами
 
 **Без этапа**
