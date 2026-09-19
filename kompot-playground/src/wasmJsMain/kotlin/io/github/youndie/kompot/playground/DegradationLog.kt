@@ -23,9 +23,23 @@ import io.github.youndie.kompot.KompotDegradationKind
 public class DegradationLog {
     private val entries = mutableStateListOf<String>()
 
+    // The wire types this client did not understand, as the sink named them. The tree marks its nodes
+    // from this rather than from a guess at the profile, so the two halves of the page cannot disagree
+    // about what was unfamiliar.
+    //
+    // UNRENDERABLE_COMPONENT is deliberately not in here: that kind reports the KOTLIN class name
+    // (B-34), which matches no "type" in the body, and a mark that silently never fires is worse than
+    // no mark at all.
+    private val unknown = mutableStateListOf<String>()
+
     public val lines: List<String> get() = entries
 
-    public fun clear(): Unit = entries.clear()
+    public val unknownTypes: Set<String> get() = unknown.toSet()
+
+    public fun clear() {
+        entries.clear()
+        unknown.clear()
+    }
 
     // Called from inside composition, by the render pane, and read by a composable beside it. Appending
     // unconditionally would append again on every recomposition — including the one the append itself
@@ -43,6 +57,7 @@ public class DegradationLog {
         val line =
             "$kind  \"$originalType\"" + if (drawnAsFallback) "  drawn through its fallback" else "  skipped"
         if (line !in entries) entries += line
+        if (kind == KompotDegradationKind.UNKNOWN_COMPONENT && originalType !in unknown) unknown += originalType
     }
 }
 

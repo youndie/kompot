@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,6 +48,10 @@ public fun PlaygroundApp() {
 
             val log = remember { DegradationLog() }
 
+            // Which node the reader is pointing at. Null is a real state and the common one: the page
+            // is read before it is poked.
+            var selectedId by remember { mutableStateOf<String?>(null) }
+
             // The decode happens HERE, on the edit, rather than inside the composition of the right
             // pane: a throw during composition takes the whole page down, and a page that dies on a
             // missing brace tells a stranger the toolkit is broken when what broke is their comma.
@@ -66,12 +71,28 @@ public fun PlaygroundApp() {
             }
 
             Row(Modifier.fillMaxSize()) {
-                BodyEditor(
-                    text = text,
-                    failure = failure,
-                    onChange = ::offer,
-                    modifier = Modifier.weight(BODY_WEIGHT).fillMaxHeight(),
-                )
+                Column(Modifier.weight(BODY_WEIGHT).fillMaxHeight().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("The tree the body describes", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.outline)
+
+                    // The tree walks the body that was DRAWN rather than the text being typed: a tree
+                    // rebuilt from half-written JSON would flicker through shapes nobody sent.
+                    BodyTree(
+                        body = drawn,
+                        unknownTypes = log.unknownTypes,
+                        selectedId = selectedId,
+                        onSelect = { selectedId = it },
+                        modifier = Modifier.fillMaxWidth().weight(TREE_WEIGHT),
+                    )
+
+                    HorizontalDivider()
+
+                    BodyEditor(
+                        text = text,
+                        failure = failure,
+                        onChange = ::offer,
+                        modifier = Modifier.fillMaxWidth().weight(1f - TREE_WEIGHT),
+                    )
+                }
 
                 VerticalDivider()
 
@@ -79,6 +100,7 @@ public fun PlaygroundApp() {
                     mode = mode,
                     body = drawn,
                     log = log,
+                    selectedId = selectedId,
                     onModeChange = ::switchTo,
                     modifier = Modifier.weight(1f - BODY_WEIGHT).fillMaxHeight(),
                 )
@@ -92,6 +114,7 @@ private fun ClientPane(
     mode: ClientMode,
     body: String,
     log: DegradationLog,
+    selectedId: String?,
     onModeChange: (ClientMode) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -115,7 +138,9 @@ private fun ClientPane(
         Box(Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState())) {
             KompotPreview(
                 body = body,
-                registry = mode.registry,
+                // Decorated, not replaced: the outline is added around the renderer the client really
+                // has, so what is drawn inside the frame is still the client's own work.
+                registry = remember(mode, selectedId) { mode.registry.outlining(selectedId) },
                 designSystem = Material3DesignSystem(),
                 json = mode.json,
                 // The WHOLE sink rather than onDegraded, because the page's subject is the one fact
@@ -136,3 +161,7 @@ private fun ClientPane(
 // Not a golden ratio and not a guess: the body is read in a monospace column where a long line is
 // common, and the screen is the thing being looked at.
 private const val BODY_WEIGHT = 0.42f
+
+// The tree is the shape of the body and the editor is its text; the shape is read more often than it
+// is typed.
+private const val TREE_WEIGHT = 0.45f
