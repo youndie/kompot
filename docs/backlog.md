@@ -47,15 +47,14 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (3)
+## Открыто (2)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-31](backlog/B-31-question-placeholder-for-unknown.md) `[?]` | Должен ли незнакомый тип без fallback рисовать заглушку? | playground | P2 | S | — |
 | [B-34](backlog/B-34-degradation-vocabulary-is-ambiguous.md) `[ ]` | Сток деградации называет тип по-разному и путает «нарисован фолбэк» с «нарисована заглушка» | — | P3 | S | — |
-| [B-33](backlog/B-33-dokka-reads-ksp-output-too-early.md) `[~]` | Dokka читает сгенерированное KSP раньше, чем оно появляется | — | infra | S/M | — |
 
-## Сделано (31)
+## Сделано (32)
 
 **Швы в toolkit'е**
 
@@ -105,6 +104,10 @@
 - [B-29](backlog/B-29-old-client-switch.md) — Переключатель «старый клиент»: три состояния деградации
 - [B-30](backlog/B-30-playground-examples-and-links.md) — Набор готовых тел и ссылки на витрину
 - [B-32](backlog/B-32-playground-states-under-test.md) — Три состояния витрины проверяются прогоном, а не глазами
+
+**Без этапа**
+
+- [B-33](backlog/B-33-dokka-reads-ksp-output-too-early.md) — Dokka читает сгенерированное KSP раньше, чем оно появляется
 
 <!-- END INDEX -->
 

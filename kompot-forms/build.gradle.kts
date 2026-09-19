@@ -61,16 +61,26 @@ ksp {
     arg("kompotModuleTag", "Forms")
 }
 
+// Where the generated sources land. The producing task is deliberately NOT attached to this directory
+// with `builtBy`: KSP reads the very source set it writes into, so making the source set depend on the
+// producer makes the producer depend on itself — Gradle answers with a circular dependency between
+// kspCommonMainKotlinMetadata and kspCommonMainKotlinMetadata. That is why the consumers below are
+// listed by name rather than served by the collection.
 kotlin.sourceSets.commonMain {
     kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
 }
 
-// Everything that READS the generated directory has to wait for it, and that is not only the
-// compilers: the per-target sources jars package commonMain too, and Gradle refuses an undeclared
-// dependency between the two. Matching on the consumers rather than listing task names, so a target
-// added later is covered without anybody remembering to.
+// For the consumers that take the PATHS out of the source set instead of the collection: those lose
+// the dependency the collection carries, and there is no way to ask Gradle which ones do.
+//
+// This list used to be the whole mechanism, and it named two kinds of consumer. Dokka was a third —
+// it reads the same directory, matched neither pattern, and therefore ran CONCURRENTLY with KSP,
+// which wipes its output directory before regenerating it. The symptom was a publish step failing
+// with FileNotFoundException on a file that does exist, once in every few runs, on branches that had
+// not touched this module (B-33). The list is incomplete by nature; the collection above is what
+// covers whoever is not on it.
 tasks.matching {
-    (it.name.startsWith("compile") || it.name.lowercase().endsWith("sourcesjar")) &&
+    (it.name.startsWith("compile") || it.name.startsWith("dokka") || it.name.lowercase().endsWith("sourcesjar")) &&
         it.name != "kspCommonMainKotlinMetadata"
 }.configureEach {
     dependsOn("kspCommonMainKotlinMetadata")
