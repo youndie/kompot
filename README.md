@@ -209,6 +209,12 @@ dependencies {
 }
 ```
 
+Moving up a version and meeting a compile error: [UPGRADING.md](UPGRADING.md) is where a break in a
+published Kotlin API is written down, with what to write instead. kompot is `0.x` and promises no
+stability — only that a break it declared is on that page. The wire's own breaks are a separate
+journal, [§13 of SPEC.md](kompot-spec/SPEC.md), addressed to somebody implementing a server rather
+than to somebody compiling against these artifacts.
+
 The platform is worth using rather than repeating the version, and not only for brevity. A version
 carries the CI run number on its tail, so **any two publishes differ** — and
 `kompot-core:0.19.0.26` beside `kompot-client:0.19.0.27` resolves quietly into a combination nobody
