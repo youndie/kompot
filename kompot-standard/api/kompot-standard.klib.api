@@ -342,11 +342,12 @@ final class io.github.youndie.kompot.standard/RowBuilder : io.github.youndie.kom
     final fun build(): io.github.youndie.kompot.standard/RowComponent // io.github.youndie.kompot.standard/RowBuilder.build|build(){}[0]
     final fun modifier(kotlin/Function1<io.github.youndie.kompot.dsl/KompotModifierBuilder, kotlin/Unit>) // io.github.youndie.kompot.standard/RowBuilder.modifier|modifier(kotlin.Function1<io.github.youndie.kompot.dsl.KompotModifierBuilder,kotlin.Unit>){}[0]
     final fun nextChildPath(): kotlin/String // io.github.youndie.kompot.standard/RowBuilder.nextChildPath|nextChildPath(){}[0]
+    final fun scrollable() // io.github.youndie.kompot.standard/RowBuilder.scrollable|scrollable(){}[0]
     final fun spacing(kotlin/Int) // io.github.youndie.kompot.standard/RowBuilder.spacing|spacing(kotlin.Int){}[0]
 }
 
 final class io.github.youndie.kompot.standard/RowComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.standard/RowComponent|null[0]
-    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin.collections/List<io.github.youndie.kompot/KompotComponent>, kotlin/Int = ..., io.github.youndie.kompot/KompotAction? = ..., kotlin/String? = ..., kotlin/String? = ...) // io.github.youndie.kompot.standard/RowComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.collections.List<io.github.youndie.kompot.KompotComponent>;kotlin.Int;io.github.youndie.kompot.KompotAction?;kotlin.String?;kotlin.String?){}[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin.collections/List<io.github.youndie.kompot/KompotComponent>, kotlin/Int = ..., io.github.youndie.kompot/KompotAction? = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ...) // io.github.youndie.kompot.standard/RowComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.collections.List<io.github.youndie.kompot.KompotComponent>;kotlin.Int;io.github.youndie.kompot.KompotAction?;kotlin.String?;kotlin.String?;kotlin.Boolean){}[0]
 
     final val action // io.github.youndie.kompot.standard/RowComponent.action|{}action[0]
         final fun <get-action>(): io.github.youndie.kompot/KompotAction? // io.github.youndie.kompot.standard/RowComponent.action.<get-action>|<get-action>(){}[0]
@@ -360,6 +361,8 @@ final class io.github.youndie.kompot.standard/RowComponent : io.github.youndie.k
         final fun <get-id>(): kotlin/String // io.github.youndie.kompot.standard/RowComponent.id.<get-id>|<get-id>(){}[0]
     final val modifiers // io.github.youndie.kompot.standard/RowComponent.modifiers|{}modifiers[0]
         final fun <get-modifiers>(): kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> // io.github.youndie.kompot.standard/RowComponent.modifiers.<get-modifiers>|<get-modifiers>(){}[0]
+    final val scrollable // io.github.youndie.kompot.standard/RowComponent.scrollable|{}scrollable[0]
+        final fun <get-scrollable>(): kotlin/Boolean // io.github.youndie.kompot.standard/RowComponent.scrollable.<get-scrollable>|<get-scrollable>(){}[0]
     final val spacing // io.github.youndie.kompot.standard/RowComponent.spacing|{}spacing[0]
         final fun <get-spacing>(): kotlin/Int // io.github.youndie.kompot.standard/RowComponent.spacing.<get-spacing>|<get-spacing>(){}[0]
 
@@ -370,7 +373,8 @@ final class io.github.youndie.kompot.standard/RowComponent : io.github.youndie.k
     final fun component5(): io.github.youndie.kompot/KompotAction? // io.github.youndie.kompot.standard/RowComponent.component5|component5(){}[0]
     final fun component6(): kotlin/String? // io.github.youndie.kompot.standard/RowComponent.component6|component6(){}[0]
     final fun component7(): kotlin/String? // io.github.youndie.kompot.standard/RowComponent.component7|component7(){}[0]
-    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin.collections/List<io.github.youndie.kompot/KompotComponent> = ..., kotlin/Int = ..., io.github.youndie.kompot/KompotAction? = ..., kotlin/String? = ..., kotlin/String? = ...): io.github.youndie.kompot.standard/RowComponent // io.github.youndie.kompot.standard/RowComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.collections.List<io.github.youndie.kompot.KompotComponent>;kotlin.Int;io.github.youndie.kompot.KompotAction?;kotlin.String?;kotlin.String?){}[0]
+    final fun component8(): kotlin/Boolean // io.github.youndie.kompot.standard/RowComponent.component8|component8(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin.collections/List<io.github.youndie.kompot/KompotComponent> = ..., kotlin/Int = ..., io.github.youndie.kompot/KompotAction? = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ...): io.github.youndie.kompot.standard/RowComponent // io.github.youndie.kompot.standard/RowComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.collections.List<io.github.youndie.kompot.KompotComponent>;kotlin.Int;io.github.youndie.kompot.KompotAction?;kotlin.String?;kotlin.String?;kotlin.Boolean){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.standard/RowComponent.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.youndie.kompot.standard/RowComponent.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.youndie.kompot.standard/RowComponent.toString|toString(){}[0]

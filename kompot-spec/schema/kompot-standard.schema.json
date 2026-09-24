@@ -367,6 +367,10 @@
             "null"
           ],
           "description": "How the children share the row's width: `start` (default), `center`, `end`, `space_between`, `space_around` or `space_evenly`. `spacing` stays the smallest gap. An unfamiliar word means `start`."
+        },
+        "scrollable": {
+          "type": "boolean",
+          "description": "Whether the row scrolls sideways when its children are wider than it. `weight` means nothing in a row that scrolls."
         }
       },
       "required": [
