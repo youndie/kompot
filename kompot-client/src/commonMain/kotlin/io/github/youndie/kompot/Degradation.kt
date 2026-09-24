@@ -55,6 +55,24 @@ public fun interface KompotDegradationSink {
         originalType: String,
         outcome: KompotDegradationOutcome,
     )
+
+    // The update channel failed: the screen keeps what it has and stops changing. The same survival
+    // as a hole in the vocabulary and the same silence without a report — a live screen that has
+    // quietly become a picture of itself looks exactly like one nobody updated.
+    //
+    // A member of its own rather than a fourth KompotDegradationKind, because the shape is different:
+    // there is no wire type to name, and the one thing a reader needs — why the channel went away, a
+    // 401 or a dropped connection — is the exception, which `onUnknown` has no place for. Defaulted, so
+    // a sink written as a lambda still compiles and reports this the way the toolkit does; a deployment
+    // that routes its degradations overrides it to route this too. Never called for cancellation:
+    // leaving the screen or changing the topic ends the subscription on purpose.
+    public fun onRealtimeFailure(
+        // The opaque topic the server handed out (SPEC.md §10.4), exactly as it was subscribed to.
+        topic: String,
+        cause: Throwable,
+    ) {
+        println("[Kompot] realtime \"$topic\" failed: $cause")
+    }
 }
 
 public val LocalKompotDegradationSink: ProvidableCompositionLocal<KompotDegradationSink> =

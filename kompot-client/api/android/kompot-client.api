@@ -114,7 +114,12 @@ public final class io/github/youndie/kompot/KompotDegradationOutcome : java/lang
 }
 
 public abstract interface class io/github/youndie/kompot/KompotDegradationSink {
+	public fun onRealtimeFailure (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public abstract fun onUnknown (Lio/github/youndie/kompot/KompotDegradationKind;Ljava/lang/String;Lio/github/youndie/kompot/KompotDegradationOutcome;)V
+}
+
+public final class io/github/youndie/kompot/KompotDegradationSink$DefaultImpls {
+	public static fun onRealtimeFailure (Lio/github/youndie/kompot/KompotDegradationSink;Ljava/lang/String;Ljava/lang/Throwable;)V
 }
 
 public abstract interface class io/github/youndie/kompot/KompotDesignSystem {

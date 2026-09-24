@@ -40,6 +40,7 @@ abstract fun interface io.github.youndie.kompot/KompotActionInterceptor { // io.
 
 abstract fun interface io.github.youndie.kompot/KompotDegradationSink { // io.github.youndie.kompot/KompotDegradationSink|null[0]
     abstract fun onUnknown(io.github.youndie.kompot/KompotDegradationKind, kotlin/String, io.github.youndie.kompot/KompotDegradationOutcome) // io.github.youndie.kompot/KompotDegradationSink.onUnknown|onUnknown(io.github.youndie.kompot.KompotDegradationKind;kotlin.String;io.github.youndie.kompot.KompotDegradationOutcome){}[0]
+    open fun onRealtimeFailure(kotlin/String, kotlin/Throwable) // io.github.youndie.kompot/KompotDegradationSink.onRealtimeFailure|onRealtimeFailure(kotlin.String;kotlin.Throwable){}[0]
 }
 
 abstract interface <#A: io.github.youndie.kompot/KompotComponent> io.github.youndie.kompot/KompotComponentRenderer { // io.github.youndie.kompot/KompotComponentRenderer|null[0]

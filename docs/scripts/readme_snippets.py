@@ -54,7 +54,7 @@ import package constructor delegate receiver param property setparam dynamic
 # Чужие имена: stdlib, Compose, kotlinx.serialization, Gradle Kotlin DSL, Ktor. Список короткий и
 # стабильный — он растёт только когда в README появляется блок с новой внешней библиотекой.
 FOREIGN = {
-    "String", "Int", "Boolean", "List", "Map", "Pair", "listOf", "mapOf", "map", "filter", "forEach",
+    "String", "Int", "Boolean", "Throwable", "List", "Map", "Pair", "listOf", "mapOf", "map", "filter", "forEach",
     "firstOrNull", "check", "require", "toString", "to", "run", "let", "also", "emptyList", "emptyMap",
     "Serializable", "SerialName", "Json", "JsonObject", "JsonPrimitive", "encodeToString", "serializer",
     "Composable", "Preview", "CompositionLocalProvider", "provides", "Modifier", "remember",
