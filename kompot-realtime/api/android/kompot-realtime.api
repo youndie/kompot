@@ -1,0 +1,63 @@
+public abstract interface class io/github/youndie/kompot/realtime/KompotRealtimeSource {
+	public abstract fun subscribe (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class io/github/youndie/kompot/realtime/KompotScreenResponse {
+	public static final field Companion Lio/github/youndie/kompot/realtime/KompotScreenResponse$Companion;
+	public fun <init> (Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;)V
+	public synthetic fun <init> (Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;)Lio/github/youndie/kompot/realtime/KompotScreenResponse;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/realtime/KompotScreenResponse;Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/realtime/KompotScreenResponse;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRealtimeTopic ()Ljava/lang/String;
+	public final fun getScreen ()Lio/github/youndie/kompot/KompotComponent;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/realtime/KompotScreenResponse$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/realtime/KompotScreenResponse$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/realtime/KompotScreenResponse;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/realtime/KompotScreenResponse;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/realtime/KompotScreenResponse$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/realtime/UpdateComponentMessage {
+	public static final field Companion Lio/github/youndie/kompot/realtime/UpdateComponentMessage$Companion;
+	public fun <init> (Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun copy (Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;)Lio/github/youndie/kompot/realtime/UpdateComponentMessage;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/realtime/UpdateComponentMessage;Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;ILjava/lang/Object;)Lio/github/youndie/kompot/realtime/UpdateComponentMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getComponent ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun getComponentId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/realtime/UpdateComponentMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/realtime/UpdateComponentMessage$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/realtime/UpdateComponentMessage;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/realtime/UpdateComponentMessage;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/realtime/UpdateComponentMessage$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+

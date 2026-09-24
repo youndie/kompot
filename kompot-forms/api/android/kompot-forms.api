@@ -1,0 +1,424 @@
+public final class io/github/youndie/kompot/forms/AmountInputComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/forms/AmountInputComponent$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)Lio/github/youndie/kompot/forms/AmountInputComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/forms/AmountInputComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lio/github/youndie/kompot/forms/AmountInputComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCurrencyFromField ()Ljava/lang/String;
+	public final fun getCurrencyPrefix ()Ljava/lang/String;
+	public final fun getCurrencySpaced ()Z
+	public final fun getCurrencySuffix ()Ljava/lang/String;
+	public final fun getFieldId ()Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/forms/AmountInputComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/forms/AmountInputComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/forms/AmountInputComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/forms/AmountInputComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/AmountInputComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/AutocompleteInputComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/forms/AutocompleteInputComponent$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/forms/AutocompleteInputComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/forms/AutocompleteInputComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/forms/AutocompleteInputComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDataSourceId ()Ljava/lang/String;
+	public final fun getFieldId ()Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public final fun getPlaceholder ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/forms/AutocompleteInputComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/forms/AutocompleteInputComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/forms/AutocompleteInputComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/forms/AutocompleteInputComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/AutocompleteInputComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/CheckboxInputComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/forms/CheckboxInputComponent$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/forms/CheckboxInputComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/forms/CheckboxInputComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/forms/CheckboxInputComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFieldId ()Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public final fun getVariant ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/forms/CheckboxInputComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/forms/CheckboxInputComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/forms/CheckboxInputComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/forms/CheckboxInputComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/CheckboxInputComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/DslKt {
+	public static final fun amountInput (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun amountInput$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun autocompleteInput (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun autocompleteInput$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun checkboxInput (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun checkboxInput$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun radioGroup (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun radioGroup$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun readOnlyField (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun readOnlyField$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun selectInput (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun selectInput$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun textInput (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZLjava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun textInput$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZLjava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+}
+
+public final class io/github/youndie/kompot/forms/FormPatchRequest {
+	public static final field Companion Lio/github/youndie/kompot/forms/FormPatchRequest$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/Map;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;)Lio/github/youndie/kompot/forms/FormPatchRequest;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/forms/FormPatchRequest;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Lio/github/youndie/kompot/forms/FormPatchRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFieldId ()Ljava/lang/String;
+	public final fun getFormId ()Ljava/lang/String;
+	public final fun getValues ()Ljava/util/Map;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/forms/FormPatchRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/forms/FormPatchRequest$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/forms/FormPatchRequest;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/forms/FormPatchRequest;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/FormPatchRequest$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/KompotCheckboxVariants {
+	public static final field INSTANCE Lio/github/youndie/kompot/forms/KompotCheckboxVariants;
+	public static final field SWITCH Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/forms/KompotFormResponse {
+	public static final field Companion Lio/github/youndie/kompot/forms/KompotFormResponse$Companion;
+	public fun <init> (Lio/github/youndie/kompot/form/FormSchema;Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;)V
+	public synthetic fun <init> (Lio/github/youndie/kompot/form/FormSchema;Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/github/youndie/kompot/form/FormSchema;
+	public final fun component2 ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Lio/github/youndie/kompot/form/FormSchema;Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;)Lio/github/youndie/kompot/forms/KompotFormResponse;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/forms/KompotFormResponse;Lio/github/youndie/kompot/form/FormSchema;Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/forms/KompotFormResponse;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRealtimeTopic ()Ljava/lang/String;
+	public final fun getSchema ()Lio/github/youndie/kompot/form/FormSchema;
+	public final fun getScreen ()Lio/github/youndie/kompot/KompotComponent;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/forms/KompotFormResponse$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/forms/KompotFormResponse$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/forms/KompotFormResponse;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/forms/KompotFormResponse;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/KompotFormResponse$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/RadioGroupComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/forms/RadioGroupComponent$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lio/github/youndie/kompot/forms/RadioGroupComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/forms/RadioGroupComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lio/github/youndie/kompot/forms/RadioGroupComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFieldId ()Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public final fun getOptions ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/forms/RadioGroupComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/forms/RadioGroupComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/forms/RadioGroupComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/forms/RadioGroupComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/RadioGroupComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/ReadOnlyFieldComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/forms/ReadOnlyFieldComponent$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/forms/ReadOnlyFieldComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/forms/ReadOnlyFieldComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/forms/ReadOnlyFieldComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFieldId ()Ljava/lang/String;
+	public final fun getHelperText ()Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/forms/ReadOnlyFieldComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/forms/ReadOnlyFieldComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/forms/ReadOnlyFieldComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/forms/ReadOnlyFieldComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/ReadOnlyFieldComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/SelectInputComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/forms/SelectInputComponent$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;)Lio/github/youndie/kompot/forms/SelectInputComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/forms/SelectInputComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/forms/SelectInputComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFieldId ()Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public final fun getOptions ()Ljava/util/List;
+	public final fun getPlaceholder ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/forms/SelectInputComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/forms/SelectInputComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/forms/SelectInputComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/forms/SelectInputComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/SelectInputComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/SelectOption {
+	public static final field Companion Lio/github/youndie/kompot/forms/SelectOption$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/Map;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;)Lio/github/youndie/kompot/forms/SelectOption;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/forms/SelectOption;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Lio/github/youndie/kompot/forms/SelectOption;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getRawMetadata ()Ljava/util/Map;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/forms/SelectOption$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/forms/SelectOption$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/forms/SelectOption;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/forms/SelectOption;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/SelectOption$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/SerializersKt {
+	public static final fun getKompotFormsSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+}
+
+public final class io/github/youndie/kompot/forms/SubmitFormAction : io/github/youndie/kompot/KompotAction {
+	public static final field Companion Lio/github/youndie/kompot/forms/SubmitFormAction$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/youndie/kompot/forms/SubmitFormAction;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/forms/SubmitFormAction;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/forms/SubmitFormAction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFormId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/forms/SubmitFormAction$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/forms/SubmitFormAction$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/forms/SubmitFormAction;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/forms/SubmitFormAction;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/SubmitFormAction$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/TextInputComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/forms/TextInputComponent$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZZ)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Z
+	public final fun component8 ()Z
+	public final fun component9 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZZ)Lio/github/youndie/kompot/forms/TextInputComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/forms/TextInputComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZZILjava/lang/Object;)Lio/github/youndie/kompot/forms/TextInputComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFieldId ()Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getMask ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public final fun getMultiline ()Z
+	public final fun getPlaceholder ()Ljava/lang/String;
+	public final fun getSecret ()Z
+	public final fun getUppercase ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/forms/TextInputComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/forms/TextInputComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/forms/TextInputComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/forms/TextInputComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/forms/TextInputComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/generated/GeneratedFormsKompotRegistrationKt {
+	public static final fun getGeneratedFormsSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+}
+

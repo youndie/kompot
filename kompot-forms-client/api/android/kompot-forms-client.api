@@ -1,0 +1,53 @@
+public final class io/github/youndie/kompot/AmountInputRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/forms/AmountInputComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/youndie/kompot/AutocompleteInputRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/forms/AutocompleteInputComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/youndie/kompot/CheckboxInputRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/forms/CheckboxInputComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/youndie/kompot/RadioGroupRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/forms/RadioGroupComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/youndie/kompot/ReadOnlyFieldRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/forms/ReadOnlyFieldComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/youndie/kompot/SelectInputRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/forms/SelectInputComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/youndie/kompot/TextInputRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/forms/TextInputComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/youndie/kompot/generated/GeneratedFormsClientKompotRegistrationKt {
+	public static final fun getGeneratedFormsClientRenderers ()Ljava/util/Map;
+}
+

@@ -74,13 +74,12 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (19)
+## Открыто (18)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-40](backlog/B-40-compose-line-1-12.md) `[ ]` | Линия Compose 1.12: четыре числа одним коммитом | release-0.38 | P0 | L | B-41 |
 | [B-58](backlog/B-58-release-0-38-0.md) `[ ]` | Выпуск 0.38.0: версия, журналы, Central | release-0.38 | P0 | S | B-40, B-41, B-42, B-43, B-44, B-45, B-46, B-47, B-48, B-49, B-50, B-51, B-52, B-53, B-54, B-55, B-56, B-57 |
-| [B-41](backlog/B-41-renovate-queue.md) `[ ]` | Очередь renovate разобрана до релиза: Kotlin 2.4.20, AGP 9.4.1, coil 3.6.3 | release-0.38 | P1 | S | — |
 | [B-42](backlog/B-42-realtime-failure-is-swallowed.md) `[ ]` | Отказ подписки на обновления проглатывается молча | release-0.38 | P1 | S | — |
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[ ]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
 | [B-44](backlog/B-44-row-and-column-alignment.md) `[ ]` | Выравнивание и распределение у row и column | release-0.38 | P1 | M | — |
@@ -98,7 +97,7 @@
 | [B-57](backlog/B-57-typescript-types-from-schema.md) `[ ]` | TypeScript-типы из schema/*.json для клиента не на Kotlin | release-0.38 | P2 | M | — |
 | [B-54](backlog/B-54-impression-is-composition-not-visibility.md) `[ ]` | Показ считается по композиции, а не по видимости | release-0.38 | P3 | M | — |
 
-## Сделано (39)
+## Сделано (40)
 
 **Швы в toolkit'е**
 
@@ -149,6 +148,10 @@
 - [B-30](backlog/B-30-playground-examples-and-links.md) — Набор готовых тел и ссылки на витрину
 - [B-31](backlog/B-31-question-placeholder-for-unknown.md) — Должен ли незнакомый тип без fallback рисовать заглушку?
 - [B-32](backlog/B-32-playground-states-under-test.md) — Три состояния витрины проверяются прогоном, а не глазами
+
+**Релиз 0.38**
+
+- [B-41](backlog/B-41-renovate-queue.md) — Очередь renovate разобрана до релиза: Kotlin 2.4.20, AGP 9.4.1, coil 3.6.3
 
 **Без этапа**
 

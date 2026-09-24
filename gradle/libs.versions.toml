@@ -3,10 +3,10 @@
 # publication come from. Bumping this changes how every module is built, so it is pinned like any
 # other dependency and moved deliberately.
 sborka = "0.4.0.91"
-androidGradlePlugin = "9.3.1"
-kotlin = "2.4.10"
+androidGradlePlugin = "9.4.1"
+kotlin = "2.4.20"
 ktor = "3.5.2"
-ksp = "2.3.11"
+ksp = "2.3.12"
 dokka = "2.2.0"
 kotlinpoet = "2.3.0"
 kotlinx-coroutines = "1.11.0"
@@ -14,7 +14,7 @@ kotlinxSerializationJson = "1.11.0"
 lettuce = "7.6.0.RELEASE"
 compose-multiplatform = "1.11.1"
 compose-material3 = "1.11.0-alpha07"
-coil3 = "3.5.0"
+coil3 = "3.6.3"
 viddik = "0.1.1.8"
 # The studio's IDE-style shell. The version carries the IntelliJ build it was cut from
 # (`0.40.0-262.10315.125`), which is why it cannot be a plain three-number bump: what has to match is
