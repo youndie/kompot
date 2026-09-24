@@ -29,6 +29,7 @@ public fun KompotRealtimeProvider(
     onUpdate: (suspend () -> Unit)? = null,
 ) {
     val updates = remember(topic) { mutableStateMapOf<String, KompotComponent>() }
+    val sink = LocalKompotDegradationSink.current
 
     LaunchedEffect(topic, onUpdate) {
         try {
@@ -38,7 +39,9 @@ public fun KompotRealtimeProvider(
             }
         } catch (e: Exception) {
             if (e is CancellationException) throw e
-            // TODO: Log the exception
+            // The screen survives — it keeps the last tree and the updates it had — which is the
+            // degradation the toolkit promises. What it may not do is survive silently.
+            sink.onRealtimeFailure(topic, e)
         }
     }
 
