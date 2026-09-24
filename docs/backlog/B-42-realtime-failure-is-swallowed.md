@@ -1,7 +1,7 @@
 ---
 id: B-42
 title: "Отказ подписки на обновления проглатывается молча"
-status: open
+status: wip
 priority: P1
 size: S
 stage: release-0.38
