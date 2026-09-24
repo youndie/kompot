@@ -42,11 +42,13 @@ compose-material3 = "1.12.0-alpha03"
 `kompot-ds-material-compose`, `kompot-forms-client`, `kompot-wizard-client`, `kompot-theme-client`,
 `kompot-preview`, `kompot-images-client-coil`, `kompot-studio`) moves to the 1.12 line itself: the
 Compose plugin, `material3` on its 1.12 alpha, and anything else compiled against one line of
-Compose. The protocol modules have no Compose in them and ask for nothing.
+Compose. The protocol modules have no Compose in them and ask for nothing on that front.
 
-- **Android:** `compileSdk` 37 or later. Compose 1.12 brings androidx material3 1.5, whose AAR
-  demands 37 of whoever depends on it, and the Compose-half AARs of kompot now say the same thing in
-  their own metadata. The protocol modules still ask for 36.
+- **Android:** `compileSdk` 37 or later, for **every** kompot module, the protocol ones included. AGP
+  writes a library's `compileSdk` into its AAR as `minCompileSdk`, so this is a requirement on the
+  app, not a detail of kompot's build. For the Compose half it would come anyway (Compose 1.12
+  brings androidx material3 1.5, which demands 37); the protocol modules follow so that the whole
+  toolkit is built against one Android API level.
 - **`kompot-studio`:** the screenshot tester it reaches at run time is viddik **0.6**, from Maven
   Central, under `io.github.youndie.viddik` (package and group both; up to 0.3.3 it was
   `ru.workinprogress`). The studio looks for the registry viddik's processor generates by that

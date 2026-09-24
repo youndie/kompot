@@ -22,10 +22,6 @@ kotlin {
     iosSimulatorArm64()
     androidLibrary {
         namespace = "io.github.youndie.kompot.wizard.client"
-        // 37 for the Compose half: Compose 1.12 brings androidx material3 1.5, whose AAR demands 37 of
-        // everyone who depends on it, so consumers of this module are asked for it regardless. The
-        // protocol modules stay on 36 — AGP publishes compileSdk as minCompileSdk, and they have no
-        // dependency that asks for more (B-40; the same reasoning as :kompot-images-client-coil).
         compileSdk = 37
         minSdk = 24
     }

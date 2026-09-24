@@ -23,10 +23,6 @@ kotlin {
     iosSimulatorArm64()
     androidLibrary {
         namespace = "io.github.youndie.kompot.ds.material.compose"
-        // 37 for the Compose half: Compose 1.12 brings androidx material3 1.5, whose AAR demands 37 of
-        // everyone who depends on it, so consumers of this module are asked for it regardless. The
-        // protocol modules stay on 36 — AGP publishes compileSdk as minCompileSdk, and they have no
-        // dependency that asks for more (B-40; the same reasoning as :kompot-images-client-coil).
         compileSdk = 37
         minSdk = 24
     }
@@ -107,17 +103,6 @@ kotlin {
 // every fixture draws with the bundled viddikTypography — so they belong in `check` on any host.
 viddik {
     verifyOnCheck = true
-}
-
-// viddik 0.6.0 adds its showroom directory (`build/generated/ksp/metadata/commonMain/kotlin`) to
-// commonMain whether or not `showroomTargets` is on, and orders the KSP tasks after the one that
-// writes it only when it IS on. With it off, every per-target KSP task reads a directory
-// `kspCommonMainKotlinMetadata` produces without depending on it, and Gradle stops the build ("uses
-// this output of task ... without declaring an explicit or implicit dependency"). This module has no
-// showroom, so the directory is taken back out rather than ordered around. Harmless once viddik stops
-// adding it (youndie/viddik#44).
-kotlin.sourceSets.getByName("commonMain").kotlin.apply {
-    setSrcDirs(srcDirs.filterNot { it.invariantSeparatorsPath.endsWith("build/generated/ksp/metadata/commonMain/kotlin") })
 }
 
 // viddik 0.6 DECLARES Java 21 in its Gradle metadata (`org.gradle.jvm.version=21`); up to 0.1.1.8 it

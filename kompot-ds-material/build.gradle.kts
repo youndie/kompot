@@ -17,7 +17,7 @@ kotlin {
     jvm()
     androidLibrary {
         namespace = "io.github.youndie.kompot.ds.material"
-        compileSdk = 36
+        compileSdk = 37
         minSdk = 24
     }
     iosX64()
