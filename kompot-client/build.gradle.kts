@@ -23,7 +23,11 @@ kotlin {
     iosSimulatorArm64()
     androidLibrary {
         namespace = "io.github.youndie.kompot.client"
-        compileSdk = 36
+        // 37 for the Compose half: Compose 1.12 brings androidx material3 1.5, whose AAR demands 37 of
+        // everyone who depends on it, so consumers of this module are asked for it regardless. The
+        // protocol modules stay on 36 — AGP publishes compileSdk as minCompileSdk, and they have no
+        // dependency that asks for more (B-40; the same reasoning as :kompot-images-client-coil).
+        compileSdk = 37
         minSdk = 24
         // The common tests run on this target too. They pass on jvm already and the modules are
         // common code with no expect/actual, so this is not about a second answer — it is about the
@@ -31,7 +35,15 @@ kotlin {
         // runs on a platform is the same silence as a suite that does not exist.
         withHostTest {}
     }
-    wasmJs { browser() }
+    wasmJs {
+        browser()
+        // Not an application: Compose 1.12 refuses to run Compose UI tests on wasmJs without an
+        // executable binary (checkComposeUiTestConfigurationForWasmJs, CMP-4906) — only a webpack
+        // bundle loads the Skiko runtime those tests draw with. The library klib is published as
+        // before; the executable exists for the browser tests. Every Compose-half module with
+        // browser tests carries the same line.
+        binaries.executable()
+    }
 
     sourceSets {
         commonMain.dependencies {

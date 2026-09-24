@@ -4,7 +4,7 @@ import io.github.youndie.kompot.KompotDegradationKind
 import io.github.youndie.kompot.studio.KompotStudioConfig
 import io.github.youndie.kompot.studio.StudioRenderPane
 import io.github.youndie.kompot.studio.toolkitRegistry
-import ru.workinprogress.viddik.core.captureComposable
+import io.github.youndie.viddik.core.captureComposable
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

@@ -20,7 +20,7 @@ import io.github.youndie.kompot.form.standard.TextValue
 import io.github.youndie.kompot.standard.NavigateAction
 import io.github.youndie.kompot.standard.CloseAction
 import kotlinx.serialization.json.Json
-import ru.workinprogress.viddik.core.captureComposable
+import io.github.youndie.viddik.core.captureComposable
 import java.awt.image.BufferedImage
 import kotlin.test.Test
 import kotlin.test.assertEquals

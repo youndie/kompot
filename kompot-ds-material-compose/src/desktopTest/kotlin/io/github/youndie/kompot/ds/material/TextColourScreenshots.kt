@@ -17,8 +17,8 @@ import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.material3.M3Colors
 import io.github.youndie.kompot.standard.ColumnComponent
 import io.github.youndie.kompot.standard.TextComponent
-import ru.workinprogress.viddik.annotations.ViddikScreenshot
-import ru.workinprogress.viddik.core.viddikTypography
+import io.github.youndie.viddik.annotations.ViddikScreenshot
+import io.github.youndie.viddik.core.viddikTypography
 
 // A design system whose typography tokens carry a colour, which is what an application writes and
 // what the toolkit's own Material3 implementation does not do — every Material3 TextStyle leaves

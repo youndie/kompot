@@ -56,7 +56,7 @@ class FrameCaptureTest {
                     name: String,
                     resolve: Boolean,
                 ): Class<*> {
-                    if (name.startsWith("ru.workinprogress.viddik")) throw ClassNotFoundException(name)
+                    if (name.startsWith("io.github.youndie.viddik")) throw ClassNotFoundException(name)
                     return super.loadClass(name, resolve)
                 }
             }

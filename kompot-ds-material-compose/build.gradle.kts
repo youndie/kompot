@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.viddik)
     id("io.github.youndie.sborka.kmp")
     alias(libs.plugins.dokka)
     id("io.github.youndie.sborka.publish")
@@ -22,10 +23,18 @@ kotlin {
     iosSimulatorArm64()
     androidLibrary {
         namespace = "io.github.youndie.kompot.ds.material.compose"
-        compileSdk = 36
+        // 37 for the Compose half: Compose 1.12 brings androidx material3 1.5, whose AAR demands 37 of
+        // everyone who depends on it, so consumers of this module are asked for it regardless. The
+        // protocol modules stay on 36 — AGP publishes compileSdk as minCompileSdk, and they have no
+        // dependency that asks for more (B-40; the same reasoning as :kompot-images-client-coil).
+        compileSdk = 37
         minSdk = 24
     }
-    wasmJs { browser() }
+    wasmJs {
+        browser()
+        // For the browser tests, not an application — see the note in :kompot-client (CMP-4906).
+        binaries.executable()
+    }
 
     sourceSets {
         commonMain.dependencies {
@@ -77,27 +86,48 @@ kotlin {
                 // :kompot-client, но не от этого модуля.
                 implementation(projects.kompotTheme)
                 implementation(projects.kompotThemeClient)
-                // Скриншот-тестер вынесен в отдельный проект viddik (соседний репозиторий) —
-                // потребляется как внешняя библиотека из reposilite (см. комментарий у viddik-*
-                // в libs.versions.toml), а не project(...).
                 // The preview harness, so the whole-screen shots below go through the same path a
                 // deployment's do — body in, real renderers, state as a parameter. Test scope: this
                 // module publishes a design system, not a preview.
                 implementation(projects.kompotPreview)
-                implementation(libs.viddik.annotations)
-                implementation(libs.viddik.testing.core)
+                // viddik itself (annotations, testing core, processor) is added by its plugin — see
+                // the `viddik` block below.
             }
         }
     }
 }
 
-dependencies {
-    add("kspDesktopTest", libs.viddik.processor)
+// The plugin puts the processor on `kspDesktopTest` and registers the generated sources — the two
+// lines this file used to write by hand, and the pair that fails silently when one is misnamed (KSP
+// reports SKIPPED and the screenshot task passes with no tests in it).
+//
+// verifyOnCheck is the one default overridden, and it is not optional: the plugin leaves goldens out
+// of `check` by default, and before it they were ordinary tests of this module that `./gradlew build`
+// ran. Taking the default would have kept CI green by no longer looking. The goldens are portable —
+// every fixture draws with the bundled viddikTypography — so they belong in `check` on any host.
+viddik {
+    verifyOnCheck = true
 }
 
-kotlin.sourceSets.getByName("desktopTest") {
-    kotlin.srcDir("build/generated/ksp/desktop/desktopTest/kotlin")
+// viddik 0.6.0 adds its showroom directory (`build/generated/ksp/metadata/commonMain/kotlin`) to
+// commonMain whether or not `showroomTargets` is on, and orders the KSP tasks after the one that
+// writes it only when it IS on. With it off, every per-target KSP task reads a directory
+// `kspCommonMainKotlinMetadata` produces without depending on it, and Gradle stops the build ("uses
+// this output of task ... without declaring an explicit or implicit dependency"). This module has no
+// showroom, so the directory is taken back out rather than ordered around. Harmless once viddik stops
+// adding it (youndie/viddik#44).
+kotlin.sourceSets.getByName("commonMain").kotlin.apply {
+    setSrcDirs(srcDirs.filterNot { it.invariantSeparatorsPath.endsWith("build/generated/ksp/metadata/commonMain/kotlin") })
 }
+
+// viddik 0.6 DECLARES Java 21 in its Gradle metadata (`org.gradle.jvm.version=21`); up to 0.1.1.8 it
+// only shipped class file 65 and said nothing. Declared, it is a resolution error: a desktopTest
+// classpath asking for Java 17 — the module's toolchain — finds no variant and the build stops before
+// compiling anything. So the TEST classpaths ask for 21, the same number the test launcher already
+// runs on; main code, and everything published, stays on the 17 floor.
+configurations
+    .matching { it.isCanBeResolved && it.name.startsWith("desktopTest") }
+    .configureEach { attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 21) }
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()

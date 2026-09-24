@@ -17,8 +17,8 @@ import io.github.youndie.kompot.SurfaceRole
 import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.standard.ButtonComponent
 import io.github.youndie.kompot.standard.CloseAction
-import ru.workinprogress.viddik.annotations.ViddikScreenshot
-import ru.workinprogress.viddik.core.viddikTypography
+import io.github.youndie.viddik.annotations.ViddikScreenshot
+import io.github.youndie.viddik.core.viddikTypography
 
 // A design system that has an opinion about the words on a button. Before the label could take one,
 // it was drawn in whatever font the machine had: Material's own typography names no family, so the

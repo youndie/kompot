@@ -24,7 +24,7 @@ import io.github.youndie.kompot.form.standard.required
 import io.github.youndie.kompot.kompotJson
 import io.github.youndie.kompot.preview.KompotPreview
 import io.github.youndie.kompot.preview.KompotPreviewState
-import ru.workinprogress.viddik.annotations.ViddikScreenshot
+import io.github.youndie.viddik.annotations.ViddikScreenshot
 
 // Unlike RendererScreenshots.kt, which photographs one renderer at a time, these shots assemble a
 // WHOLE form through buildFormScreen{} — the same DSL a real server writes its schemas with — and

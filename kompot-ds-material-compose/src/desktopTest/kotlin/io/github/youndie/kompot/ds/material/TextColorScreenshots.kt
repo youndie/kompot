@@ -18,8 +18,8 @@ import io.github.youndie.kompot.material3.M3Colors
 import io.github.youndie.kompot.standard.ColumnComponent
 import io.github.youndie.kompot.standard.TextComponent
 import io.github.youndie.kompot.standard.TextSpan
-import ru.workinprogress.viddik.annotations.ViddikScreenshot
-import ru.workinprogress.viddik.core.viddikTypography
+import io.github.youndie.viddik.annotations.ViddikScreenshot
+import io.github.youndie.viddik.core.viddikTypography
 
 // A design system whose "quiet" typography token carries a colour of its own, so the picture shows
 // the two sources of colour disagreeing rather than only one of them working.

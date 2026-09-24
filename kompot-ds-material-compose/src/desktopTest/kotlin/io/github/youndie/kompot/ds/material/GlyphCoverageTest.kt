@@ -2,7 +2,7 @@ package io.github.youndie.kompot.ds.material
 
 import kotlin.test.Test
 import kotlin.test.assertTrue
-import ru.workinprogress.viddik.core.ViddikGlyphCoverage
+import io.github.youndie.viddik.core.ViddikGlyphCoverage
 
 // A character the bundled font lacks is drawn with a substituted system one, and that differs between
 // platforms. From the outside it looks like a screenshot mismatch of a fraction of a percent — "it

@@ -199,6 +199,15 @@ afterEvaluate {
     }
 }
 
+// viddik 0.6 DECLARES Java 21 in its Gradle metadata (`org.gradle.jvm.version=21`); up to 0.1.1.8 it
+// only shipped class file 65 and said nothing. Declared, it is a resolution error: a desktopTest
+// classpath asking for Java 17 — the module's toolchain — finds no variant and the build stops before
+// compiling anything. So the TEST classpaths ask for 21, the same number the test launcher already
+// runs on; main code, and everything published, stays on the 17 floor.
+configurations
+    .matching { it.isCanBeResolved && it.name.startsWith("desktopTest") }
+    .configureEach { attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 21) }
+
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 

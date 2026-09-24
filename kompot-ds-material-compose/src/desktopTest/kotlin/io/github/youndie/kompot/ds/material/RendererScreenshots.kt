@@ -55,8 +55,8 @@ import io.github.youndie.kompot.form.standard.RequiredRule
 import io.github.youndie.kompot.form.standard.SelectionFieldDefinition
 import io.github.youndie.kompot.form.standard.TextFieldDefinition
 import io.github.youndie.kompot.form.standard.TextValue
-import ru.workinprogress.viddik.annotations.ViddikScreenshot
-import ru.workinprogress.viddik.core.viddikTypography
+import io.github.youndie.viddik.annotations.ViddikScreenshot
+import io.github.youndie.viddik.core.viddikTypography
 
 // Text, Button and Column read no FormController, but the renderer interface asks for one uniformly.
 // internal rather than private, because ComplexFormScreenshots.kt in this module uses it too and a

@@ -87,7 +87,7 @@ class StoriesTest {
                     name: String,
                     resolve: Boolean,
                 ): Class<*> {
-                    if (name.startsWith("ru.workinprogress.viddik.generated")) throw ClassNotFoundException(name)
+                    if (name.startsWith("io.github.youndie.viddik.generated")) throw ClassNotFoundException(name)
                     return super.loadClass(name, resolve)
                 }
             }

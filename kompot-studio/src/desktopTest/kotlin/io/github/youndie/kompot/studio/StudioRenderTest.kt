@@ -14,7 +14,7 @@ import io.github.youndie.kompot.standard.KompotPageLoader
 import io.github.youndie.kompot.standard.KompotPageResponse
 import io.github.youndie.kompot.studio.tree.SELECTION_RGB
 import io.github.youndie.kompot.theme.KompotTheme
-import ru.workinprogress.viddik.core.captureComposable
+import io.github.youndie.viddik.core.captureComposable
 import java.awt.image.BufferedImage
 import kotlin.test.Test
 import kotlin.test.assertContains

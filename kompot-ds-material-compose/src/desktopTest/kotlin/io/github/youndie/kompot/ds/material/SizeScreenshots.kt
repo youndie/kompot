@@ -10,7 +10,7 @@ import io.github.youndie.kompot.material3.M3Typography
 import io.github.youndie.kompot.standard.ColumnComponent
 import io.github.youndie.kompot.standard.RowComponent
 import io.github.youndie.kompot.standard.TextComponent
-import ru.workinprogress.viddik.annotations.ViddikScreenshot
+import io.github.youndie.viddik.annotations.ViddikScreenshot
 
 // The three layout techniques issue #3 reported as inexpressible, in one shot: a one-dp rule used
 // instead of a border, a two-dp stripe, and two panels of fixed width. Each of them is a number the

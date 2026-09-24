@@ -9,7 +9,7 @@ import io.github.youndie.kompot.material3.M3Typography
 import io.github.youndie.kompot.standard.ColumnComponent
 import io.github.youndie.kompot.standard.RowComponent
 import io.github.youndie.kompot.standard.TextComponent
-import ru.workinprogress.viddik.annotations.ViddikScreenshot
+import io.github.youndie.viddik.annotations.ViddikScreenshot
 
 // A weighted node reserves its share of the row — an empty one still pushes its siblings, which is how
 // the spacer idiom works — and the question is whether it PAINTS that share. The picture answers it:
