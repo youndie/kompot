@@ -4,7 +4,7 @@ title: "Короткая формулировка задачи"
 status: open          # open | wip | done | question | dropped
 priority: P1          # P0 | P1 | P2 | P3 | infra
 size: M               # XS | S | S/M | M | L | XL
-stage: v1-viewer      # upstream | spike | v1-viewer | v2-editor | v3-builder — таблица в backlog.md
+stage: v1-viewer      # upstream | spike | v1-viewer | v2-editor | v3-builder | playground | release-0.38 — таблица в backlog.md
 epic: research-studio # необязательно: id research-документа или фичи
 blocked_by: [B-NN]    # необязательно: чего ждёт; только то, что реально блокирует
 ---
