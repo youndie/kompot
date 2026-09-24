@@ -1,7 +1,7 @@
 ---
 id: B-45
 title: "box: наложение узлов друг на друга"
-status: open
+status: wip
 priority: P1
 size: M
 stage: release-0.38
