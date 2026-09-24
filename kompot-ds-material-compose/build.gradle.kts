@@ -65,6 +65,8 @@ kotlin {
                 // RendererScreenshots.kt) — реальная Material3DesignSystem живет тут, а не в
                 // :kompot-client (тот зависит от kompot-ds-material-compose в обратную сторону, не наоборот).
                 implementation(projects.kompotStandard)
+                // PerformAction, for the test that a perform answering with show_message shows it.
+                implementation(projects.kompotCommands)
                 implementation(projects.kompotForms)
                 // Рендереры :kompot-forms/:kompot-banking живут в этих sibling-модулях, а не в
                 // kompot-client (см. @KompotComponentMarker/generatedFormsClientRenderers) — их нужно

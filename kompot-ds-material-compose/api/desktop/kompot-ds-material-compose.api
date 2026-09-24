@@ -11,3 +11,7 @@ public final class io/github/youndie/kompot/ds/material/Material3RemoteThemeKt {
 	public static final fun toMaterialColorScheme (Lio/github/youndie/kompot/theme/KompotTheme;Landroidx/compose/material3/ColorScheme;Z)Landroidx/compose/material3/ColorScheme;
 }
 
+public final class io/github/youndie/kompot/ds/material/MessagesKt {
+	public static final fun withSnackbarMessages (Lio/github/youndie/kompot/KompotActionHandler;Landroidx/compose/material3/SnackbarHostState;Lkotlinx/coroutines/CoroutineScope;)Lio/github/youndie/kompot/KompotActionHandler;
+}
+

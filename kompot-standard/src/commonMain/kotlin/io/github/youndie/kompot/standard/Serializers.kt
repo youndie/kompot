@@ -16,6 +16,7 @@ public val kompotStandardSerializersModule: SerializersModule =
             subclass(OpenUrlAction::class)
             subclass(CopyTextAction::class)
             subclass(CloseAction::class)
+            subclass(ShowMessageAction::class)
             subclass(LoadPageAction::class)
         }
     }

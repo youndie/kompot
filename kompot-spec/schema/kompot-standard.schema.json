@@ -10,7 +10,8 @@
       "copy_text": "#/$defs/KompotActionCopyText",
       "load_page": "#/$defs/KompotActionLoadPage",
       "navigate": "#/$defs/KompotActionNavigate",
-      "open_url": "#/$defs/KompotActionOpenUrl"
+      "open_url": "#/$defs/KompotActionOpenUrl",
+      "show_message": "#/$defs/KompotActionShowMessage"
     },
     "KompotComponent": {
       "box": "#/$defs/KompotComponentBox",
@@ -115,6 +116,46 @@
       "required": [
         "type",
         "url"
+      ],
+      "additionalProperties": true
+    },
+    "KompotActionShowMessage": {
+      "x-kompot-kind": "variant",
+      "x-kompot-wire-type": "show_message",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "show_message"
+        },
+        "text": {
+          "type": "string"
+        },
+        "level": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "actionLabel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "action": {
+          "anyOf": [
+            {
+              "$ref": "kompot-core.schema.json#/$defs/KompotAction"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "text"
       ],
       "additionalProperties": true
     },

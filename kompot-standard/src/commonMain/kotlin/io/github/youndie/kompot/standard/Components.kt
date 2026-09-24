@@ -234,6 +234,29 @@ public data class CopyTextAction(
 @SerialName("close")
 public data object CloseAction : KompotAction
 
+// A short message in answer to what was just done — "copied", "saved", "could not reach the server".
+// An action rather than a component: the message does not live in the tree, has no id and no place
+// among the nodes; it is something that HAPPENS, and it is usually the answer to another action (a
+// `perform` answers with it, SPEC.md §16.4). The client draws it with its own design system — a
+// snackbar, a toast, a banner — because what a message looks like is the client's (§6).
+@Serializable
+@SerialName("show_message")
+public data class ShowMessageAction(
+    /** The words to show. */
+    val text: String,
+    /** How serious it is: `info` (default) or `error`. An open string; an unfamiliar word means `info`. */
+    val level: String? = null,
+    /** The words on the message's own button, e.g. "Undo". The button is shown only with an `action`. */
+    val actionLabel: String? = null,
+    /** What the message's button does. Shown only with an `actionLabel`. */
+    val action: @Polymorphic KompotAction? = null,
+) : KompotAction
+
+public object MessageLevel {
+    public const val INFO: String = "info"
+    public const val ERROR: String = "error"
+}
+
 // The words `alignment` and `arrangement` take, as constants for whoever writes a tree in Kotlin. The
 // wire keeps them open strings (SPEC.md §4.7): these are the ones this toolkit's client understands,
 // not a closed set a newer server is held to.
