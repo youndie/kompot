@@ -1,7 +1,7 @@
 ---
 id: B-40
 title: "Линия Compose 1.12: четыре числа одним коммитом"
-status: open
+status: wip
 priority: P0
 size: L
 stage: release-0.38
