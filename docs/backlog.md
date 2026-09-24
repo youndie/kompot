@@ -74,13 +74,12 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (15)
+## Открыто (14)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-58](backlog/B-58-release-0-38-0.md) `[ ]` | Выпуск 0.38.0: версия, журналы, Central | release-0.38 | P0 | S | B-40, B-41, B-42, B-43, B-44, B-45, B-46, B-47, B-48, B-49, B-50, B-51, B-52, B-53, B-54, B-55, B-56, B-57 |
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[?]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
-| [B-46](backlog/B-46-horizontal-rail.md) `[~]` | Горизонтальная прокрутка: рельс карточек | release-0.38 | P1 | M | — |
 | [B-48](backlog/B-48-local-state-research.md) `[?]` | Сколько локального состояния пускать в провод? | release-0.38 | P1 | M | — |
 | [B-49](backlog/B-49-local-state.md) `[ ]` | Локальное состояние экрана: реализация выбранной ступени | release-0.38 | P1 | L | B-48 |
 | [B-50](backlog/B-50-show-message-action.md) `[ ]` | show_message: короткое сообщение в ответ на действие | release-0.38 | P1 | S/M | — |
@@ -94,7 +93,7 @@
 | [B-54](backlog/B-54-impression-is-composition-not-visibility.md) `[ ]` | Показ считается по композиции, а не по видимости | release-0.38 | P3 | M | — |
 | [B-59](backlog/B-59-playground-old-client-for-any-type.md) `[ ]` | Переключатель «старый клиент» в плейграунде — для любого типа, а не только для демо-плагина | playground | P3 | S/M | — |
 
-## Сделано (44)
+## Сделано (45)
 
 **Швы в toolkit'е**
 
@@ -153,6 +152,7 @@
 - [B-42](backlog/B-42-realtime-failure-is-swallowed.md) — Отказ подписки на обновления проглатывается молча
 - [B-44](backlog/B-44-row-and-column-alignment.md) — Выравнивание и распределение у row и column
 - [B-45](backlog/B-45-box-overlay.md) — box: наложение узлов друг на друга
+- [B-46](backlog/B-46-horizontal-rail.md) — Горизонтальная прокрутка: рельс карточек
 
 **Без этапа**
 
