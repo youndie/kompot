@@ -1,7 +1,7 @@
 ---
 id: B-44
 title: "Выравнивание и распределение у row и column"
-status: open
+status: wip
 priority: P1
 size: M
 stage: release-0.38
