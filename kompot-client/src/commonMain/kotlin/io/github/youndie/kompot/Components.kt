@@ -63,7 +63,8 @@ public class ColumnRenderer : KompotComponentRenderer<ColumnComponent> {
                 // The tap goes on the CONTAINER rather than on a child: the whole row is the target,
                 // which is the gesture a list of openable items expects.
             modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler),
-            verticalArrangement = Arrangement.spacedBy(component.spacing.dp),
+            verticalArrangement = StackArrangement(component.arrangement, component.spacing.dp),
+            horizontalAlignment = columnAlignment(component.alignment),
         ) {
             component.children.forEach { child ->
                     // weight is a share of the height inside a column, carried by a modifier node on
@@ -104,7 +105,8 @@ public class RowRenderer : KompotComponentRenderer<RowComponent> {
         val registry = LocalKompotRegistry.current
         Row(
             modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler),
-            horizontalArrangement = Arrangement.spacedBy(component.spacing.dp),
+            horizontalArrangement = StackArrangement(component.arrangement, component.spacing.dp),
+            verticalAlignment = rowAlignment(component.alignment),
         ) {
             component.children.forEach { child ->
                     // weight is a share of the width inside a row, carried by a modifier node on the
@@ -651,7 +653,11 @@ public fun KompotLazyScreen(
             LazyColumn(
                 modifier = modifier.then(rootColumn.modifiers.toComposeModifier()),
                 contentPadding = contentPadding,
-                verticalArrangement = Arrangement.spacedBy(rootColumn.spacing.dp),
+                // The same two words the non-lazy column reads, so a screen does not lay out
+                // differently for having become lazy. Along a list that scrolls there is free space to
+                // share only while the content is shorter than the window.
+                verticalArrangement = StackArrangement(rootColumn.arrangement, rootColumn.spacing.dp),
+                horizontalAlignment = columnAlignment(rootColumn.alignment),
             ) {
                 rootColumn.children.forEach { child ->
                     if (child is PaginatedListComponent) {

@@ -28,6 +28,17 @@ public data class ColumnComponent(
     // while an unknown FIELD is simply ignored and the row renders exactly as before, merely not
     // tappable.
     val action: @Polymorphic KompotAction? = null,
+    // Where the children sit ACROSS the stack — left, centre or right of a column. Fields rather than
+    // a modifier for the reason `action` is one (SPEC.md §4.7): an unknown field is ignored and the
+    // stack is laid out as before, an unknown modifier node fails the whole parse. Open strings, like
+    // a button's variant: a word this client does not know means the default.
+    /** Where the children sit across the column: `start` (default), `center` or `end`. An unfamiliar word means `start`. */
+    val alignment: String? = null,
+    /**
+     * How the children share the column's height: `start` (default), `center`, `end`,
+     * `space_between`, `space_around` or `space_evenly`. `spacing` stays the smallest gap. An unfamiliar word means `start`.
+     */
+    val arrangement: String? = null,
 ) : KompotComponent
 
 // A horizontal container — a pair of fields side by side, say a document number and its date. A
@@ -45,6 +56,14 @@ public data class RowComponent(
     val spacing: Int = 0,
     // See ColumnComponent.action.
     val action: @Polymorphic KompotAction? = null,
+    // See ColumnComponent.alignment and .arrangement; the axes turn with the container.
+    /** Where the children sit across the row — top, middle or bottom: `start` (default), `center` or `end`. An unfamiliar word means `start`. */
+    val alignment: String? = null,
+    /**
+     * How the children share the row's width: `start` (default), `center`, `end`, `space_between`,
+     * `space_around` or `space_evenly`. `spacing` stays the smallest gap. An unfamiliar word means `start`.
+     */
+    val arrangement: String? = null,
 ) : KompotComponent
 
 /** A run of words to show. The only node that carries copy, and every string a person reads is one. */
@@ -186,3 +205,21 @@ public data class CopyTextAction(
 @Serializable
 @SerialName("close")
 public data object CloseAction : KompotAction
+
+// The words `alignment` and `arrangement` take, as constants for whoever writes a tree in Kotlin. The
+// wire keeps them open strings (SPEC.md §4.7): these are the ones this toolkit's client understands,
+// not a closed set a newer server is held to.
+public object StackAlignment {
+    public const val START: String = "start"
+    public const val CENTER: String = "center"
+    public const val END: String = "end"
+}
+
+public object StackArrangement {
+    public const val START: String = "start"
+    public const val CENTER: String = "center"
+    public const val END: String = "end"
+    public const val SPACE_BETWEEN: String = "space_between"
+    public const val SPACE_AROUND: String = "space_around"
+    public const val SPACE_EVENLY: String = "space_evenly"
+}
