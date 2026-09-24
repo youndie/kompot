@@ -5,6 +5,7 @@ status: open
 priority: P0
 size: L
 stage: release-0.38
+blocked_by: [B-41]
 ---
 
 # B-40 — Линия Compose 1.12: четыре числа одним коммитом
