@@ -35,7 +35,15 @@ kotlin {
         // runs on a platform is the same silence as a suite that does not exist.
         withHostTest {}
     }
-    wasmJs { browser() }
+    wasmJs {
+        browser()
+        // Not an application: Compose 1.12 refuses to run Compose UI tests on wasmJs without an
+        // executable binary (checkComposeUiTestConfigurationForWasmJs, CMP-4906) — only a webpack
+        // bundle loads the Skiko runtime those tests draw with. The library klib is published as
+        // before; the executable exists for the browser tests. Every Compose-half module with
+        // browser tests carries the same line.
+        binaries.executable()
+    }
 
     sourceSets {
         commonMain.dependencies {

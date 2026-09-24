@@ -30,7 +30,11 @@ kotlin {
         compileSdk = 37
         minSdk = 24
     }
-    wasmJs { browser() }
+    wasmJs {
+        browser()
+        // For the browser tests, not an application — see the note in :kompot-client (CMP-4906).
+        binaries.executable()
+    }
 
     sourceSets {
         commonMain.dependencies {
