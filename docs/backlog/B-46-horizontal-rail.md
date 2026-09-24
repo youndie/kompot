@@ -1,7 +1,7 @@
 ---
 id: B-46
 title: "Горизонтальная прокрутка: рельс карточек"
-status: open
+status: wip
 priority: P1
 size: M
 stage: release-0.38
