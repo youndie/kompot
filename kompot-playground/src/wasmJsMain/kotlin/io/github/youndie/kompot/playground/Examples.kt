@@ -96,9 +96,68 @@ private val LIVE_SCREEN_BODY: String =
     }
     """.trimIndent()
 
+// Layers (SPEC.md §4.8). The picture sets the box's size; the badge and the caption are boxes that FILL
+// it and align their own child — which is how one layer sits in a corner and another at the bottom
+// without an alignment per child on the wire.
+private val LAYERS_BODY: String =
+    """
+    {
+      "type": "column",
+      "id": "root",
+      "spacing": 12,
+      "modifiers": [ { "type": "padding", "all": 24 } ],
+      "children": [
+        {
+          "type": "text",
+          "id": "title",
+          "text": "One node laid over another",
+          "style": "headline_small",
+          "color": "on_surface"
+        },
+        {
+          "type": "box",
+          "id": "card",
+          "children": [
+            {
+              "type": "column",
+              "id": "picture",
+              "modifiers": [
+                { "type": "size", "widthDp": 320, "heightDp": 160 },
+                { "type": "background", "color": "primary_container" }
+              ],
+              "children": []
+            },
+            {
+              "type": "box",
+              "id": "badge_frame",
+              "alignment": "top_end",
+              "modifiers": [ { "type": "size", "width": "Fill", "height": "Fill" }, { "type": "padding", "all": 8 } ],
+              "children": [ { "type": "text", "id": "badge", "text": "NEW", "style": "label_large", "color": "on_primary_container" } ]
+            },
+            {
+              "type": "box",
+              "id": "caption_frame",
+              "alignment": "bottom_start",
+              "modifiers": [ { "type": "size", "width": "Fill", "height": "Fill" }, { "type": "padding", "all": 12 } ],
+              "children": [ { "type": "text", "id": "caption", "text": "A caption over the picture", "style": "title_medium", "color": "on_primary_container" } ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "text": "The badge and the caption are boxes that fill the picture and place their own child. A client older than box draws the equivalent the server names in its place.",
+          "style": "body_medium",
+          "color": "on_surface_variant"
+        }
+      ]
+    }
+    """.trimIndent()
+
 internal val EXAMPLES: List<Example> =
     listOf(
         Example("A component an older client cannot read", SAMPLE_BODY),
         Example("A form: schema and screen in one body", FORM_BODY),
         Example("A screen that names its update channel", LIVE_SCREEN_BODY),
+        Example("Layers: a badge and a caption over a picture", LAYERS_BODY),
     )

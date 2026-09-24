@@ -66,6 +66,29 @@ public data class RowComponent(
     val arrangement: String? = null,
 ) : KompotComponent
 
+/**
+ * Nodes laid over one another, in order: the first is the bottom layer. The box is as large as its
+ * children that do not fill it; a child whose size is `Fill` on an axis takes the box's extent there.
+ */
+@Serializable
+@SerialName("box")
+@KompotComponentMarker
+public data class BoxComponent(
+    override val id: String,
+    override val modifiers: List<KompotModifierNode> = emptyList(),
+    val children: List<@Polymorphic KompotComponent>,
+    // One alignment for every layer, not one per child. Per child would need either a modifier —
+    // KompotModifierNode is closed (SPEC.md §2.3), so an unknown one fails the parse of the whole
+    // response — or a wrapper object around each child, which every walker of the tree would have to
+    // learn. A layer that sits elsewhere is a nested box that fills this one and aligns its own child
+    // (SPEC.md §4.8): the same words, no new mechanism.
+    /**
+     * Where the layers sit in the box: `top_start` (default), `top_center`, `top_end`, `center_start`,
+     * `center`, `center_end`, `bottom_start`, `bottom_center` or `bottom_end`. An unfamiliar word means `top_start`.
+     */
+    val alignment: String? = null,
+) : KompotComponent
+
 /** A run of words to show. The only node that carries copy, and every string a person reads is one. */
 @Serializable
 @SerialName("text")
@@ -222,4 +245,17 @@ public object StackArrangement {
     public const val SPACE_BETWEEN: String = "space_between"
     public const val SPACE_AROUND: String = "space_around"
     public const val SPACE_EVENLY: String = "space_evenly"
+}
+
+// The words a box's `alignment` takes (SPEC.md §4.8): the two axes of StackAlignment, vertical first.
+public object BoxAlignment {
+    public const val TOP_START: String = "top_start"
+    public const val TOP_CENTER: String = "top_center"
+    public const val TOP_END: String = "top_end"
+    public const val CENTER_START: String = "center_start"
+    public const val CENTER: String = "center"
+    public const val CENTER_END: String = "center_end"
+    public const val BOTTOM_START: String = "bottom_start"
+    public const val BOTTOM_CENTER: String = "bottom_center"
+    public const val BOTTOM_END: String = "bottom_end"
 }

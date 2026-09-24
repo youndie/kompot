@@ -119,6 +119,47 @@ public fun KompotContainerContext.row(
     addComponent(RowBuilder(id, id ?: nextChildPath()).apply(block).build())
 }
 
+@KompotDsl
+public class BoxBuilder(
+    private val id: String?,
+    private val path: String = id ?: ROOT_PATH,
+) : KompotContainerContext {
+    private val children = mutableListOf<KompotComponent>()
+    private var modifiers: List<KompotModifierNode> = emptyList()
+    private var alignment: String? = null
+
+    public fun modifier(block: KompotModifierBuilder.() -> Unit) {
+        modifiers = KompotModifierBuilder().apply(block).build()
+    }
+
+    /** Where the layers sit in the box; one of [BoxAlignment]. */
+    public fun alignment(word: String) {
+        alignment = word
+    }
+
+    override fun addComponent(component: KompotComponent) {
+        children.add(component)
+    }
+
+    override fun nextChildPath(): String = "$path/${children.size}"
+
+    public fun build(): BoxComponent =
+        BoxComponent(
+            id = id ?: path,
+            modifiers = modifiers,
+            children = children,
+            alignment = alignment,
+        )
+}
+
+/** Layers over one another, bottom first. */
+public fun KompotContainerContext.box(
+    id: String? = null,
+    block: BoxBuilder.() -> Unit,
+) {
+    addComponent(BoxBuilder(id, id ?: nextChildPath()).apply(block).build())
+}
+
 public fun KompotContainerContext.text(
     text: String,
     style: TypographyToken? = null,

@@ -3,6 +3,63 @@ public final class io/github/youndie/kompot/generated/GeneratedStandardKompotReg
 	public static final fun getGeneratedStandardSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
 }
 
+public final class io/github/youndie/kompot/standard/BoxAlignment {
+	public static final field BOTTOM_CENTER Ljava/lang/String;
+	public static final field BOTTOM_END Ljava/lang/String;
+	public static final field BOTTOM_START Ljava/lang/String;
+	public static final field CENTER Ljava/lang/String;
+	public static final field CENTER_END Ljava/lang/String;
+	public static final field CENTER_START Ljava/lang/String;
+	public static final field INSTANCE Lio/github/youndie/kompot/standard/BoxAlignment;
+	public static final field TOP_CENTER Ljava/lang/String;
+	public static final field TOP_END Ljava/lang/String;
+	public static final field TOP_START Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/standard/BoxBuilder : io/github/youndie/kompot/dsl/KompotContainerContext {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun addComponent (Lio/github/youndie/kompot/KompotComponent;)V
+	public final fun alignment (Ljava/lang/String;)V
+	public final fun build ()Lio/github/youndie/kompot/standard/BoxComponent;
+	public final fun modifier (Lkotlin/jvm/functions/Function1;)V
+	public fun nextChildPath ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/standard/BoxComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/standard/BoxComponent$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/lang/String;)Lio/github/youndie/kompot/standard/BoxComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/BoxComponent;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/standard/BoxComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAlignment ()Ljava/lang/String;
+	public final fun getChildren ()Ljava/util/List;
+	public fun getId ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/standard/BoxComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/standard/BoxComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/standard/BoxComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/standard/BoxComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/standard/BoxComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
 public final class io/github/youndie/kompot/standard/ButtonComponent : io/github/youndie/kompot/KompotComponent {
 	public static final field Companion Lio/github/youndie/kompot/standard/ButtonComponent$Companion;
 	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;)V
@@ -128,6 +185,8 @@ public final class io/github/youndie/kompot/standard/CopyTextAction$Companion {
 
 public final class io/github/youndie/kompot/standard/DslKt {
 	public static final field ROOT_PATH Ljava/lang/String;
+	public static final fun box (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun box$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static final fun button (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun button$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static final fun column (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
