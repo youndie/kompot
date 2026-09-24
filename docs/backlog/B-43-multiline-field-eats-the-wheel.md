@@ -1,7 +1,7 @@
 ---
 id: B-43
 title: "Многострочное поле съедает колесо, когда прокручивать нечего (#51)"
-status: open
+status: wip
 priority: P1
 size: S
 stage: release-0.38
