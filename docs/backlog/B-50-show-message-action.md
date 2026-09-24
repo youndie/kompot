@@ -1,7 +1,7 @@
 ---
 id: B-50
 title: "show_message: короткое сообщение в ответ на действие"
-status: open
+status: wip
 priority: P1
 size: S/M
 stage: release-0.38
