@@ -79,7 +79,7 @@
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-58](backlog/B-58-release-0-38-0.md) `[ ]` | Выпуск 0.38.0: версия, журналы, Central | release-0.38 | P0 | S | B-40, B-41, B-42, B-43, B-44, B-45, B-46, B-47, B-48, B-49, B-50, B-51, B-52, B-53, B-54, B-55, B-56, B-57 |
-| [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[~]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
+| [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[?]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
 | [B-44](backlog/B-44-row-and-column-alignment.md) `[ ]` | Выравнивание и распределение у row и column | release-0.38 | P1 | M | — |
 | [B-45](backlog/B-45-box-overlay.md) `[ ]` | box: наложение узлов друг на друга | release-0.38 | P1 | M | B-44 |
 | [B-46](backlog/B-46-horizontal-rail.md) `[ ]` | Горизонтальная прокрутка: рельс карточек | release-0.38 | P1 | M | — |
