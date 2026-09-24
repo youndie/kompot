@@ -95,6 +95,34 @@ CompositionLocalProvider(
 Раньше на этом месте стоял `Boolean` `drawnAsFallback`, и лог сообщал «нарисовано через fallback»
 там, где никакого fallback не было и сервер его не присылал.
 
+### Отказ канала обновлений
+
+Экран с `realtimeTopic` (§10 SPEC) переживает падение канала так же, как дыру в словаре: дерево и
+уже пришедшие обновления остаются, новых больше нет. Живой экран, тихо ставший собственной
+фотографией, выглядит ровно как экран, который никто не обновлял, — поэтому отказ тоже уходит в сток,
+отдельным членом `onRealtimeFailure(topic, cause)`.
+
+Отдельным, а не четвёртым `KompotDegradationKind`, потому что форма другая: проводного имени типа тут
+нет, а нужное читающему — почему канал ушёл, 401 или обрыв, — это исключение. У члена есть реализация
+по умолчанию (тот же `println`), поэтому сток-лямбда выше компилируется как раньше; чтобы отказ тоже
+доехал до аналитики, сток пишется объектом:
+
+```kotlin
+object : KompotDegradationSink {
+    override fun onUnknown(kind: KompotDegradationKind, originalType: String, outcome: KompotDegradationOutcome) {
+        analytics.count("kompot.degradation", "kind" to kind.name, "type" to originalType)
+    }
+
+    override fun onRealtimeFailure(topic: String, cause: Throwable) {
+        crashReporter.breadcrumb("kompot realtime $topic failed: $cause")
+    }
+}
+```
+
+Отмена подписки отказом не считается: уход с экрана и смена топика завершают её намеренно.
+Переподключения тулкит не делает — что показывать и когда пробовать снова, решает приложение,
+получив событие.
+
 ## Видимые заглушки — опция, а не умолчание
 
 Речь только про `UNKNOWN_COMPONENT` — про тип, которого эта сборка не знает. В релизе он не рисует
