@@ -1,7 +1,7 @@
 ---
 id: B-41
 title: "Очередь renovate разобрана до релиза: Kotlin 2.4.20, AGP 9.4.1, coil 3.6.3"
-status: open
+status: wip
 priority: P1
 size: S
 stage: release-0.38
