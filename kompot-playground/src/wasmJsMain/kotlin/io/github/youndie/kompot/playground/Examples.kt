@@ -154,10 +154,48 @@ private val LAYERS_BODY: String =
     }
     """.trimIndent()
 
+// A rail of cards (SPEC.md §4.9): a row that keeps the page's width while its content scrolls sideways.
+private val RAIL_BODY: String =
+    """
+    {
+      "type": "column",
+      "id": "root",
+      "spacing": 16,
+      "modifiers": [ { "type": "padding", "all": 24 } ],
+      "children": [
+        { "type": "text", "id": "title", "text": "A rail of cards", "style": "headline_small", "color": "on_surface" },
+        {
+          "type": "row",
+          "id": "rail",
+          "spacing": 12,
+          "scrollable": true,
+          "modifiers": [ { "type": "size", "width": "Fill" } ],
+          "children": [
+            { "type": "text", "id": "card_1", "text": "Card 1", "style": "title_medium", "color": "on_primary_container", "modifiers": [ { "type": "size", "widthDp": 140, "heightDp": 96 }, { "type": "background", "color": "primary_container" }, { "type": "padding", "all": 12 } ] },
+            { "type": "text", "id": "card_2", "text": "Card 2", "style": "title_medium", "color": "on_primary_container", "modifiers": [ { "type": "size", "widthDp": 140, "heightDp": 96 }, { "type": "background", "color": "primary_container" }, { "type": "padding", "all": 12 } ] },
+            { "type": "text", "id": "card_3", "text": "Card 3", "style": "title_medium", "color": "on_primary_container", "modifiers": [ { "type": "size", "widthDp": 140, "heightDp": 96 }, { "type": "background", "color": "primary_container" }, { "type": "padding", "all": 12 } ] },
+            { "type": "text", "id": "card_4", "text": "Card 4", "style": "title_medium", "color": "on_primary_container", "modifiers": [ { "type": "size", "widthDp": 140, "heightDp": 96 }, { "type": "background", "color": "primary_container" }, { "type": "padding", "all": 12 } ] },
+            { "type": "text", "id": "card_5", "text": "Card 5", "style": "title_medium", "color": "on_primary_container", "modifiers": [ { "type": "size", "widthDp": 140, "heightDp": 96 }, { "type": "background", "color": "primary_container" }, { "type": "padding", "all": 12 } ] },
+            { "type": "text", "id": "card_6", "text": "Card 6", "style": "title_medium", "color": "on_primary_container", "modifiers": [ { "type": "size", "widthDp": 140, "heightDp": 96 }, { "type": "background", "color": "primary_container" }, { "type": "padding", "all": 12 } ] },
+            { "type": "text", "id": "card_7", "text": "Card 7", "style": "title_medium", "color": "on_primary_container", "modifiers": [ { "type": "size", "widthDp": 140, "heightDp": 96 }, { "type": "background", "color": "primary_container" }, { "type": "padding", "all": 12 } ] },
+            { "type": "text", "id": "card_8", "text": "Card 8", "style": "title_medium", "color": "on_primary_container", "modifiers": [ { "type": "size", "widthDp": 140, "heightDp": 96 }, { "type": "background", "color": "primary_container" }, { "type": "padding", "all": 12 } ] }
+          ]
+        },
+        { "type": "text", "id": "p1", "text": "The row keeps the width of the page; its content is as wide as it is and slides under a sideways gesture — a trackpad swipe, shift and the wheel, or a finger.", "style": "body_medium", "color": "on_surface_variant" },
+        { "type": "text", "id": "p2", "text": "The wheel turned over the rail still moves the page: a rail takes only the sideways gesture.", "style": "body_medium", "color": "on_surface_variant" },
+        { "type": "text", "id": "p3", "text": "A client older than the field ignores it and draws the row it always drew: the cards that fit, and nothing past the edge.", "style": "body_medium", "color": "on_surface_variant" },
+        { "type": "text", "id": "p4", "text": "In a row that scrolls, weight is ignored — a share of an unbounded width is nothing.", "style": "body_medium", "color": "on_surface_variant" },
+        { "type": "text", "id": "p5", "text": "These paragraphs are here so the page is taller than the window, which is what makes the second sentence above something to try.", "style": "body_medium", "color": "on_surface_variant" },
+        { "type": "text", "id": "p6", "text": "One more, for the same reason.", "style": "body_medium", "color": "on_surface_variant" }
+      ]
+    }
+    """.trimIndent()
+
 internal val EXAMPLES: List<Example> =
     listOf(
         Example("A component an older client cannot read", SAMPLE_BODY),
         Example("A form: schema and screen in one body", FORM_BODY),
         Example("A screen that names its update channel", LIVE_SCREEN_BODY),
         Example("Layers: a badge and a caption over a picture", LAYERS_BODY),
+        Example("A rail of cards that scrolls sideways", RAIL_BODY),
     )
