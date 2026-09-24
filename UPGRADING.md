@@ -22,6 +22,46 @@ breaks a consumer without saying so is not caught by anything here, and
 
 ---
 
+## 0.38.0 — the Compose half moves to Compose Multiplatform 1.12
+
+**Was**
+
+```toml
+compose-multiplatform = "1.11.1"
+compose-material3 = "1.11.0-alpha07"
+```
+
+**Now**
+
+```toml
+compose-multiplatform = "1.12.1"
+compose-material3 = "1.12.0-alpha03"
+```
+
+**What to change.** A build that depends on anything in the Compose half (`kompot-client`,
+`kompot-ds-material-compose`, `kompot-forms-client`, `kompot-wizard-client`, `kompot-theme-client`,
+`kompot-preview`, `kompot-images-client-coil`, `kompot-studio`) moves to the 1.12 line itself: the
+Compose plugin, `material3` on its 1.12 alpha, and anything else compiled against one line of
+Compose. The protocol modules have no Compose in them and ask for nothing.
+
+- **Android:** `compileSdk` 37 or later. Compose 1.12 brings androidx material3 1.5, whose AAR
+  demands 37 of whoever depends on it, and the Compose-half AARs of kompot now say the same thing in
+  their own metadata. The protocol modules still ask for 36.
+- **`kompot-studio`:** the screenshot tester it reaches at run time is viddik **0.6**, from Maven
+  Central, under `io.github.youndie.viddik` (package and group both; up to 0.3.3 it was
+  `ru.workinprogress`). The studio looks for the registry viddik's processor generates by that
+  package's name, so a consumer still on the old viddik gets an empty stories panel and no capture
+  buttons instead of an error. Jewel, if you pin it, is `0.41.0-262.10968.63`.
+- **viddik 0.6 in your own tests** declares Java 21 in its Gradle metadata. A test classpath that
+  asks for an older Java finds no variant; ask for 21 on the test configurations only, as
+  `kompot-ds-material-compose/build.gradle.kts` does.
+
+**Why it was worth breaking.** Mixing Compose lines does not fail where it could be read: it
+resolves cleanly, compiles, and throws `NoSuchMethodError` on the first frame inside a renderer.
+While kompot stayed on 1.11, every app using it was held on 1.11 too, for no reason of its own.
+Moving the four numbers together (Compose, material3, viddik, Jewel) is the only way the line stays
+one line.
+
 ## 0.37.0 — `KompotStudioConfig.samples` takes components, not pairs
 
 **Was**

@@ -43,6 +43,8 @@ internal fun viddikStories(loader: ClassLoader = ViddikStory::class.java.classLo
         }
     }.getOrDefault(emptyList())
 
-// Confirmed against the processor of the line this toolkit is on (0.1.1.8) rather than assumed from a
-// newer one: the class the generator writes, and the property it puts the list in.
-private const val REGISTRY = "ru.workinprogress.viddik.generated.GeneratedViddikRegistry"
+// Confirmed against the processor of the line this toolkit is on (0.6.0) rather than assumed: the class
+// the generator writes, and the property it puts the list in. 0.6 also gives each component a
+// `fontScale` and a `tolerancePercent`; the studio reads neither, so a fixture recorded at another font
+// scale is shown here at 1.
+private const val REGISTRY = "io.github.youndie.viddik.generated.GeneratedViddikRegistry"

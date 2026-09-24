@@ -18,8 +18,8 @@ import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.standard.ButtonComponent
 import io.github.youndie.kompot.standard.CloseAction
 import io.github.youndie.kompot.standard.RowComponent
-import ru.workinprogress.viddik.annotations.ViddikScreenshot
-import ru.workinprogress.viddik.core.viddikTypography
+import io.github.youndie.viddik.annotations.ViddikScreenshot
+import io.github.youndie.viddik.core.viddikTypography
 
 // Two buttons whose surfaces name two different content colours, drawn under an ambient text style
 // that names a third. If the label takes the ambient colour, both come out identical and the design

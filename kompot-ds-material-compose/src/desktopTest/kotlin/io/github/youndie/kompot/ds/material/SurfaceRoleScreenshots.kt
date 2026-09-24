@@ -23,8 +23,8 @@ import io.github.youndie.kompot.material3.M3Colors
 import io.github.youndie.kompot.standard.ButtonComponent
 import io.github.youndie.kompot.standard.CloseAction
 import io.github.youndie.kompot.standard.ColumnComponent
-import ru.workinprogress.viddik.annotations.ViddikScreenshot
-import ru.workinprogress.viddik.core.viddikTypography
+import io.github.youndie.viddik.annotations.ViddikScreenshot
+import io.github.youndie.viddik.core.viddikTypography
 
 // A design that rounds nothing, fills its fields and forbids borders. None of it could be expressed:
 // a Material button takes its shape from ButtonDefaults, not from MaterialTheme.shapes, so zeroing

@@ -20,8 +20,8 @@ import io.github.youndie.kompot.standard.ColumnComponent
 import io.github.youndie.kompot.standard.OpenUrlAction
 import io.github.youndie.kompot.standard.TextComponent
 import io.github.youndie.kompot.standard.TextSpan
-import ru.workinprogress.viddik.annotations.ViddikScreenshot
-import ru.workinprogress.viddik.core.viddikTypography
+import io.github.youndie.viddik.annotations.ViddikScreenshot
+import io.github.youndie.viddik.core.viddikTypography
 
 // A design system with tokens for the runs a piece of prose is made of. Copied from MaterialTheme so
 // the bundled font survives — a bare TextStyle names no family and would put the golden back in the

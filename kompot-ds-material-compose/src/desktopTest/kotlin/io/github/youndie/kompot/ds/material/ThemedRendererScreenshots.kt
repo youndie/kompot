@@ -21,8 +21,8 @@ import io.github.youndie.kompot.standard.TextComponent
 import io.github.youndie.kompot.theme.KompotTheme
 import io.github.youndie.kompot.theme.kompotTheme
 import io.github.youndie.kompot.theme.client.RemoteThemeDesignSystem
-import ru.workinprogress.viddik.annotations.ViddikScreenshot
-import ru.workinprogress.viddik.core.viddikTypography
+import io.github.youndie.viddik.annotations.ViddikScreenshot
+import io.github.youndie.viddik.core.viddikTypography
 
 // The one place where the point of a server-driven theme is visible: the SAME component tree
 // photographed three times, and only the goldens differ. No component, no renderer and no token
