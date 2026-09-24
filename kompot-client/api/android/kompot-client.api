@@ -18,6 +18,13 @@ public final class io/github/youndie/kompot/AnalyticsActionInterceptor : io/gith
 	public fun intercept (Lio/github/youndie/kompot/KompotActionChain;)V
 }
 
+public final class io/github/youndie/kompot/BoxRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/standard/BoxComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
 public final class io/github/youndie/kompot/ButtonRenderer : io/github/youndie/kompot/KompotComponentRenderer {
 	public static final field $stable I
 	public fun <init> ()V

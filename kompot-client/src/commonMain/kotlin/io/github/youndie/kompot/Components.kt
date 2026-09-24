@@ -576,6 +576,7 @@ public val kompotStandardRenderers: Map<KClass<out KompotComponent>, KompotCompo
     mapOf(
         ColumnComponent::class to ColumnRenderer(),
         RowComponent::class to RowRenderer(),
+        BoxComponent::class to BoxRenderer(),
         TextComponent::class to TextRenderer(),
         ButtonComponent::class to ButtonRenderer(),
         TableComponent::class to TableRenderer(),

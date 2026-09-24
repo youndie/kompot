@@ -172,6 +172,9 @@
           "$ref": "kompot-forms.schema.json#/$defs/KompotComponentAutocompleteInput"
         },
         {
+          "$ref": "kompot-standard.schema.json#/$defs/KompotComponentBox"
+        },
+        {
           "$ref": "kompot-standard.schema.json#/$defs/KompotComponentButton"
         },
         {
@@ -216,6 +219,7 @@
         "mapping": {
           "amount_input": "kompot-forms.schema.json#/$defs/KompotComponentAmountInput",
           "autocomplete_input": "kompot-forms.schema.json#/$defs/KompotComponentAutocompleteInput",
+          "box": "kompot-standard.schema.json#/$defs/KompotComponentBox",
           "button": "kompot-standard.schema.json#/$defs/KompotComponentButton",
           "checkbox_input": "kompot-forms.schema.json#/$defs/KompotComponentCheckboxInput",
           "column": "kompot-standard.schema.json#/$defs/KompotComponentColumn",

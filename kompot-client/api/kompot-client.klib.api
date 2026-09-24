@@ -72,6 +72,12 @@ final class io.github.youndie.kompot/AnalyticsActionInterceptor : io.github.youn
     final fun intercept(io.github.youndie.kompot/KompotActionChain) // io.github.youndie.kompot/AnalyticsActionInterceptor.intercept|intercept(io.github.youndie.kompot.KompotActionChain){}[0]
 }
 
+final class io.github.youndie.kompot/BoxRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.standard/BoxComponent> { // io.github.youndie.kompot/BoxRenderer|null[0]
+    constructor <init>() // io.github.youndie.kompot/BoxRenderer.<init>|<init>(){}[0]
+
+    final fun Render(io.github.youndie.kompot.standard/BoxComponent, io.github.youndie.kompot/KompotActionHandler, io.github.youndie.kompot.form/FormController, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/BoxRenderer.Render|Render(io.github.youndie.kompot.standard.BoxComponent;io.github.youndie.kompot.KompotActionHandler;io.github.youndie.kompot.form.FormController;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
 final class io.github.youndie.kompot/ButtonRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.standard/ButtonComponent> { // io.github.youndie.kompot/ButtonRenderer|null[0]
     constructor <init>() // io.github.youndie.kompot/ButtonRenderer.<init>|<init>(){}[0]
 
@@ -208,6 +214,7 @@ final val io.github.youndie.kompot/LocalKompotRegistry // io.github.youndie.komp
     final fun <get-LocalKompotRegistry>(): androidx.compose.runtime/ProvidableCompositionLocal<io.github.youndie.kompot/KompotRegistry> // io.github.youndie.kompot/LocalKompotRegistry.<get-LocalKompotRegistry>|<get-LocalKompotRegistry>(){}[0]
 final val io.github.youndie.kompot/io_github_youndie_kompot_AmountVisualTransformation$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_AmountVisualTransformation$stableprop|#static{}io_github_youndie_kompot_AmountVisualTransformation$stableprop[0]
 final val io.github.youndie.kompot/io_github_youndie_kompot_AnalyticsActionInterceptor$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_AnalyticsActionInterceptor$stableprop|#static{}io_github_youndie_kompot_AnalyticsActionInterceptor$stableprop[0]
+final val io.github.youndie.kompot/io_github_youndie_kompot_BoxRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_BoxRenderer$stableprop|#static{}io_github_youndie_kompot_BoxRenderer$stableprop[0]
 final val io.github.youndie.kompot/io_github_youndie_kompot_ButtonRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_ButtonRenderer$stableprop|#static{}io_github_youndie_kompot_ButtonRenderer$stableprop[0]
 final val io.github.youndie.kompot/io_github_youndie_kompot_ColumnRenderer$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_ColumnRenderer$stableprop|#static{}io_github_youndie_kompot_ColumnRenderer$stableprop[0]
 final val io.github.youndie.kompot/io_github_youndie_kompot_KompotRegistry$stableprop // io.github.youndie.kompot/io_github_youndie_kompot_KompotRegistry$stableprop|#static{}io_github_youndie_kompot_KompotRegistry$stableprop[0]
@@ -246,6 +253,7 @@ final fun io.github.youndie.kompot/KompotRealtimeProvider(kotlin/String, io.gith
 final fun io.github.youndie.kompot/KompotScreen(io.github.youndie.kompot/KompotComponent, io.github.youndie.kompot/KompotRegistry, io.github.youndie.kompot.form/FormController, io.github.youndie.kompot/KompotActionHandler, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.youndie.kompot/KompotScreen|KompotScreen(io.github.youndie.kompot.KompotComponent;io.github.youndie.kompot.KompotRegistry;io.github.youndie.kompot.form.FormController;io.github.youndie.kompot.KompotActionHandler;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
 final fun io.github.youndie.kompot/io_github_youndie_kompot_AmountVisualTransformation$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_AmountVisualTransformation$stableprop_getter|io_github_youndie_kompot_AmountVisualTransformation$stableprop_getter(){}[0]
 final fun io.github.youndie.kompot/io_github_youndie_kompot_AnalyticsActionInterceptor$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_AnalyticsActionInterceptor$stableprop_getter|io_github_youndie_kompot_AnalyticsActionInterceptor$stableprop_getter(){}[0]
+final fun io.github.youndie.kompot/io_github_youndie_kompot_BoxRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_BoxRenderer$stableprop_getter|io_github_youndie_kompot_BoxRenderer$stableprop_getter(){}[0]
 final fun io.github.youndie.kompot/io_github_youndie_kompot_ButtonRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_ButtonRenderer$stableprop_getter|io_github_youndie_kompot_ButtonRenderer$stableprop_getter(){}[0]
 final fun io.github.youndie.kompot/io_github_youndie_kompot_ColumnRenderer$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_ColumnRenderer$stableprop_getter|io_github_youndie_kompot_ColumnRenderer$stableprop_getter(){}[0]
 final fun io.github.youndie.kompot/io_github_youndie_kompot_KompotRegistry$stableprop_getter(): kotlin/Int // io.github.youndie.kompot/io_github_youndie_kompot_KompotRegistry$stableprop_getter|io_github_youndie_kompot_KompotRegistry$stableprop_getter(){}[0]
