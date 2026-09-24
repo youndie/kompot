@@ -194,6 +194,20 @@
               "type": "null"
             }
           ]
+        },
+        "alignment": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Where the children sit across the column: `start` (default), `center` or `end`. An unfamiliar word means `start`."
+        },
+        "arrangement": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "How the children share the column's height: `start` (default), `center`, `end`, `space_between`, `space_around` or `space_evenly`. `spacing` stays the smallest gap. An unfamiliar word means `start`."
         }
       },
       "required": [
@@ -299,6 +313,20 @@
               "type": "null"
             }
           ]
+        },
+        "alignment": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Where the children sit across the row — top, middle or bottom: `start` (default), `center` or `end`. An unfamiliar word means `start`."
+        },
+        "arrangement": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "How the children share the row's width: `start` (default), `center`, `end`, `space_between`, `space_around` or `space_evenly`. `spacing` stays the smallest gap. An unfamiliar word means `start`."
         }
       },
       "required": [

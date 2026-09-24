@@ -19,6 +19,8 @@ public class ColumnBuilder(
     private val children = mutableListOf<KompotComponent>()
     private var modifiers: List<KompotModifierNode> = emptyList()
     private var spacing: Int = 0
+    private var alignment: String? = null
+    private var arrangement: String? = null
 
     public fun modifier(block: KompotModifierBuilder.() -> Unit) {
         modifiers = KompotModifierBuilder().apply(block).build()
@@ -26,6 +28,16 @@ public class ColumnBuilder(
 
     public fun spacing(dp: Int) {
         spacing = dp
+    }
+
+    /** Where the children sit across the stack; one of [StackAlignment]. */
+    public fun alignment(word: String) {
+        alignment = word
+    }
+
+    /** How the children share the stack's length; one of [StackArrangement]. */
+    public fun arrangement(word: String) {
+        arrangement = word
     }
 
     override fun addComponent(component: KompotComponent) {
@@ -40,6 +52,8 @@ public class ColumnBuilder(
             modifiers = modifiers,
             spacing = spacing,
             children = children,
+            alignment = alignment,
+            arrangement = arrangement,
         )
 }
 
@@ -60,6 +74,8 @@ public class RowBuilder(
     private val children = mutableListOf<KompotComponent>()
     private var modifiers: List<KompotModifierNode> = emptyList()
     private var spacing: Int = 0
+    private var alignment: String? = null
+    private var arrangement: String? = null
 
     public fun modifier(block: KompotModifierBuilder.() -> Unit) {
         modifiers = KompotModifierBuilder().apply(block).build()
@@ -67,6 +83,16 @@ public class RowBuilder(
 
     public fun spacing(dp: Int) {
         spacing = dp
+    }
+
+    /** Where the children sit across the stack; one of [StackAlignment]. */
+    public fun alignment(word: String) {
+        alignment = word
+    }
+
+    /** How the children share the stack's length; one of [StackArrangement]. */
+    public fun arrangement(word: String) {
+        arrangement = word
     }
 
     override fun addComponent(component: KompotComponent) {
@@ -81,6 +107,8 @@ public class RowBuilder(
             modifiers = modifiers,
             spacing = spacing,
             children = children,
+            alignment = alignment,
+            arrangement = arrangement,
         )
 }
 

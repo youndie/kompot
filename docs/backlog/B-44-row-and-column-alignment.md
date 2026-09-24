@@ -1,7 +1,7 @@
 ---
 id: B-44
 title: "Выравнивание и распределение у row и column"
-status: open
+status: done
 priority: P1
 size: M
 stage: release-0.38
@@ -33,3 +33,37 @@ stage: release-0.38
   совместимое.
 - Якоря: `kompot-standard/src/commonMain/kotlin/io/github/youndie/kompot/standard/Components.kt`,
   `kompot-client/.../Components.kt`, `kompot-spec/SPEC.md` §4–§5, `kompot-client-tck`.
+
+## Находки
+
+### Итерация 1 — 2026-09-25
+
+**Правило `spacing` + `arrangement` — в SPEC §4.7 до кода:** `spacing` — наименьший зазор всегда,
+`arrangement` распределяет только остаток; не помещается — ровно `spacing` от начала. Готовых
+раскладок Compose для этого нет (`SpaceBetween` без зазора, `spacedBy` без распределения), поэтому
+в `kompot-client` своя `StackArrangement` на обе оси, с зеркалом для RTL.
+
+**Умолчание у `row` — `start`, то есть верх, а не середина.** Середина была бы удобнее для строки
+«иконка + подпись», но смена умолчания перерисовала бы каждый существующий экран — это не эта задача.
+
+**Ленивый корень тоже читает оба слова** (`KompotLazyScreen`): экран не должен раскладываться иначе
+оттого, что стал ленивым.
+
+**AC «фикстура корпуса случаев» невыполним в этой форме.** Корпус `kompot-client-tck` держит
+поведение форм (видимые поля, полезная нагрузка, ошибки) — геометрии в `ClientExpectation` нет.
+Поведение старого клиента держит §3 (незнакомое поле игнорируется) и
+`checkSchemaCompatibility`: все четыре поля — `field-added-optional`, «Nothing incompatible».
+
+**Kotlin-API: бинарная поломка при целых исходниках.** Конструкторы и `copy` двух data class получили
+по два параметра — `checkKotlinAbi` показал удаление старых сигнатур. Объявлено (`!`, `UPGRADING.md`).
+
+**Проверки:** 10 тестов геометрии (`StackLayoutTest`) — числа выведены из правила, не сняты с
+результата; три мутации убиты (`spacing` выпал из свободного места — 4 теста, `center` как `start`,
+`alignment` у `row` игнорируется), первая попытка первой мутации не скомпилировалась и была
+переделана. Голдены `kompot-ds-material-compose` (`viddikVerify`) не изменились: при умолчаниях новая
+раскладка совпадает со `spacedBy` пиксель в пиксель.
+
+**Стенд:** первая полная сборка на Linux-машине упала «Not enough memory to run compilation» на
+`kompot-preview:compileProductionExecutableKotlinWasmJs` — с B-40 семь модулей собирают production-wasm,
+и параллельно это упирается в 16 ГБ. Повтор прошёл; в CI не наблюдалось.
+
