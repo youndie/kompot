@@ -1,0 +1,13 @@
+public final class io/github/youndie/kompot/theme/client/RemoteThemeDesignSystem : io/github/youndie/kompot/KompotDesignSystem {
+	public static final field $stable I
+	public fun <init> (Lio/github/youndie/kompot/theme/KompotTheme;Lio/github/youndie/kompot/KompotDesignSystem;Ljava/lang/Boolean;)V
+	public synthetic fun <init> (Lio/github/youndie/kompot/theme/KompotTheme;Lio/github/youndie/kompot/KompotDesignSystem;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun resolveColor-m9voGas (Ljava/lang/String;Landroidx/compose/runtime/Composer;I)J
+	public fun resolveSurface-U35sUF4 (Ljava/lang/String;Landroidx/compose/runtime/Composer;I)Lio/github/youndie/kompot/KompotSurface;
+	public fun resolveTypography-5uXlh_k (Ljava/lang/String;Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/text/TextStyle;
+}
+
+public final class io/github/youndie/kompot/theme/client/RemoteThemeDesignSystemKt {
+	public static final fun rememberKompotDesignSystem (Lio/github/youndie/kompot/theme/KompotTheme;Lio/github/youndie/kompot/KompotDesignSystem;Ljava/lang/Boolean;Landroidx/compose/runtime/Composer;II)Lio/github/youndie/kompot/KompotDesignSystem;
+}
+

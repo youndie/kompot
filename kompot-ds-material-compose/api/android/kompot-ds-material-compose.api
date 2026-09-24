@@ -1,0 +1,13 @@
+public final class io/github/youndie/kompot/ds/material/Material3DesignSystem : io/github/youndie/kompot/KompotDesignSystem {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun resolveColor-m9voGas (Ljava/lang/String;Landroidx/compose/runtime/Composer;I)J
+	public fun resolveSurface-U35sUF4 (Ljava/lang/String;Landroidx/compose/runtime/Composer;I)Lio/github/youndie/kompot/KompotSurface;
+	public fun resolveTypography-5uXlh_k (Ljava/lang/String;Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/text/TextStyle;
+}
+
+public final class io/github/youndie/kompot/ds/material/Material3RemoteThemeKt {
+	public static final fun rememberMaterialColorScheme (Lio/github/youndie/kompot/theme/KompotTheme;ZLandroidx/compose/runtime/Composer;II)Landroidx/compose/material3/ColorScheme;
+	public static final fun toMaterialColorScheme (Lio/github/youndie/kompot/theme/KompotTheme;Landroidx/compose/material3/ColorScheme;Z)Landroidx/compose/material3/ColorScheme;
+}
+
