@@ -22,7 +22,7 @@ breaks a consumer without saying so is not caught by anything here, and
 
 ---
 
-## 0.38.0 — `RowComponent` and `ColumnComponent` gain `alignment` and `arrangement` (binary only)
+## 0.38.0 — `RowComponent` and `ColumnComponent` gain `alignment` and `arrangement`, `RowComponent` gains `scrollable` (binary only)
 
 **Was**
 
@@ -38,7 +38,7 @@ RowComponent(id = "actions", children = buttons, spacing = 8, arrangement = Stac
 ```
 
 **What to change.** Nothing in source. Recompile against 0.38: the constructors and `copy` of both
-classes take two more parameters, so a library compiled against 0.37 that builds these nodes fails at
+classes take two more parameters (three for `RowComponent`, which also gained `scrollable`), so a library compiled against 0.37 that builds these nodes fails at
 run time with `NoSuchMethodError` until it is rebuilt. Positional calls past `action` did not exist,
 so no call site changes meaning.
 

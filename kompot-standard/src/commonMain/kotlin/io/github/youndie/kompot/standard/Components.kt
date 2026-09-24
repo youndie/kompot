@@ -64,6 +64,11 @@ public data class RowComponent(
      * `space_around` or `space_evenly`. `spacing` stays the smallest gap. An unfamiliar word means `start`.
      */
     val arrangement: String? = null,
+    // A rail of cards: the row keeps its width and its content scrolls sideways. A field rather than a
+    // type of its own (SPEC.md §4.9): a client that predates it ignores the field and draws the row it
+    // always drew — still, with the tail cut off at the edge — where an unknown type would be a hole.
+    /** Whether the row scrolls sideways when its children are wider than it. `weight` means nothing in a row that scrolls. */
+    val scrollable: Boolean = false,
 ) : KompotComponent
 
 /**

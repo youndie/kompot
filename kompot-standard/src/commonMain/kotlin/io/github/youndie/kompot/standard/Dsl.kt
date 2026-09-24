@@ -76,6 +76,7 @@ public class RowBuilder(
     private var spacing: Int = 0
     private var alignment: String? = null
     private var arrangement: String? = null
+    private var scrollable: Boolean = false
 
     public fun modifier(block: KompotModifierBuilder.() -> Unit) {
         modifiers = KompotModifierBuilder().apply(block).build()
@@ -95,6 +96,11 @@ public class RowBuilder(
         arrangement = word
     }
 
+    /** Let the row scroll sideways, a rail of cards (SPEC.md §4.9). */
+    public fun scrollable() {
+        scrollable = true
+    }
+
     override fun addComponent(component: KompotComponent) {
         children.add(component)
     }
@@ -109,6 +115,7 @@ public class RowBuilder(
             children = children,
             alignment = alignment,
             arrangement = arrangement,
+            scrollable = scrollable,
         )
 }
 

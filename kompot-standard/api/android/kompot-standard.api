@@ -369,13 +369,14 @@ public final class io/github/youndie/kompot/standard/RowBuilder : io/github/youn
 	public final fun build ()Lio/github/youndie/kompot/standard/RowComponent;
 	public final fun modifier (Lkotlin/jvm/functions/Function1;)V
 	public fun nextChildPath ()Ljava/lang/String;
+	public final fun scrollable ()V
 	public final fun spacing (I)V
 }
 
 public final class io/github/youndie/kompot/standard/RowComponent : io/github/youndie/kompot/KompotComponent {
 	public static final field Companion Lio/github/youndie/kompot/standard/RowComponent$Companion;
-	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/util/List;
 	public final fun component3 ()Ljava/util/List;
@@ -383,8 +384,9 @@ public final class io/github/youndie/kompot/standard/RowComponent : io/github/yo
 	public final fun component5 ()Lio/github/youndie/kompot/KompotAction;
 	public final fun component6 ()Ljava/lang/String;
 	public final fun component7 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/standard/RowComponent;
-	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/RowComponent;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/standard/RowComponent;
+	public final fun component8 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;Z)Lio/github/youndie/kompot/standard/RowComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/RowComponent;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lio/github/youndie/kompot/standard/RowComponent;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAction ()Lio/github/youndie/kompot/KompotAction;
 	public final fun getAlignment ()Ljava/lang/String;
@@ -392,6 +394,7 @@ public final class io/github/youndie/kompot/standard/RowComponent : io/github/yo
 	public final fun getChildren ()Ljava/util/List;
 	public fun getId ()Ljava/lang/String;
 	public fun getModifiers ()Ljava/util/List;
+	public final fun getScrollable ()Z
 	public final fun getSpacing ()I
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;

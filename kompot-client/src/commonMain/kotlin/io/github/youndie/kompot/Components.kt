@@ -5,6 +5,8 @@ package io.github.youndie.kompot
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -103,8 +105,11 @@ public class RowRenderer : KompotComponentRenderer<RowComponent> {
         formController: FormController,
     ) {
         val registry = LocalKompotRegistry.current
+        // The scroll goes AFTER the row's own size: the modifiers give the viewport (a Fill row is the
+        // window's width), and horizontalScroll lets the content inside it be as wide as it is.
+        val scroll = if (component.scrollable) Modifier.horizontalScroll(rememberScrollState()) else Modifier
         Row(
-            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler),
+            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler).then(scroll),
             horizontalArrangement = StackArrangement(component.arrangement, component.spacing.dp),
             verticalAlignment = rowAlignment(component.alignment),
         ) {
@@ -113,6 +118,9 @@ public class RowRenderer : KompotComponentRenderer<RowComponent> {
                     // CHILD. Outside a row the general mapper ignores it — it is extracted and applied
                     // here, by the parent, because only the parent has a RowScope.
                 val weight =
+                    // A share of an unbounded width is nothing: in a row that scrolls, weight is ignored
+                    // (SPEC.md §4.9) rather than left to Compose, which has no sensible answer to it.
+                    if (component.scrollable) null else
                     child.modifiers
                         .filterIsInstance<KompotModifierNode.Weight>()
                         .firstOrNull()
