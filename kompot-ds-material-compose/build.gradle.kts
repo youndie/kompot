@@ -105,17 +105,6 @@ viddik {
     verifyOnCheck = true
 }
 
-// viddik 0.6.0 adds its showroom directory (`build/generated/ksp/metadata/commonMain/kotlin`) to
-// commonMain whether or not `showroomTargets` is on, and orders the KSP tasks after the one that
-// writes it only when it IS on. With it off, every per-target KSP task reads a directory
-// `kspCommonMainKotlinMetadata` produces without depending on it, and Gradle stops the build ("uses
-// this output of task ... without declaring an explicit or implicit dependency"). This module has no
-// showroom, so the directory is taken back out rather than ordered around. Harmless once viddik stops
-// adding it (youndie/viddik#44).
-kotlin.sourceSets.getByName("commonMain").kotlin.apply {
-    setSrcDirs(srcDirs.filterNot { it.invariantSeparatorsPath.endsWith("build/generated/ksp/metadata/commonMain/kotlin") })
-}
-
 // viddik 0.6 DECLARES Java 21 in its Gradle metadata (`org.gradle.jvm.version=21`); up to 0.1.1.8 it
 // only shipped class file 65 and said nothing. Declared, it is a resolution error: a desktopTest
 // classpath asking for Java 17 — the module's toolchain — finds no variant and the build stops before
