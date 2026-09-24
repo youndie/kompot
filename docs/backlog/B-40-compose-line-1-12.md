@@ -86,7 +86,7 @@ viddik ушёл до 0.6.0.
 **`compileSdk` 37 у Compose-половины.** Compose 1.12 приводит androidx material3 1.5, чей AAR требует
 37 от всех, кто от него зависит. Шесть Compose-модулей — на 37 (у coil-модуля 37 с
 [B-41](B-41-renovate-queue.md)), модули протокола — на 36: AGP публикует `compileSdk` как
-`minCompileSdk`, и потребителю протокола поднимать нечего.
+`minCompileSdk`, и потребителю протокола поднимать нечего. (Позже в тот же день модули протокола тоже подняты до 37 — см. [B-41](B-41-renovate-queue.md).)
 
 **Плейграунд.** `wasmJsBrowserDistribution` собран на Linux, открыт в браузере: три тела рисуются,
 «клиент, выпущенный раньше» показывает `UNKNOWN_COMPONENT promo_banner`, ошибок в консоли нет.

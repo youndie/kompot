@@ -367,9 +367,9 @@ The Compose half is built against **Compose Multiplatform 1.12.1** and **materia
 and the second number is not sloppiness: that line has no stable material3 at all. It is worth
 knowing because mixing lines fails late — a consumer on another line resolves foundation and runtime
 to its own version while material3 stays where these modules put it, and the pair compiles, starts,
-and throws `AbstractMethodError` at the first screen with a text field on it. On Android the Compose
-half asks for `compileSdk` 37, because androidx material3 1.5 under Compose 1.12 asks it of everyone;
-the protocol modules ask for 36. What moving from 1.11 takes is in [UPGRADING.md](UPGRADING.md).
+and throws `AbstractMethodError` at the first screen with a text field on it. On Android every module
+asks for `compileSdk` 37 — AGP publishes it as the app's minimum. What moving from 1.11 takes is in
+[UPGRADING.md](UPGRADING.md).
 
 Android is the newest of them, and it is worth saying what its absence used to do rather than only
 that it is there. Nothing failed: an Android consumer resolved the **desktop** variant, because
