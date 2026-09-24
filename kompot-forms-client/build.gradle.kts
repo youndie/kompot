@@ -22,7 +22,7 @@ kotlin {
     iosSimulatorArm64()
     androidLibrary {
         namespace = "io.github.youndie.kompot.forms.client"
-        compileSdk = 37
+        compileSdk = 36
         minSdk = 24
     }
     wasmJs { browser() }

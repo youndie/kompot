@@ -15,7 +15,7 @@ kotlin {
     jvm()
     androidLibrary {
         namespace = "io.github.youndie.form.standard"
-        compileSdk = 37
+        compileSdk = 36
         minSdk = 24
         // The common tests run on this target too. They pass on jvm already and the modules are
         // common code with no expect/actual, so this is not about a second answer — it is about the

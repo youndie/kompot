@@ -22,6 +22,10 @@ kotlin {
     iosSimulatorArm64()
     androidLibrary {
         namespace = "io.github.youndie.kompot.images.client.coil"
+        // 37 here and 36 everywhere else, on purpose. AGP writes compileSdk into the published AAR as
+        // minCompileSdk, so the number is a requirement on every consumer, not a detail of this build.
+        // coil 3.6 already demands 37 from whoever depends on it, so this module costs its consumers
+        // nothing extra; raising the rest would oblige an app that never touches coil to move too.
         compileSdk = 37
         minSdk = 24
     }

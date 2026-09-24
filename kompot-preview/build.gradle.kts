@@ -20,7 +20,7 @@ kotlin {
     iosSimulatorArm64()
     androidLibrary {
         namespace = "io.github.youndie.kompot.preview"
-        compileSdk = 37
+        compileSdk = 36
         minSdk = 24
     }
     wasmJs { browser() }
