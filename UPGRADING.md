@@ -22,7 +22,7 @@ breaks a consumer without saying so is not caught by anything here, and
 
 ---
 
-## 0.38.0 — `RowComponent` and `ColumnComponent` gain `alignment` and `arrangement`, `RowComponent` gains `scrollable` (binary only)
+## 0.38.0 — new fields on `RowComponent`, `ColumnComponent`, `ButtonComponent` and `TextComponent` (binary only)
 
 **Was**
 
@@ -37,15 +37,17 @@ RowComponent(id = "actions", children = buttons, spacing = 8)
 RowComponent(id = "actions", children = buttons, spacing = 8, arrangement = StackArrangement.SPACE_BETWEEN)
 ```
 
-**What to change.** Nothing in source. Recompile against 0.38: the constructors and `copy` of both
-classes take two more parameters (three for `RowComponent`, which also gained `scrollable`), so a library compiled against 0.37 that builds these nodes fails at
-run time with `NoSuchMethodError` until it is rebuilt. Positional calls past `action` did not exist,
-so no call site changes meaning.
+**What to change.** Nothing in source. Recompile against 0.38: the constructors and `copy` of these
+classes take more parameters — `alignment`, `arrangement` and `accessibilityLabel` on row and
+column, `scrollable` on row, `accessibilityLabel` on button, `heading` on text — so a library
+compiled against 0.37 that builds these nodes fails at run time with `NoSuchMethodError` until it is
+rebuilt. Every new parameter comes last and has a default, so no call site changes meaning.
 
 **Why it was worth breaking.** A server could not say "the price on the right" or "the buttons at
 both ends" without inventing a spacer node the design does not have. Fields on the wire, not a
 modifier, so an older client still draws the stack (SPEC.md §4.7); a data class cannot gain a field
-without its constructor changing.
+without its constructor changing. The same goes for a screen reader: a row that opens something was
+not announced as a button, and a screen had no headings to move between.
 
 ## 0.38.0 — the Compose half moves to Compose Multiplatform 1.12
 

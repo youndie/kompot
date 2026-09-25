@@ -14,6 +14,10 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -64,7 +68,7 @@ public class ColumnRenderer : KompotComponentRenderer<ColumnComponent> {
         ComposeColumn(
                 // The tap goes on the CONTAINER rather than on a child: the whole row is the target,
                 // which is the gesture a list of openable items expects.
-            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler),
+            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler, component.accessibilityLabel),
             verticalArrangement = StackArrangement(component.arrangement, component.spacing.dp),
             horizontalAlignment = columnAlignment(component.alignment),
         ) {
@@ -115,7 +119,7 @@ public class RowRenderer : KompotComponentRenderer<RowComponent> {
         // first. Only then: intrinsics cost a second measure pass, and nothing else in a row needs it.
         val rule = if (component.children.any { it is DividerComponent }) Modifier.height(IntrinsicSize.Min) else Modifier
         Row(
-            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler).then(scroll).then(rule),
+            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler, component.accessibilityLabel).then(scroll).then(rule),
             horizontalArrangement = StackArrangement(component.arrangement, component.spacing.dp),
             verticalAlignment = rowAlignment(component.alignment),
         ) {
@@ -203,7 +207,7 @@ public class TextRenderer : KompotComponentRenderer<TextComponent> {
                 // text takes the lines it needs, exactly as before.
             maxLines = component.maxLines ?: Int.MAX_VALUE,
             overflow = if (component.ellipsis) TextOverflow.Ellipsis else TextOverflow.Clip,
-            modifier = component.modifiers.toComposeModifier(),
+            modifier = component.modifiers.toComposeModifier().headingIf(component.heading),
         )
     }
 }
@@ -237,7 +241,10 @@ public class ButtonRenderer : KompotComponentRenderer<ButtonComponent> {
                 // defaultMinSize rather than height: the design system names a floor, and a button
                 // whose label wraps to two lines is still allowed to be taller than it.
             contentPadding = surface.contentPadding ?: ButtonDefaults.ContentPadding,
-            modifier = component.modifiers.toComposeModifier().minHeightOf(surface),
+            modifier =
+                component.modifiers.toComposeModifier().minHeightOf(surface).then(
+                    component.accessibilityLabel?.let { label -> Modifier.semantics { contentDescription = label } } ?: Modifier,
+                ),
         ) {
                 // The label goes through the design system too. Without it a button's words are set in
                 // the platform's fallback font: Material's own typography names no family, and the
@@ -809,7 +816,19 @@ public class KompotRegistry(
 private fun Modifier.clickableWith(
     action: KompotAction?,
     actionHandler: KompotActionHandler,
-): Modifier = if (action == null) this else clickable { actionHandler.handle(action) }
+    // SPEC.md §4.11: the role follows from there being an action, so the client sets it; the words are
+    // the server's, and only mean something on a container a person can press.
+    accessibilityLabel: String? = null,
+): Modifier =
+    if (action == null) {
+        this
+    } else {
+        clickable(role = Role.Button) { actionHandler.handle(action) }
+            .then(if (accessibilityLabel != null) Modifier.semantics { contentDescription = accessibilityLabel } else Modifier)
+    }
+
+// A heading for assistive technology to navigate by (SPEC.md §4.11).
+private fun Modifier.headingIf(heading: Boolean): Modifier = if (heading) semantics { heading() } else this
 
 // A text node cut into runs. One node rather than a row of them, because a row does not wrap and the
 // first long sentence walks off the screen — which is what makes a paragraph with a link inside it
@@ -866,6 +885,6 @@ private fun SpannedText(
         color = baseColor,
         maxLines = component.maxLines ?: Int.MAX_VALUE,
         overflow = if (component.ellipsis) TextOverflow.Ellipsis else TextOverflow.Clip,
-        modifier = component.modifiers.toComposeModifier(),
+        modifier = component.modifiers.toComposeModifier().headingIf(component.heading),
     )
 }

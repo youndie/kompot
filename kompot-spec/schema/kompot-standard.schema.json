@@ -333,6 +333,13 @@
             "null"
           ],
           "description": "Which of the client's button styles to use. An unfamiliar word draws the neutral one."
+        },
+        "accessibilityLabel": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "What assistive technology announces for the button, when its words alone do not say what it does."
         }
       },
       "required": [
@@ -394,6 +401,13 @@
             "null"
           ],
           "description": "How the children share the column's height: `start` (default), `center`, `end`, `space_between`, `space_around` or `space_evenly`. `spacing` stays the smallest gap. An unfamiliar word means `start`."
+        },
+        "accessibilityLabel": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "What assistive technology announces for this container when it has an `action`, instead of reading its children."
         }
       },
       "required": [
@@ -553,6 +567,13 @@
         "scrollable": {
           "type": "boolean",
           "description": "Whether the row scrolls sideways when its children are wider than it. `weight` means nothing in a row that scrolls."
+        },
+        "accessibilityLabel": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "What assistive technology announces for this container when it has an `action`, instead of reading its children."
         }
       },
       "required": [
@@ -679,6 +700,10 @@
         "ellipsis": {
           "type": "boolean",
           "description": "Whether a cut is marked with an ellipsis. Only meaningful together with maxLines."
+        },
+        "heading": {
+          "type": "boolean",
+          "description": "Whether this text is a heading, for assistive technology to navigate by."
         }
       },
       "required": [
