@@ -1,7 +1,7 @@
 ---
 id: B-53
 title: "refresh: перезагрузить текущий экран, не называя его"
-status: open
+status: wip
 priority: P2
 size: S
 stage: release-0.38
