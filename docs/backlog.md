@@ -75,15 +75,14 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (3)
+## Открыто (2)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-58](backlog/B-58-release-0-38-0.md) `[ ]` | Выпуск 0.38.0: версия, журналы, Central | release-0.38 | P0 | S | B-40, B-41, B-42, B-44, B-45, B-46, B-47, B-48, B-49, B-50, B-51, B-52, B-53, B-54, B-55, B-56, B-57, B-62, B-63 |
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
-| [B-64](backlog/B-64-wasm-production-compile-runs-out-of-memory.md) `[ ]` | Продакшн-компиляция wasm падает по памяти — на Linux-машине каждый раз, на CI однажды | release-0.38 | infra | S | — |
 
-## Сделано (61)
+## Сделано (62)
 
 **Швы в toolkit'е**
 
@@ -159,6 +158,7 @@
 - [B-60](backlog/B-60-unknown-actions-in-answers-go-unreported.md) — Незнакомое действие в ответе сервера не сообщается никуда
 - [B-62](backlog/B-62-server-marks-the-measured-node.md) — Как сервер помечает узел, который меряет эксперимент?
 - [B-63](backlog/B-63-compat-check-ignores-hierarchy-bases.md) — Проверка совместимости не видит изменений в базе иерархии
+- [B-64](backlog/B-64-wasm-production-compile-runs-out-of-memory.md) — Продакшн-компиляция wasm падает по памяти — на Linux-машине каждый раз, на CI однажды
 
 **Без этапа**
 
