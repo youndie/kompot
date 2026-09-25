@@ -207,6 +207,9 @@
           "$ref": "kompot-standard.schema.json#/$defs/KompotComponentDivider"
         },
         {
+          "$ref": "kompot-standard.schema.json#/$defs/KompotComponentExpandable"
+        },
+        {
           "$ref": "kompot-images.schema.json#/$defs/KompotComponentImage"
         },
         {
@@ -231,6 +234,9 @@
           "$ref": "kompot-standard.schema.json#/$defs/KompotComponentTable"
         },
         {
+          "$ref": "kompot-standard.schema.json#/$defs/KompotComponentTabs"
+        },
+        {
           "$ref": "kompot-standard.schema.json#/$defs/KompotComponentText"
         },
         {
@@ -250,6 +256,7 @@
           "checkbox_input": "kompot-forms.schema.json#/$defs/KompotComponentCheckboxInput",
           "column": "kompot-standard.schema.json#/$defs/KompotComponentColumn",
           "divider": "kompot-standard.schema.json#/$defs/KompotComponentDivider",
+          "expandable": "kompot-standard.schema.json#/$defs/KompotComponentExpandable",
           "image": "kompot-images.schema.json#/$defs/KompotComponentImage",
           "paginated_list": "kompot-standard.schema.json#/$defs/KompotComponentPaginatedList",
           "radio_group": "kompot-forms.schema.json#/$defs/KompotComponentRadioGroup",
@@ -258,6 +265,7 @@
           "select_input": "kompot-forms.schema.json#/$defs/KompotComponentSelectInput",
           "spacer": "kompot-standard.schema.json#/$defs/KompotComponentSpacer",
           "table": "kompot-standard.schema.json#/$defs/KompotComponentTable",
+          "tabs": "kompot-standard.schema.json#/$defs/KompotComponentTabs",
           "text": "kompot-standard.schema.json#/$defs/KompotComponentText",
           "text_input": "kompot-forms.schema.json#/$defs/KompotComponentTextInput",
           "wizard_screen": "kompot-wizard.schema.json#/$defs/KompotComponentWizardScreen"

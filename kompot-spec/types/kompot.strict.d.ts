@@ -447,6 +447,16 @@ export interface KompotComponentDivider {
   color?: ColorToken | null;
 }
 
+/** A section that opens and closes: [header] is always shown and toggles [content], on the client and without asking the server (SPEC.md §4.12). [expanded] is how it opens, re-applied only when a later version of the node carries a different value. */
+export interface KompotComponentExpandable {
+  type: "expandable";
+  id: string;
+  modifiers?: KompotModifierNode[];
+  header: KompotComponent;
+  content: KompotComponent;
+  expanded?: boolean;
+}
+
 export interface KompotComponentPaginatedList {
   type: "paginated_list";
   id: string;
@@ -493,6 +503,16 @@ export interface KompotComponentTable {
   rows: TableRow[];
 }
 
+/** Tabs: a strip of titles and the content of the one selected, switched by the client without asking the server (SPEC.md §4.12). [selected] is where the screen opens; the client applies it again only when a later version of the node carries a different value, so a reload does not undo the reader's choice. */
+export interface KompotComponentTabs {
+  type: "tabs";
+  id: string;
+  modifiers?: KompotModifierNode[];
+  tabs: TabsItem[];
+  /** The tab the screen opens on, counted from 0. Outside the list means the first. */
+  selected?: number;
+}
+
 /** A run of words to show. The only node that carries copy, and every string a person reads is one. */
 export interface KompotComponentText {
   type: "text";
@@ -523,6 +543,11 @@ export interface LoadPage {
 export interface TableRow {
   cells: string[];
   header?: boolean;
+}
+
+export interface TabsItem {
+  title: string;
+  content: KompotComponent;
 }
 
 export interface TextSpan {
@@ -630,6 +655,6 @@ export type FormFieldDefinition = FormFieldDefinitionAmountField | FormFieldDefi
 
 export type KompotAction = KompotActionClose | KompotActionConfirm | KompotActionCopyText | KompotActionLoadPage | KompotActionNavigate | KompotActionOpenUrl | KompotActionPerform | KompotActionPresent | KompotActionRefresh | KompotActionSequence | KompotActionShowMessage | KompotActionSubmitForm | KompotActionUpdateSession | KompotActionWizardBack | KompotActionWizardFinish | KompotActionWizardNext | KompotActionWizardStepResult;
 
-export type KompotComponent = KompotComponentAmountInput | KompotComponentAutocompleteInput | KompotComponentBox | KompotComponentButton | KompotComponentCheckboxInput | KompotComponentColumn | KompotComponentDivider | KompotComponentImage | KompotComponentPaginatedList | KompotComponentRadioGroup | KompotComponentReadOnlyField | KompotComponentRow | KompotComponentSelectInput | KompotComponentSpacer | KompotComponentTable | KompotComponentText | KompotComponentTextInput | KompotComponentWizardScreen;
+export type KompotComponent = KompotComponentAmountInput | KompotComponentAutocompleteInput | KompotComponentBox | KompotComponentButton | KompotComponentCheckboxInput | KompotComponentColumn | KompotComponentDivider | KompotComponentExpandable | KompotComponentImage | KompotComponentPaginatedList | KompotComponentRadioGroup | KompotComponentReadOnlyField | KompotComponentRow | KompotComponentSelectInput | KompotComponentSpacer | KompotComponentTable | KompotComponentTabs | KompotComponentText | KompotComponentTextInput | KompotComponentWizardScreen;
 
 export type ValidationRule = ValidationRuleMaxAmountFromField | ValidationRuleRegex | ValidationRuleRequired | ValidationRuleRequiredIf;

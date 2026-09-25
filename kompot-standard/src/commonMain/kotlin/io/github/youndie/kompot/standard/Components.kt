@@ -102,6 +102,51 @@ public data class BoxComponent(
     val alignment: String? = null,
 ) : KompotComponent
 
+/** One tab of [TabsComponent]: the words on its strip and the tree it shows. */
+@Serializable
+public data class TabsItem(
+    val title: String,
+    val content: @Polymorphic KompotComponent,
+)
+
+/**
+ * Tabs: a strip of titles and the content of the one selected, switched by the client without asking
+ * the server (SPEC.md §4.12). [selected] is where the screen opens; the client applies it again only
+ * when a later version of the node carries a different value, so a reload does not undo the reader's
+ * choice.
+ */
+// A type with state of its own rather than a flag and an action on the containers, and the reason is
+// the older client. A type it does not know degrades through the fallback the server names (§2.1) —
+// all panes one under another, say. A field it does not know is ignored, which for tabs means every
+// pane at once under a strip that does nothing, and the server would have no way to say otherwise
+// (docs/research/research-local-state.md).
+@Serializable
+@SerialName("tabs")
+@KompotComponentMarker
+public data class TabsComponent(
+    override val id: String,
+    override val modifiers: List<KompotModifierNode> = emptyList(),
+    val tabs: List<TabsItem>,
+    /** The tab the screen opens on, counted from 0. Outside the list means the first. */
+    val selected: Int = 0,
+) : KompotComponent
+
+/**
+ * A section that opens and closes: [header] is always shown and toggles [content], on the client and
+ * without asking the server (SPEC.md §4.12). [expanded] is how it opens, re-applied only when a later
+ * version of the node carries a different value.
+ */
+@Serializable
+@SerialName("expandable")
+@KompotComponentMarker
+public data class ExpandableComponent(
+    override val id: String,
+    override val modifiers: List<KompotModifierNode> = emptyList(),
+    val header: @Polymorphic KompotComponent,
+    val content: @Polymorphic KompotComponent,
+    val expanded: Boolean = false,
+) : KompotComponent
+
 /**
  * A thin rule between neighbours, drawn across its parent's axis: horizontal in a column, vertical in
  * a row. Its colour is the design system's unless the server names a token.

@@ -167,6 +167,58 @@ public fun KompotContainerContext.box(
     addComponent(BoxBuilder(id, id ?: nextChildPath()).apply(block).build())
 }
 
+@KompotDsl
+public class TabsBuilder(
+    private val id: String?,
+    private val path: String = id ?: ROOT_PATH,
+) {
+    private val tabs = mutableListOf<TabsItem>()
+    private var modifiers: List<KompotModifierNode> = emptyList()
+
+    public fun modifier(block: KompotModifierBuilder.() -> Unit) {
+        modifiers = KompotModifierBuilder().apply(block).build()
+    }
+
+    /** One tab: [title] on the strip, and a column of content under it when it is selected. */
+    public fun tab(
+        title: String,
+        id: String? = null,
+        block: ColumnBuilder.() -> Unit,
+    ) {
+        val contentPath = id ?: "$path/${tabs.size}"
+        tabs.add(TabsItem(title, ColumnBuilder(id, contentPath).apply(block).build()))
+    }
+
+    public fun build(selected: Int): TabsComponent = TabsComponent(id = id ?: path, modifiers = modifiers, tabs = tabs, selected = selected)
+}
+
+/** Tabs switched on the client (SPEC.md §4.12); [selected] is the one the screen opens on. */
+public fun KompotContainerContext.tabs(
+    id: String? = null,
+    selected: Int = 0,
+    block: TabsBuilder.() -> Unit,
+) {
+    addComponent(TabsBuilder(id, id ?: nextChildPath()).apply(block).build(selected))
+}
+
+/** A section whose [header] opens and closes its [content] on the client (SPEC.md §4.12). */
+public fun KompotContainerContext.expandable(
+    id: String? = null,
+    expanded: Boolean = false,
+    header: ColumnBuilder.() -> Unit,
+    content: ColumnBuilder.() -> Unit,
+) {
+    val path = id ?: nextChildPath()
+    addComponent(
+        ExpandableComponent(
+            id = path,
+            header = ColumnBuilder(null, "$path/header").apply(header).build(),
+            content = ColumnBuilder(null, "$path/content").apply(content).build(),
+            expanded = expanded,
+        ),
+    )
+}
+
 /** A rule across the parent's axis (SPEC.md §4.10). */
 public fun KompotContainerContext.divider(
     color: ColorToken? = null,

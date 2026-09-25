@@ -265,6 +265,8 @@ public final class io/github/youndie/kompot/standard/DslKt {
 	public static synthetic fun column$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static final fun divider-pxkI4q8 (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;)V
 	public static synthetic fun divider-pxkI4q8$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun expandable (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun expandable$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static final fun kompotScreen (Lkotlin/jvm/functions/Function1;)Lio/github/youndie/kompot/standard/ColumnComponent;
 	public static final fun paginatedList (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/util/List;Lio/github/youndie/kompot/standard/LoadPageAction;Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun paginatedList$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/util/List;Lio/github/youndie/kompot/standard/LoadPageAction;Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
@@ -274,8 +276,46 @@ public final class io/github/youndie/kompot/standard/DslKt {
 	public static synthetic fun spacer$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;ILjava/lang/Float;Ljava/lang/String;ILjava/lang/Object;)V
 	public static final fun table (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun table$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun tabs (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;ILkotlin/jvm/functions/Function1;)V
+	public static synthetic fun tabs$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;ILkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static final fun text-9Ve2xZ8 (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun text-9Ve2xZ8$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+}
+
+public final class io/github/youndie/kompot/standard/ExpandableComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/standard/ExpandableComponent$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotComponent;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotComponent;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun component4 ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun component5 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotComponent;Z)Lio/github/youndie/kompot/standard/ExpandableComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/ExpandableComponent;Ljava/lang/String;Ljava/util/List;Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotComponent;ZILjava/lang/Object;)Lio/github/youndie/kompot/standard/ExpandableComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun getExpanded ()Z
+	public final fun getHeader ()Lio/github/youndie/kompot/KompotComponent;
+	public fun getId ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/standard/ExpandableComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/standard/ExpandableComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/standard/ExpandableComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/standard/ExpandableComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/standard/ExpandableComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
 public abstract interface class io/github/youndie/kompot/standard/KompotPageLoader {
@@ -723,6 +763,78 @@ public final synthetic class io/github/youndie/kompot/standard/TableRow$$seriali
 }
 
 public final class io/github/youndie/kompot/standard/TableRow$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/standard/TabsBuilder {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun build (I)Lio/github/youndie/kompot/standard/TabsComponent;
+	public final fun modifier (Lkotlin/jvm/functions/Function1;)V
+	public final fun tab (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun tab$default (Lio/github/youndie/kompot/standard/TabsBuilder;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+}
+
+public final class io/github/youndie/kompot/standard/TabsComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/standard/TabsComponent$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;I)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()I
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/util/List;I)Lio/github/youndie/kompot/standard/TabsComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/TabsComponent;Ljava/lang/String;Ljava/util/List;Ljava/util/List;IILjava/lang/Object;)Lio/github/youndie/kompot/standard/TabsComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getId ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public final fun getSelected ()I
+	public final fun getTabs ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/standard/TabsComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/standard/TabsComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/standard/TabsComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/standard/TabsComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/standard/TabsComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/standard/TabsItem {
+	public static final field Companion Lio/github/youndie/kompot/standard/TabsItem$Companion;
+	public fun <init> (Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun copy (Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;)Lio/github/youndie/kompot/standard/TabsItem;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/TabsItem;Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;ILjava/lang/Object;)Lio/github/youndie/kompot/standard/TabsItem;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/standard/TabsItem$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/standard/TabsItem$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/standard/TabsItem;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/standard/TabsItem;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/standard/TabsItem$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 

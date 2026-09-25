@@ -326,6 +326,55 @@ private val OVERLAYS_BODY: String =
     }
     """.trimIndent()
 
+// tabs and expandable (SPEC.md §4.12): the screen changes on the client, and nothing reaches the
+// server. The tabs carry the equivalent §4.12 recommends — every pane one under another — so a client
+// older than tabs still shows everything; the sections carry none, so the switch shows all three
+// states on them.
+private val DISCLOSURE_BODY: String =
+    """
+    {
+      "type": "column",
+      "id": "root",
+      "spacing": 12,
+      "modifiers": [ { "type": "padding", "all": 24 } ],
+      "children": [
+        { "type": "text", "id": "title", "text": "Settings", "style": "headline_small", "heading": true, "color": "on_surface" },
+        {
+          "type": "tabs",
+          "id": "settings_tabs",
+          "selected": 0,
+          "tabs": [
+            { "title": "Profile", "content": { "type": "text", "id": "profile_pane", "text": "Name, photo and the address people see.", "style": "body_large", "color": "on_surface" } },
+            { "title": "Security", "content": { "type": "text", "id": "security_pane", "text": "Password, two-step sign-in and active sessions.", "style": "body_large", "color": "on_surface" } }
+          ],
+          "fallback": {
+            "type": "column", "id": "settings_tabs-fallback", "spacing": 8,
+            "children": [
+              { "type": "text", "id": "profile_title", "text": "Profile", "style": "title_medium", "heading": true, "color": "on_surface" },
+              { "type": "text", "id": "profile_body", "text": "Name, photo and the address people see.", "style": "body_large", "color": "on_surface" },
+              { "type": "text", "id": "security_title", "text": "Security", "style": "title_medium", "heading": true, "color": "on_surface" },
+              { "type": "text", "id": "security_body", "text": "Password, two-step sign-in and active sessions.", "style": "body_large", "color": "on_surface" }
+            ]
+          }
+        },
+        { "type": "divider", "id": "rule" },
+        {
+          "type": "expandable",
+          "id": "faq_offline",
+          "header": { "type": "text", "id": "faq_offline_q", "text": "Does it work offline?", "style": "title_medium", "color": "on_surface" },
+          "content": { "type": "text", "id": "faq_offline_a", "text": "The last screens you opened stay readable; changes wait for the network.", "style": "body_medium", "color": "on_surface_variant" }
+        },
+        {
+          "type": "expandable",
+          "id": "faq_export",
+          "expanded": true,
+          "header": { "type": "text", "id": "faq_export_q", "text": "Can I export my data?", "style": "title_medium", "color": "on_surface" },
+          "content": { "type": "text", "id": "faq_export_a", "text": "Yes: Settings, then Profile, then Export. The file arrives by email.", "style": "body_medium", "color": "on_surface_variant" }
+        }
+      ]
+    }
+    """.trimIndent()
+
 internal val EXAMPLES: List<Example> =
     listOf(
         Example("A component an older client cannot read", SAMPLE_BODY),
@@ -336,4 +385,5 @@ internal val EXAMPLES: List<Example> =
         Example("An answer in words: show_message", MESSAGES_BODY),
         Example("Rules and room: divider and spacer", RULES_BODY),
         Example("Over the screen: confirm and present", OVERLAYS_BODY),
+        Example("Tabs and sections that open, on the client", DISCLOSURE_BODY),
     )
