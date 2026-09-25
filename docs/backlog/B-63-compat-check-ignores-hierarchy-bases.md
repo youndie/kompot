@@ -1,7 +1,7 @@
 ---
 id: B-63
 title: "Проверка совместимости не видит изменений в базе иерархии"
-status: open
+status: wip
 priority: P1
 size: S/M
 stage: release-0.38
