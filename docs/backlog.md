@@ -75,15 +75,14 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (3)
+## Открыто (2)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-58](backlog/B-58-release-0-38-0.md) `[?]` | Выпуск 0.38.0: версия, журналы, Central | release-0.38 | P0 | S | B-40, B-41, B-42, B-44, B-45, B-46, B-47, B-48, B-49, B-50, B-51, B-52, B-53, B-54, B-55, B-56, B-57, B-62, B-63 |
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
-| [B-65](backlog/B-65-redis-test-never-starts-the-publisher.md) `[~]` | Тест Redis-шины «с одного инстанса на другой» не запускает бродкастер отправителя | — | P2 | XS | — |
 
-## Сделано (62)
+## Сделано (63)
 
 **Швы в toolkit'е**
 
@@ -170,6 +169,7 @@
 - [B-37](backlog/B-37-readme-snippets-are-unchecked.md) — Kotlin-сниппеты в README ничем не компилируются и разойдутся молча
 - [B-38](backlog/B-38-wire-name-is-not-obtainable.md) — Проводное имя компонента получить нечем, а студия его требует
 - [B-39](backlog/B-39-nothing-guards-the-published-kotlin-api.md) — Молчаливую поломку Kotlin-API не ловит ничто
+- [B-65](backlog/B-65-redis-test-never-starts-the-publisher.md) — Тест Redis-шины «с одного инстанса на другой» не запускает бродкастер отправителя
 
 <!-- END INDEX -->
 

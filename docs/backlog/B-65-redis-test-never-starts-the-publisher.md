@@ -1,7 +1,7 @@
 ---
 id: B-65
 title: "Тест Redis-шины «с одного инстанса на другой» не запускает бродкастер отправителя"
-status: wip
+status: done
 priority: P2
 size: XS
 ---
@@ -37,3 +37,24 @@ reaches the bus, but nothing will deliver it
   B получает сообщение, опубликованное через `broadcast()` на A, два разных `RedisClient`.
 - Якоря: `kompot-realtime-redis/src/test/kotlin/io/github/youndie/kompot/realtime/redis/RedisKompotUpdateBusTest.kt`,
   `kompot-realtime-server/src/commonMain/kotlin/io/github/youndie/kompot/realtime/server/KompotUpdateBroadcaster.kt`.
+
+## Находки
+
+- **Воспроизведено до правки** на Linux-машине, Redis 7.2.16 в контейнере (`redis:7.2`, порт
+  16950): `tests="4" skipped="0" failures="1"`, та же `IllegalStateException` из
+  `KompotUpdateBroadcaster.broadcast` на строке 89 теста.
+- **После правки:** `REDIS_URL=redis://127.0.0.1:16950 ./gradlew :kompot-realtime-redis:test
+  --rerun-tasks` — `tests="4" skipped="0" failures="0" errors="0"`, XML с временем этого прогона.
+  Без `REDIS_URL` `:kompot-realtime-redis:build` зелёный, четыре теста `skipped` — как в CI.
+- **Контроли (мутации после коммита, только этот тест):**
+
+  | мутация | что сказал тест |
+  |---|---|
+  | `broadcasterB.start(scope())` убран | `TimeoutCancellationException: Timed out waiting for 5000 ms` |
+  | шина A с другим префиксом канала (`"$prefix:elsewhere"`) | `TimeoutCancellationException: Timed out waiting for 5000 ms` |
+
+  Первая показывает, что доставка идёт через сборщик шины на B, вторая — что сообщение
+  действительно проходит через канал Redis, а не коротким путём внутри процесса.
+- Проверку `check(started)` в `broadcast()` правка не трогает; тест падал с момента её появления
+  и не был замечен только потому, что CI гоняет файл без `REDIS_URL`. Включать ли Redis в CI —
+  отдельный вопрос, здесь не решается.
