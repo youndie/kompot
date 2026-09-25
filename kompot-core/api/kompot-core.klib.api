@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-core>
+// Library unique name: <io.github.youndie.kompot:kompot-core>
 open annotation class io.github.youndie.kompot.dsl/KompotDsl : kotlin/Annotation { // io.github.youndie.kompot.dsl/KompotDsl|null[0]
     constructor <init>() // io.github.youndie.kompot.dsl/KompotDsl.<init>|<init>(){}[0]
 }

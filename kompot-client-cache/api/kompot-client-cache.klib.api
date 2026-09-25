@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-client-cache>
+// Library unique name: <io.github.youndie.kompot:kompot-client-cache>
 abstract fun interface io.github.youndie.kompot.cache/KompotScreenFetcher { // io.github.youndie.kompot.cache/KompotScreenFetcher|null[0]
     abstract suspend fun fetch(kotlin/String, kotlin/String?): io.github.youndie.kompot.cache/KompotFetchResult // io.github.youndie.kompot.cache/KompotScreenFetcher.fetch|fetch(kotlin.String;kotlin.String?){}[0]
 }

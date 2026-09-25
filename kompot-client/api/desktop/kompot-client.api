@@ -53,14 +53,14 @@ public final class io/github/youndie/kompot/ComponentsKt {
 public final class io/github/youndie/kompot/ComposableSingletons$ComponentsKt {
 	public static final field INSTANCE Lio/github/youndie/kompot/ComposableSingletons$ComponentsKt;
 	public fun <init> ()V
-	public final fun getLambda$-2059690228$io_github_youndie_kompot_client ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$-723670497$io_github_youndie_kompot_client ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-2059690228$io_github_youndie_kompot_kompot_client ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-723670497$io_github_youndie_kompot_kompot_client ()Lkotlin/jvm/functions/Function3;
 }
 
 public final class io/github/youndie/kompot/ComposableSingletons$ScreenLoaderKt {
 	public static final field INSTANCE Lio/github/youndie/kompot/ComposableSingletons$ScreenLoaderKt;
 	public fun <init> ()V
-	public final fun getLambda$800978476$io_github_youndie_kompot_client ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$800978476$io_github_youndie_kompot_kompot_client ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class io/github/youndie/kompot/DegradationKt {

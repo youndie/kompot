@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-realtime>
+// Library unique name: <io.github.youndie.kompot:kompot-realtime>
 abstract fun interface io.github.youndie.kompot.realtime/KompotRealtimeSource { // io.github.youndie.kompot.realtime/KompotRealtimeSource|null[0]
     abstract fun subscribe(kotlin/String): kotlinx.coroutines.flow/Flow<io.github.youndie.kompot.realtime/UpdateComponentMessage> // io.github.youndie.kompot.realtime/KompotRealtimeSource.subscribe|subscribe(kotlin.String){}[0]
 }

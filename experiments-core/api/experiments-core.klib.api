@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:experiments-core>
+// Library unique name: <io.github.youndie.kompot:experiments-core>
 final class io.github.youndie.kompot.experiments/Experiment { // io.github.youndie.kompot.experiments/Experiment|null[0]
     constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot.experiments/Variant>) // io.github.youndie.kompot.experiments/Experiment.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.experiments.Variant>){}[0]
 

@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-images-client-coil>
+// Library unique name: <io.github.youndie.kompot:kompot-images-client-coil>
 final class io.github.youndie.kompot.images.coil/KompotImageRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.images/KompotImageComponent> { // io.github.youndie.kompot.images.coil/KompotImageRenderer|null[0]
     constructor <init>() // io.github.youndie.kompot.images.coil/KompotImageRenderer.<init>|<init>(){}[0]
 

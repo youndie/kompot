@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:form-standard>
+// Library unique name: <io.github.youndie.kompot:form-standard>
 final enum class io.github.youndie.kompot.form.standard/KeyboardType : kotlin/Enum<io.github.youndie.kompot.form.standard/KeyboardType> { // io.github.youndie.kompot.form.standard/KeyboardType|null[0]
     enum entry EMAIL // io.github.youndie.kompot.form.standard/KeyboardType.EMAIL|null[0]
     enum entry NUMBER // io.github.youndie.kompot.form.standard/KeyboardType.NUMBER|null[0]

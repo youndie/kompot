@@ -1,16 +1,16 @@
 public final class io/github/youndie/kompot/studio/ComposableSingletons$KompotStudioKt {
 	public static final field INSTANCE Lio/github/youndie/kompot/studio/ComposableSingletons$KompotStudioKt;
 	public fun <init> ()V
-	public final fun getLambda$-1239233289$io_github_youndie_kompot_studio ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-1855465772$io_github_youndie_kompot_studio ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-1941829128$io_github_youndie_kompot_studio ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-4577618$io_github_youndie_kompot_studio ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-583532986$io_github_youndie_kompot_studio ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-835398275$io_github_youndie_kompot_studio ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-980485581$io_github_youndie_kompot_studio ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$1380941002$io_github_youndie_kompot_studio ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$1596364212$io_github_youndie_kompot_studio ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$998119696$io_github_youndie_kompot_studio ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-1239233289$io_github_youndie_kompot_kompot_studio ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-1855465772$io_github_youndie_kompot_kompot_studio ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-1941829128$io_github_youndie_kompot_kompot_studio ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-4577618$io_github_youndie_kompot_kompot_studio ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-583532986$io_github_youndie_kompot_kompot_studio ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-835398275$io_github_youndie_kompot_kompot_studio ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-980485581$io_github_youndie_kompot_kompot_studio ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1380941002$io_github_youndie_kompot_kompot_studio ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1596364212$io_github_youndie_kompot_kompot_studio ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$998119696$io_github_youndie_kompot_kompot_studio ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class io/github/youndie/kompot/studio/DefaultFrameKt {
@@ -160,12 +160,12 @@ public abstract interface class io/github/youndie/kompot/studio/source/ScreenSou
 public final class io/github/youndie/kompot/studio/tree/ComposableSingletons$ScreenTreeKt {
 	public static final field INSTANCE Lio/github/youndie/kompot/studio/tree/ComposableSingletons$ScreenTreeKt;
 	public fun <init> ()V
-	public final fun getLambda$1845521087$io_github_youndie_kompot_studio ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1845521087$io_github_youndie_kompot_kompot_studio ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class io/github/youndie/kompot/studio/ui/ComposableSingletons$ConfirmPopupKt {
 	public static final field INSTANCE Lio/github/youndie/kompot/studio/ui/ComposableSingletons$ConfirmPopupKt;
 	public fun <init> ()V
-	public final fun getLambda$-360450685$io_github_youndie_kompot_studio ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-360450685$io_github_youndie_kompot_kompot_studio ()Lkotlin/jvm/functions/Function2;
 }
 

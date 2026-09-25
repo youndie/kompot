@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-standard>
+// Library unique name: <io.github.youndie.kompot:kompot-standard>
 abstract interface io.github.youndie.kompot.standard/KompotPageLoader { // io.github.youndie.kompot.standard/KompotPageLoader|null[0]
     abstract suspend fun loadPage(kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String> = ...): io.github.youndie.kompot.standard/KompotPageResponse // io.github.youndie.kompot.standard/KompotPageLoader.loadPage|loadPage(kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
 }

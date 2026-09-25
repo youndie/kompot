@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-registry-annotations>
+// Library unique name: <io.github.youndie.kompot:kompot-registry-annotations>
 open annotation class io.github.youndie.kompot.registry/KompotComponentMarker : kotlin/Annotation { // io.github.youndie.kompot.registry/KompotComponentMarker|null[0]
     constructor <init>() // io.github.youndie.kompot.registry/KompotComponentMarker.<init>|<init>(){}[0]
 }

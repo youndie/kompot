@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-wizard-client>
+// Library unique name: <io.github.youndie.kompot:kompot-wizard-client>
 final class io.github.youndie.kompot/WizardScreenRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.wizard/WizardScreenComponent> { // io.github.youndie.kompot/WizardScreenRenderer|null[0]
     constructor <init>() // io.github.youndie.kompot/WizardScreenRenderer.<init>|<init>(){}[0]
 

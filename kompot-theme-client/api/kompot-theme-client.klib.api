@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-theme-client>
+// Library unique name: <io.github.youndie.kompot:kompot-theme-client>
 final class io.github.youndie.kompot.theme.client/RemoteThemeDesignSystem : io.github.youndie.kompot/KompotDesignSystem { // io.github.youndie.kompot.theme.client/RemoteThemeDesignSystem|null[0]
     constructor <init>(io.github.youndie.kompot.theme/KompotTheme, io.github.youndie.kompot/KompotDesignSystem, kotlin/Boolean? = ...) // io.github.youndie.kompot.theme.client/RemoteThemeDesignSystem.<init>|<init>(io.github.youndie.kompot.theme.KompotTheme;io.github.youndie.kompot.KompotDesignSystem;kotlin.Boolean?){}[0]
 

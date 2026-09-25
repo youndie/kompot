@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-navigation>
+// Library unique name: <io.github.youndie.kompot:kompot-navigation>
 final class io.github.youndie.kompot.navigation/NavigationBackStack { // io.github.youndie.kompot.navigation/NavigationBackStack|null[0]
     constructor <init>(kotlin.collections/List<kotlin/String>) // io.github.youndie.kompot.navigation/NavigationBackStack.<init>|<init>(kotlin.collections.List<kotlin.String>){}[0]
     constructor <init>(kotlin/String) // io.github.youndie.kompot.navigation/NavigationBackStack.<init>|<init>(kotlin.String){}[0]

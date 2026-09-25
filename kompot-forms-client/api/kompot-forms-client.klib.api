@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-forms-client>
+// Library unique name: <io.github.youndie.kompot:kompot-forms-client>
 final class io.github.youndie.kompot/AmountInputRenderer : io.github.youndie.kompot/KompotComponentRenderer<io.github.youndie.kompot.forms/AmountInputComponent> { // io.github.youndie.kompot/AmountInputRenderer|null[0]
     constructor <init>() // io.github.youndie.kompot/AmountInputRenderer.<init>|<init>(){}[0]
 

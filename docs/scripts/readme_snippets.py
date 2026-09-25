@@ -118,8 +118,25 @@ def declared_names():
     return names
 
 
+def group():
+    """Группа публикации — из `gradle.properties`, а не строкой здесь.
+
+    Строкой она уже была, и стоило группе смениться (B-58), как проверка перестала видеть координаты
+    вовсе: ноль найденных — ноль претензий, тот же зелёный вывод.
+    """
+    with open(os.path.join(ROOT, "gradle.properties")) as handle:
+        found = re.search(r"^sborka\.group=(\S+)$", handle.read(), re.M)
+    if not found:
+        raise SystemExit("gradle.properties: нет sborka.group — не с чем сверять координаты")
+    return found.group(1)
+
+
+# Группы, под которыми kompot публиковался раньше: координата с ними в README — устаревший совет.
+OLD_GROUPS = ["io.github.youndie"]
+
+
 def modules():
-    """Пути Gradle-модулей: то, что может стоять после `io.github.youndie:`."""
+    """Пути Gradle-модулей: то, что может стоять после группы в координате."""
     with open(os.path.join(ROOT, "settings.gradle.kts")) as handle:
         return set(re.findall(r'include\("(?::)?([A-Za-z0-9-]+)"\)', handle.read()))
 
@@ -181,9 +198,9 @@ def blocks_of(path):
     return found
 
 
-def coordinates_of(path):
+def coordinates_of(path, of_group):
     with open(os.path.join(ROOT, path)) as handle:
-        return set(re.findall(r"io\.github\.youndie:([A-Za-z0-9-]+)", handle.read()))
+        return set(re.findall(re.escape(of_group) + r":(kompot[A-Za-z0-9-]*)", handle.read()))
 
 
 def sanity(declared):
@@ -212,6 +229,8 @@ def check(verbose=False):
     sanity(declared)
     generated = re.compile(r"^generated[A-Z][A-Za-z0-9]*(" + "|".join(GENERATED_SUFFIXES) + r")$")
     known_modules = modules()
+    current_group = group()
+    coordinates = 0
 
     problems = []
     checked = 0
@@ -239,11 +258,19 @@ def check(verbose=False):
                 if verbose:
                     print(f"  {path}, блок {number}: настоящих имён не нашлось — проверка о нём ничего не сказала")
 
-        for coordinate in sorted(coordinates_of(path)):
+        for coordinate in sorted(coordinates_of(path, current_group)):
+            coordinates += 1
             if coordinate in known_modules:
                 checked += 1
             else:
-                problems.append(f"{path}: координата io.github.youndie:{coordinate} — такого модуля в сборке нет")
+                problems.append(f"{path}: координата {current_group}:{coordinate} — такого модуля в сборке нет")
+        for old in OLD_GROUPS:
+            for coordinate in sorted(coordinates_of(path, old)):
+                problems.append(f"{path}: координата {old}:{coordinate} — старая группа, сейчас {current_group}")
+
+    # README установки без единой координаты значит, что разбор её не узнал, а не что её нет.
+    if coordinates == 0:
+        problems.append(f"ни одной координаты {current_group}:… во всех README — сломан разбор или группа")
 
     return problems, checked, silent
 

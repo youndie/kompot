@@ -1,7 +1,7 @@
 public final class io/github/youndie/kompot/preview/ComposableSingletons$IdePreviewExperimentKt {
 	public static final field INSTANCE Lio/github/youndie/kompot/preview/ComposableSingletons$IdePreviewExperimentKt;
 	public fun <init> ()V
-	public final fun getLambda$1456576139$io_github_youndie_kompot_preview ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1456576139$io_github_youndie_kompot_kompot_preview ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class io/github/youndie/kompot/preview/IdePreviewExperimentKt {
