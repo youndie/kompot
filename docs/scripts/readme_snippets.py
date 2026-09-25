@@ -76,6 +76,8 @@ PLACEHOLDERS = {
     "analytics", "crashReporter", "breadcrumb",
     # транспорт приложения в примере withPerform
     "performOnServer",
+    # обвязка цепочки обработчиков в kompot-client/README.md
+    "myHandler", "mySnackbarHost", "reloadMyScreen",
     # прочие подстановки в примерах студии и TCK
     "showcaseComponents", "recordingsDir", "homeSubmitBody",
     # значения читателя в примере сборки экрана

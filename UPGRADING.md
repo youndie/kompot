@@ -122,7 +122,36 @@ While kompot stayed on 1.11, every app using it was held on 1.11 too, for no rea
 Moving the four numbers together (Compose, material3, viddik, Jewel) is the only way the line stays
 one line.
 
-## 0.37.0 — `KompotStudioConfig.samples` takes components, not pairs
+## 0.38.0 — `KompotDegradationSink` names the outcome instead of a boolean
+
+**Was**
+
+```kotlin
+KompotDegradationSink { kind, originalType, drawnAsFallback ->
+    log("$kind $originalType fallback=$drawnAsFallback")
+}
+```
+
+**Now**
+
+```kotlin
+KompotDegradationSink { kind, originalType, outcome ->
+    log("$kind $originalType ${outcome.name.lowercase()}")
+}
+```
+
+**What to change.** The third parameter is `KompotDegradationOutcome` — `NOTHING`, `PLACEHOLDER` or
+`SERVER_FALLBACK` — where it was `drawnAsFallback: Boolean`. A lambda sink compiles again once the
+parameter is used as an outcome; a class implementing `onUnknown` changes its signature. What was
+`true` is `SERVER_FALLBACK` only when the server named an equivalent: the boolean was also `true` for a
+missing renderer, which is `PLACEHOLDER` now. And `UNRENDERABLE_COMPONENT` reports the **wire** name,
+where it reported the Kotlin class name — a filter written against the class name matches nothing.
+
+**Why it was worth breaking.** A hole, a placeholder and the server's equivalent are three different
+things to whoever reads the log, and the one choice somebody made — the equivalent — could not be
+counted apart from the other two, which is the number a staged rollout is decided on (B-34).
+
+## 0.38.0 — `KompotStudioConfig.samples` takes components, not pairs
 
 **Was**
 
