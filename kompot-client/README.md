@@ -137,6 +137,37 @@ object : KompotDegradationSink {
 Переподключения тулкит не делает — что показывать и когда пробовать снова, решает приложение,
 получив событие.
 
+## Действия, которые клиент исполняет сам
+
+Узлы рисует реестр, а действия исполняет **цепочка обработчиков**, и в ней есть только то, что
+приложение туда поставило. Действия 0.38 без своего звена в цепочке доходят до приложения как есть и
+по §2.1 не делают ничего: у потребителя, обновившего зависимость, но не цепочку, кнопка с `confirm`
+не спросит и не удалит — она просто ничего не сделает.
+
+| действие | звено | модуль |
+|---|---|---|
+| `sequence` | `withSequences(followUp)` | `kompot-client` |
+| `refresh` | `withRefresh(scope) { … }` — перезапросить экран | `kompot-client` |
+| `show_message` | `withSnackbarMessages(host, scope, followUp)` | `kompot-ds-material-compose` |
+| `present`, `confirm`, `close` поверх слоя | `withOverlays(overlays)` и `KompotOverlayHost` | `kompot-ds-material-compose` |
+
+`followUp` — вершина цепочки: действие, пришедшее из ответа, из шага `sequence` или с кнопки
+сообщения, проходит всю цепочку заново, а не только звенья под текущим:
+
+```kotlin
+lateinit var top: KompotActionHandler
+top =
+    myHandler
+        .withRefresh(scope) { reloadMyScreen() }
+        .withSequences { top.handle(it) }
+        .withSnackbarMessages(mySnackbarHost, scope) { top.handle(it) }
+        .withOverlays(overlays)
+```
+
+`KompotOverlayHost(overlays, top)` ставится над экраном — он рисует слой и вопрос тем же реестром.
+`tabs` и `expandable` подключать не нужно: их состояние живёт в рендерерах `kompotStandardRenderers`.
+Загрузку и ошибку экрана рисует приложение (§12.6) — через `KompotScreenLoader(key, load, failed)`.
+
 ## Видимые заглушки — опция, а не умолчание
 
 Речь только про `UNKNOWN_COMPONENT` — про тип, которого эта сборка не знает. В релизе он не рисует
