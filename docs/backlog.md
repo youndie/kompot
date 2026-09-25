@@ -82,7 +82,7 @@
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[?]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
 | [B-48](backlog/B-48-local-state-research.md) `[?]` | Сколько локального состояния пускать в провод? | release-0.38 | P1 | M | — |
 | [B-49](backlog/B-49-local-state.md) `[ ]` | Локальное состояние экрана: реализация выбранной ступени | release-0.38 | P1 | L | B-48 |
-| [B-52](backlog/B-52-sequence-action.md) `[ ]` | sequence: несколько действий одним ответом | release-0.38 | P2 | S | — |
+| [B-52](backlog/B-52-sequence-action.md) `[~]` | sequence: несколько действий одним ответом | release-0.38 | P2 | S | — |
 | [B-53](backlog/B-53-refresh-action.md) `[ ]` | refresh: перезагрузить текущий экран, не называя его | release-0.38 | P2 | S | — |
 | [B-55](backlog/B-55-accessibility-of-actionable-containers.md) `[ ]` | Доступность: роль и подпись у нажимаемого контейнера, заголовок у text | release-0.38 | P2 | S/M | — |
 | [B-56](backlog/B-56-loading-and-error-screens.md) `[?]` | Экран загрузки и экран ошибки — чьи они? | release-0.38 | P2 | M | — |

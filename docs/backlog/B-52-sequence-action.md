@@ -1,7 +1,7 @@
 ---
 id: B-52
 title: "sequence: несколько действий одним ответом"
-status: open
+status: wip
 priority: P2
 size: S
 stage: release-0.38
