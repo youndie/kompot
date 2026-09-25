@@ -1,7 +1,7 @@
 ---
 id: B-54
 title: "Показ считается по композиции, а не по видимости"
-status: open
+status: wip
 priority: P3
 size: M
 stage: release-0.38
