@@ -101,6 +101,19 @@ public object KompotToolkitSpec {
                                         put("items", buildJsonObject { put("\$ref", "#/\$defs/KompotModifierNode") })
                                         put("description", "The order of nodes matters — they are applied left to right")
                                     }
+                                    // On every node, because the writer cannot know which reader lacks the
+                                    // type: only a client that does NOT know it reads the key (SPEC.md §2.1),
+                                    // one that does ignores it (§3). Left out, the schema said nothing about
+                                    // the one field a server is asked to write for every new type, and the
+                                    // TypeScript declarations printed from it refused it outright.
+                                    putJsonObject("fallback") {
+                                        put("\$ref", "#/\$defs/KompotComponent")
+                                        put(
+                                            "description",
+                                            "The equivalent for a reader that does not know this type (SPEC.md §2.1). " +
+                                                "A reader that knows the type ignores it",
+                                        )
+                                    }
                                 },
                         ),
                     "KompotAction" to

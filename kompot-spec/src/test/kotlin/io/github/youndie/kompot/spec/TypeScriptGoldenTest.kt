@@ -46,4 +46,18 @@ class TypeScriptGoldenTest {
         assertTrue("UnknownKompotModifierNode" !in printed, "KompotModifierNode is closed (SPEC.md §2.3)")
         assertTrue("UnknownKompot" !in TypeScriptDeclarations.render(documents(), strict = true), "the strict file closes every hierarchy")
     }
+
+    // A writer names an equivalent on a node of a type some reader may lack (SPEC.md §2.1) — on any
+    // node, since it cannot know which. The strict file refuses a property a type does not name, so the
+    // key has to be on every component variant, and on nothing else: actions have no equivalent.
+    @Test
+    fun `every component variant accepts a fallback and no action does`() {
+        val strict = TypeScriptDeclarations.render(documents(), strict = true)
+        val interfaces = Regex("""export interface (\w+) \{(.*?)\n\}""", RegexOption.DOT_MATCHES_ALL).findAll(strict).associate { it.groupValues[1] to it.groupValues[2] }
+        val components = interfaces.filterKeys { it.startsWith("KompotComponent") }
+        val actions = interfaces.filterKeys { it.startsWith("KompotAction") }
+        assertTrue(components.size >= 20, "found ${components.keys}")
+        components.forEach { (name, body) -> assertTrue("fallback?: KompotComponent" in body, "$name has no fallback") }
+        actions.forEach { (name, body) -> assertTrue("fallback" !in body, "$name has a fallback") }
+    }
 }

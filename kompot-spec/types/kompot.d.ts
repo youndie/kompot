@@ -217,6 +217,8 @@ export interface KompotComponentAmountInput {
   currencyPrefix?: string | null;
   currencyFromField?: string | null;
   currencySpaced?: boolean;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 export interface KompotComponentAutocompleteInput {
@@ -227,6 +229,8 @@ export interface KompotComponentAutocompleteInput {
   label: string;
   dataSourceId: string;
   placeholder?: string | null;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 export interface KompotComponentCheckboxInput {
@@ -236,6 +240,8 @@ export interface KompotComponentCheckboxInput {
   fieldId: string;
   label: string;
   variant?: string | null;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 export interface KompotComponentRadioGroup {
@@ -245,6 +251,8 @@ export interface KompotComponentRadioGroup {
   fieldId: string;
   label: string;
   options: SelectOption[];
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 export interface KompotComponentReadOnlyField {
@@ -255,6 +263,8 @@ export interface KompotComponentReadOnlyField {
   value: string;
   helperText?: string | null;
   fieldId?: string | null;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 export interface KompotComponentSelectInput {
@@ -265,6 +275,8 @@ export interface KompotComponentSelectInput {
   label: string;
   options: SelectOption[];
   placeholder?: string | null;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 export interface KompotComponentTextInput {
@@ -278,6 +290,8 @@ export interface KompotComponentTextInput {
   uppercase?: boolean;
   multiline?: boolean;
   secret?: boolean;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 export interface KompotFormResponse {
@@ -306,6 +320,8 @@ export interface KompotComponentImage {
   scaleType?: ImageScaleType;
   tint?: ColorToken | null;
   modifiers?: KompotModifierNode[];
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 // kompot-navigation
@@ -406,6 +422,8 @@ export interface KompotComponentBox {
   children: KompotComponent[];
   /** Where the layers sit in the box: `top_start` (default), `top_center`, `top_end`, `center_start`, `center`, `center_end`, `bottom_start`, `bottom_center` or `bottom_end`. An unfamiliar word means `top_start`. */
   alignment?: string | null;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 /** A control that raises an action when pressed. */
@@ -419,6 +437,8 @@ export interface KompotComponentButton {
   variant?: string | null;
   /** What assistive technology announces for the button, when its words alone do not say what it does. */
   accessibilityLabel?: string | null;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 /** A vertical stack of nodes. The root of most screens, and the only container that scrolls. */
@@ -436,6 +456,8 @@ export interface KompotComponentColumn {
   arrangement?: string | null;
   /** What assistive technology announces for this container when it has an `action`, instead of reading its children. */
   accessibilityLabel?: string | null;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 /** A thin rule between neighbours, drawn across its parent's axis: horizontal in a column, vertical in a row. Its colour is the design system's unless the server names a token. */
@@ -445,6 +467,8 @@ export interface KompotComponentDivider {
   modifiers?: KompotModifierNode[];
   /** The rule's colour; the design system's own when absent. */
   color?: ColorToken | null;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 /** A section that opens and closes: [header] is always shown and toggles [content], on the client and without asking the server (SPEC.md §4.12). [expanded] is how it opens, re-applied only when a later version of the node carries a different value. */
@@ -455,6 +479,8 @@ export interface KompotComponentExpandable {
   header: KompotComponent;
   content: KompotComponent;
   expanded?: boolean;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 export interface KompotComponentPaginatedList {
@@ -466,6 +492,8 @@ export interface KompotComponentPaginatedList {
   /** The relative address of the first page; the form's field values go there as query parameters */
   reloadUrl?: string | null;
   emptyState?: KompotComponent | null;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 /** A horizontal row of nodes. Unlike a column it never scrolls: a row is one item of its parent. */
@@ -485,6 +513,8 @@ export interface KompotComponentRow {
   scrollable?: boolean;
   /** What assistive technology announces for this container when it has an `action`, instead of reading its children. */
   accessibilityLabel?: string | null;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 /** Empty room along its parent's axis: [size] dp of height in a column, of width in a row. A `weight` modifier makes it take its share instead — what pushes a button to the bottom of a fixed screen. */
@@ -494,6 +524,8 @@ export interface KompotComponentSpacer {
   modifiers?: KompotModifierNode[];
   /** The room it takes along the parent's axis, in density-independent pixels. */
   size?: number;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 export interface KompotComponentTable {
@@ -501,6 +533,8 @@ export interface KompotComponentTable {
   id: string;
   modifiers?: KompotModifierNode[];
   rows: TableRow[];
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 /** Tabs: a strip of titles and the content of the one selected, switched by the client without asking the server (SPEC.md §4.12). [selected] is where the screen opens; the client applies it again only when a later version of the node carries a different value, so a reload does not undo the reader's choice. */
@@ -511,6 +545,8 @@ export interface KompotComponentTabs {
   tabs: TabsItem[];
   /** The tab the screen opens on, counted from 0. Outside the list means the first. */
   selected?: number;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 /** A run of words to show. The only node that carries copy, and every string a person reads is one. */
@@ -528,6 +564,8 @@ export interface KompotComponentText {
   ellipsis?: boolean;
   /** Whether this text is a heading, for assistive technology to navigate by. */
   heading?: boolean;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 export interface KompotPageResponse {
@@ -616,6 +654,8 @@ export interface KompotComponentWizardScreen {
   canGoBack?: boolean;
   content: KompotComponent;
   finishLabel?: string | null;
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
 }
 
 export interface WizardResumeRequest {
