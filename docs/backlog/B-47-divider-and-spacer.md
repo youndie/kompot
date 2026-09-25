@@ -1,7 +1,7 @@
 ---
 id: B-47
 title: "divider и spacer как узлы провода"
-status: open
+status: wip
 priority: P2
 size: S
 stage: release-0.38
