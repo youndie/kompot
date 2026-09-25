@@ -1,7 +1,7 @@
 ---
 id: B-60
 title: "Незнакомое действие в ответе сервера не сообщается никуда"
-status: wip
+status: done
 priority: P2
 size: S
 stage: release-0.38
@@ -30,3 +30,27 @@ stage: release-0.38
   действием по-прежнему сообщается один раз, а не дважды.
 - Якоря: `kompot-client/src/commonMain/kotlin/io/github/youndie/kompot/Perform.kt`,
   `.../LoginSubmit.kt`, `.../Degradation.kt` (`ReportingActionHandler`).
+
+## Находки
+
+### Итерация 1 — 2026-09-25
+
+**Решение пункта подтвердилось:** сообщать там, где ответ входит в цепочку, — в `withPerform` и
+`withLoginSubmit`, стоку, который им передали. Обёртка `withReporting` в цепочке приложения сообщала
+бы и о том, что уже сообщила обёртка рендерера, — тест «a node raising an unknown action is still
+reported once, not twice» держит именно это.
+
+**Правило одно на обе дороги** — `KompotDegradationSink.reportUnknown` (само действие и каждая часть
+`sequence`); обёртка рендерера и ответы вызывают его же. Мутация «не заглядывать в `sequence`» уронила
+тесты обеих дорог сразу.
+
+**Бинарная совместимость сохранена.** Сток — в новой перегрузке; старые сигнатуры остались и
+сообщают в печатающий сток — тот же, что `LocalKompotDegradationSink` по умолчанию, теперь названный
+(`KompotPrintingDegradationSink`). Поломки нет: дифф ABI только добавляющий.
+
+**Ответы сценария (`withWizardNavigation`) — вне этой задачи:** они уходят в колбэки приложения, и
+тулкит их не видит. Записано в README `kompot-client` как обязанность приложения.
+
+**Проверки:** 4 теста (`AnswerReportingTest`); мутации — ответ `perform` не сообщается, сообщение не
+заглядывает в `sequence` — убиты. Полная сборка на Linux-машине.
+
