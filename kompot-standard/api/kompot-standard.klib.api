@@ -800,6 +800,14 @@ final object io.github.youndie.kompot.standard/PresentKind { // io.github.youndi
         final fun <get-SHEET>(): kotlin/String // io.github.youndie.kompot.standard/PresentKind.SHEET.<get-SHEET>|<get-SHEET>(){}[0]
 }
 
+final object io.github.youndie.kompot.standard/RefreshAction : io.github.youndie.kompot/KompotAction, kotlinx.serialization.internal/SerializerFactory { // io.github.youndie.kompot.standard/RefreshAction|null[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.standard/RefreshAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.standard/RefreshAction.hashCode|hashCode(){}[0]
+    final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.standard/RefreshAction> // io.github.youndie.kompot.standard/RefreshAction.serializer|serializer(){}[0]
+    final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // io.github.youndie.kompot.standard/RefreshAction.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.standard/RefreshAction.toString|toString(){}[0]
+}
+
 final object io.github.youndie.kompot.standard/StackAlignment { // io.github.youndie.kompot.standard/StackAlignment|null[0]
     final const val CENTER // io.github.youndie.kompot.standard/StackAlignment.CENTER|{}CENTER[0]
         final fun <get-CENTER>(): kotlin/String // io.github.youndie.kompot.standard/StackAlignment.CENTER.<get-CENTER>|<get-CENTER>(){}[0]

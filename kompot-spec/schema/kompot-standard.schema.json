@@ -13,6 +13,7 @@
       "navigate": "#/$defs/KompotActionNavigate",
       "open_url": "#/$defs/KompotActionOpenUrl",
       "present": "#/$defs/KompotActionPresent",
+      "refresh": "#/$defs/KompotActionRefresh",
       "sequence": "#/$defs/KompotActionSequence",
       "show_message": "#/$defs/KompotActionShowMessage"
     },
@@ -185,6 +186,20 @@
       "required": [
         "type",
         "content"
+      ],
+      "additionalProperties": true
+    },
+    "KompotActionRefresh": {
+      "x-kompot-kind": "variant",
+      "x-kompot-wire-type": "refresh",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "refresh"
+        }
+      },
+      "required": [
+        "type"
       ],
       "additionalProperties": true
     },

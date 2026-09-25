@@ -330,6 +330,14 @@ public data class SequenceAction(
     val actions: List<@Polymorphic KompotAction>,
 ) : KompotAction
 
+// "Show this screen again." The commonest answer to a perform, which used to be a navigate to the
+// screen's own deeplink — so the server had to know which screen an action came from (a row in a
+// shared list does not say), and a client that did not compare pushed a second copy onto its stack.
+// The client reloads what it is showing; state under stable ids survives (SPEC.md §4.4, §16.4).
+@Serializable
+@SerialName("refresh")
+public data object RefreshAction : KompotAction
+
 public object MessageLevel {
     public const val INFO: String = "info"
     public const val ERROR: String = "error"
