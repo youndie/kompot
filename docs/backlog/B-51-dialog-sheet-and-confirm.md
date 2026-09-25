@@ -1,7 +1,7 @@
 ---
 id: B-51
 title: "Диалог, шторка и подтверждение перед действием"
-status: open
+status: wip
 priority: P2
 size: M
 stage: release-0.38
