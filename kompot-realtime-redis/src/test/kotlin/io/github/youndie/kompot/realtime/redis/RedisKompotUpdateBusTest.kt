@@ -77,6 +77,12 @@ class RedisKompotUpdateBusTest {
             val instanceA = bus(prefix)
             val instanceB = bus(prefix)
 
+            // Both instances start their broadcaster the way an application does at start-up: one that
+            // was never started refuses to broadcast, so publishing from an unstarted A would test a
+            // configuration the broadcaster forbids rather than the path between instances.
+            val broadcasterA = KompotUpdateBroadcaster(instanceA)
+            broadcasterA.start(scope())
+
             val delivered = Channel<String>(Channel.BUFFERED)
             val broadcasterB = KompotUpdateBroadcaster(instanceB)
             broadcasterB.start(scope())
@@ -86,7 +92,7 @@ class RedisKompotUpdateBusTest {
             settle()
 
             // The request landed on instance A while the streaming connection hangs off instance B.
-            KompotUpdateBroadcaster(instanceA).broadcast("home:user1", "payload-from-A")
+            broadcasterA.broadcast("home:user1", "payload-from-A")
 
             assertEquals("payload-from-A", withTimeout(5.seconds) { delivered.receive() })
         }
