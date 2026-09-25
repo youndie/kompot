@@ -79,6 +79,25 @@ public final class io/github/youndie/kompot/FormSubmitAnalyticsKt {
 
 public final class io/github/youndie/kompot/ImpressionTrackingKt {
 	public static final fun withImpressionTracking (Ljava/util/Map;Lio/github/youndie/kompot/analytics/AnalyticsTracker;Lio/github/youndie/kompot/analytics/KompotEventNamingRegistry;)Ljava/util/Map;
+	public static final fun withImpressionTracking (Ljava/util/Map;Lio/github/youndie/kompot/analytics/AnalyticsTracker;Lio/github/youndie/kompot/analytics/KompotEventNamingRegistry;Lio/github/youndie/kompot/ImpressionVisibility;)Ljava/util/Map;
+}
+
+public final class io/github/youndie/kompot/ImpressionVisibility {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (FJLkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (FJLkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()F
+	public final fun component2 ()J
+	public final fun component3 ()Lkotlin/jvm/functions/Function1;
+	public final fun copy (FJLkotlin/jvm/functions/Function1;)Lio/github/youndie/kompot/ImpressionVisibility;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/ImpressionVisibility;FJLkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/youndie/kompot/ImpressionVisibility;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMinVisibleFraction ()F
+	public final fun getMinVisibleMillis ()J
+	public final fun getTrack ()Lkotlin/jvm/functions/Function1;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class io/github/youndie/kompot/KompotActionChain {

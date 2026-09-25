@@ -22,6 +22,37 @@ breaks a consumer without saying so is not caught by anything here, and
 
 ---
 
+## 0.38.0 — `withImpressionTracking` counts a node when it is seen, not when it is composed (behaviour)
+
+**Was** — one `ComponentImpression` per node the moment it entered the composition, which in a plain
+column is the moment the screen opens:
+
+```kotlin
+renderers.withImpressionTracking(tracker, naming)
+```
+
+**Now** — the same line counts a node once half of it is inside the window (along an axis where the
+node is longer than the window, filling the window is enough). To choose the threshold, a minimum
+time on screen, or which nodes count at all:
+
+```kotlin
+renderers.withImpressionTracking(
+    tracker,
+    naming,
+    ImpressionVisibility(minVisibleFraction = 0.5f, minVisibleMillis = 1_000, track = { it.id.startsWith("promo-") }),
+)
+```
+
+**What to change.** Nothing compiles differently. What changes is the numbers: impressions of
+everything below the first screen drop to the people who scrolled to it, and a node inside a
+zero-size or clipped-away container is no longer counted. A dashboard comparing periods across the
+upgrade sees a step; `ImpressionVisibility(minVisibleFraction = 0f)` is the nearest thing to the old
+count (a node still has to be laid out with a size).
+
+**Why it was worth breaking.** An A/B comparison of blocks below the first screen — the reason a
+server holds the screen — was inflated for all of them by everybody who never scrolled there
+(B-54).
+
 ## 0.38.0 — new fields on `RowComponent`, `ColumnComponent`, `ButtonComponent` and `TextComponent` (binary only)
 
 **Was**
