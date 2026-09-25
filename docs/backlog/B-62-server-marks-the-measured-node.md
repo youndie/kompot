@@ -1,7 +1,7 @@
 ---
 id: B-62
 title: "Как сервер помечает узел, который меряет эксперимент?"
-status: question
+status: open
 priority: P3
 size: M
 stage: release-0.38
@@ -40,3 +40,12 @@ stage: release-0.38
 - Якоря: `kompot-core/src/commonMain/kotlin/io/github/youndie/kompot/KompotComponent.kt`,
   `kompot-client/src/commonMain/kotlin/io/github/youndie/kompot/ImpressionTracking.kt`,
   `kompot-spec/SPEC.md` §2.3, §3.
+
+## Решение — 2026-09-25
+
+Владелец выбрал первый вариант: **соглашение об `id`, записанное в SPEC как рекомендация.**
+Протокол не меняется: сервер выбирает `id` отслеживаемых узлов по соглашению с приложением,
+клиент выбирает их предикатом `ImpressionVisibility.track`. Поле у каждого типа и узел-обёртка
+отвергнуты — первое размножается по всем типам и требует сторожа, второе теряет ребёнка у старого
+клиента. Остаток работы — запись в SPEC (раздел про аналитику или §12) с этой причиной и пример в
+KDoc `ImpressionVisibility`.
