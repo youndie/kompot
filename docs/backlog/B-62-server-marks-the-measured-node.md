@@ -1,7 +1,7 @@
 ---
 id: B-62
 title: "Как сервер помечает узел, который меряет эксперимент?"
-status: open
+status: wip
 priority: P3
 size: M
 stage: release-0.38
