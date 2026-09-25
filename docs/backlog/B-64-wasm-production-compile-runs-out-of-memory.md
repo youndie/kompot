@@ -1,7 +1,7 @@
 ---
 id: B-64
 title: "Продакшн-компиляция wasm падает по памяти — на Linux-машине каждый раз, на CI однажды"
-status: open
+status: wip
 priority: infra
 size: S
 stage: release-0.38
