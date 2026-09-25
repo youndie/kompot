@@ -1,7 +1,7 @@
 ---
 id: B-55
 title: "Доступность: роль и подпись у нажимаемого контейнера, заголовок у text"
-status: open
+status: wip
 priority: P2
 size: S/M
 stage: release-0.38
