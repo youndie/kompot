@@ -83,7 +83,7 @@
 | [B-48](backlog/B-48-local-state-research.md) `[?]` | Сколько локального состояния пускать в провод? | release-0.38 | P1 | M | — |
 | [B-49](backlog/B-49-local-state.md) `[ ]` | Локальное состояние экрана: реализация выбранной ступени | release-0.38 | P1 | L | B-48 |
 | [B-56](backlog/B-56-loading-and-error-screens.md) `[?]` | Экран загрузки и экран ошибки — чьи они? | release-0.38 | P2 | M | — |
-| [B-61](backlog/B-61-preview-content-missing-from-browser-a11y.md) `[ ]` | Содержимое предпросмотра в плейграунде не попадает в дерево доступности браузера | playground | P3 | S/M | — |
+| [B-61](backlog/B-61-preview-content-missing-from-browser-a11y.md) `[~]` | Содержимое предпросмотра в плейграунде не попадает в дерево доступности браузера | playground | P3 | S/M | — |
 | [B-62](backlog/B-62-server-marks-the-measured-node.md) `[?]` | Как сервер помечает узел, который меряет эксперимент? | release-0.38 | P3 | M | — |
 
 ## Сделано (55)

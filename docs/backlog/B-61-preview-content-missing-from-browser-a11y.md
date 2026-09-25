@@ -1,7 +1,7 @@
 ---
 id: B-61
 title: "Содержимое предпросмотра в плейграунде не попадает в дерево доступности браузера"
-status: open
+status: wip
 priority: P3
 size: S/M
 stage: playground
