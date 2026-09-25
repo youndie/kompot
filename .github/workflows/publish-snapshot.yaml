@@ -64,12 +64,12 @@ jobs:
           # rest report into the job summary, which is where somebody looking for a reason goes
           # anyway; a header of six pictures is a header nobody reads.
           coordinate: |
-            io.github.youndie:kompot-bom:${{ needs.publish.outputs.version }}
-            io.github.youndie:kompot-core:${{ needs.publish.outputs.version }}
-            io.github.youndie:kompot-standard:${{ needs.publish.outputs.version }}
-            io.github.youndie:kompot-client:${{ needs.publish.outputs.version }}
-            io.github.youndie:kompot-client-tck:${{ needs.publish.outputs.version }}
-            io.github.youndie:kompot-ktor:${{ needs.publish.outputs.version }}
+            io.github.youndie.kompot:kompot-bom:${{ needs.publish.outputs.version }}
+            io.github.youndie.kompot:kompot-core:${{ needs.publish.outputs.version }}
+            io.github.youndie.kompot:kompot-standard:${{ needs.publish.outputs.version }}
+            io.github.youndie.kompot:kompot-client:${{ needs.publish.outputs.version }}
+            io.github.youndie.kompot:kompot-client-tck:${{ needs.publish.outputs.version }}
+            io.github.youndie.kompot:kompot-ktor:${{ needs.publish.outputs.version }}
           repository: https://reposilite.kotlin.website/snapshots
           # The confirming tier. `implementation` is right exactly when no public signature mentions
           # the dependency, and only a build that compiles against the publication can tell those apart

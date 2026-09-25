@@ -22,6 +22,34 @@ breaks a consumer without saying so is not caught by anything here, and
 
 ---
 
+## 0.38.0 — the group is `io.github.youndie.kompot`
+
+**Was**
+
+```kotlin
+implementation(platform("io.github.youndie:kompot-bom:0.37.0"))
+implementation("io.github.youndie:kompot-client")
+```
+
+**Now**
+
+```kotlin
+implementation(platform("io.github.youndie.kompot:kompot-bom:0.38.0"))
+implementation("io.github.youndie.kompot:kompot-client")
+```
+
+**What to change.** The group of every artifact, the BOM included: `io.github.youndie` becomes
+`io.github.youndie.kompot`. Artifact names, Kotlin packages and the Gradle plugin id
+(`io.github.youndie.kompot.studio`) stay as they were, so no source file changes. The same goes for
+the continuous channel: snapshots `0.38.0.<run>` in the Reposilite are published under the new group
+too, and a build resolving them changes the coordinate the day it takes one.
+
+**Why it was worth breaking.** `io.github.youndie` is the owner's namespace, shared with every other
+library of theirs; a group that names the library is how the portfolio's other libraries publish
+(`io.github.youndie.viddik`), matches the Kotlin packages, and keeps a dependency list readable as
+"which libraries" rather than "whose". Moving it costs one line per consumer now, and a line more for
+every release it waits.
+
 ## 0.38.0 — `withImpressionTracking` counts a node when it is seen, not when it is composed (behaviour)
 
 **Was** — one `ComponentImpression` per node the moment it entered the composition, which in a plain

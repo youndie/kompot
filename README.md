@@ -201,11 +201,11 @@ repositories {
 val kompotVersion = "0.36.2.118"
 
 dependencies {
-    implementation(platform("io.github.youndie:kompot-bom:$kompotVersion"))
+    implementation(platform("io.github.youndie.kompot:kompot-bom:$kompotVersion"))
 
-    implementation("io.github.youndie:kompot-core")
-    implementation("io.github.youndie:kompot-standard")
-    implementation("io.github.youndie:kompot-ktor")
+    implementation("io.github.youndie.kompot:kompot-core")
+    implementation("io.github.youndie.kompot:kompot-standard")
+    implementation("io.github.youndie.kompot:kompot-ktor")
 }
 ```
 
@@ -230,8 +230,8 @@ unique to that module:
 plugins { id("com.google.devtools.ksp") }
 
 dependencies {
-    implementation("io.github.youndie:kompot-registry-annotations")
-    ksp("io.github.youndie:kompot-registry-processor")
+    implementation("io.github.youndie.kompot:kompot-registry-annotations")
+    ksp("io.github.youndie.kompot:kompot-registry-processor")
 }
 
 ksp { arg("kompotModuleTag", "Catalogue") }
