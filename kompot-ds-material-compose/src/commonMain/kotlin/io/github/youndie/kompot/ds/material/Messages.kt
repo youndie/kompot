@@ -3,6 +3,7 @@ package io.github.youndie.kompot.ds.material
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import io.github.youndie.kompot.KompotAction
 import io.github.youndie.kompot.KompotActionHandler
 import io.github.youndie.kompot.standard.MessageLevel
 import io.github.youndie.kompot.standard.ShowMessageAction
@@ -15,15 +16,23 @@ import kotlinx.coroutines.launch
  *
  * The protocol leaves the look of a message to the client; this is the Material answer, for an app
  * whose screen already has a `SnackbarHost`. Put it in the same chain as `withPerform`, inside it, so
- * the action a `perform` answers with reaches it:
+ * the action a `perform` answers with reaches it — and give [followUp] the TOP of the chain, so the
+ * action on the message's own button goes through all of it:
  *
  * ```
- * val handler = appHandler.withSnackbarMessages(snackbarHostState, scope).withPerform(scope, perform)
+ * lateinit var handler: KompotActionHandler
+ * handler = appHandler.withSnackbarMessages(snackbarHostState, scope) { handler.handle(it) }.withPerform(scope, perform)
  * ```
+ *
+ * [followUp] is the whole point of the second line. The button's action is a new action like any
+ * other — "Undo" is typically a `perform` — and sent to the handler this wraps it would skip
+ * everything wrapped around it, `withPerform` included: the undo would never be sent. The default is
+ * only right for a chain with nothing outside this wrapper.
  */
 public fun KompotActionHandler.withSnackbarMessages(
     host: SnackbarHostState,
     scope: CoroutineScope,
+    followUp: (KompotAction) -> Unit = { handle(it) },
 ): KompotActionHandler =
     KompotActionHandler { action ->
         if (action is ShowMessageAction) {
@@ -44,7 +53,7 @@ public fun KompotActionHandler.withSnackbarMessages(
                                 else -> SnackbarDuration.Short
                             },
                     )
-                if (result == SnackbarResult.ActionPerformed && follow != null) handle(follow)
+                if (result == SnackbarResult.ActionPerformed && follow != null) followUp(follow)
             }
         }
         // Forwarded even when shown, as withPerform forwards: an analytics wrapper further along the

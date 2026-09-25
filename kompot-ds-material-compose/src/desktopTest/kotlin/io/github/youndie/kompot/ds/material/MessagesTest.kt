@@ -40,7 +40,12 @@ class MessagesTest {
     ) = @androidx.compose.runtime.Composable {
         val host = remember { SnackbarHostState() }
         val scope = rememberCoroutineScope()
-        val handler = remember { app.withSnackbarMessages(host, scope).withPerform(scope) { url, _ -> perform(url) } }
+        val handler =
+            remember {
+                lateinit var top: KompotActionHandler
+                top = app.withSnackbarMessages(host, scope) { top.handle(it) }.withPerform(scope) { url, _ -> perform(url) }
+                top
+            }
         MaterialTheme {
             Column {
                 Button(onClick = { handler.handle(raise) }) { Text("raise") }
@@ -89,6 +94,26 @@ class MessagesTest {
             onNodeWithText("raise").performClick()
             waitForIdle()
             onNodeWithText("Archived").assertIsDisplayed()
+        }
+
+    // The case the default wiring gets wrong: "Undo" is itself an operation. Its action has to go
+    // through the WHOLE chain — withPerform is outside the message wrapper — and what the server
+    // answers it with is one more message.
+    @Test
+    fun `the message's button goes through the whole chain, perform included`() =
+        runDesktopComposeUiTest {
+            val undo = PerformAction(url = "/cards/7/unarchive", payload = emptyMap())
+            setContent(
+                screen(
+                    ShowMessageAction(text = "Card archived", actionLabel = "Undo", action = undo),
+                    perform = { url -> ShowMessageAction(text = "Restored by $url") },
+                ),
+            )
+            onNodeWithText("raise").performClick()
+            waitForIdle()
+            onNodeWithText("Undo").performClick()
+            waitForIdle()
+            onNodeWithText("Restored by /cards/7/unarchive").assertIsDisplayed()
         }
 
     @Test
