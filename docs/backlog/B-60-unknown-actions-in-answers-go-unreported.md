@@ -1,7 +1,7 @@
 ---
 id: B-60
 title: "Незнакомое действие в ответе сервера не сообщается никуда"
-status: open
+status: wip
 priority: P2
 size: S
 stage: release-0.38
