@@ -1,7 +1,7 @@
 ---
 id: B-59
 title: "Переключатель «старый клиент» в плейграунде — для любого типа, а не только для демо-плагина"
-status: open
+status: wip
 priority: P3
 size: S/M
 stage: playground
