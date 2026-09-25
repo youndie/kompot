@@ -74,7 +74,7 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (8)
+## Открыто (7)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
@@ -83,11 +83,10 @@
 | [B-48](backlog/B-48-local-state-research.md) `[?]` | Сколько локального состояния пускать в провод? | release-0.38 | P1 | M | — |
 | [B-49](backlog/B-49-local-state.md) `[ ]` | Локальное состояние экрана: реализация выбранной ступени | release-0.38 | P1 | L | B-48 |
 | [B-56](backlog/B-56-loading-and-error-screens.md) `[?]` | Экран загрузки и экран ошибки — чьи они? | release-0.38 | P2 | M | — |
-| [B-59](backlog/B-59-playground-old-client-for-any-type.md) `[ ]` | Переключатель «старый клиент» в плейграунде — для любого типа, а не только для демо-плагина | playground | P3 | S/M | — |
 | [B-61](backlog/B-61-preview-content-missing-from-browser-a11y.md) `[ ]` | Содержимое предпросмотра в плейграунде не попадает в дерево доступности браузера | playground | P3 | S/M | — |
 | [B-62](backlog/B-62-server-marks-the-measured-node.md) `[?]` | Как сервер помечает узел, который меряет эксперимент? | release-0.38 | P3 | M | — |
 
-## Сделано (54)
+## Сделано (55)
 
 **Швы в toolkit'е**
 
@@ -138,6 +137,7 @@
 - [B-30](backlog/B-30-playground-examples-and-links.md) — Набор готовых тел и ссылки на витрину
 - [B-31](backlog/B-31-question-placeholder-for-unknown.md) — Должен ли незнакомый тип без fallback рисовать заглушку?
 - [B-32](backlog/B-32-playground-states-under-test.md) — Три состояния витрины проверяются прогоном, а не глазами
+- [B-59](backlog/B-59-playground-old-client-for-any-type.md) — Переключатель «старый клиент» в плейграунде — для любого типа, а не только для демо-плагина
 
 **Релиз 0.38**
 
