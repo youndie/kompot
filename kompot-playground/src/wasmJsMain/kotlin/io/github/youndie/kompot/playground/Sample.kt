@@ -22,6 +22,7 @@ internal val SAMPLE_BODY: String =
           "id": "title",
           "text": "This screen is JSON, drawn by the client's own renderers",
           "style": "headline_small",
+          "heading": true,
           "color": "on_surface"
         },
         {
