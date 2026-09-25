@@ -2,7 +2,7 @@
 
 [![kotlin](https://img.shields.io/badge/Kotlin-2.4.10-blue?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![kompot-core](https://reposilite.kotlin.website/api/badge/latest/snapshots/io/github/youndie/kompot-core?name=kompot-core&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/io/github/youndie/kompot-core)
-[![what a consumer gets](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot-core.svg)](https://github.com/youndie/proba)
+[![what a consumer gets](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot.kompot-core.svg)](https://github.com/youndie/proba)
 
 ![jvm](https://img.shields.io/badge/jvm-DB413D?style=flat)
 ![android](https://img.shields.io/badge/android-3DDC84?style=flat)
