@@ -96,6 +96,13 @@ jobs:
       - name: Every published module has its API under guard
         run: python3 docs/scripts/abi_coverage.py
 
+      # The TypeScript declarations are held to the schema by a golden test in `./gradlew build`; this
+      # asks whether they can describe a real body at all. Every playground example and every form in
+      # the case corpus is typed and compiled with tsc, and a deliberately broken nested value must be
+      # rejected in the same run — a check that also accepts it checks nothing (B-57).
+      - name: The TypeScript declarations describe real bodies
+        run: python3 tools/ts-check.py
+
       # Only on a pull request, and this is the case the check was written for: `B-NN` is taken from
       # the index when the branch is cut, and a branch merged in the meantime can take that same
       # number. Neither tree holds a duplicate on its own — both are legal, and the collision exists

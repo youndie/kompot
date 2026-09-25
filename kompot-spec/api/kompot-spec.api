@@ -338,3 +338,9 @@ public final class io/github/youndie/kompot/spec/TokenUsesKt {
 	public static synthetic fun tokenUses$default (Lkotlinx/serialization/json/JsonElement;Ljava/util/Map;Ljava/lang/String;ILjava/lang/Object;)Ljava/util/List;
 }
 
+public final class io/github/youndie/kompot/spec/TypeScriptDeclarations {
+	public static final field INSTANCE Lio/github/youndie/kompot/spec/TypeScriptDeclarations;
+	public final fun render (Ljava/util/Map;Z)Ljava/lang/String;
+	public static synthetic fun render$default (Lio/github/youndie/kompot/spec/TypeScriptDeclarations;Ljava/util/Map;ZILjava/lang/Object;)Ljava/lang/String;
+}
+
