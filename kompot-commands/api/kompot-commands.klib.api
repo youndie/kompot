@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-commands>
+// Library unique name: <io.github.youndie.kompot:kompot-commands>
 final class io.github.youndie.kompot.commands/PerformAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot.commands/PerformAction|null[0]
     constructor <init>(kotlin/String, kotlin.collections/Map<kotlin/String, io.github.youndie.kompot.form/FieldValue> = ...) // io.github.youndie.kompot.commands/PerformAction.<init>|<init>(kotlin.String;kotlin.collections.Map<kotlin.String,io.github.youndie.kompot.form.FieldValue>){}[0]
 

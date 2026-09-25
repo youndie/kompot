@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:form-core>
+// Library unique name: <io.github.youndie.kompot:form-core>
 open annotation class io.github.youndie.kompot.form/FormDsl : kotlin/Annotation { // io.github.youndie.kompot.form/FormDsl|null[0]
     constructor <init>() // io.github.youndie.kompot.form/FormDsl.<init>|<init>(){}[0]
 }

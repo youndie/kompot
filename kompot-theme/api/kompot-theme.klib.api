@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-theme>
+// Library unique name: <io.github.youndie.kompot:kompot-theme>
 open annotation class io.github.youndie.kompot.theme/KompotThemeDsl : kotlin/Annotation { // io.github.youndie.kompot.theme/KompotThemeDsl|null[0]
     constructor <init>() // io.github.youndie.kompot.theme/KompotThemeDsl.<init>|<init>(){}[0]
 }

@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-forms>
+// Library unique name: <io.github.youndie.kompot:kompot-forms>
 final class io.github.youndie.kompot.forms/AmountInputComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.forms/AmountInputComponent|null[0]
     constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ...) // io.github.youndie.kompot.forms/AmountInputComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;kotlin.String;kotlin.String?;kotlin.String?;kotlin.String?;kotlin.Boolean){}[0]
 

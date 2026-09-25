@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-images>
+// Library unique name: <io.github.youndie.kompot:kompot-images>
 final enum class io.github.youndie.kompot.images/ImageScaleType : kotlin/Enum<io.github.youndie.kompot.images/ImageScaleType> { // io.github.youndie.kompot.images/ImageScaleType|null[0]
     enum entry Crop // io.github.youndie.kompot.images/ImageScaleType.Crop|null[0]
     enum entry FillBounds // io.github.youndie.kompot.images/ImageScaleType.FillBounds|null[0]

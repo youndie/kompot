@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-analytics>
+// Library unique name: <io.github.youndie.kompot:kompot-analytics>
 abstract fun interface io.github.youndie.kompot.analytics/AnalyticsTracker { // io.github.youndie.kompot.analytics/AnalyticsTracker|null[0]
     abstract fun track(io.github.youndie.kompot.analytics/AnalyticsEvent) // io.github.youndie.kompot.analytics/AnalyticsTracker.track|track(io.github.youndie.kompot.analytics.AnalyticsEvent){}[0]
 }

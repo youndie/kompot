@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-ds-material-compose>
+// Library unique name: <io.github.youndie.kompot:kompot-ds-material-compose>
 final class io.github.youndie.kompot.ds.material/KompotOverlays { // io.github.youndie.kompot.ds.material/KompotOverlays|null[0]
     constructor <init>() // io.github.youndie.kompot.ds.material/KompotOverlays.<init>|<init>(){}[0]
 

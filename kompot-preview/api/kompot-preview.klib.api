@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-preview>
+// Library unique name: <io.github.youndie.kompot:kompot-preview>
 final enum class io.github.youndie.kompot.preview/KompotBodyShape : kotlin/Enum<io.github.youndie.kompot.preview/KompotBodyShape> { // io.github.youndie.kompot.preview/KompotBodyShape|null[0]
     enum entry COMPONENT // io.github.youndie.kompot.preview/KompotBodyShape.COMPONENT|null[0]
     enum entry FORM // io.github.youndie.kompot.preview/KompotBodyShape.FORM|null[0]

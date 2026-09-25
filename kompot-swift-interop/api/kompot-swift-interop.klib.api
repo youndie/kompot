@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-swift-interop>
+// Library unique name: <io.github.youndie.kompot:kompot-swift-interop>
 final fun (io.github.youndie.kompot.form/FormController).io.github.youndie.kompot.interop/fieldFlow(kotlin/String): kotlinx.coroutines.flow/Flow<io.github.youndie.kompot.form/FieldState<io.github.youndie.kompot.form/FieldValue>> // io.github.youndie.kompot.interop/fieldFlow|fieldFlow@io.github.youndie.kompot.form.FormController(kotlin.String){}[0]
 final fun (io.github.youndie.kompot.form/FormController).io.github.youndie.kompot.interop/fieldState(kotlin/String): io.github.youndie.kompot.form/FieldState<io.github.youndie.kompot.form/FieldValue> // io.github.youndie.kompot.interop/fieldState|fieldState@io.github.youndie.kompot.form.FormController(kotlin.String){}[0]
 final fun (io.github.youndie.kompot.images/KompotImageComponent).io.github.youndie.kompot.interop/tintKey(): kotlin/String? // io.github.youndie.kompot.interop/tintKey|tintKey@io.github.youndie.kompot.images.KompotImageComponent(){}[0]

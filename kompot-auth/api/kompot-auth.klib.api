@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:kompot-auth>
+// Library unique name: <io.github.youndie.kompot:kompot-auth>
 final class io.github.youndie.kompot.auth/UpdateSessionAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot.auth/UpdateSessionAction|null[0]
     constructor <init>(kotlin/String, kotlin/String) // io.github.youndie.kompot.auth/UpdateSessionAction.<init>|<init>(kotlin.String;kotlin.String){}[0]
 

@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <io.github.youndie:wizard-core>
+// Library unique name: <io.github.youndie.kompot:wizard-core>
 abstract fun interface <#A: kotlin/Any?> io.github.youndie.kompot.wizard.core/WizardStepResolver { // io.github.youndie.kompot.wizard.core/WizardStepResolver|null[0]
     abstract fun resolveNext(kotlin/String, #A): kotlin/String? // io.github.youndie.kompot.wizard.core/WizardStepResolver.resolveNext|resolveNext(kotlin.String;1:0){}[0]
 }
