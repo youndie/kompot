@@ -76,12 +76,26 @@ public fun interface KompotDegradationSink {
     }
 }
 
-public val LocalKompotDegradationSink: ProvidableCompositionLocal<KompotDegradationSink> =
-    staticCompositionLocalOf {
-        KompotDegradationSink { kind, originalType, outcome ->
-            println("[Kompot] $kind \"$originalType\" ${outcome.name.lowercase()}")
-        }
+/** The toolkit's default sink: a line on standard output. Named so the paths outside composition — the answers `withPerform` and `withLoginSubmit` feed back — can default to the same thing. */
+public val KompotPrintingDegradationSink: KompotDegradationSink =
+    KompotDegradationSink { kind, originalType, outcome ->
+        println("[Kompot] $kind \"$originalType\" ${outcome.name.lowercase()}")
     }
+
+public val LocalKompotDegradationSink: ProvidableCompositionLocal<KompotDegradationSink> =
+    staticCompositionLocalOf { KompotPrintingDegradationSink }
+
+// What a client cannot understand in an action, reported: the action itself, and every part of a
+// sequence (SPEC.md §16.4). One rule for the two roads an action arrives by — raised by a node on the
+// screen (ReportingActionHandler) and answered by the server (withPerform, withLoginSubmit), which
+// enters the chain past the renderer's wrapper and used to be reported nowhere (B-60).
+internal fun KompotDegradationSink.reportUnknown(action: KompotAction) {
+    when (action) {
+        is UnknownAction -> onUnknown(KompotDegradationKind.UNKNOWN_ACTION, action.originalType, KompotDegradationOutcome.NOTHING)
+        is SequenceAction -> action.actions.forEach { reportUnknown(it) }
+        else -> Unit
+    }
+}
 
 // An action handler that reports what it cannot understand before passing it on. Its own type is the
 // marker that keeps it from wrapping twice: RenderNode wraps at every level of the tree, and a child
@@ -90,19 +104,11 @@ internal class ReportingActionHandler(
     val delegate: KompotActionHandler,
     private val sink: KompotDegradationSink,
 ) : KompotActionHandler {
-    override fun handle(action: KompotAction) {
-        report(action)
-        delegate.handle(action)
-    }
-
     // Into sequences too: a part this client does not know is as much a hole as a whole action it does
     // not know, and the rest of the sequence still runs (SPEC.md §16.4) — so the tap did SOMETHING,
     // which makes the missing part easy to miss.
-    private fun report(action: KompotAction) {
-        when (action) {
-            is UnknownAction -> sink.onUnknown(KompotDegradationKind.UNKNOWN_ACTION, action.originalType, KompotDegradationOutcome.NOTHING)
-            is SequenceAction -> action.actions.forEach(::report)
-            else -> Unit
-        }
+    override fun handle(action: KompotAction) {
+        sink.reportUnknown(action)
+        delegate.handle(action)
     }
 }

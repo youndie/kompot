@@ -20,10 +20,24 @@ import kotlinx.coroutines.launch
 public fun KompotActionHandler.withPerform(
     scope: CoroutineScope,
     perform: suspend (url: String, payload: Map<String, FieldValue>) -> KompotAction,
+): KompotActionHandler = withPerform(scope, KompotPrintingDegradationSink, perform)
+
+// The answer enters the chain here, past the wrapper RenderNode puts around every node — so what the
+// client cannot understand in it is reported here, to the sink the application gives (pass the same
+// one it provides as LocalKompotDegradationSink). Without it an unknown answer reached the
+// application as UnknownAction and was counted nowhere (B-60).
+public fun KompotActionHandler.withPerform(
+    scope: CoroutineScope,
+    degradationSink: KompotDegradationSink,
+    perform: suspend (url: String, payload: Map<String, FieldValue>) -> KompotAction,
 ): KompotActionHandler =
     KompotActionHandler { action ->
         if (action is PerformAction) {
-            scope.launch { handle(perform(action.url, action.payload)) }
+            scope.launch {
+                val answer = perform(action.url, action.payload)
+                degradationSink.reportUnknown(answer)
+                handle(answer)
+            }
         }
             // Forwarded even when it was handled, exactly as withLoginSubmit forwards a submit: an
             // analytics wrapper further along the chain has to see that the button was pressed.
