@@ -58,6 +58,7 @@ public final class io/github/youndie/kompot/ComposableSingletons$ComponentsKt {
 }
 
 public final class io/github/youndie/kompot/DegradationKt {
+	public static final fun getKompotPrintingDegradationSink ()Lio/github/youndie/kompot/KompotDegradationSink;
 	public static final fun getLocalKompotDegradationSink ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 
@@ -206,6 +207,7 @@ public final class io/github/youndie/kompot/KompotSurfaceRoles {
 }
 
 public final class io/github/youndie/kompot/LoginSubmitKt {
+	public static final fun withLoginSubmit (Lio/github/youndie/kompot/KompotActionHandler;Lkotlinx/coroutines/CoroutineScope;Lio/github/youndie/kompot/form/FormController;Ljava/lang/String;Lio/github/youndie/kompot/KompotDegradationSink;Lkotlin/jvm/functions/Function2;)Lio/github/youndie/kompot/KompotActionHandler;
 	public static final fun withLoginSubmit (Lio/github/youndie/kompot/KompotActionHandler;Lkotlinx/coroutines/CoroutineScope;Lio/github/youndie/kompot/form/FormController;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lio/github/youndie/kompot/KompotActionHandler;
 }
 
@@ -225,6 +227,7 @@ public final class io/github/youndie/kompot/PaginatedListRenderer : io/github/yo
 }
 
 public final class io/github/youndie/kompot/PerformKt {
+	public static final fun withPerform (Lio/github/youndie/kompot/KompotActionHandler;Lkotlinx/coroutines/CoroutineScope;Lio/github/youndie/kompot/KompotDegradationSink;Lkotlin/jvm/functions/Function3;)Lio/github/youndie/kompot/KompotActionHandler;
 	public static final fun withPerform (Lio/github/youndie/kompot/KompotActionHandler;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function3;)Lio/github/youndie/kompot/KompotActionHandler;
 }
 

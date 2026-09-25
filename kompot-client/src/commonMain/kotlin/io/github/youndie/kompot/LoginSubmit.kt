@@ -19,6 +19,16 @@ public fun KompotActionHandler.withLoginSubmit(
     formController: FormController,
     formId: String,
     submit: suspend (payload: Map<String, FieldValue>) -> KompotAction,
+): KompotActionHandler = withLoginSubmit(scope, formController, formId, KompotPrintingDegradationSink, submit)
+
+// The answer to a submit enters the chain past the renderer's wrapper, as a perform's does — so what
+// the client cannot understand in it is reported here (see withPerform, B-60).
+public fun KompotActionHandler.withLoginSubmit(
+    scope: CoroutineScope,
+    formController: FormController,
+    formId: String,
+    degradationSink: KompotDegradationSink,
+    submit: suspend (payload: Map<String, FieldValue>) -> KompotAction,
 ): KompotActionHandler =
     KompotActionHandler { action ->
         if (action is SubmitFormAction && action.formId == formId) {
@@ -27,7 +37,11 @@ public fun KompotActionHandler.withLoginSubmit(
                 // empty map rather than null, and would not block the submit.
             formController.markAllAsChanged()
             formController.getPayload()?.let { payload ->
-                scope.launch { handle(submit(payload)) }
+                scope.launch {
+                    val answer = submit(payload)
+                    degradationSink.reportUnknown(answer)
+                    handle(answer)
+                }
             }
         }
         handle(action)

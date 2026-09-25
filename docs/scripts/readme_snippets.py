@@ -74,6 +74,8 @@ PLACEHOLDERS = {
     "PromoBannerComponent", "PromoBannerRenderer",
     # чужая телеметрия в примере стока деградации
     "analytics", "crashReporter", "breadcrumb",
+    # транспорт приложения в примере withPerform
+    "performOnServer",
     # прочие подстановки в примерах студии и TCK
     "showcaseComponents", "recordingsDir", "homeSubmitBody",
     # значения читателя в примере сборки экрана
