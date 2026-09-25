@@ -19,6 +19,7 @@ public val kompotStandardSerializersModule: SerializersModule =
             subclass(ShowMessageAction::class)
             subclass(PresentAction::class)
             subclass(ConfirmAction::class)
+            subclass(SequenceAction::class)
             subclass(LoadPageAction::class)
         }
     }

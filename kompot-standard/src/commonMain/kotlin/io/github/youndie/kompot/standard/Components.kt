@@ -320,6 +320,16 @@ public data class ConfirmAction(
     val cancelLabel: String? = null,
 ) : KompotAction
 
+// Several actions as one answer. A submit, a perform and a wizard step each answer with ONE action
+// (SPEC.md §11.5, §16.4), so "update the session and go on", "say it and close" had to drop a half.
+// Run in order, each through the whole chain; not a transaction (SPEC.md §16.4).
+@Serializable
+@SerialName("sequence")
+public data class SequenceAction(
+    /** The actions, run in order. */
+    val actions: List<@Polymorphic KompotAction>,
+) : KompotAction
+
 public object MessageLevel {
     public const val INFO: String = "info"
     public const val ERROR: String = "error"

@@ -529,6 +529,33 @@ public final class io/github/youndie/kompot/standard/RowComponent$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class io/github/youndie/kompot/standard/SequenceAction : io/github/youndie/kompot/KompotAction {
+	public static final field Companion Lio/github/youndie/kompot/standard/SequenceAction$Companion;
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lio/github/youndie/kompot/standard/SequenceAction;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/SequenceAction;Ljava/util/List;ILjava/lang/Object;)Lio/github/youndie/kompot/standard/SequenceAction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActions ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/standard/SequenceAction$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/standard/SequenceAction$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/standard/SequenceAction;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/standard/SequenceAction;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/standard/SequenceAction$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
 public final class io/github/youndie/kompot/standard/SerializersKt {
 	public static final fun getKompotStandardSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
 }
