@@ -49,6 +49,14 @@ stage: release-0.38
 [B-61](B-61-preview-content-missing-from-browser-a11y.md). Так что в браузере поля этой задачи пока не
 видны вспомогательным технологиям — записано, как и требовал AC.
 
+> **Поправка 2026-09-25 ([B-61](B-61-preview-content-missing-from-browser-a11y.md)).** Абзац выше
+> не подтвердился. В настоящем дереве доступности Chrome (CDP `Accessibility.getFullAXTree`, та же
+> сборка на CMP 1.12.1) содержимое предпросмотра есть: нажимаемая строка — `button` с именем из
+> `accessibilityLabel`, текст с `heading` — `heading`. Зеркальный DOM в shadow root говорит то же
+> (`role=button aria-label=…`, `role=heading`). Наблюдение было артефактом способа смотреть: плоский
+> `querySelectorAll` в shadow root не заходит, а снимок страницы инструментом браузера показывает её
+> пустой.
+
 **Бинарная поломка** четырёх data class — объявлена; запись 0.38.0 в `UPGRADING.md` переписана под все
 новые поля.
 
