@@ -39,6 +39,10 @@ public data class ColumnComponent(
      * `space_between`, `space_around` or `space_evenly`. `spacing` stays the smallest gap. An unfamiliar word means `start`.
      */
     val arrangement: String? = null,
+    // What a screen reader says for the container as a whole (SPEC.md §4.11). A field, like the
+    // others: an unknown one is ignored and the container is read as before, child by child.
+    /** What assistive technology announces for this container when it has an `action`, instead of reading its children. */
+    val accessibilityLabel: String? = null,
 ) : KompotComponent
 
 // A horizontal container — a pair of fields side by side, say a document number and its date. A
@@ -69,6 +73,10 @@ public data class RowComponent(
     // always drew — still, with the tail cut off at the edge — where an unknown type would be a hole.
     /** Whether the row scrolls sideways when its children are wider than it. `weight` means nothing in a row that scrolls. */
     val scrollable: Boolean = false,
+    // What a screen reader says for the container as a whole (SPEC.md §4.11). A field, like the
+    // others: an unknown one is ignored and the container is read as before, child by child.
+    /** What assistive technology announces for this container when it has an `action`, instead of reading its children. */
+    val accessibilityLabel: String? = null,
 ) : KompotComponent
 
 /**
@@ -172,6 +180,9 @@ public data class TextComponent(
     // Only meaningful together with maxLines: whether the cut is marked. false clips silently.
     /** Whether a cut is marked with an ellipsis. Only meaningful together with maxLines. */
     val ellipsis: Boolean = true,
+    // Screen readers move between headings; without this a kompot screen had none to move between.
+    /** Whether this text is a heading, for assistive technology to navigate by. */
+    val heading: Boolean = false,
 ) : KompotComponent
 
 // One run of a text node: its own words, optionally its own style, optionally something to do. A span
@@ -209,6 +220,8 @@ public data class ButtonComponent(
     // set of emphases, and a client that does not recognise one falls back to its ordinary button.
     /** Which of the client's button styles to use. An unfamiliar word draws the neutral one. */
     val variant: String? = null,
+    /** What assistive technology announces for the button, when its words alone do not say what it does. */
+    val accessibilityLabel: String? = null,
 ) : KompotComponent
 
 // One row of a simple table grid (see TableComponent); cells in a row always share the width

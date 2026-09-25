@@ -42,7 +42,7 @@ private val FORM_BODY: String =
             "type": "text",
             "id": "title",
             "text": "A form is a schema and a screen in one body",
-            "style": "headline_small",
+            "style": "headline_small", "heading": true,
             "color": "on_surface"
           },
           {
@@ -81,7 +81,7 @@ private val LIVE_SCREEN_BODY: String =
             "type": "text",
             "id": "title",
             "text": "A screen that names its update channel",
-            "style": "headline_small",
+            "style": "headline_small", "heading": true,
             "color": "on_surface"
           },
           {
@@ -111,7 +111,7 @@ private val LAYERS_BODY: String =
           "type": "text",
           "id": "title",
           "text": "One node laid over another",
-          "style": "headline_small",
+          "style": "headline_small", "heading": true,
           "color": "on_surface"
         },
         {
@@ -163,7 +163,7 @@ private val RAIL_BODY: String =
       "spacing": 16,
       "modifiers": [ { "type": "padding", "all": 24 } ],
       "children": [
-        { "type": "text", "id": "title", "text": "A rail of cards", "style": "headline_small", "color": "on_surface" },
+        { "type": "text", "id": "title", "text": "A rail of cards", "style": "headline_small", "heading": true, "color": "on_surface" },
         {
           "type": "row",
           "id": "rail",
@@ -202,7 +202,7 @@ private val MESSAGES_BODY: String =
       "spacing": 12,
       "modifiers": [ { "type": "padding", "all": 24 } ],
       "children": [
-        { "type": "text", "id": "title", "text": "An answer in words", "style": "headline_small", "color": "on_surface" },
+        { "type": "text", "id": "title", "text": "An answer in words", "style": "headline_small", "heading": true, "color": "on_surface" },
         {
           "type": "text",
           "id": "note",
@@ -242,9 +242,11 @@ private val RULES_BODY: String =
       "spacing": 12,
       "modifiers": [ { "type": "padding", "all": 24 } ],
       "children": [
-        { "type": "text", "id": "title", "text": "Rules and room", "style": "headline_small", "color": "on_surface" },
+        { "type": "text", "id": "title", "text": "Rules and room", "style": "headline_small", "heading": true, "color": "on_surface" },
         {
           "type": "row", "id": "language",
+          "action": { "type": "show_message", "text": "The language picker would open here" },
+          "accessibilityLabel": "Language: English. Change",
           "children": [
             { "type": "text", "id": "language_label", "text": "Language", "style": "body_large", "color": "on_surface" },
             { "type": "spacer", "id": "language_gap", "modifiers": [ { "type": "weight", "value": 1.0 } ] },
@@ -286,7 +288,7 @@ private val OVERLAYS_BODY: String =
       "spacing": 12,
       "modifiers": [ { "type": "padding", "all": 24 } ],
       "children": [
-        { "type": "text", "id": "title", "text": "Over the screen", "style": "headline_small", "color": "on_surface" },
+        { "type": "text", "id": "title", "text": "Over the screen", "style": "headline_small", "heading": true, "color": "on_surface" },
         {
           "type": "text", "id": "note",
           "text": "confirm wraps the action it guards, so a client that does not know it runs nothing rather than deleting on the first tap. present shows a tree over the screen; close inside it closes it.",

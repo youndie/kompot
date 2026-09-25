@@ -58,8 +58,10 @@ final class io.github.youndie.kompot.standard/BoxComponent : io.github.youndie.k
 }
 
 final class io.github.youndie.kompot.standard/ButtonComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.standard/ButtonComponent|null[0]
-    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String, io.github.youndie.kompot/KompotAction, kotlin/String? = ...) // io.github.youndie.kompot.standard/ButtonComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;io.github.youndie.kompot.KompotAction;kotlin.String?){}[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String, io.github.youndie.kompot/KompotAction, kotlin/String? = ..., kotlin/String? = ...) // io.github.youndie.kompot.standard/ButtonComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;io.github.youndie.kompot.KompotAction;kotlin.String?;kotlin.String?){}[0]
 
+    final val accessibilityLabel // io.github.youndie.kompot.standard/ButtonComponent.accessibilityLabel|{}accessibilityLabel[0]
+        final fun <get-accessibilityLabel>(): kotlin/String? // io.github.youndie.kompot.standard/ButtonComponent.accessibilityLabel.<get-accessibilityLabel>|<get-accessibilityLabel>(){}[0]
     final val action // io.github.youndie.kompot.standard/ButtonComponent.action|{}action[0]
         final fun <get-action>(): io.github.youndie.kompot/KompotAction // io.github.youndie.kompot.standard/ButtonComponent.action.<get-action>|<get-action>(){}[0]
     final val id // io.github.youndie.kompot.standard/ButtonComponent.id|{}id[0]
@@ -76,7 +78,8 @@ final class io.github.youndie.kompot.standard/ButtonComponent : io.github.youndi
     final fun component3(): kotlin/String // io.github.youndie.kompot.standard/ButtonComponent.component3|component3(){}[0]
     final fun component4(): io.github.youndie.kompot/KompotAction // io.github.youndie.kompot.standard/ButtonComponent.component4|component4(){}[0]
     final fun component5(): kotlin/String? // io.github.youndie.kompot.standard/ButtonComponent.component5|component5(){}[0]
-    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., io.github.youndie.kompot/KompotAction = ..., kotlin/String? = ...): io.github.youndie.kompot.standard/ButtonComponent // io.github.youndie.kompot.standard/ButtonComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;io.github.youndie.kompot.KompotAction;kotlin.String?){}[0]
+    final fun component6(): kotlin/String? // io.github.youndie.kompot.standard/ButtonComponent.component6|component6(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., io.github.youndie.kompot/KompotAction = ..., kotlin/String? = ..., kotlin/String? = ...): io.github.youndie.kompot.standard/ButtonComponent // io.github.youndie.kompot.standard/ButtonComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;io.github.youndie.kompot.KompotAction;kotlin.String?;kotlin.String?){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.standard/ButtonComponent.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.youndie.kompot.standard/ButtonComponent.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.youndie.kompot.standard/ButtonComponent.toString|toString(){}[0]
@@ -110,8 +113,10 @@ final class io.github.youndie.kompot.standard/ColumnBuilder : io.github.youndie.
 }
 
 final class io.github.youndie.kompot.standard/ColumnComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.standard/ColumnComponent|null[0]
-    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin.collections/List<io.github.youndie.kompot/KompotComponent>, kotlin/Int = ..., io.github.youndie.kompot/KompotAction? = ..., kotlin/String? = ..., kotlin/String? = ...) // io.github.youndie.kompot.standard/ColumnComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.collections.List<io.github.youndie.kompot.KompotComponent>;kotlin.Int;io.github.youndie.kompot.KompotAction?;kotlin.String?;kotlin.String?){}[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin.collections/List<io.github.youndie.kompot/KompotComponent>, kotlin/Int = ..., io.github.youndie.kompot/KompotAction? = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/String? = ...) // io.github.youndie.kompot.standard/ColumnComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.collections.List<io.github.youndie.kompot.KompotComponent>;kotlin.Int;io.github.youndie.kompot.KompotAction?;kotlin.String?;kotlin.String?;kotlin.String?){}[0]
 
+    final val accessibilityLabel // io.github.youndie.kompot.standard/ColumnComponent.accessibilityLabel|{}accessibilityLabel[0]
+        final fun <get-accessibilityLabel>(): kotlin/String? // io.github.youndie.kompot.standard/ColumnComponent.accessibilityLabel.<get-accessibilityLabel>|<get-accessibilityLabel>(){}[0]
     final val action // io.github.youndie.kompot.standard/ColumnComponent.action|{}action[0]
         final fun <get-action>(): io.github.youndie.kompot/KompotAction? // io.github.youndie.kompot.standard/ColumnComponent.action.<get-action>|<get-action>(){}[0]
     final val alignment // io.github.youndie.kompot.standard/ColumnComponent.alignment|{}alignment[0]
@@ -134,7 +139,8 @@ final class io.github.youndie.kompot.standard/ColumnComponent : io.github.youndi
     final fun component5(): io.github.youndie.kompot/KompotAction? // io.github.youndie.kompot.standard/ColumnComponent.component5|component5(){}[0]
     final fun component6(): kotlin/String? // io.github.youndie.kompot.standard/ColumnComponent.component6|component6(){}[0]
     final fun component7(): kotlin/String? // io.github.youndie.kompot.standard/ColumnComponent.component7|component7(){}[0]
-    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin.collections/List<io.github.youndie.kompot/KompotComponent> = ..., kotlin/Int = ..., io.github.youndie.kompot/KompotAction? = ..., kotlin/String? = ..., kotlin/String? = ...): io.github.youndie.kompot.standard/ColumnComponent // io.github.youndie.kompot.standard/ColumnComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.collections.List<io.github.youndie.kompot.KompotComponent>;kotlin.Int;io.github.youndie.kompot.KompotAction?;kotlin.String?;kotlin.String?){}[0]
+    final fun component8(): kotlin/String? // io.github.youndie.kompot.standard/ColumnComponent.component8|component8(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin.collections/List<io.github.youndie.kompot/KompotComponent> = ..., kotlin/Int = ..., io.github.youndie.kompot/KompotAction? = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/String? = ...): io.github.youndie.kompot.standard/ColumnComponent // io.github.youndie.kompot.standard/ColumnComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.collections.List<io.github.youndie.kompot.KompotComponent>;kotlin.Int;io.github.youndie.kompot.KompotAction?;kotlin.String?;kotlin.String?;kotlin.String?){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.standard/ColumnComponent.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.youndie.kompot.standard/ColumnComponent.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.youndie.kompot.standard/ColumnComponent.toString|toString(){}[0]
@@ -452,8 +458,10 @@ final class io.github.youndie.kompot.standard/RowBuilder : io.github.youndie.kom
 }
 
 final class io.github.youndie.kompot.standard/RowComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.standard/RowComponent|null[0]
-    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin.collections/List<io.github.youndie.kompot/KompotComponent>, kotlin/Int = ..., io.github.youndie.kompot/KompotAction? = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ...) // io.github.youndie.kompot.standard/RowComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.collections.List<io.github.youndie.kompot.KompotComponent>;kotlin.Int;io.github.youndie.kompot.KompotAction?;kotlin.String?;kotlin.String?;kotlin.Boolean){}[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin.collections/List<io.github.youndie.kompot/KompotComponent>, kotlin/Int = ..., io.github.youndie.kompot/KompotAction? = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ..., kotlin/String? = ...) // io.github.youndie.kompot.standard/RowComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.collections.List<io.github.youndie.kompot.KompotComponent>;kotlin.Int;io.github.youndie.kompot.KompotAction?;kotlin.String?;kotlin.String?;kotlin.Boolean;kotlin.String?){}[0]
 
+    final val accessibilityLabel // io.github.youndie.kompot.standard/RowComponent.accessibilityLabel|{}accessibilityLabel[0]
+        final fun <get-accessibilityLabel>(): kotlin/String? // io.github.youndie.kompot.standard/RowComponent.accessibilityLabel.<get-accessibilityLabel>|<get-accessibilityLabel>(){}[0]
     final val action // io.github.youndie.kompot.standard/RowComponent.action|{}action[0]
         final fun <get-action>(): io.github.youndie.kompot/KompotAction? // io.github.youndie.kompot.standard/RowComponent.action.<get-action>|<get-action>(){}[0]
     final val alignment // io.github.youndie.kompot.standard/RowComponent.alignment|{}alignment[0]
@@ -479,7 +487,8 @@ final class io.github.youndie.kompot.standard/RowComponent : io.github.youndie.k
     final fun component6(): kotlin/String? // io.github.youndie.kompot.standard/RowComponent.component6|component6(){}[0]
     final fun component7(): kotlin/String? // io.github.youndie.kompot.standard/RowComponent.component7|component7(){}[0]
     final fun component8(): kotlin/Boolean // io.github.youndie.kompot.standard/RowComponent.component8|component8(){}[0]
-    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin.collections/List<io.github.youndie.kompot/KompotComponent> = ..., kotlin/Int = ..., io.github.youndie.kompot/KompotAction? = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ...): io.github.youndie.kompot.standard/RowComponent // io.github.youndie.kompot.standard/RowComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.collections.List<io.github.youndie.kompot.KompotComponent>;kotlin.Int;io.github.youndie.kompot.KompotAction?;kotlin.String?;kotlin.String?;kotlin.Boolean){}[0]
+    final fun component9(): kotlin/String? // io.github.youndie.kompot.standard/RowComponent.component9|component9(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin.collections/List<io.github.youndie.kompot/KompotComponent> = ..., kotlin/Int = ..., io.github.youndie.kompot/KompotAction? = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ..., kotlin/String? = ...): io.github.youndie.kompot.standard/RowComponent // io.github.youndie.kompot.standard/RowComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.collections.List<io.github.youndie.kompot.KompotComponent>;kotlin.Int;io.github.youndie.kompot.KompotAction?;kotlin.String?;kotlin.String?;kotlin.Boolean;kotlin.String?){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.standard/RowComponent.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.youndie.kompot.standard/RowComponent.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.youndie.kompot.standard/RowComponent.toString|toString(){}[0]
@@ -672,12 +681,14 @@ final class io.github.youndie.kompot.standard/TableRow { // io.github.youndie.ko
 }
 
 final class io.github.youndie.kompot.standard/TextComponent : io.github.youndie.kompot/KompotComponent { // io.github.youndie.kompot.standard/TextComponent|null[0]
-    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String, io.github.youndie.kompot/TypographyToken? = ..., io.github.youndie.kompot/ColorToken? = ..., kotlin.collections/List<io.github.youndie.kompot.standard/TextSpan> = ..., kotlin/Int? = ..., kotlin/Boolean = ...) // io.github.youndie.kompot.standard/TextComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;io.github.youndie.kompot.TypographyToken?;io.github.youndie.kompot.ColorToken?;kotlin.collections.List<io.github.youndie.kompot.standard.TextSpan>;kotlin.Int?;kotlin.Boolean){}[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String, io.github.youndie.kompot/TypographyToken? = ..., io.github.youndie.kompot/ColorToken? = ..., kotlin.collections/List<io.github.youndie.kompot.standard/TextSpan> = ..., kotlin/Int? = ..., kotlin/Boolean = ..., kotlin/Boolean = ...) // io.github.youndie.kompot.standard/TextComponent.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;io.github.youndie.kompot.TypographyToken?;io.github.youndie.kompot.ColorToken?;kotlin.collections.List<io.github.youndie.kompot.standard.TextSpan>;kotlin.Int?;kotlin.Boolean;kotlin.Boolean){}[0]
 
     final val color // io.github.youndie.kompot.standard/TextComponent.color|{}color[0]
         final fun <get-color>(): io.github.youndie.kompot/ColorToken? // io.github.youndie.kompot.standard/TextComponent.color.<get-color>|<get-color>(){}[0]
     final val ellipsis // io.github.youndie.kompot.standard/TextComponent.ellipsis|{}ellipsis[0]
         final fun <get-ellipsis>(): kotlin/Boolean // io.github.youndie.kompot.standard/TextComponent.ellipsis.<get-ellipsis>|<get-ellipsis>(){}[0]
+    final val heading // io.github.youndie.kompot.standard/TextComponent.heading|{}heading[0]
+        final fun <get-heading>(): kotlin/Boolean // io.github.youndie.kompot.standard/TextComponent.heading.<get-heading>|<get-heading>(){}[0]
     final val id // io.github.youndie.kompot.standard/TextComponent.id|{}id[0]
         final fun <get-id>(): kotlin/String // io.github.youndie.kompot.standard/TextComponent.id.<get-id>|<get-id>(){}[0]
     final val maxLines // io.github.youndie.kompot.standard/TextComponent.maxLines|{}maxLines[0]
@@ -699,7 +710,8 @@ final class io.github.youndie.kompot.standard/TextComponent : io.github.youndie.
     final fun component6(): kotlin.collections/List<io.github.youndie.kompot.standard/TextSpan> // io.github.youndie.kompot.standard/TextComponent.component6|component6(){}[0]
     final fun component7(): kotlin/Int? // io.github.youndie.kompot.standard/TextComponent.component7|component7(){}[0]
     final fun component8(): kotlin/Boolean // io.github.youndie.kompot.standard/TextComponent.component8|component8(){}[0]
-    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., io.github.youndie.kompot/TypographyToken? = ..., io.github.youndie.kompot/ColorToken? = ..., kotlin.collections/List<io.github.youndie.kompot.standard/TextSpan> = ..., kotlin/Int? = ..., kotlin/Boolean = ...): io.github.youndie.kompot.standard/TextComponent // io.github.youndie.kompot.standard/TextComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;io.github.youndie.kompot.TypographyToken?;io.github.youndie.kompot.ColorToken?;kotlin.collections.List<io.github.youndie.kompot.standard.TextSpan>;kotlin.Int?;kotlin.Boolean){}[0]
+    final fun component9(): kotlin/Boolean // io.github.youndie.kompot.standard/TextComponent.component9|component9(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.kompot/KompotModifierNode> = ..., kotlin/String = ..., io.github.youndie.kompot/TypographyToken? = ..., io.github.youndie.kompot/ColorToken? = ..., kotlin.collections/List<io.github.youndie.kompot.standard/TextSpan> = ..., kotlin/Int? = ..., kotlin/Boolean = ..., kotlin/Boolean = ...): io.github.youndie.kompot.standard/TextComponent // io.github.youndie.kompot.standard/TextComponent.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.kompot.KompotModifierNode>;kotlin.String;io.github.youndie.kompot.TypographyToken?;io.github.youndie.kompot.ColorToken?;kotlin.collections.List<io.github.youndie.kompot.standard.TextSpan>;kotlin.Int?;kotlin.Boolean;kotlin.Boolean){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.standard/TextComponent.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.youndie.kompot.standard/TextComponent.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.youndie.kompot.standard/TextComponent.toString|toString(){}[0]

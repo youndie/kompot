@@ -62,16 +62,18 @@ public final class io/github/youndie/kompot/standard/BoxComponent$Companion {
 
 public final class io/github/youndie/kompot/standard/ButtonComponent : io/github/youndie/kompot/KompotComponent {
 	public static final field Companion Lio/github/youndie/kompot/standard/ButtonComponent$Companion;
-	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/util/List;
 	public final fun component3 ()Ljava/lang/String;
 	public final fun component4 ()Lio/github/youndie/kompot/KompotAction;
 	public final fun component5 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;)Lio/github/youndie/kompot/standard/ButtonComponent;
-	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/ButtonComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/standard/ButtonComponent;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/standard/ButtonComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/ButtonComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/standard/ButtonComponent;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccessibilityLabel ()Ljava/lang/String;
 	public final fun getAction ()Lio/github/youndie/kompot/KompotAction;
 	public fun getId ()Ljava/lang/String;
 	public fun getModifiers ()Ljava/util/List;
@@ -118,8 +120,8 @@ public final class io/github/youndie/kompot/standard/ColumnBuilder : io/github/y
 
 public final class io/github/youndie/kompot/standard/ColumnComponent : io/github/youndie/kompot/KompotComponent {
 	public static final field Companion Lio/github/youndie/kompot/standard/ColumnComponent$Companion;
-	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/util/List;
 	public final fun component3 ()Ljava/util/List;
@@ -127,9 +129,11 @@ public final class io/github/youndie/kompot/standard/ColumnComponent : io/github
 	public final fun component5 ()Lio/github/youndie/kompot/KompotAction;
 	public final fun component6 ()Ljava/lang/String;
 	public final fun component7 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/standard/ColumnComponent;
-	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/ColumnComponent;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/standard/ColumnComponent;
+	public final fun component8 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/kompot/standard/ColumnComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/ColumnComponent;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/standard/ColumnComponent;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccessibilityLabel ()Ljava/lang/String;
 	public final fun getAction ()Lio/github/youndie/kompot/KompotAction;
 	public final fun getAlignment ()Ljava/lang/String;
 	public final fun getArrangement ()Ljava/lang/String;
@@ -497,8 +501,8 @@ public final class io/github/youndie/kompot/standard/RowBuilder : io/github/youn
 
 public final class io/github/youndie/kompot/standard/RowComponent : io/github/youndie/kompot/KompotComponent {
 	public static final field Companion Lio/github/youndie/kompot/standard/RowComponent$Companion;
-	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;Z)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/util/List;
 	public final fun component3 ()Ljava/util/List;
@@ -507,9 +511,11 @@ public final class io/github/youndie/kompot/standard/RowComponent : io/github/yo
 	public final fun component6 ()Ljava/lang/String;
 	public final fun component7 ()Ljava/lang/String;
 	public final fun component8 ()Z
-	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;Z)Lio/github/youndie/kompot/standard/RowComponent;
-	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/RowComponent;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lio/github/youndie/kompot/standard/RowComponent;
+	public final fun component9 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)Lio/github/youndie/kompot/standard/RowComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/RowComponent;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/standard/RowComponent;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccessibilityLabel ()Ljava/lang/String;
 	public final fun getAction ()Lio/github/youndie/kompot/KompotAction;
 	public final fun getAlignment ()Ljava/lang/String;
 	public final fun getArrangement ()Ljava/lang/String;
@@ -722,8 +728,8 @@ public final class io/github/youndie/kompot/standard/TableRow$Companion {
 
 public final class io/github/youndie/kompot/standard/TextComponent : io/github/youndie/kompot/KompotComponent {
 	public static final field Companion Lio/github/youndie/kompot/standard/TextComponent$Companion;
-	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Integer;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Integer;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Integer;ZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Integer;ZZLkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/util/List;
 	public final fun component3 ()Ljava/lang/String;
@@ -732,11 +738,13 @@ public final class io/github/youndie/kompot/standard/TextComponent : io/github/y
 	public final fun component6 ()Ljava/util/List;
 	public final fun component7 ()Ljava/lang/Integer;
 	public final fun component8 ()Z
-	public final fun copy-wln_tMw (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Integer;Z)Lio/github/youndie/kompot/standard/TextComponent;
-	public static synthetic fun copy-wln_tMw$default (Lio/github/youndie/kompot/standard/TextComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Integer;ZILjava/lang/Object;)Lio/github/youndie/kompot/standard/TextComponent;
+	public final fun component9 ()Z
+	public final fun copy-qUiO0uI (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Integer;ZZ)Lio/github/youndie/kompot/standard/TextComponent;
+	public static synthetic fun copy-qUiO0uI$default (Lio/github/youndie/kompot/standard/TextComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Integer;ZZILjava/lang/Object;)Lio/github/youndie/kompot/standard/TextComponent;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getColor-R3uu6jg ()Ljava/lang/String;
 	public final fun getEllipsis ()Z
+	public final fun getHeading ()Z
 	public fun getId ()Ljava/lang/String;
 	public final fun getMaxLines ()Ljava/lang/Integer;
 	public fun getModifiers ()Ljava/util/List;
