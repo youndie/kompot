@@ -231,6 +231,50 @@ private val MESSAGES_BODY: String =
     }
     """.trimIndent()
 
+// divider and spacer (SPEC.md §4.10): a rule across the axis, room along it. Settings-like rows split
+// by dividers; in each row a weighted spacer pushes the value to the far edge, and the rows' own
+// divider is vertical because a row is horizontal.
+private val RULES_BODY: String =
+    """
+    {
+      "type": "column",
+      "id": "root",
+      "spacing": 12,
+      "modifiers": [ { "type": "padding", "all": 24 } ],
+      "children": [
+        { "type": "text", "id": "title", "text": "Rules and room", "style": "headline_small", "color": "on_surface" },
+        {
+          "type": "row", "id": "language",
+          "children": [
+            { "type": "text", "id": "language_label", "text": "Language", "style": "body_large", "color": "on_surface" },
+            { "type": "spacer", "id": "language_gap", "modifiers": [ { "type": "weight", "value": 1.0 } ] },
+            { "type": "text", "id": "language_value", "text": "English", "style": "body_large", "color": "on_surface_variant" }
+          ]
+        },
+        { "type": "divider", "id": "rule_1" },
+        {
+          "type": "row", "id": "theme",
+          "children": [
+            { "type": "text", "id": "theme_label", "text": "Theme", "style": "body_large", "color": "on_surface" },
+            { "type": "spacer", "id": "theme_gap", "modifiers": [ { "type": "weight", "value": 1.0 } ] },
+            { "type": "text", "id": "theme_light", "text": "Light", "style": "body_large", "color": "on_surface_variant" },
+            { "type": "spacer", "id": "theme_room", "size": 12 },
+            { "type": "divider", "id": "theme_rule" },
+            { "type": "spacer", "id": "theme_room_2", "size": 12 },
+            { "type": "text", "id": "theme_dark", "text": "Dark", "style": "body_large", "color": "on_surface_variant" }
+          ]
+        },
+        { "type": "divider", "id": "rule_2" },
+        { "type": "spacer", "id": "before_note", "size": 24 },
+        {
+          "type": "text", "id": "note",
+          "text": "The rules between the rows are horizontal and the one inside the theme row is vertical: a divider runs across the stack it is in. The values sit at the right because a spacer with weight takes the room between.",
+          "style": "body_medium", "color": "on_surface_variant"
+        }
+      ]
+    }
+    """.trimIndent()
+
 internal val EXAMPLES: List<Example> =
     listOf(
         Example("A component an older client cannot read", SAMPLE_BODY),
@@ -239,4 +283,5 @@ internal val EXAMPLES: List<Example> =
         Example("Layers: a badge and a caption over a picture", LAYERS_BODY),
         Example("A rail of cards that scrolls sideways", RAIL_BODY),
         Example("An answer in words: show_message", MESSAGES_BODY),
+        Example("Rules and room: divider and spacer", RULES_BODY),
     )
