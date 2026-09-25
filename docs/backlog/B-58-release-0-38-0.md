@@ -1,7 +1,7 @@
 ---
 id: B-58
 title: "Выпуск 0.38.0: версия, журналы, Central"
-status: open
+status: wip
 priority: P0
 size: S
 stage: release-0.38
