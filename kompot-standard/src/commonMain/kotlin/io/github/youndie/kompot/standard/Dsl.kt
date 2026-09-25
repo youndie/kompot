@@ -167,6 +167,29 @@ public fun KompotContainerContext.box(
     addComponent(BoxBuilder(id, id ?: nextChildPath()).apply(block).build())
 }
 
+/** A rule across the parent's axis (SPEC.md §4.10). */
+public fun KompotContainerContext.divider(
+    color: ColorToken? = null,
+    id: String? = null,
+) {
+    addComponent(DividerComponent(id = id ?: nextChildPath(), color = color))
+}
+
+/** Room along the parent's axis: [size] dp, or a share of what is left with [weight]. */
+public fun KompotContainerContext.spacer(
+    size: Int = 0,
+    weight: Float? = null,
+    id: String? = null,
+) {
+    addComponent(
+        SpacerComponent(
+            id = id ?: nextChildPath(),
+            modifiers = if (weight != null) listOf(KompotModifierNode.Weight(weight)) else emptyList(),
+            size = size,
+        ),
+    )
+}
+
 public fun KompotContainerContext.text(
     text: String,
     style: TypographyToken? = null,

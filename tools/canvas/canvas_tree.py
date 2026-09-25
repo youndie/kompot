@@ -164,9 +164,12 @@ def to_wire(node: Node) -> dict:
         out["modifiers"] = mods
     text = clean("".join(node.text))
     if node.kind == "spacer":
-        out["type"] = "column"
+        # The wire's own spacer since kompot 0.38 (SPEC.md §4.10), carrying as its fallback the empty
+        # weighted column every earlier client already draws — so a client older than the type keeps
+        # the gap instead of losing it, which on a fixed screen would move everything below it.
         out.setdefault("modifiers", []).insert(0, {"type": "weight", "value": 1.0})
-        out["children"] = []
+        # Its own id: the body rules walk into fallbacks, and an id repeated there reads as two nodes (§4.2).
+        out["fallback"] = {"type": "column", "id": f"{a.get('id')}-fallback", "modifiers": list(out["modifiers"]), "children": []}
         return out
     if node.kind in ("column", "row"):
         if "spacing" in a:
@@ -274,9 +277,29 @@ def words(node: dict, defaults: dict = DEFAULTS) -> dict:
     return out
 
 
+def spacer_form(tree: dict) -> dict:
+    """The two spellings of one gap, read as one: the wire's spacer (kompot 0.38) and the empty weighted
+    column a server built before it — so a recording made for older clients does not diff against a
+    canvas that now says spacer."""
+    node = dict(tree)
+    mods = node.get("modifiers") or []
+    if (
+        node.get("type") == "column"
+        and not node.get("children")
+        and "action" not in node
+        and any(m.get("type") == "weight" for m in mods)
+    ):
+        node["type"] = "spacer"
+        node.pop("children", None)
+    node.pop("fallback", None)
+    if "children" in node:
+        node["children"] = [spacer_form(c) for c in node["children"]]
+    return node
+
+
 def compare(canvas: dict, recorded: dict, defaults: dict = DEFAULTS) -> list:
     rows = []
-    a, b = index(canvas), index(recorded)
+    a, b = index(spacer_form(canvas)), index(spacer_form(recorded))
     for nid in a:
         if nid not in b:
             rows.append(("ONLY CANVAS", nid, a[nid][0].get("type"), ""))

@@ -183,6 +183,38 @@ public final class io/github/youndie/kompot/standard/CopyTextAction$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class io/github/youndie/kompot/standard/DividerComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/standard/DividerComponent$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3-R3uu6jg ()Ljava/lang/String;
+	public final fun copy-Ic-GcAg (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;)Lio/github/youndie/kompot/standard/DividerComponent;
+	public static synthetic fun copy-Ic-GcAg$default (Lio/github/youndie/kompot/standard/DividerComponent;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/kompot/standard/DividerComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getColor-R3uu6jg ()Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/standard/DividerComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/standard/DividerComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/standard/DividerComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/standard/DividerComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/standard/DividerComponent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
 public final class io/github/youndie/kompot/standard/DslKt {
 	public static final field ROOT_PATH Ljava/lang/String;
 	public static final fun box (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
@@ -191,11 +223,15 @@ public final class io/github/youndie/kompot/standard/DslKt {
 	public static synthetic fun button$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static final fun column (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun column$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun divider-pxkI4q8 (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;)V
+	public static synthetic fun divider-pxkI4q8$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
 	public static final fun kompotScreen (Lkotlin/jvm/functions/Function1;)Lio/github/youndie/kompot/standard/ColumnComponent;
 	public static final fun paginatedList (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/util/List;Lio/github/youndie/kompot/standard/LoadPageAction;Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun paginatedList$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/util/List;Lio/github/youndie/kompot/standard/LoadPageAction;Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static final fun row (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun row$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun spacer (Lio/github/youndie/kompot/dsl/KompotContainerContext;ILjava/lang/Float;Ljava/lang/String;)V
+	public static synthetic fun spacer$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;ILjava/lang/Float;Ljava/lang/String;ILjava/lang/Object;)V
 	public static final fun table (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun table$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static final fun text-9Ve2xZ8 (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
@@ -456,6 +492,38 @@ public final synthetic class io/github/youndie/kompot/standard/ShowMessageAction
 }
 
 public final class io/github/youndie/kompot/standard/ShowMessageAction$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/standard/SpacerComponent : io/github/youndie/kompot/KompotComponent {
+	public static final field Companion Lio/github/youndie/kompot/standard/SpacerComponent$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;I)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()I
+	public final fun copy (Ljava/lang/String;Ljava/util/List;I)Lio/github/youndie/kompot/standard/SpacerComponent;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/SpacerComponent;Ljava/lang/String;Ljava/util/List;IILjava/lang/Object;)Lio/github/youndie/kompot/standard/SpacerComponent;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getId ()Ljava/lang/String;
+	public fun getModifiers ()Ljava/util/List;
+	public final fun getSize ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/standard/SpacerComponent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/standard/SpacerComponent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/standard/SpacerComponent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/standard/SpacerComponent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/standard/SpacerComponent$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 

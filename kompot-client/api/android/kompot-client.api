@@ -65,6 +65,13 @@ public final class io/github/youndie/kompot/DesignSystemKt {
 	public static final fun getLocalKompotDesignSystem ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 
+public final class io/github/youndie/kompot/DividerRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/standard/DividerComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
 public final class io/github/youndie/kompot/FormSubmitAnalyticsKt {
 	public static final fun withFormSubmitTracking (Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Lio/github/youndie/kompot/analytics/AnalyticsTracker;Ljava/lang/String;)Lio/github/youndie/kompot/KompotActionHandler;
 }
@@ -152,6 +159,14 @@ public final class io/github/youndie/kompot/KompotRegistry$Companion {
 	public static synthetic fun invoke$default (Lio/github/youndie/kompot/KompotRegistry$Companion;[Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/youndie/kompot/KompotRegistry;
 }
 
+public final class io/github/youndie/kompot/KompotStackAxis : java/lang/Enum {
+	public static final field Horizontal Lio/github/youndie/kompot/KompotStackAxis;
+	public static final field Vertical Lio/github/youndie/kompot/KompotStackAxis;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/youndie/kompot/KompotStackAxis;
+	public static fun values ()[Lio/github/youndie/kompot/KompotStackAxis;
+}
+
 public final class io/github/youndie/kompot/KompotSurface {
 	public static final field $stable I
 	public fun <init> ()V
@@ -223,6 +238,17 @@ public final class io/github/youndie/kompot/RowRenderer : io/github/youndie/komp
 	public fun <init> ()V
 	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
 	public fun Render (Lio/github/youndie/kompot/standard/RowComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/youndie/kompot/SpacerRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/standard/SpacerComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/youndie/kompot/StackKt {
+	public static final fun getLocalKompotStackAxis ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 
 public final class io/github/youndie/kompot/SurfaceKt {

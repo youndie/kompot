@@ -17,8 +17,10 @@
       "box": "#/$defs/KompotComponentBox",
       "button": "#/$defs/KompotComponentButton",
       "column": "#/$defs/KompotComponentColumn",
+      "divider": "#/$defs/KompotComponentDivider",
       "paginated_list": "#/$defs/KompotComponentPaginatedList",
       "row": "#/$defs/KompotComponentRow",
+      "spacer": "#/$defs/KompotComponentSpacer",
       "table": "#/$defs/KompotComponentTable",
       "text": "#/$defs/KompotComponentText"
     }
@@ -298,6 +300,42 @@
       ],
       "additionalProperties": true
     },
+    "KompotComponentDivider": {
+      "x-kompot-kind": "variant",
+      "x-kompot-wire-type": "divider",
+      "description": "A thin rule between neighbours, drawn across its parent's axis: horizontal in a column, vertical in a row. Its colour is the design system's unless the server names a token.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "divider"
+        },
+        "id": {
+          "type": "string"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "kompot-core.schema.json#/$defs/KompotModifierNode"
+          }
+        },
+        "color": {
+          "anyOf": [
+            {
+              "$ref": "kompot-core.schema.json#/$defs/ColorToken"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The rule's colour; the design system's own when absent."
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": true
+    },
     "KompotComponentPaginatedList": {
       "x-kompot-kind": "variant",
       "x-kompot-wire-type": "paginated_list",
@@ -418,6 +456,35 @@
         "type",
         "id",
         "children"
+      ],
+      "additionalProperties": true
+    },
+    "KompotComponentSpacer": {
+      "x-kompot-kind": "variant",
+      "x-kompot-wire-type": "spacer",
+      "description": "Empty room along its parent's axis: [size] dp of height in a column, of width in a row. A `weight` modifier makes it take its share instead — what pushes a button to the bottom of a fixed screen.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "spacer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "kompot-core.schema.json#/$defs/KompotModifierNode"
+          }
+        },
+        "size": {
+          "type": "integer",
+          "description": "The room it takes along the parent's axis, in density-independent pixels."
+        }
+      },
+      "required": [
+        "type",
+        "id"
       ],
       "additionalProperties": true
     },
