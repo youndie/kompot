@@ -67,7 +67,12 @@ def render(node: dict, depth: int = 0, defaults: dict = DEFAULTS) -> str:
     a = {"data-kompot": kind, "data-id": node.get("id", "")}
     a.update(attrs_of(node))
     inner = ""
-    if kind in ("column", "row"):
+    if kind == "spacer":
+        # The wire's own spacer (SPEC.md §4.10). Its weight is what the kit's spacer means, so it is
+        # not repeated as data-weight; its fallback is for old clients and has nothing to draw here.
+        a["data-kompot"] = "spacer"
+        a.pop("data-weight", None)
+    elif kind in ("column", "row"):
         if kind == "column" and not node.get("children") and "data-weight" in a and "data-action" not in a:
             a["data-kompot"] = "spacer"
             del a["data-weight"]

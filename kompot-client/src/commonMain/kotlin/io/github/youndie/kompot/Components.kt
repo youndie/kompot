@@ -68,6 +68,7 @@ public class ColumnRenderer : KompotComponentRenderer<ColumnComponent> {
             verticalArrangement = StackArrangement(component.arrangement, component.spacing.dp),
             horizontalAlignment = columnAlignment(component.alignment),
         ) {
+            CompositionLocalProvider(LocalKompotStackAxis provides KompotStackAxis.Vertical) {
             component.children.forEach { child ->
                     // weight is a share of the height inside a column, carried by a modifier node on
                     // the CHILD. Outside a column the general mapper ignores it — it is extracted and
@@ -93,6 +94,7 @@ public class ColumnRenderer : KompotComponentRenderer<ColumnComponent> {
                     registry.RenderNode(child, actionHandler, formController)
                 }
             }
+            }
         }
     }
 }
@@ -108,11 +110,16 @@ public class RowRenderer : KompotComponentRenderer<RowComponent> {
         // The scroll goes AFTER the row's own size: the modifiers give the viewport (a Fill row is the
         // window's width), and horizontalScroll lets the content inside it be as wide as it is.
         val scroll = if (component.scrollable) Modifier.horizontalScroll(rememberScrollState()) else Modifier
+        // A vertical divider has to be as tall as the row, and a row inside a scrolling column is
+        // offered unbounded height — so a row that holds one measures itself at its intrinsic height
+        // first. Only then: intrinsics cost a second measure pass, and nothing else in a row needs it.
+        val rule = if (component.children.any { it is DividerComponent }) Modifier.height(IntrinsicSize.Min) else Modifier
         Row(
-            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler).then(scroll),
+            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler).then(scroll).then(rule),
             horizontalArrangement = StackArrangement(component.arrangement, component.spacing.dp),
             verticalAlignment = rowAlignment(component.alignment),
         ) {
+            CompositionLocalProvider(LocalKompotStackAxis provides KompotStackAxis.Horizontal) {
             component.children.forEach { child ->
                     // weight is a share of the width inside a row, carried by a modifier node on the
                     // CHILD. Outside a row the general mapper ignores it — it is extracted and applied
@@ -140,6 +147,7 @@ public class RowRenderer : KompotComponentRenderer<RowComponent> {
                 ) {
                     registry.RenderNode(child, actionHandler, formController)
                 }
+            }
             }
         }
     }
@@ -585,6 +593,8 @@ public val kompotStandardRenderers: Map<KClass<out KompotComponent>, KompotCompo
         ColumnComponent::class to ColumnRenderer(),
         RowComponent::class to RowRenderer(),
         BoxComponent::class to BoxRenderer(),
+        DividerComponent::class to DividerRenderer(),
+        SpacerComponent::class to SpacerRenderer(),
         TextComponent::class to TextRenderer(),
         ButtonComponent::class to ButtonRenderer(),
         TableComponent::class to TableRenderer(),

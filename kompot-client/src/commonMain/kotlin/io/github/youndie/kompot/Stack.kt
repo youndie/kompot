@@ -1,10 +1,24 @@
 package io.github.youndie.kompot
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.VerticalDivider
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+import io.github.youndie.kompot.form.FormController
+import io.github.youndie.kompot.standard.DividerComponent
+import io.github.youndie.kompot.standard.SpacerComponent
 import kotlin.math.roundToInt
 
 // The words `alignment` and `arrangement` on row and column (SPEC.md §4.7), turned into what Compose
@@ -83,4 +97,47 @@ internal class StackArrangement(
     }
 
     override fun toString(): String = "StackArrangement($word, $spacing)"
+}
+
+// Which way the stack a node sits in runs, for the two nodes whose meaning turns with it: a divider is
+// a rule ACROSS the axis, a spacer is room ALONG it (SPEC.md §4.10). Provided by the row and column
+// renderers; outside any stack — the root, a box — a node reads it as a column's.
+public enum class KompotStackAxis { Vertical, Horizontal }
+
+public val LocalKompotStackAxis: ProvidableCompositionLocal<KompotStackAxis> =
+    compositionLocalOf { KompotStackAxis.Vertical }
+
+public class DividerRenderer : KompotComponentRenderer<DividerComponent> {
+    @Composable
+    override fun Render(
+        component: DividerComponent,
+        actionHandler: KompotActionHandler,
+        formController: FormController,
+    ) {
+        // The table's rule when the server names nothing, so a divider and a table row line read as the
+        // same line; a named token is resolved like any other.
+        val color = component.color?.let { LocalKompotDesignSystem.current.resolveColor(it) } ?: MaterialTheme.colorScheme.outlineVariant
+        val modifier = component.modifiers.toComposeModifier()
+        when (LocalKompotStackAxis.current) {
+            KompotStackAxis.Vertical -> HorizontalDivider(modifier = modifier, color = color)
+            // Fills the row's height, which the row makes finite by measuring itself at its intrinsic
+            // height whenever a divider is among its children (RowRenderer).
+            KompotStackAxis.Horizontal -> VerticalDivider(modifier = modifier.fillMaxHeight(), color = color)
+        }
+    }
+}
+
+public class SpacerRenderer : KompotComponentRenderer<SpacerComponent> {
+    @Composable
+    override fun Render(
+        component: SpacerComponent,
+        actionHandler: KompotActionHandler,
+        formController: FormController,
+    ) {
+        val modifier = component.modifiers.toComposeModifier()
+        when (LocalKompotStackAxis.current) {
+            KompotStackAxis.Vertical -> Spacer(modifier.height(component.size.dp))
+            KompotStackAxis.Horizontal -> Spacer(modifier.width(component.size.dp))
+        }
+    }
 }

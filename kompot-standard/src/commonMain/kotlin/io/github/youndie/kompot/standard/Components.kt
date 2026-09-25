@@ -94,6 +94,37 @@ public data class BoxComponent(
     val alignment: String? = null,
 ) : KompotComponent
 
+/**
+ * A thin rule between neighbours, drawn across its parent's axis: horizontal in a column, vertical in
+ * a row. Its colour is the design system's unless the server names a token.
+ */
+@Serializable
+@SerialName("divider")
+@KompotComponentMarker
+public data class DividerComponent(
+    override val id: String,
+    override val modifiers: List<KompotModifierNode> = emptyList(),
+    // A token, as on text: the protocol never carries a colour value (SPEC.md §6).
+    /** The rule's colour; the design system's own when absent. */
+    val color: ColorToken? = null,
+) : KompotComponent
+
+/**
+ * Empty room along its parent's axis: [size] dp of height in a column, of width in a row. A `weight`
+ * modifier makes it take its share instead — what pushes a button to the bottom of a fixed screen.
+ */
+@Serializable
+@SerialName("spacer")
+@KompotComponentMarker
+public data class SpacerComponent(
+    override val id: String,
+    override val modifiers: List<KompotModifierNode> = emptyList(),
+    // Before it, a gap that was not `spacing` was an empty column with a size — a node with an id
+    // somebody had to invent, which reads in the tree as "something is here" (SPEC.md §4.10).
+    /** The room it takes along the parent's axis, in density-independent pixels. */
+    val size: Int = 0,
+) : KompotComponent
+
 /** A run of words to show. The only node that carries copy, and every string a person reads is one. */
 @Serializable
 @SerialName("text")

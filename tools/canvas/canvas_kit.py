@@ -30,7 +30,7 @@ The markup contract (what `canvas_tree.py` reads):
     glyph           data-tone  data-frame="disc|rounded|none"  data-size="small|medium|large"  data-color
     photo           data-size="thumb|tile|square|hero"; the text is the caption
     screen_header   data-action (the way back)
-    spacer          an empty column with weight 1
+    spacer          the wire's spacer with weight 1 (an empty weighted column as its fallback)
     table           <div data-row [data-header]><span data-cell>…</span>…</div> per row
 
     data-action is a deeplink; `data-id` must be unique on the screen (the conformance walk checks it).
@@ -303,7 +303,7 @@ def build_readme(tokens: dict, title: str) -> str:
 | `glyph` | `data-tone`, `data-frame="disc\\|rounded\\|none"`, `data-size="small\\|medium\\|large"`, `data-color` |
 | `photo` | `data-size="thumb\\|tile\\|square\\|hero"`; текст — подпись |
 | `screen_header` | `data-action` — путь назад; оболочка рисует его поверх содержимого |
-| `spacer` | пустая колонка с весом 1: то, что раздвигает соседей на фиксированном экране |
+| `spacer` | `spacer` провода с весом 1 — то, что раздвигает соседей на фиксированном экране; для клиентов старше 0.38 его `fallback` — прежняя пустая колонка с весом |
 | `table` | `<div data-row [data-header]><span data-cell>…</span></div>` на строку — стандартная таблица kompot |
 
 **Слова.** Тона: {tones}. Плотности: {densities}. Стили: {styles}.
