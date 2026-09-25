@@ -57,6 +57,12 @@ public final class io/github/youndie/kompot/ComposableSingletons$ComponentsKt {
 	public final fun getLambda$-723670497$io_github_youndie_kompot_client ()Lkotlin/jvm/functions/Function3;
 }
 
+public final class io/github/youndie/kompot/ComposableSingletons$ScreenLoaderKt {
+	public static final field INSTANCE Lio/github/youndie/kompot/ComposableSingletons$ScreenLoaderKt;
+	public fun <init> ()V
+	public final fun getLambda$800978476$io_github_youndie_kompot_client ()Lkotlin/jvm/functions/Function2;
+}
+
 public final class io/github/youndie/kompot/DegradationKt {
 	public static final fun getKompotPrintingDegradationSink ()Lio/github/youndie/kompot/KompotDegradationSink;
 	public static final fun getLocalKompotDegradationSink ()Landroidx/compose/runtime/ProvidableCompositionLocal;
@@ -271,6 +277,10 @@ public final class io/github/youndie/kompot/RowRenderer : io/github/youndie/komp
 	public fun <init> ()V
 	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
 	public fun Render (Lio/github/youndie/kompot/standard/RowComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/youndie/kompot/ScreenLoaderKt {
+	public static final fun KompotScreenLoader (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class io/github/youndie/kompot/SequenceKt {
