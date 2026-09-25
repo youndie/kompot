@@ -25,7 +25,11 @@ Run against a local publication:
 import glob, json, os, re, subprocess, sys, zipfile
 
 VERSION = sys.argv[1] if len(sys.argv) > 1 else sys.exit("usage: api-metadata-audit.py <version>")
-M2 = os.path.expanduser("~/.m2/repository/io/github/youndie")
+# The group from where the build reads it (`sborka.group`), not spelled here: when it moved to
+# io.github.youndie.kompot (B-58), a path written as a string found nothing under the new one.
+M2 = os.path.expanduser("~/.m2/repository/" + re.search(r"^sborka\.group=(\S+)$", open(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "gradle.properties")
+).read(), re.MULTILINE).group(1).replace(".", "/"))
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Fully-qualified class -> owning module, read from the sources. By CLASS and not by package: the
@@ -112,4 +116,8 @@ for artifact, missing in gaps.items():
 
 if gaps:
     sys.exit(f"\n{len(gaps)} module(s) advertise less than their public API needs")
+# Zero artifacts read is not "every API reachable": it is this audit looking in the wrong place, and it
+# printed exactly that line when the group moved and nothing was under the old path.
+if not glob.glob(f"{M2}/*/{VERSION}"):
+    sys.exit(f"no artifacts published under {VERSION} in {M2} — the audit would pass by finding nothing")
 print(f"checked {len(glob.glob(f'{M2}/*/{VERSION}'))} published artifacts: every public API is reachable")

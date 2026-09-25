@@ -28,7 +28,11 @@ FLOOR = int(re.search(r"^sborka\.jvmFloor\s*=\s*(\d+)\s*$", open(
 CLASS_FILE = FLOOR + 44
 
 VERSION = sys.argv[1] if len(sys.argv) > 1 else sys.exit("usage: jvm-floor-audit.py <version>")
-M2 = os.path.expanduser("~/.m2/repository/io/github/youndie")
+# The group from where the build reads it (`sborka.group`), not spelled here: when it moved to
+# io.github.youndie.kompot (B-58), a path written as a string found nothing under the new one.
+M2 = os.path.expanduser("~/.m2/repository/" + re.search(r"^sborka\.group=(\S+)$", open(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "gradle.properties")
+).read(), re.MULTILINE).group(1).replace(".", "/"))
 
 modules = sorted(glob.glob(f"{M2}/*/{VERSION}/*.module"))
 if not modules:

@@ -20,10 +20,14 @@ Run against a local publication:
     ./gradlew publishToMavenLocal -PVERSION=<v>
     python3 tools/artifact-name-audit.py <v>
 """
-import glob, json, os, sys
+import glob, json, os, re, sys
 
 VERSION = sys.argv[1] if len(sys.argv) > 1 else sys.exit("usage: artifact-name-audit.py <version>")
-M2 = os.path.expanduser("~/.m2/repository/io/github/youndie")
+# The group from where the build reads it (`sborka.group`), not spelled here: when it moved to
+# io.github.youndie.kompot (B-58), a path written as a string found nothing under the new one.
+M2 = os.path.expanduser("~/.m2/repository/" + re.search(r"^sborka\.group=(\S+)$", open(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "gradle.properties")
+).read(), re.MULTILINE).group(1).replace(".", "/"))
 
 modules = sorted(glob.glob(f"{M2}/*/{VERSION}/*.module"))
 if not modules:
