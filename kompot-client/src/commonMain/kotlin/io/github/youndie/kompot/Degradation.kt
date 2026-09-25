@@ -2,6 +2,7 @@ package io.github.youndie.kompot
 
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf
+import io.github.youndie.kompot.standard.SequenceAction
 
 // What a client meets that it does not know. Degradation turns a crash into a hole, and that is the
 // point of it — but a crash is reported by every crash reporter ever written and a hole is reported
@@ -90,9 +91,18 @@ internal class ReportingActionHandler(
     private val sink: KompotDegradationSink,
 ) : KompotActionHandler {
     override fun handle(action: KompotAction) {
-        if (action is UnknownAction) {
-            sink.onUnknown(KompotDegradationKind.UNKNOWN_ACTION, action.originalType, KompotDegradationOutcome.NOTHING)
-        }
+        report(action)
         delegate.handle(action)
+    }
+
+    // Into sequences too: a part this client does not know is as much a hole as a whole action it does
+    // not know, and the rest of the sequence still runs (SPEC.md §16.4) — so the tap did SOMETHING,
+    // which makes the missing part easy to miss.
+    private fun report(action: KompotAction) {
+        when (action) {
+            is UnknownAction -> sink.onUnknown(KompotDegradationKind.UNKNOWN_ACTION, action.originalType, KompotDegradationOutcome.NOTHING)
+            is SequenceAction -> action.actions.forEach(::report)
+            else -> Unit
+        }
     }
 }

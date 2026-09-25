@@ -130,6 +130,9 @@
           "$ref": "kompot-standard.schema.json#/$defs/KompotActionPresent"
         },
         {
+          "$ref": "kompot-standard.schema.json#/$defs/KompotActionSequence"
+        },
+        {
           "$ref": "kompot-standard.schema.json#/$defs/KompotActionShowMessage"
         },
         {
@@ -162,6 +165,7 @@
           "open_url": "kompot-standard.schema.json#/$defs/KompotActionOpenUrl",
           "perform": "kompot-commands.schema.json#/$defs/KompotActionPerform",
           "present": "kompot-standard.schema.json#/$defs/KompotActionPresent",
+          "sequence": "kompot-standard.schema.json#/$defs/KompotActionSequence",
           "show_message": "kompot-standard.schema.json#/$defs/KompotActionShowMessage",
           "submit_form": "kompot-forms.schema.json#/$defs/KompotActionSubmitForm",
           "update_session": "kompot-auth.schema.json#/$defs/KompotActionUpdateSession",
