@@ -153,6 +153,8 @@ public object SchemaCompatibility {
                     )
             }
 
+            changes += baseChanges(name, before.bases[name], after.bases[name])
+
             (old.members - now.members).sorted().forEach { wireType ->
                 before.definitionOf(wireType)?.let { spoken += it }
                 changes +=
@@ -255,6 +257,48 @@ public object SchemaCompatibility {
             }
         }
 
+        return changes
+    }
+
+    // THE BASE OF A HIERARCHY is a definition too: its properties are fields of every node of the
+    // hierarchy (a component's `id`, `modifiers` and `fallback`), and its required list binds every one
+    // of them. It used to be read for membership and flags only, so taking `id` out of required passed
+    // as "nothing incompatible" (B-63). Compared by the same rules as any definition's fields, under the
+    // hierarchy's name.
+    private fun baseChanges(
+        name: String,
+        old: Definition?,
+        now: Definition?,
+    ): List<SchemaChange> {
+        if (old == null && now == null) return emptyList()
+        val before = old ?: NO_BASE
+        val after = now ?: NO_BASE
+        val changes = mutableListOf<SchemaChange>()
+
+        (before.properties.keys + after.properties.keys).sorted().forEach { field ->
+            changes += fieldChanges("$name.$field", field, before, after)
+        }
+        if (before.additionalProperties != after.additionalProperties) {
+            changes +=
+                SchemaChange(
+                    SchemaCompatibilityRules.UNKNOWN_FIELDS_CLOSED,
+                    Compatibility.UNCLASSIFIED,
+                    name,
+                    "additionalProperties of the base is ${after.additionalProperties} where it was " +
+                        "${before.additionalProperties} — §15 names no rule for it, while §3 is the promise that an " +
+                        "unknown field is ignored",
+                )
+        }
+        if (before.residual != after.residual) {
+            changes +=
+                SchemaChange(
+                    SchemaCompatibilityRules.UNCLASSIFIED_CHANGE,
+                    Compatibility.UNCLASSIFIED,
+                    name,
+                    "the base of the hierarchy changed where no rule of §15 looks: " +
+                        firstDifference(before.residual, after.residual),
+                )
+        }
         return changes
     }
 
@@ -488,6 +532,9 @@ private data class Definition(
 private data class Model(
     val hierarchies: Map<String, Hierarchy>,
     val definitions: Map<String, Definition>,
+    // The base definition of each hierarchy that declares one — the file owning an open base prints
+    // its properties; the profile and a closed hierarchy print only the list of members.
+    val bases: Map<String, Definition>,
     // One file minus its $defs, as text: the tripwire for a root keyword nobody here has met yet.
     val envelopes: Map<String, String>,
 ) {
@@ -503,6 +550,7 @@ private data class Model(
 private fun model(documents: Map<String, JsonObject>): Model {
     val hierarchies = mutableMapOf<String, Hierarchy>()
     val definitions = mutableMapOf<String, Definition>()
+    val bases = mutableMapOf<String, Definition>()
     val envelopes = mutableMapOf<String, String>()
 
     documents.toSortedMap().forEach { (fileName, document) ->
@@ -540,28 +588,41 @@ private fun model(documents: Map<String, JsonObject>): Model {
                                     (definition[EXTENSIONS] as? JsonArray).orEmpty().map { it.primitive() },
                         ),
                     )
+                if ("properties" in definition || "required" in definition) {
+                    bases[name] = definitionOf(definition, modelled = MODELLED + HIERARCHY_MODELLED)
+                }
                 return@forEach
             }
 
-            definitions[name] =
-                Definition(
-                    kind = definition.string(KIND),
-                    wireType = definition.string(WIRE_TYPE),
-                    properties =
-                        (definition["properties"] as? JsonObject)
-                            .orEmpty()
-                            .mapNotNull { (field, value) -> (value as? JsonObject)?.let { field to it } }
-                            .toMap(),
-                    required = (definition["required"] as? JsonArray).orEmpty().map { it.primitive() }.toSet(),
-                    enumValues = (definition["enum"] as? JsonArray)?.map { it.primitive() },
-                    additionalProperties = definition["additionalProperties"],
-                    residual = canonical(JsonObject(definition.filterKeys { it !in MODELLED })),
-                )
+            definitions[name] = definitionOf(definition, modelled = MODELLED)
         }
     }
 
-    return Model(hierarchies, definitions, envelopes)
+    return Model(hierarchies, definitions, bases, envelopes)
 }
+
+private fun definitionOf(
+    definition: JsonObject,
+    modelled: Set<String>,
+): Definition =
+    Definition(
+        kind = definition.string(KIND),
+        wireType = definition.string(WIRE_TYPE),
+        properties =
+            (definition["properties"] as? JsonObject)
+                .orEmpty()
+                .mapNotNull { (field, value) -> (value as? JsonObject)?.let { field to it } }
+                .toMap(),
+        required = (definition["required"] as? JsonArray).orEmpty().map { it.primitive() }.toSet(),
+        enumValues = (definition["enum"] as? JsonArray)?.map { it.primitive() },
+        additionalProperties = definition["additionalProperties"],
+        residual = canonical(JsonObject(definition.filterKeys { it !in modelled })),
+    )
+
+// A base that one side does not have: every field it declares on the other side is an addition or a
+// removal, judged by the same rules.
+private val NO_BASE =
+    Definition(kind = null, wireType = null, properties = emptyMap(), required = emptySet(), enumValues = null, additionalProperties = null, residual = "")
 
 private fun merge(
     existing: Hierarchy?,
@@ -628,6 +689,9 @@ private const val HIERARCHY = "hierarchy"
 // What the rules above already read out of a definition, and therefore what the tripwire must not
 // report a second time.
 private val MODELLED = setOf(KIND, WIRE_TYPE, "properties", "required", "enum", "additionalProperties")
+
+// What the hierarchy rules read out of a base besides that: membership and the contract flags.
+private val HIERARCHY_MODELLED = setOf(OPEN, DEGRADES, DISCRIMINATOR, EXTENSIONS, "oneOf")
 
 // Prose, addresses and the two root keys whose content is modelled as membership. A description is
 // read by people and by nothing else (§3 has a reader ignore what it does not know); $id, $schema and

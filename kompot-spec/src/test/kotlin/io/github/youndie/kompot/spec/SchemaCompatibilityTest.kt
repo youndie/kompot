@@ -54,6 +54,51 @@ class SchemaCompatibilityTest {
         assertEquals(emptyList(), SchemaCompatibility.compare(before, after))
     }
 
+    // THE BASE OF A HIERARCHY (B-63). Its fields are fields of every node, and the checker used to read
+    // it for membership only: the two edits below passed as "nothing incompatible".
+    @Test
+    fun `a field taken out of required in the base of a hierarchy is breaking`() {
+        val before = SchemaFiles.loadAll()
+        val after =
+            before.edit("kompot-core.schema.json", "KompotComponent") { definition ->
+                definition.with("required", JsonArray(definition.getValue("required").jsonArray.filter { (it as JsonPrimitive).content != "id" }))
+            }
+
+        val change = SchemaCompatibility.compare(before, after).only()
+        assertEquals(SchemaCompatibilityRules.REQUIRED_REMOVED, change.rule)
+        assertEquals(Compatibility.BREAKING, change.verdict)
+        assertEquals("KompotComponent.id", change.subject)
+    }
+
+    @Test
+    fun `a field gone from the base of a hierarchy is reported`() {
+        val before = SchemaFiles.loadAll()
+        val after =
+            before.edit("kompot-core.schema.json", "KompotComponent") { definition ->
+                definition.with("properties", JsonObject(definition.getValue("properties").jsonObject - "modifiers"))
+            }
+
+        val change = SchemaCompatibility.compare(before, after).only()
+        assertEquals(SchemaCompatibilityRules.FIELD_REMOVED, change.rule)
+        assertEquals("KompotComponent.modifiers", change.subject)
+    }
+
+    // The direction B-49 took: a field with a default added to the base is compatible, and said so.
+    @Test
+    fun `an optional field added to the base of a hierarchy is compatible`() {
+        val before = SchemaFiles.loadAll()
+        val after =
+            before.edit("kompot-core.schema.json", "KompotComponent") { definition ->
+                val properties = definition.getValue("properties").jsonObject
+                definition.with("properties", JsonObject(properties + ("tag" to JsonObject(mapOf("type" to JsonPrimitive("string"))))))
+            }
+
+        val change = SchemaCompatibility.compare(before, after).only()
+        assertEquals(SchemaCompatibilityRules.FIELD_ADDED_OPTIONAL, change.rule)
+        assertEquals(Compatibility.COMPATIBLE, change.verdict)
+        assertEquals("KompotComponent.tag", change.subject)
+    }
+
     @Test
     fun `nothing changed reports nothing`() {
         assertEquals(emptyList(), SchemaCompatibility.compare(schemaSet(), schemaSet()))
