@@ -606,6 +606,8 @@ public val kompotStandardRenderers: Map<KClass<out KompotComponent>, KompotCompo
         ButtonComponent::class to ButtonRenderer(),
         TableComponent::class to TableRenderer(),
         PaginatedListComponent::class to PaginatedListRenderer(),
+        TabsComponent::class to TabsRenderer(),
+        ExpandableComponent::class to ExpandableRenderer(),
     )
 
 // The renderers of :kompot-forms live in :kompot-forms-client, in this same package, and their map is

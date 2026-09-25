@@ -22,10 +22,12 @@
       "button": "#/$defs/KompotComponentButton",
       "column": "#/$defs/KompotComponentColumn",
       "divider": "#/$defs/KompotComponentDivider",
+      "expandable": "#/$defs/KompotComponentExpandable",
       "paginated_list": "#/$defs/KompotComponentPaginatedList",
       "row": "#/$defs/KompotComponentRow",
       "spacer": "#/$defs/KompotComponentSpacer",
       "table": "#/$defs/KompotComponentTable",
+      "tabs": "#/$defs/KompotComponentTabs",
       "text": "#/$defs/KompotComponentText"
     }
   },
@@ -453,6 +455,42 @@
       ],
       "additionalProperties": true
     },
+    "KompotComponentExpandable": {
+      "x-kompot-kind": "variant",
+      "x-kompot-wire-type": "expandable",
+      "description": "A section that opens and closes: [header] is always shown and toggles [content], on the client and without asking the server (SPEC.md §4.12). [expanded] is how it opens, re-applied only when a later version of the node carries a different value.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "expandable"
+        },
+        "id": {
+          "type": "string"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "kompot-core.schema.json#/$defs/KompotModifierNode"
+          }
+        },
+        "header": {
+          "$ref": "kompot-core.schema.json#/$defs/KompotComponent"
+        },
+        "content": {
+          "$ref": "kompot-core.schema.json#/$defs/KompotComponent"
+        },
+        "expanded": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "header",
+        "content"
+      ],
+      "additionalProperties": true
+    },
     "KompotComponentPaginatedList": {
       "x-kompot-kind": "variant",
       "x-kompot-wire-type": "paginated_list",
@@ -643,6 +681,42 @@
       ],
       "additionalProperties": true
     },
+    "KompotComponentTabs": {
+      "x-kompot-kind": "variant",
+      "x-kompot-wire-type": "tabs",
+      "description": "Tabs: a strip of titles and the content of the one selected, switched by the client without asking the server (SPEC.md §4.12). [selected] is where the screen opens; the client applies it again only when a later version of the node carries a different value, so a reload does not undo the reader's choice.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "tabs"
+        },
+        "id": {
+          "type": "string"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "kompot-core.schema.json#/$defs/KompotModifierNode"
+          }
+        },
+        "tabs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TabsItem"
+          }
+        },
+        "selected": {
+          "type": "integer",
+          "description": "The tab the screen opens on, counted from 0. Outside the list means the first."
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "tabs"
+      ],
+      "additionalProperties": true
+    },
     "KompotComponentText": {
       "x-kompot-kind": "variant",
       "x-kompot-wire-type": "text",
@@ -770,6 +844,23 @@
       },
       "required": [
         "cells"
+      ],
+      "additionalProperties": true
+    },
+    "TabsItem": {
+      "x-kompot-kind": "object",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "$ref": "kompot-core.schema.json#/$defs/KompotComponent"
+        }
+      },
+      "required": [
+        "title",
+        "content"
       ],
       "additionalProperties": true
     },

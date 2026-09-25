@@ -54,8 +54,8 @@ public enum class ClientMode(
     // node does not. This is the state the whole protocol is arranged around.
     OLDER(
         "A client released earlier",
-        "Its serializers module has never heard of the chosen type. The node decodes to UnknownComponent, " +
-            "nothing is drawn in its place, and the rest of the screen is untouched.",
+        "Its serializers module has never heard of the chosen type. The node decodes to UnknownComponent; " +
+            "unless the body names an equivalent, nothing is drawn in its place, and the rest of the screen is untouched.",
     ),
 
     // The same old client, and a server that named a stand-in.

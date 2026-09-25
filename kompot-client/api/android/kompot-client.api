@@ -73,6 +73,13 @@ public final class io/github/youndie/kompot/DividerRenderer : io/github/youndie/
 	public fun Render (Lio/github/youndie/kompot/standard/DividerComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
 }
 
+public final class io/github/youndie/kompot/ExpandableRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/standard/ExpandableComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
 public final class io/github/youndie/kompot/FormSubmitAnalyticsKt {
 	public static final fun withFormSubmitTracking (Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Lio/github/youndie/kompot/analytics/AnalyticsTracker;Ljava/lang/String;)Lio/github/youndie/kompot/KompotActionHandler;
 }
@@ -305,6 +312,13 @@ public final class io/github/youndie/kompot/TableRenderer : io/github/youndie/ko
 	public fun <init> ()V
 	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
 	public fun Render (Lio/github/youndie/kompot/standard/TableComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/youndie/kompot/TabsRenderer : io/github/youndie/kompot/KompotComponentRenderer {
+	public static final field $stable I
+	public fun <init> ()V
+	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+	public fun Render (Lio/github/youndie/kompot/standard/TabsComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
 }
 
 public final class io/github/youndie/kompot/TextRenderer : io/github/youndie/kompot/KompotComponentRenderer {

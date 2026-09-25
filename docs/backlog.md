@@ -79,13 +79,13 @@
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
-| [B-58](backlog/B-58-release-0-38-0.md) `[ ]` | Выпуск 0.38.0: версия, журналы, Central | release-0.38 | P0 | S | B-40, B-41, B-42, B-44, B-45, B-46, B-47, B-48, B-49, B-50, B-51, B-52, B-53, B-54, B-55, B-56, B-57, B-62 |
+| [B-58](backlog/B-58-release-0-38-0.md) `[ ]` | Выпуск 0.38.0: версия, журналы, Central | release-0.38 | P0 | S | B-40, B-41, B-42, B-44, B-45, B-46, B-47, B-48, B-49, B-50, B-51, B-52, B-53, B-54, B-55, B-56, B-57, B-62, B-63 |
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
-| [B-49](backlog/B-49-local-state.md) `[ ]` | Локальное состояние экрана: tabs и expandable | release-0.38 | P1 | M | B-48 |
+| [B-63](backlog/B-63-compat-check-ignores-hierarchy-bases.md) `[ ]` | Проверка совместимости не видит изменений в базе иерархии | release-0.38 | P1 | S/M | — |
 | [B-56](backlog/B-56-loading-and-error-screens.md) `[ ]` | Экран загрузки и экран ошибки — чьи они? | release-0.38 | P2 | M | — |
 | [B-62](backlog/B-62-server-marks-the-measured-node.md) `[ ]` | Как сервер помечает узел, который меряет эксперимент? | release-0.38 | P3 | M | — |
 
-## Сделано (57)
+## Сделано (58)
 
 **Швы в toolkit'е**
 
@@ -149,6 +149,7 @@
 - [B-46](backlog/B-46-horizontal-rail.md) — Горизонтальная прокрутка: рельс карточек
 - [B-47](backlog/B-47-divider-and-spacer.md) — divider и spacer как узлы провода
 - [B-48](backlog/B-48-local-state-research.md) — Сколько локального состояния пускать в провод?
+- [B-49](backlog/B-49-local-state.md) — Локальное состояние экрана: tabs и expandable
 - [B-50](backlog/B-50-show-message-action.md) — show_message: короткое сообщение в ответ на действие
 - [B-51](backlog/B-51-dialog-sheet-and-confirm.md) — Диалог, шторка и подтверждение перед действием
 - [B-52](backlog/B-52-sequence-action.md) — sequence: несколько действий одним ответом

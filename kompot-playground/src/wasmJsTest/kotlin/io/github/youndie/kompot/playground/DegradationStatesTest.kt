@@ -138,6 +138,33 @@ class DegradationStatesTest {
             assertEquals(listOf("UNRENDERABLE_COMPONENT  \"box\"  placeholder"), reported.toList())
         }
 
+    // tabs and expandable (SPEC.md §4.12): the sections carry no equivalent, so all three states show on
+    // them; the tabs carry the one §4.12 recommends, so an older client draws it even before the switch
+    // adds anything — the body's author named it, and that is the state the SPEC asks servers to be in.
+    @Test
+    fun `an older client skips a section`() =
+        checkingReports(PlaygroundClient(ClientMode.OLDER, EXPANDABLE), DISCLOSURE) { reported ->
+            assertEquals(listOf("UNKNOWN_COMPONENT  \"expandable\"  nothing"), reported.toList())
+        }
+
+    @Test
+    fun `the same client draws the equivalent named for a section`() =
+        checkingReports(PlaygroundClient(ClientMode.OLDER_WITH_FALLBACK, EXPANDABLE), DISCLOSURE.withServerFallback(true, EXPANDABLE)) { reported ->
+            assertEquals(listOf("UNKNOWN_COMPONENT  \"expandable\"  server_fallback"), reported.toList())
+        }
+
+    @Test
+    fun `a build without the section renderer shows a placeholder`() =
+        checkingReports(PlaygroundClient(ClientMode.MISSING_RENDERER, EXPANDABLE), DISCLOSURE) { reported ->
+            assertEquals(listOf("UNRENDERABLE_COMPONENT  \"expandable\"  placeholder"), reported.toList())
+        }
+
+    @Test
+    fun `an older client draws the panes the body names for tabs`() =
+        checkingReports(PlaygroundClient(ClientMode.OLDER, TABS), DISCLOSURE) { reported ->
+            assertEquals(listOf("UNKNOWN_COMPONENT  \"tabs\"  server_fallback"), reported.toList())
+        }
+
     // Taking one word away takes away exactly one: the rest of today's vocabulary still decodes, and
     // the unknown fallback the old client degrades through survived the copy.
     @Test
@@ -195,6 +222,9 @@ class DegradationStatesTest {
     private companion object {
         const val PROMO = "promo_banner"
         const val BOX = "box"
+        const val TABS = "tabs"
+        const val EXPANDABLE = "expandable"
         val LAYERS = EXAMPLES.single { "box" in it.body && "Layers" in it.name }.body
+        val DISCLOSURE = EXAMPLES.single { "\"tabs\"" in it.body }.body
     }
 }
