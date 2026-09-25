@@ -75,7 +75,7 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (5)
+## Открыто (6)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
@@ -84,6 +84,7 @@
 | [B-63](backlog/B-63-compat-check-ignores-hierarchy-bases.md) `[~]` | Проверка совместимости не видит изменений в базе иерархии | release-0.38 | P1 | S/M | — |
 | [B-56](backlog/B-56-loading-and-error-screens.md) `[ ]` | Экран загрузки и экран ошибки — чьи они? | release-0.38 | P2 | M | — |
 | [B-62](backlog/B-62-server-marks-the-measured-node.md) `[ ]` | Как сервер помечает узел, который меряет эксперимент? | release-0.38 | P3 | M | — |
+| [B-64](backlog/B-64-wasm-production-compile-runs-out-of-memory.md) `[ ]` | Продакшн-компиляция wasm падает по памяти — на Linux-машине каждый раз, на CI однажды | release-0.38 | infra | S | — |
 
 ## Сделано (58)
 
