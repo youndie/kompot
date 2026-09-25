@@ -1,3 +1,9 @@
+public final class io/github/youndie/kompot/ds/material/KompotOverlays {
+	public static final field $stable I
+	public fun <init> ()V
+	public final fun isOpen ()Z
+}
+
 public final class io/github/youndie/kompot/ds/material/Material3DesignSystem : io/github/youndie/kompot/KompotDesignSystem {
 	public static final field $stable I
 	public fun <init> ()V
@@ -14,5 +20,10 @@ public final class io/github/youndie/kompot/ds/material/Material3RemoteThemeKt {
 public final class io/github/youndie/kompot/ds/material/MessagesKt {
 	public static final fun withSnackbarMessages (Lio/github/youndie/kompot/KompotActionHandler;Landroidx/compose/material3/SnackbarHostState;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function1;)Lio/github/youndie/kompot/KompotActionHandler;
 	public static synthetic fun withSnackbarMessages$default (Lio/github/youndie/kompot/KompotActionHandler;Landroidx/compose/material3/SnackbarHostState;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/youndie/kompot/KompotActionHandler;
+}
+
+public final class io/github/youndie/kompot/ds/material/OverlaysKt {
+	public static final fun KompotOverlayHost (Lio/github/youndie/kompot/ds/material/KompotOverlays;Lio/github/youndie/kompot/KompotActionHandler;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;II)V
+	public static final fun withOverlays (Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/ds/material/KompotOverlays;)Lio/github/youndie/kompot/KompotActionHandler;
 }
 

@@ -155,6 +155,46 @@ final class io.github.youndie.kompot.standard/ColumnComponent : io.github.youndi
     }
 }
 
+final class io.github.youndie.kompot.standard/ConfirmAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot.standard/ConfirmAction|null[0]
+    constructor <init>(kotlin/String, io.github.youndie.kompot/KompotAction, kotlin/String? = ..., kotlin/String? = ..., kotlin/String? = ...) // io.github.youndie.kompot.standard/ConfirmAction.<init>|<init>(kotlin.String;io.github.youndie.kompot.KompotAction;kotlin.String?;kotlin.String?;kotlin.String?){}[0]
+
+    final val action // io.github.youndie.kompot.standard/ConfirmAction.action|{}action[0]
+        final fun <get-action>(): io.github.youndie.kompot/KompotAction // io.github.youndie.kompot.standard/ConfirmAction.action.<get-action>|<get-action>(){}[0]
+    final val cancelLabel // io.github.youndie.kompot.standard/ConfirmAction.cancelLabel|{}cancelLabel[0]
+        final fun <get-cancelLabel>(): kotlin/String? // io.github.youndie.kompot.standard/ConfirmAction.cancelLabel.<get-cancelLabel>|<get-cancelLabel>(){}[0]
+    final val confirmLabel // io.github.youndie.kompot.standard/ConfirmAction.confirmLabel|{}confirmLabel[0]
+        final fun <get-confirmLabel>(): kotlin/String? // io.github.youndie.kompot.standard/ConfirmAction.confirmLabel.<get-confirmLabel>|<get-confirmLabel>(){}[0]
+    final val detail // io.github.youndie.kompot.standard/ConfirmAction.detail|{}detail[0]
+        final fun <get-detail>(): kotlin/String? // io.github.youndie.kompot.standard/ConfirmAction.detail.<get-detail>|<get-detail>(){}[0]
+    final val question // io.github.youndie.kompot.standard/ConfirmAction.question|{}question[0]
+        final fun <get-question>(): kotlin/String // io.github.youndie.kompot.standard/ConfirmAction.question.<get-question>|<get-question>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.standard/ConfirmAction.component1|component1(){}[0]
+    final fun component2(): io.github.youndie.kompot/KompotAction // io.github.youndie.kompot.standard/ConfirmAction.component2|component2(){}[0]
+    final fun component3(): kotlin/String? // io.github.youndie.kompot.standard/ConfirmAction.component3|component3(){}[0]
+    final fun component4(): kotlin/String? // io.github.youndie.kompot.standard/ConfirmAction.component4|component4(){}[0]
+    final fun component5(): kotlin/String? // io.github.youndie.kompot.standard/ConfirmAction.component5|component5(){}[0]
+    final fun copy(kotlin/String = ..., io.github.youndie.kompot/KompotAction = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/String? = ...): io.github.youndie.kompot.standard/ConfirmAction // io.github.youndie.kompot.standard/ConfirmAction.copy|copy(kotlin.String;io.github.youndie.kompot.KompotAction;kotlin.String?;kotlin.String?;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.standard/ConfirmAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.standard/ConfirmAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.standard/ConfirmAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.standard/ConfirmAction> { // io.github.youndie.kompot.standard/ConfirmAction.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.standard/ConfirmAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.standard/ConfirmAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.standard/ConfirmAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.standard/ConfirmAction // io.github.youndie.kompot.standard/ConfirmAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.standard/ConfirmAction) // io.github.youndie.kompot.standard/ConfirmAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.standard.ConfirmAction){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.standard/ConfirmAction.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.standard/ConfirmAction.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.standard/ConfirmAction> // io.github.youndie.kompot.standard/ConfirmAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
 final class io.github.youndie.kompot.standard/CopyTextAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot.standard/CopyTextAction|null[0]
     constructor <init>(kotlin/String) // io.github.youndie.kompot.standard/CopyTextAction.<init>|<init>(kotlin.String){}[0]
 
@@ -364,6 +404,37 @@ final class io.github.youndie.kompot.standard/PaginatedListComponent : io.github
         final val $childSerializers // io.github.youndie.kompot.standard/PaginatedListComponent.Companion.$childSerializers|{}$childSerializers[0]
 
         final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.standard/PaginatedListComponent> // io.github.youndie.kompot.standard/PaginatedListComponent.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.youndie.kompot.standard/PresentAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot.standard/PresentAction|null[0]
+    constructor <init>(io.github.youndie.kompot/KompotComponent, kotlin/String? = ...) // io.github.youndie.kompot.standard/PresentAction.<init>|<init>(io.github.youndie.kompot.KompotComponent;kotlin.String?){}[0]
+
+    final val content // io.github.youndie.kompot.standard/PresentAction.content|{}content[0]
+        final fun <get-content>(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.standard/PresentAction.content.<get-content>|<get-content>(){}[0]
+    final val kind // io.github.youndie.kompot.standard/PresentAction.kind|{}kind[0]
+        final fun <get-kind>(): kotlin/String? // io.github.youndie.kompot.standard/PresentAction.kind.<get-kind>|<get-kind>(){}[0]
+
+    final fun component1(): io.github.youndie.kompot/KompotComponent // io.github.youndie.kompot.standard/PresentAction.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // io.github.youndie.kompot.standard/PresentAction.component2|component2(){}[0]
+    final fun copy(io.github.youndie.kompot/KompotComponent = ..., kotlin/String? = ...): io.github.youndie.kompot.standard/PresentAction // io.github.youndie.kompot.standard/PresentAction.copy|copy(io.github.youndie.kompot.KompotComponent;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.standard/PresentAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.standard/PresentAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.standard/PresentAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.standard/PresentAction> { // io.github.youndie.kompot.standard/PresentAction.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.standard/PresentAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.standard/PresentAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.standard/PresentAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.standard/PresentAction // io.github.youndie.kompot.standard/PresentAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.standard/PresentAction) // io.github.youndie.kompot.standard/PresentAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.standard.PresentAction){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.standard/PresentAction.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.standard/PresentAction.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.standard/PresentAction> // io.github.youndie.kompot.standard/PresentAction.Companion.serializer|serializer(){}[0]
     }
 }
 
@@ -692,6 +763,13 @@ final object io.github.youndie.kompot.standard/MessageLevel { // io.github.yound
         final fun <get-ERROR>(): kotlin/String // io.github.youndie.kompot.standard/MessageLevel.ERROR.<get-ERROR>|<get-ERROR>(){}[0]
     final const val INFO // io.github.youndie.kompot.standard/MessageLevel.INFO|{}INFO[0]
         final fun <get-INFO>(): kotlin/String // io.github.youndie.kompot.standard/MessageLevel.INFO.<get-INFO>|<get-INFO>(){}[0]
+}
+
+final object io.github.youndie.kompot.standard/PresentKind { // io.github.youndie.kompot.standard/PresentKind|null[0]
+    final const val DIALOG // io.github.youndie.kompot.standard/PresentKind.DIALOG|{}DIALOG[0]
+        final fun <get-DIALOG>(): kotlin/String // io.github.youndie.kompot.standard/PresentKind.DIALOG.<get-DIALOG>|<get-DIALOG>(){}[0]
+    final const val SHEET // io.github.youndie.kompot.standard/PresentKind.SHEET|{}SHEET[0]
+        final fun <get-SHEET>(): kotlin/String // io.github.youndie.kompot.standard/PresentKind.SHEET.<get-SHEET>|<get-SHEET>(){}[0]
 }
 
 final object io.github.youndie.kompot.standard/StackAlignment { // io.github.youndie.kompot.standard/StackAlignment|null[0]
