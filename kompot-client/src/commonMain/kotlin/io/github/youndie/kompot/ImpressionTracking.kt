@@ -28,7 +28,12 @@ import kotlin.reflect.KClass
  *   axis where the node is longer than the window, the window's length is the whole.
  * @property minVisibleMillis how long it has to stay there; `0` counts the first frame it is.
  * @property track which nodes are counted at all. Every node was — a row of layout included — and the
- *   unit an experiment measures is usually a banner or a card, not the column that holds it.
+ *   unit an experiment measures is usually a banner or a card, not the column that holds it. The
+ *   server names those nodes by the form of their `id`, agreed with the application (SPEC.md §4.3):
+ *
+ * ```kotlin
+ * renderers.withImpressionTracking(tracker, naming, ImpressionVisibility(track = { it.id.startsWith("promo-") }))
+ * ```
  */
 public data class ImpressionVisibility(
     val minVisibleFraction: Float = 0.5f,
