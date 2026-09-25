@@ -474,6 +474,14 @@ public final class io/github/youndie/kompot/standard/PresentKind {
 	public static final field SHEET Ljava/lang/String;
 }
 
+public final class io/github/youndie/kompot/standard/RefreshAction : io/github/youndie/kompot/KompotAction {
+	public static final field INSTANCE Lio/github/youndie/kompot/standard/RefreshAction;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/youndie/kompot/standard/RowBuilder : io/github/youndie/kompot/dsl/KompotContainerContext {
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V

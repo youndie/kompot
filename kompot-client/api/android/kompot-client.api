@@ -233,6 +233,10 @@ public final class io/github/youndie/kompot/RealtimeKt {
 	public static final fun getLocalKompotRealtimeUpdates ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 
+public final class io/github/youndie/kompot/RefreshKt {
+	public static final fun withRefresh (Lio/github/youndie/kompot/KompotActionHandler;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function1;)Lio/github/youndie/kompot/KompotActionHandler;
+}
+
 public final class io/github/youndie/kompot/RowRenderer : io/github/youndie/kompot/KompotComponentRenderer {
 	public static final field $stable I
 	public fun <init> ()V
