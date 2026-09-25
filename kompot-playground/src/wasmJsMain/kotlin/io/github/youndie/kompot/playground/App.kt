@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,7 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.youndie.kompot.KompotActionHandler
 import io.github.youndie.kompot.KompotDegradationSink
+import io.github.youndie.kompot.LocalKompotDesignSystem
+import io.github.youndie.kompot.LocalKompotRegistry
+import io.github.youndie.kompot.ds.material.KompotOverlayHost
+import io.github.youndie.kompot.ds.material.KompotOverlays
 import io.github.youndie.kompot.ds.material.Material3DesignSystem
+import io.github.youndie.kompot.ds.material.withOverlays
 import io.github.youndie.kompot.ds.material.withSnackbarMessages
 import io.github.youndie.kompot.preview.KompotPreview
 import io.github.youndie.kompot.preview.decodeKompotBody
@@ -158,11 +164,13 @@ private fun ClientPane(
         // Everything else a tap raises still goes nowhere — there is no server behind the page.
         val messages = remember { SnackbarHostState() }
         val scope = rememberCoroutineScope()
+        val overlays = remember { KompotOverlays() }
         val actionHandler =
-            remember(messages, scope) {
-                // The message's own button goes back to the top of the chain, as it must in an app.
+            remember(messages, scope, overlays) {
+                // The message's own button goes back to the top of the chain, as it must in an app;
+                // so does everything raised inside a presented tree (KompotOverlayHost below).
                 lateinit var top: KompotActionHandler
-                top = KompotActionHandler {}.withSnackbarMessages(messages, scope) { top.handle(it) }
+                top = KompotActionHandler {}.withSnackbarMessages(messages, scope) { top.handle(it) }.withOverlays(overlays)
                 top
             }
 
@@ -189,6 +197,14 @@ private fun ClientPane(
         }
 
         SnackbarHost(messages)
+        // Over the preview, with the same registry and design system it draws with: a presented tree is
+        // the client's own renderers too.
+        CompositionLocalProvider(
+            LocalKompotRegistry provides mode.registry,
+            LocalKompotDesignSystem provides Material3DesignSystem(),
+        ) {
+            KompotOverlayHost(overlays, actionHandler)
+        }
 
         DegradationLogPane(log = log, modifier = Modifier.fillMaxWidth())
     }

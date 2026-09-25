@@ -283,6 +283,43 @@ public data class ShowMessageAction(
     val action: @Polymorphic KompotAction? = null,
 ) : KompotAction
 
+// A tree shown over the screen — a dialog or a sheet — rather than as a screen of its own. Before it,
+// every choice over a screen (the actions on an item, a filter, a short form) was a navigation that
+// lost the screen underneath. One layer deep: presenting while one is open replaces it, and `close`
+// closes it (SPEC.md §12.5).
+@Serializable
+@SerialName("present")
+public data class PresentAction(
+    /** The tree to show over the screen. */
+    val content: @Polymorphic KompotComponent,
+    /** `dialog` (default) or `sheet`. An open string; an unfamiliar word means `dialog`. */
+    val kind: String? = null,
+) : KompotAction
+
+public object PresentKind {
+    public const val DIALOG: String = "dialog"
+    public const val SHEET: String = "sheet"
+}
+
+// "Are you sure?" before an action. A wrapper rather than a field on the action it guards, and the
+// reason is the client that predates it (SPEC.md §12.5): a field it would ignore (§3) and run the
+// guarded action WITHOUT asking — a delete on the first tap — while an unknown action it does not run
+// at all. Failing closed is the only acceptable way for a question about a destructive action to fail.
+@Serializable
+@SerialName("confirm")
+public data class ConfirmAction(
+    /** The question, e.g. "Delete the board?". */
+    val question: String,
+    /** The action to run once the person agrees. */
+    val action: @Polymorphic KompotAction,
+    /** More words under the question, e.g. what cannot be undone. */
+    val detail: String? = null,
+    /** The words on the agreeing button; the client's own when absent. */
+    val confirmLabel: String? = null,
+    /** The words on the refusing button; the client's own when absent. */
+    val cancelLabel: String? = null,
+) : KompotAction
+
 public object MessageLevel {
     public const val INFO: String = "info"
     public const val ERROR: String = "error"

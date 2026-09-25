@@ -7,10 +7,12 @@
   "x-kompot-contributes": {
     "KompotAction": {
       "close": "#/$defs/KompotActionClose",
+      "confirm": "#/$defs/KompotActionConfirm",
       "copy_text": "#/$defs/KompotActionCopyText",
       "load_page": "#/$defs/KompotActionLoadPage",
       "navigate": "#/$defs/KompotActionNavigate",
       "open_url": "#/$defs/KompotActionOpenUrl",
+      "present": "#/$defs/KompotActionPresent",
       "show_message": "#/$defs/KompotActionShowMessage"
     },
     "KompotComponent": {
@@ -37,6 +39,46 @@
       },
       "required": [
         "type"
+      ],
+      "additionalProperties": true
+    },
+    "KompotActionConfirm": {
+      "x-kompot-kind": "variant",
+      "x-kompot-wire-type": "confirm",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "confirm"
+        },
+        "question": {
+          "type": "string"
+        },
+        "action": {
+          "$ref": "kompot-core.schema.json#/$defs/KompotAction"
+        },
+        "detail": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confirmLabel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "cancelLabel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "question",
+        "action"
       ],
       "additionalProperties": true
     },
@@ -118,6 +160,30 @@
       "required": [
         "type",
         "url"
+      ],
+      "additionalProperties": true
+    },
+    "KompotActionPresent": {
+      "x-kompot-kind": "variant",
+      "x-kompot-wire-type": "present",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "present"
+        },
+        "content": {
+          "$ref": "kompot-core.schema.json#/$defs/KompotComponent"
+        },
+        "kind": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "content"
       ],
       "additionalProperties": true
     },

@@ -275,6 +275,55 @@ private val RULES_BODY: String =
     }
     """.trimIndent()
 
+// present and confirm (SPEC.md §12.5): a question before a destructive action, and a tree over the
+// screen that closes itself. What the agreed action and the sheet's buttons raise is a message, since
+// the page has no server to send anything to.
+private val OVERLAYS_BODY: String =
+    """
+    {
+      "type": "column",
+      "id": "root",
+      "spacing": 12,
+      "modifiers": [ { "type": "padding", "all": 24 } ],
+      "children": [
+        { "type": "text", "id": "title", "text": "Over the screen", "style": "headline_small", "color": "on_surface" },
+        {
+          "type": "text", "id": "note",
+          "text": "confirm wraps the action it guards, so a client that does not know it runs nothing rather than deleting on the first tap. present shows a tree over the screen; close inside it closes it.",
+          "style": "body_medium", "color": "on_surface_variant"
+        },
+        {
+          "type": "button", "id": "delete", "text": "Delete the board",
+          "action": {
+            "type": "confirm",
+            "question": "Delete the board?",
+            "detail": "Its cards go with it, and this cannot be undone.",
+            "confirmLabel": "Delete",
+            "cancelLabel": "Keep it",
+            "action": { "type": "show_message", "text": "Board deleted" }
+          }
+        },
+        {
+          "type": "button", "id": "move", "text": "Move the card",
+          "action": {
+            "type": "present",
+            "kind": "sheet",
+            "content": {
+              "type": "column", "id": "move_sheet", "spacing": 8,
+              "modifiers": [ { "type": "padding", "all": 24 } ],
+              "children": [
+                { "type": "text", "id": "move_title", "text": "Move to", "style": "title_medium", "color": "on_surface" },
+                { "type": "button", "id": "to_doing", "text": "Doing", "action": { "type": "show_message", "text": "Moved to Doing" } },
+                { "type": "button", "id": "to_done", "text": "Done", "action": { "type": "show_message", "text": "Moved to Done" } },
+                { "type": "button", "id": "move_close", "text": "Close", "variant": "text", "action": { "type": "close" } }
+              ]
+            }
+          }
+        }
+      ]
+    }
+    """.trimIndent()
+
 internal val EXAMPLES: List<Example> =
     listOf(
         Example("A component an older client cannot read", SAMPLE_BODY),
@@ -284,4 +333,5 @@ internal val EXAMPLES: List<Example> =
         Example("A rail of cards that scrolls sideways", RAIL_BODY),
         Example("An answer in words: show_message", MESSAGES_BODY),
         Example("Rules and room: divider and spacer", RULES_BODY),
+        Example("Over the screen: confirm and present", OVERLAYS_BODY),
     )

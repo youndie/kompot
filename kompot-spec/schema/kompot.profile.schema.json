@@ -109,6 +109,9 @@
           "$ref": "kompot-standard.schema.json#/$defs/KompotActionClose"
         },
         {
+          "$ref": "kompot-standard.schema.json#/$defs/KompotActionConfirm"
+        },
+        {
           "$ref": "kompot-standard.schema.json#/$defs/KompotActionCopyText"
         },
         {
@@ -122,6 +125,9 @@
         },
         {
           "$ref": "kompot-commands.schema.json#/$defs/KompotActionPerform"
+        },
+        {
+          "$ref": "kompot-standard.schema.json#/$defs/KompotActionPresent"
         },
         {
           "$ref": "kompot-standard.schema.json#/$defs/KompotActionShowMessage"
@@ -149,11 +155,13 @@
         "propertyName": "type",
         "mapping": {
           "close": "kompot-standard.schema.json#/$defs/KompotActionClose",
+          "confirm": "kompot-standard.schema.json#/$defs/KompotActionConfirm",
           "copy_text": "kompot-standard.schema.json#/$defs/KompotActionCopyText",
           "load_page": "kompot-standard.schema.json#/$defs/KompotActionLoadPage",
           "navigate": "kompot-standard.schema.json#/$defs/KompotActionNavigate",
           "open_url": "kompot-standard.schema.json#/$defs/KompotActionOpenUrl",
           "perform": "kompot-commands.schema.json#/$defs/KompotActionPerform",
+          "present": "kompot-standard.schema.json#/$defs/KompotActionPresent",
           "show_message": "kompot-standard.schema.json#/$defs/KompotActionShowMessage",
           "submit_form": "kompot-forms.schema.json#/$defs/KompotActionSubmitForm",
           "update_session": "kompot-auth.schema.json#/$defs/KompotActionUpdateSession",
