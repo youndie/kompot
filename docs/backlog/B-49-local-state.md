@@ -1,7 +1,7 @@
 ---
 id: B-49
 title: "Локальное состояние экрана: tabs и expandable"
-status: open
+status: wip
 priority: P1
 size: M
 stage: release-0.38
