@@ -1,7 +1,7 @@
 ---
 id: B-61
 title: "Содержимое предпросмотра в плейграунде не попадает в дерево доступности браузера"
-status: open
+status: done
 priority: P3
 size: S/M
 stage: playground
@@ -34,3 +34,27 @@ stage: playground
   ссылкой.
 - Якоря: `kompot-preview/src/commonMain/.../KompotPreview.kt`,
   `kompot-playground/src/wasmJsMain/.../App.kt`.
+
+## Находки
+
+- **Причина названа: её нет в коде — наблюдение B-55 было артефактом способа смотреть.** Замер —
+  настоящее дерево доступности Chrome, то, что получает экранный диктор: headless Chrome, CDP
+  `Accessibility.getFullAXTree`, плейграунд на CMP 1.12.1. В нём есть всё, чего B-55 не нашёл:
+  - первый пример — `heading` «This screen is JSON…», `button` «Nothing happens, there is no
+    server» (внутри демо-плагина), `button` «A button the server asked for», тексты баннера;
+  - «Rules and room» — `heading` «Rules and room» и `button` с именем «Language: English. Change»:
+    нажимаемая строка с `action` — кнопка, и имя у неё из `accessibilityLabel`, а не слитый текст.
+- **Зеркальный DOM Compose/Wasm говорит то же:** в shadow root `div role=heading`,
+  `div role=button aria-label="Language: English. Change"`. То есть `contentDescription` в
+  `aria-label` переносится, `Heading` становится `role=heading` — обе оговорки B-55 неверны, там
+  добавлена поправка.
+- **Не код между замерами.** Та же картина на сборке `main` до B-59 (плейграунд собран с
+  откаченным патчем B-59) и после него — наблюдение B-55 не воспроизводится на том же коде.
+- **Два способа смотреть, которые дают «ничего»,** и, по всей видимости, дали его в B-55:
+  `document.querySelectorAll('[role]')` возвращает 0 — плоский запрос в shadow root не заходит;
+  снимок страницы инструментом браузера (`read_page`) показывает «empty page». Точный порядок
+  действий B-55 не записан, поэтому «по всей видимости», а не «доказано». Зеркало к тому же
+  отстаёт от смены экрана на кадр: дамп в том же тике, что и клик, показывает прежний экран.
+- Минимальная страница с одним `KompotPreview` не понадобилась: вопрос «плейграунд или
+  предпросмотр» снят, раз содержимое предпросмотра в дереве есть. Issue наверх — тоже: в
+  Compose/Wasm нечего сообщать.
