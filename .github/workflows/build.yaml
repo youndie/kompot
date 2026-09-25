@@ -26,6 +26,10 @@ jobs:
       # GRADLE runs on; what the modules compile to is `sborka.jvmToolchain=17`, fetched by the
       # toolchain resolver.
       - uses: youndie/sborka/.github/actions/setup-kotlin@main
+      # What the runner has, in the run itself: the build's memory limits (B-64) are set against a
+      # measurement, and the runner is the machine nobody here can log into.
+      - name: The runner's memory
+        run: free -m
       - run: ./gradlew build --no-daemon
 
       # §15 of the spec says which change of the schema is compatible and which is not, and until now
