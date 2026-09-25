@@ -1,7 +1,7 @@
 ---
 id: B-56
 title: "Экран загрузки и экран ошибки — чьи они?"
-status: open
+status: wip
 priority: P2
 size: M
 stage: release-0.38

@@ -81,7 +81,7 @@
 |---|---|---|---|---|---|
 | [B-58](backlog/B-58-release-0-38-0.md) `[ ]` | Выпуск 0.38.0: версия, журналы, Central | release-0.38 | P0 | S | B-40, B-41, B-42, B-44, B-45, B-46, B-47, B-48, B-49, B-50, B-51, B-52, B-53, B-54, B-55, B-56, B-57, B-62, B-63 |
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
-| [B-56](backlog/B-56-loading-and-error-screens.md) `[ ]` | Экран загрузки и экран ошибки — чьи они? | release-0.38 | P2 | M | — |
+| [B-56](backlog/B-56-loading-and-error-screens.md) `[~]` | Экран загрузки и экран ошибки — чьи они? | release-0.38 | P2 | M | — |
 | [B-62](backlog/B-62-server-marks-the-measured-node.md) `[ ]` | Как сервер помечает узел, который меряет эксперимент? | release-0.38 | P3 | M | — |
 | [B-64](backlog/B-64-wasm-production-compile-runs-out-of-memory.md) `[ ]` | Продакшн-компиляция wasm падает по памяти — на Linux-машине каждый раз, на CI однажды | release-0.38 | infra | S | — |
 
