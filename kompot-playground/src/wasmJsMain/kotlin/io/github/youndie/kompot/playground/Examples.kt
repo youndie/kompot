@@ -191,6 +191,46 @@ private val RAIL_BODY: String =
     }
     """.trimIndent()
 
+// show_message (SPEC.md §16.4): an answer in words, drawn by the client's design system. The second
+// button's message carries a button of its own, and what that one raises is another message — the
+// message's button goes through the same chain as every other action.
+private val MESSAGES_BODY: String =
+    """
+    {
+      "type": "column",
+      "id": "root",
+      "spacing": 12,
+      "modifiers": [ { "type": "padding", "all": 24 } ],
+      "children": [
+        { "type": "text", "id": "title", "text": "An answer in words", "style": "headline_small", "color": "on_surface" },
+        {
+          "type": "text",
+          "id": "note",
+          "text": "A perform usually answers with a message rather than a new screen. Here the buttons raise the answer themselves, since the page has no server.",
+          "style": "body_medium",
+          "color": "on_surface_variant"
+        },
+        {
+          "type": "button",
+          "id": "copy",
+          "text": "Copy the link",
+          "action": { "type": "show_message", "text": "Link copied" }
+        },
+        {
+          "type": "button",
+          "id": "archive",
+          "text": "Archive the card",
+          "action": {
+            "type": "show_message",
+            "text": "Card archived",
+            "actionLabel": "Undo",
+            "action": { "type": "show_message", "text": "Card restored" }
+          }
+        }
+      ]
+    }
+    """.trimIndent()
+
 internal val EXAMPLES: List<Example> =
     listOf(
         Example("A component an older client cannot read", SAMPLE_BODY),
@@ -198,4 +238,5 @@ internal val EXAMPLES: List<Example> =
         Example("A screen that names its update channel", LIVE_SCREEN_BODY),
         Example("Layers: a badge and a caption over a picture", LAYERS_BODY),
         Example("A rail of cards that scrolls sideways", RAIL_BODY),
+        Example("An answer in words: show_message", MESSAGES_BODY),
     )

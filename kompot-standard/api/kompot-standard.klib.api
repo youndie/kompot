@@ -395,6 +395,43 @@ final class io.github.youndie.kompot.standard/RowComponent : io.github.youndie.k
     }
 }
 
+final class io.github.youndie.kompot.standard/ShowMessageAction : io.github.youndie.kompot/KompotAction { // io.github.youndie.kompot.standard/ShowMessageAction|null[0]
+    constructor <init>(kotlin/String, kotlin/String? = ..., kotlin/String? = ..., io.github.youndie.kompot/KompotAction? = ...) // io.github.youndie.kompot.standard/ShowMessageAction.<init>|<init>(kotlin.String;kotlin.String?;kotlin.String?;io.github.youndie.kompot.KompotAction?){}[0]
+
+    final val action // io.github.youndie.kompot.standard/ShowMessageAction.action|{}action[0]
+        final fun <get-action>(): io.github.youndie.kompot/KompotAction? // io.github.youndie.kompot.standard/ShowMessageAction.action.<get-action>|<get-action>(){}[0]
+    final val actionLabel // io.github.youndie.kompot.standard/ShowMessageAction.actionLabel|{}actionLabel[0]
+        final fun <get-actionLabel>(): kotlin/String? // io.github.youndie.kompot.standard/ShowMessageAction.actionLabel.<get-actionLabel>|<get-actionLabel>(){}[0]
+    final val level // io.github.youndie.kompot.standard/ShowMessageAction.level|{}level[0]
+        final fun <get-level>(): kotlin/String? // io.github.youndie.kompot.standard/ShowMessageAction.level.<get-level>|<get-level>(){}[0]
+    final val text // io.github.youndie.kompot.standard/ShowMessageAction.text|{}text[0]
+        final fun <get-text>(): kotlin/String // io.github.youndie.kompot.standard/ShowMessageAction.text.<get-text>|<get-text>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.kompot.standard/ShowMessageAction.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // io.github.youndie.kompot.standard/ShowMessageAction.component2|component2(){}[0]
+    final fun component3(): kotlin/String? // io.github.youndie.kompot.standard/ShowMessageAction.component3|component3(){}[0]
+    final fun component4(): io.github.youndie.kompot/KompotAction? // io.github.youndie.kompot.standard/ShowMessageAction.component4|component4(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String? = ..., kotlin/String? = ..., io.github.youndie.kompot/KompotAction? = ...): io.github.youndie.kompot.standard/ShowMessageAction // io.github.youndie.kompot.standard/ShowMessageAction.copy|copy(kotlin.String;kotlin.String?;kotlin.String?;io.github.youndie.kompot.KompotAction?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.standard/ShowMessageAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.kompot.standard/ShowMessageAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.kompot.standard/ShowMessageAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.standard/ShowMessageAction> { // io.github.youndie.kompot.standard/ShowMessageAction.$serializer|null[0]
+        final val descriptor // io.github.youndie.kompot.standard/ShowMessageAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.youndie.kompot.standard/ShowMessageAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.youndie.kompot.standard/ShowMessageAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.youndie.kompot.standard/ShowMessageAction // io.github.youndie.kompot.standard/ShowMessageAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.youndie.kompot.standard/ShowMessageAction) // io.github.youndie.kompot.standard/ShowMessageAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.youndie.kompot.standard.ShowMessageAction){}[0]
+    }
+
+    final object Companion { // io.github.youndie.kompot.standard/ShowMessageAction.Companion|null[0]
+        final val $childSerializers // io.github.youndie.kompot.standard/ShowMessageAction.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.standard/ShowMessageAction> // io.github.youndie.kompot.standard/ShowMessageAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
 final class io.github.youndie.kompot.standard/TableBuilder { // io.github.youndie.kompot.standard/TableBuilder|null[0]
     constructor <init>() // io.github.youndie.kompot.standard/TableBuilder.<init>|<init>(){}[0]
 
@@ -580,6 +617,13 @@ final object io.github.youndie.kompot.standard/CloseAction : io.github.youndie.k
     final fun serializer(): kotlinx.serialization/KSerializer<io.github.youndie.kompot.standard/CloseAction> // io.github.youndie.kompot.standard/CloseAction.serializer|serializer(){}[0]
     final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // io.github.youndie.kompot.standard/CloseAction.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
     final fun toString(): kotlin/String // io.github.youndie.kompot.standard/CloseAction.toString|toString(){}[0]
+}
+
+final object io.github.youndie.kompot.standard/MessageLevel { // io.github.youndie.kompot.standard/MessageLevel|null[0]
+    final const val ERROR // io.github.youndie.kompot.standard/MessageLevel.ERROR|{}ERROR[0]
+        final fun <get-ERROR>(): kotlin/String // io.github.youndie.kompot.standard/MessageLevel.ERROR.<get-ERROR>|<get-ERROR>(){}[0]
+    final const val INFO // io.github.youndie.kompot.standard/MessageLevel.INFO|{}INFO[0]
+        final fun <get-INFO>(): kotlin/String // io.github.youndie.kompot.standard/MessageLevel.INFO.<get-INFO>|<get-INFO>(){}[0]
 }
 
 final object io.github.youndie.kompot.standard/StackAlignment { // io.github.youndie.kompot.standard/StackAlignment|null[0]

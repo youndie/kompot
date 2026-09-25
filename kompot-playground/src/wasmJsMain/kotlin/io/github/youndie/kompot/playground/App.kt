@@ -12,6 +12,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.VerticalDivider
@@ -19,11 +21,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.github.youndie.kompot.KompotActionHandler
 import io.github.youndie.kompot.KompotDegradationSink
 import io.github.youndie.kompot.ds.material.Material3DesignSystem
+import io.github.youndie.kompot.ds.material.withSnackbarMessages
 import io.github.youndie.kompot.preview.KompotPreview
 import io.github.youndie.kompot.preview.decodeKompotBody
 
@@ -148,11 +153,25 @@ private fun ClientPane(
                 KompotDegradationSink { kind, originalType, outcome -> log.report(kind, originalType, outcome) }
             }
 
+        // The one action the page can answer without a server: show_message is drawn by the design
+        // system, so a button whose action is a message shows it here exactly as an app would.
+        // Everything else a tap raises still goes nowhere — there is no server behind the page.
+        val messages = remember { SnackbarHostState() }
+        val scope = rememberCoroutineScope()
+        val actionHandler =
+            remember(messages, scope) {
+                // The message's own button goes back to the top of the chain, as it must in an app.
+                lateinit var top: KompotActionHandler
+                top = KompotActionHandler {}.withSnackbarMessages(messages, scope) { top.handle(it) }
+                top
+            }
+
         // Scrolls, because a body is as long as its author makes it and a clipped screen looks like a
         // renderer that lost the rest.
         Box(Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState())) {
             KompotPreview(
                 body = body,
+                actionHandler = actionHandler,
                 // Decorated, not replaced: the outline is added around the renderer the client really
                 // has, so what is drawn inside the frame is still the client's own work.
                 registry = remember(mode, selectedId) { mode.registry.outlining(selectedId) },
@@ -168,6 +187,8 @@ private fun ClientPane(
                 degradationSink = sink,
             )
         }
+
+        SnackbarHost(messages)
 
         DegradationLogPane(log = log, modifier = Modifier.fillMaxWidth())
     }

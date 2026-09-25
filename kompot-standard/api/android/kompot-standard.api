@@ -268,6 +268,12 @@ public final class io/github/youndie/kompot/standard/LoadPageAction$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class io/github/youndie/kompot/standard/MessageLevel {
+	public static final field ERROR Ljava/lang/String;
+	public static final field INFO Ljava/lang/String;
+	public static final field INSTANCE Lio/github/youndie/kompot/standard/MessageLevel;
+}
+
 public final class io/github/youndie/kompot/standard/NavigateAction : io/github/youndie/kompot/KompotAction {
 	public static final field Companion Lio/github/youndie/kompot/standard/NavigateAction$Companion;
 	public fun <init> (Ljava/lang/String;)V
@@ -417,6 +423,40 @@ public final class io/github/youndie/kompot/standard/RowComponent$Companion {
 
 public final class io/github/youndie/kompot/standard/SerializersKt {
 	public static final fun getKompotStandardSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+}
+
+public final class io/github/youndie/kompot/standard/ShowMessageAction : io/github/youndie/kompot/KompotAction {
+	public static final field Companion Lio/github/youndie/kompot/standard/ShowMessageAction$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lio/github/youndie/kompot/KompotAction;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;)Lio/github/youndie/kompot/standard/ShowMessageAction;
+	public static synthetic fun copy$default (Lio/github/youndie/kompot/standard/ShowMessageAction;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;ILjava/lang/Object;)Lio/github/youndie/kompot/standard/ShowMessageAction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAction ()Lio/github/youndie/kompot/KompotAction;
+	public final fun getActionLabel ()Ljava/lang/String;
+	public final fun getLevel ()Ljava/lang/String;
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/kompot/standard/ShowMessageAction$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/github/youndie/kompot/standard/ShowMessageAction$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/youndie/kompot/standard/ShowMessageAction;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/youndie/kompot/standard/ShowMessageAction;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/youndie/kompot/standard/ShowMessageAction$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
 public final class io/github/youndie/kompot/standard/StackAlignment {
