@@ -74,7 +74,7 @@
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (12)
+## Открыто (11)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
@@ -82,7 +82,6 @@
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[?]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
 | [B-48](backlog/B-48-local-state-research.md) `[?]` | Сколько локального состояния пускать в провод? | release-0.38 | P1 | M | — |
 | [B-49](backlog/B-49-local-state.md) `[ ]` | Локальное состояние экрана: реализация выбранной ступени | release-0.38 | P1 | L | B-48 |
-| [B-51](backlog/B-51-dialog-sheet-and-confirm.md) `[~]` | Диалог, шторка и подтверждение перед действием | release-0.38 | P2 | M | — |
 | [B-52](backlog/B-52-sequence-action.md) `[ ]` | sequence: несколько действий одним ответом | release-0.38 | P2 | S | — |
 | [B-53](backlog/B-53-refresh-action.md) `[ ]` | refresh: перезагрузить текущий экран, не называя его | release-0.38 | P2 | S | — |
 | [B-55](backlog/B-55-accessibility-of-actionable-containers.md) `[ ]` | Доступность: роль и подпись у нажимаемого контейнера, заголовок у text | release-0.38 | P2 | S/M | — |
@@ -91,7 +90,7 @@
 | [B-54](backlog/B-54-impression-is-composition-not-visibility.md) `[ ]` | Показ считается по композиции, а не по видимости | release-0.38 | P3 | M | — |
 | [B-59](backlog/B-59-playground-old-client-for-any-type.md) `[ ]` | Переключатель «старый клиент» в плейграунде — для любого типа, а не только для демо-плагина | playground | P3 | S/M | — |
 
-## Сделано (47)
+## Сделано (48)
 
 **Швы в toolkit'е**
 
@@ -153,6 +152,7 @@
 - [B-46](backlog/B-46-horizontal-rail.md) — Горизонтальная прокрутка: рельс карточек
 - [B-47](backlog/B-47-divider-and-spacer.md) — divider и spacer как узлы провода
 - [B-50](backlog/B-50-show-message-action.md) — show_message: короткое сообщение в ответ на действие
+- [B-51](backlog/B-51-dialog-sheet-and-confirm.md) — Диалог, шторка и подтверждение перед действием
 
 **Без этапа**
 
