@@ -83,11 +83,11 @@
 | [B-48](backlog/B-48-local-state-research.md) `[?]` | Сколько локального состояния пускать в провод? | release-0.38 | P1 | M | — |
 | [B-49](backlog/B-49-local-state.md) `[ ]` | Локальное состояние экрана: реализация выбранной ступени | release-0.38 | P1 | L | B-48 |
 | [B-56](backlog/B-56-loading-and-error-screens.md) `[?]` | Экран загрузки и экран ошибки — чьи они? | release-0.38 | P2 | M | — |
-| [B-54](backlog/B-54-impression-is-composition-not-visibility.md) `[~]` | Показ считается по композиции, а не по видимости | release-0.38 | P3 | M | — |
 | [B-59](backlog/B-59-playground-old-client-for-any-type.md) `[ ]` | Переключатель «старый клиент» в плейграунде — для любого типа, а не только для демо-плагина | playground | P3 | S/M | — |
 | [B-61](backlog/B-61-preview-content-missing-from-browser-a11y.md) `[ ]` | Содержимое предпросмотра в плейграунде не попадает в дерево доступности браузера | playground | P3 | S/M | — |
+| [B-62](backlog/B-62-server-marks-the-measured-node.md) `[?]` | Как сервер помечает узел, который меряет эксперимент? | release-0.38 | P3 | M | — |
 
-## Сделано (53)
+## Сделано (54)
 
 **Швы в toolkit'е**
 
@@ -152,6 +152,7 @@
 - [B-51](backlog/B-51-dialog-sheet-and-confirm.md) — Диалог, шторка и подтверждение перед действием
 - [B-52](backlog/B-52-sequence-action.md) — sequence: несколько действий одним ответом
 - [B-53](backlog/B-53-refresh-action.md) — refresh: перезагрузить текущий экран, не называя его
+- [B-54](backlog/B-54-impression-is-composition-not-visibility.md) — Показ считается по композиции, а не по видимости
 - [B-55](backlog/B-55-accessibility-of-actionable-containers.md) — Доступность: роль и подпись у нажимаемого контейнера, заголовок у text
 - [B-57](backlog/B-57-typescript-types-from-schema.md) — TypeScript-типы из schema/*.json для клиента не на Kotlin
 - [B-60](backlog/B-60-unknown-actions-in-answers-go-unreported.md) — Незнакомое действие в ответе сервера не сообщается никуда
