@@ -1,7 +1,7 @@
 ---
 id: B-57
 title: "TypeScript-типы из schema/*.json для клиента не на Kotlin"
-status: open
+status: wip
 priority: P2
 size: M
 stage: release-0.38
