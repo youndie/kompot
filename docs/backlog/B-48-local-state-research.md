@@ -1,7 +1,7 @@
 ---
 id: B-48
 title: "Сколько локального состояния пускать в провод?"
-status: open
+status: wip
 priority: P1
 size: M
 stage: release-0.38
