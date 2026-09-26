@@ -169,6 +169,7 @@
 - [B-37](backlog/B-37-readme-snippets-are-unchecked.md) — Kotlin-сниппеты в README ничем не компилируются и разойдутся молча
 - [B-38](backlog/B-38-wire-name-is-not-obtainable.md) — Проводное имя компонента получить нечем, а студия его требует
 - [B-39](backlog/B-39-nothing-guards-the-published-kotlin-api.md) — Молчаливую поломку Kotlin-API не ловит ничто
+- [B-65](backlog/B-65-redis-test-never-starts-the-publisher.md) — Тест Redis-шины «с одного инстанса на другой» не запускает бродкастер отправителя
 
 <!-- END INDEX -->
 
