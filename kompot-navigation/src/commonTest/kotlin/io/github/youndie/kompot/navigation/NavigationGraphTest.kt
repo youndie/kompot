@@ -1,5 +1,6 @@
 package io.github.youndie.kompot.navigation
 
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -74,4 +75,55 @@ class NavigationGraphTest {
 
         assertNull(graph.routeFor("app://home"))
     }
+
+    @Test
+    fun `a route says how it is shown and a client shows what it can draw`() {
+        val confirm = ScreenRoute(deeplink = "app://confirm", endpoint = "/screens/confirm", presentation = ScreenRoutePresentation.SHEET)
+
+        assertEquals(ScreenRoutePresentation.SHEET, confirm.presentedAs())
+        assertEquals(ScreenRoutePresentation.SCREEN, confirm.presentedAs(setOf(ScreenRoutePresentation.SCREEN)))
+        assertEquals(ScreenRoutePresentation.SCREEN, ScreenRoute(deeplink = "app://home", endpoint = "/screens/home").presentedAs())
+    }
+
+    // The opposite of an unknown kind: the route stays, as a screen. Hiding it would leave the button that
+    // opens it dead on exactly the client the hint is meant to spare.
+    @Test
+    fun `a presentation from a newer server shows the route as a screen`() {
+        val decoded =
+            wire.decodeFromString<NavigationGraph>(
+                """{"routes":[{"deeplink":"app://confirm","endpoint":"/screens/confirm","presentation":"popover"}]}""",
+            )
+
+        val route = decoded.routeFor("app://confirm")!!
+        assertEquals(ScreenRoutePresentation.SCREEN, route.presentedAs())
+    }
+
+    // A client released before the field reads the same graph through its own ScreenRoute, which has no
+    // `presentation`: on the wire's terms (unknown keys ignored, SPEC.md §3) it finds the route and opens
+    // it the only way it knows — as a screen.
+    @Test
+    fun `a graph with a presentation is read by a client that predates the field`() {
+        val body = wire.encodeToString(NavigationGraph(listOf(ScreenRoute("app://confirm", "/screens/confirm", presentation = "sheet"))))
+
+        val older = wire.decodeFromString<GraphBeforePresentation>(body)
+
+        assertEquals(listOf(RouteBeforePresentation("app://confirm", "/screens/confirm")), older.routes)
+    }
 }
+
+// The shape of the graph in 0.38, as a client of that version decodes it.
+@Serializable
+private data class GraphBeforePresentation(
+    val routes: List<RouteBeforePresentation>,
+)
+
+@Serializable
+private data class RouteBeforePresentation(
+    val deeplink: String,
+    val endpoint: String,
+    val title: String? = null,
+    val kind: String = ScreenRouteKind.SCREEN,
+)
+
+// What a client reads with: unknown keys ignored, as SPEC.md §3 requires of every client.
+private val wire = Json { ignoreUnknownKeys = true }

@@ -23,6 +23,20 @@ public object ScreenRouteKind {
     public val known: Set<String> = setOf(SCREEN, FORM, LIVE_SCREEN)
 }
 
+// How a route's screen is shown (SPEC.md §12.1): pushed as a screen of its own, or laid over the screen
+// it was opened from. A hint, not a kind: the endpoint and what it answers are the same either way, and a
+// client that does not know the hint opens a screen, as it did before the hint existed — which is the
+// whole reason the hint lives on the route and not in a new action (B-68). `present` stays for a layer
+// with no address.
+public object ScreenRoutePresentation {
+    public const val SCREEN: String = "screen"
+    public const val SHEET: String = "sheet"
+    public const val DIALOG: String = "dialog"
+
+    // Every presentation this build knows. A client passes what IT can draw, which is not necessarily this.
+    public val known: Set<String> = setOf(SCREEN, SHEET, DIALOG)
+}
+
 // One plain screen of the graph: the deeplink the client opens it by — the same deeplink that a
 // NavigateAction elsewhere already carries — and the endpoint to fetch the screen from. `title` is the
 // copy for the screen's app bar, decided by the server rather than the client, like the rest of this
@@ -42,7 +56,19 @@ public data class ScreenRoute(
     // fails deserialisation of the WHOLE graph before any code gets to skip one route. The same reason
     // ColorToken is an open key.
     val kind: String = ScreenRouteKind.SCREEN,
-)
+    // An open String for the same reason as `kind`, with the opposite rule for an unknown value: an
+    // unknown kind hides the route, an unknown presentation shows it as a screen. Hiding would turn a
+    // sheet into a dead button on the very client the hint exists to spare.
+    val presentation: String = ScreenRoutePresentation.SCREEN,
+) {
+    /**
+     * How a client that can draw [supported] shows this route: [presentation] when it is one of them,
+     * [ScreenRoutePresentation.SCREEN] otherwise — for a value from a newer server, and for a sheet on a
+     * client that has no sheet.
+     */
+    public fun presentedAs(supported: Set<String> = ScreenRoutePresentation.known): String =
+        presentation.takeIf { it in supported } ?: ScreenRoutePresentation.SCREEN
+}
 
 @Serializable
 public data class NavigationGraph(

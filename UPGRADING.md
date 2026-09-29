@@ -22,6 +22,31 @@ breaks a consumer without saying so is not caught by anything here, and
 
 ---
 
+## 0.39.0 — `ScreenRoute` gains `presentation` (binary only)
+
+**Was**
+
+```kotlin
+ScreenRoute(deeplink = "app://confirm", endpoint = "/screens/confirm")
+```
+
+**Now** — the same line compiles and means the same thing; a route can also ask to be shown over the
+screen it was opened from:
+
+```kotlin
+ScreenRoute(deeplink = "app://confirm", endpoint = "/screens/confirm", presentation = ScreenRoutePresentation.SHEET)
+```
+
+**What to change.** Nothing in source. Recompile against 0.39: the constructor and `copy` of
+`ScreenRoute` take one more parameter, so a library compiled against 0.38 that builds routes fails at
+run time with `NoSuchMethodError` until it is rebuilt. The new parameter comes last and defaults to
+`screen`. A client that draws layers asks the route how to show it — `route.presentedAs(supported)`,
+which answers `screen` for anything the client cannot draw.
+
+**Why it was worth breaking.** A server could not show a screen as a sheet without leaving a dead
+button on every client released before `present` (B-68). A field on the route degrades for free: an
+older client ignores it and opens the screen as it always did (SPEC.md §12.1).
+
 ## 0.38.0 — the group is `io.github.youndie.kompot`
 
 **Was**

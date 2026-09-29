@@ -387,6 +387,15 @@ public object KompotToolkitSpec {
                                             "route whose kind it does not recognise, and an unknown enum constant would fail the " +
                                             "parse of the whole graph before one route could be skipped",
                                 ),
+                            "presentation" to
+                                KompotSpec.constrained(
+                                    pattern = null,
+                                    description =
+                                        "How the route's screen is shown: \"screen\" (pushed, the default), \"sheet\" or " +
+                                            "\"dialog\" (laid over the screen it was opened from). An open string: a client " +
+                                            "MUST show a route whose presentation it does not recognise or cannot draw as a " +
+                                            "screen, never hide it",
+                                ),
                         ),
                 ),
         )
