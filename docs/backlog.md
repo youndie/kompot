@@ -82,7 +82,7 @@
 Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой поверх экрана: его задача
 «подтверждение покупки — шторка над планом» — ровно `present` с `kind: sheet` из
 [B-51](backlog/B-51-dialog-sheet-and-confirm.md), и выпущенное покрывает её наполовину
-(B-66…B-68).
+(B-66…B-69).
 
 Порядок: находка заводится здесь, потребитель обходит её у себя с комментарием на задачу, обход
 снимается, когда исправление выйдет.
@@ -96,9 +96,9 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
 | [B-66](backlog/B-66-overlay-state-is-closed-to-other-hosts.md) `[ ]` | Слой поверх экрана рисует только Material: состояние KompotOverlays закрыто для чужого хоста | adoption-0.38 | P1 | S | — |
 | [B-67](backlog/B-67-navigate-leaves-the-layer-open.md) `[ ]` | Переход со шторки оставляет шторку открытой над новым экраном | adoption-0.38 | P1 | S | — |
-| [B-68](backlog/B-68-present-has-no-way-to-degrade.md) `[?]` | Что видит старый клиент вместо шторки: у present нет пути деградации | adoption-0.38 | P2 | M | — |
+| [B-69](backlog/B-69-route-presentation-hint.md) `[ ]` | Маршрут говорит «покажи шторкой», а старый клиент открывает его экраном | adoption-0.38 | P1 | M | — |
 
-## Сделано (64)
+## Сделано (65)
 
 **Швы в toolkit'е**
 
@@ -176,6 +176,10 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 - [B-62](backlog/B-62-server-marks-the-measured-node.md) — Как сервер помечает узел, который меряет эксперимент?
 - [B-63](backlog/B-63-compat-check-ignores-hierarchy-bases.md) — Проверка совместимости не видит изменений в базе иерархии
 - [B-64](backlog/B-64-wasm-production-compile-runs-out-of-memory.md) — Продакшн-компиляция wasm падает по памяти — на Linux-машине каждый раз, на CI однажды
+
+**Принятие 0.38**
+
+- [B-68](backlog/B-68-present-has-no-way-to-degrade.md) — Что видит старый клиент вместо шторки: у present нет пути деградации
 
 **Без этапа**
 

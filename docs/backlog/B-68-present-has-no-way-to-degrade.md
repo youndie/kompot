@@ -1,7 +1,7 @@
 ---
 id: B-68
 title: "Что видит старый клиент вместо шторки: у present нет пути деградации"
-status: question
+status: done
 priority: P2
 size: M
 stage: adoption-0.38
@@ -42,3 +42,8 @@ konekt задачу сформулировал ровно так («подска
 
 - Якоря: `kompot-spec/SPEC.md` §2.1, §3, §12.5; `kompot-standard/.../Components.kt` (`NavigateAction`,
   `PresentAction`); граф маршрутов в `kompot-navigation`.
+
+## Ответ — 2026-09-29
+
+Владелец выбрал **3 — подсказку показа на маршруте**. Реализация — [B-69](B-69-route-presentation-hint.md);
+`present` остаётся как есть, §12.5 не меняется.
