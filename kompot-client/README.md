@@ -183,6 +183,23 @@ overlays.asking?.let { question ->
     MyQuestion(question.question, onYes = { overlays.agree(top) }, onNo = { overlays.refuse() })
 }
 ```
+**Маршрут, показанный слоем.** Маршрут графа может попросить показать свой экран шторкой или
+диалогом (`presentation`, §12.1) — сервер ставит это в граф, не дожидаясь, пока уйдут старые
+клиенты: они подсказку не знают и открывают экран, как раньше. Клиент, который слой рисует,
+спрашивает маршрут и кладёт загруженное дерево в тот же слой, что и `present`, — значения
+`presentation` и `PresentKind` совпадают:
+
+```kotlin
+val route = myGraph.routeFor(deeplink, ScreenRouteKind.known) ?: return
+when (val shownAs = route.presentedAs()) {
+    ScreenRoutePresentation.SCREEN -> myBackStack = myBackStack.push(route.deeplink)
+    else -> top.handle(PresentAction(content = myLoadedScreen(route), kind = shownAs))
+}
+```
+
+Клиент без слоя передаёт `presentedAs(setOf(ScreenRoutePresentation.SCREEN))` и получает экран на любой
+маршрут.
+
 `tabs` и `expandable` подключать не нужно: их состояние живёт в рендерерах `kompotStandardRenderers`.
 Загрузку и ошибку экрана рисует приложение (§12.6) — через `KompotScreenLoader(key, load, failed)`.
 

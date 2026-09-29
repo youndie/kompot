@@ -56,7 +56,7 @@ final class io.github.youndie.kompot.navigation/NavigationGraph { // io.github.y
 }
 
 final class io.github.youndie.kompot.navigation/ScreenRoute { // io.github.youndie.kompot.navigation/ScreenRoute|null[0]
-    constructor <init>(kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/String = ...) // io.github.youndie.kompot.navigation/ScreenRoute.<init>|<init>(kotlin.String;kotlin.String;kotlin.String?;kotlin.String){}[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/String = ..., kotlin/String = ...) // io.github.youndie.kompot.navigation/ScreenRoute.<init>|<init>(kotlin.String;kotlin.String;kotlin.String?;kotlin.String;kotlin.String){}[0]
 
     final val deeplink // io.github.youndie.kompot.navigation/ScreenRoute.deeplink|{}deeplink[0]
         final fun <get-deeplink>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.deeplink.<get-deeplink>|<get-deeplink>(){}[0]
@@ -64,6 +64,8 @@ final class io.github.youndie.kompot.navigation/ScreenRoute { // io.github.yound
         final fun <get-endpoint>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.endpoint.<get-endpoint>|<get-endpoint>(){}[0]
     final val kind // io.github.youndie.kompot.navigation/ScreenRoute.kind|{}kind[0]
         final fun <get-kind>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.kind.<get-kind>|<get-kind>(){}[0]
+    final val presentation // io.github.youndie.kompot.navigation/ScreenRoute.presentation|{}presentation[0]
+        final fun <get-presentation>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.presentation.<get-presentation>|<get-presentation>(){}[0]
     final val title // io.github.youndie.kompot.navigation/ScreenRoute.title|{}title[0]
         final fun <get-title>(): kotlin/String? // io.github.youndie.kompot.navigation/ScreenRoute.title.<get-title>|<get-title>(){}[0]
 
@@ -71,9 +73,11 @@ final class io.github.youndie.kompot.navigation/ScreenRoute { // io.github.yound
     final fun component2(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.component2|component2(){}[0]
     final fun component3(): kotlin/String? // io.github.youndie.kompot.navigation/ScreenRoute.component3|component3(){}[0]
     final fun component4(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.component4|component4(){}[0]
-    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/String? = ..., kotlin/String = ...): io.github.youndie.kompot.navigation/ScreenRoute // io.github.youndie.kompot.navigation/ScreenRoute.copy|copy(kotlin.String;kotlin.String;kotlin.String?;kotlin.String){}[0]
+    final fun component5(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.component5|component5(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/String? = ..., kotlin/String = ..., kotlin/String = ...): io.github.youndie.kompot.navigation/ScreenRoute // io.github.youndie.kompot.navigation/ScreenRoute.copy|copy(kotlin.String;kotlin.String;kotlin.String?;kotlin.String;kotlin.String){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot.navigation/ScreenRoute.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.youndie.kompot.navigation/ScreenRoute.hashCode|hashCode(){}[0]
+    final fun presentedAs(kotlin.collections/Set<kotlin/String> = ...): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.presentedAs|presentedAs(kotlin.collections.Set<kotlin.String>){}[0]
     final fun toString(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoute.toString|toString(){}[0]
 
     final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.youndie.kompot.navigation/ScreenRoute> { // io.github.youndie.kompot.navigation/ScreenRoute.$serializer|null[0]
@@ -100,4 +104,16 @@ final object io.github.youndie.kompot.navigation/ScreenRouteKind { // io.github.
 
     final val known // io.github.youndie.kompot.navigation/ScreenRouteKind.known|{}known[0]
         final fun <get-known>(): kotlin.collections/Set<kotlin/String> // io.github.youndie.kompot.navigation/ScreenRouteKind.known.<get-known>|<get-known>(){}[0]
+}
+
+final object io.github.youndie.kompot.navigation/ScreenRoutePresentation { // io.github.youndie.kompot.navigation/ScreenRoutePresentation|null[0]
+    final const val DIALOG // io.github.youndie.kompot.navigation/ScreenRoutePresentation.DIALOG|{}DIALOG[0]
+        final fun <get-DIALOG>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoutePresentation.DIALOG.<get-DIALOG>|<get-DIALOG>(){}[0]
+    final const val SCREEN // io.github.youndie.kompot.navigation/ScreenRoutePresentation.SCREEN|{}SCREEN[0]
+        final fun <get-SCREEN>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoutePresentation.SCREEN.<get-SCREEN>|<get-SCREEN>(){}[0]
+    final const val SHEET // io.github.youndie.kompot.navigation/ScreenRoutePresentation.SHEET|{}SHEET[0]
+        final fun <get-SHEET>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRoutePresentation.SHEET.<get-SHEET>|<get-SHEET>(){}[0]
+
+    final val known // io.github.youndie.kompot.navigation/ScreenRoutePresentation.known|{}known[0]
+        final fun <get-known>(): kotlin.collections/Set<kotlin/String> // io.github.youndie.kompot.navigation/ScreenRoutePresentation.known.<get-known>|<get-known>(){}[0]
 }

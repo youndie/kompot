@@ -1,7 +1,7 @@
 ---
 id: B-69
 title: "Маршрут говорит «покажи шторкой», а старый клиент открывает его экраном"
-status: wip
+status: done
 priority: P1
 size: M
 stage: adoption-0.38
@@ -38,3 +38,21 @@ stage: adoption-0.38
 - AC: konekt закрывает свою задачу «подтверждение покупки — шторка» этим полем без обхода.
 - Якоря: `kompot-navigation/src/commonMain/kotlin/io/github/youndie/kompot/navigation/NavigationGraph.kt`,
   `kompot-spec/SPEC.md` §12.1, `kompot-spec/schema/`, `kompot-client-tck`.
+
+## Сделано — 2026-09-30
+
+`ScreenRoute.presentation` (`screen` по умолчанию, `sheet`, `dialog`) и `ScreenRoutePresentation`;
+`route.presentedAs(supported)` отвечает, как показать маршрут, и на всё незнакомое или неподдерживаемое
+говорит `screen`. SPEC §12.1 — поле, обратное `kind` правило для незнакомого значения и почему поле,
+а не действие. Схема `kompot-navigation` и TS-типы перегенерированы; `UPGRADING.md` 0.39.0 — бинарная
+поломка конструктора и `copy` (тот же случай, что `RowComponent` в 0.38).
+
+- **Рисует слой приложение, через тот же `KompotOverlays`:** значения `presentation` и `PresentKind`
+  совпадают, и загруженное по маршруту дерево кладётся в слой обычным `PresentAction` — отдельного API
+  для отрисовки не понадобилось. Рецепт — в README `kompot-client`. Хост слоя один (B-66), закрытие на
+  переходе — то же (B-67).
+- **Фикстуры корпуса случаев нет:** `kompot-client-tck` держит только формы (§9), случая для графа у
+  него нет вовсе. Старого клиента держит тест `NavigationGraphTest`: граф с `presentation` читается
+  моделью маршрута 0.38 на условиях провода (`ignoreUnknownKeys`, §3) и маршрут находится.
+- **§13 записи нет:** журнал ведёт только несовместимые изменения провода, а поле добавляющее.
+- AC про konekt — в его задаче «подтверждение покупки — шторка» (B-116), следующим шагом цикла.
