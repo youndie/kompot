@@ -1,7 +1,7 @@
 ---
 id: B-69
 title: "Маршрут говорит «покажи шторкой», а старый клиент открывает его экраном"
-status: open
+status: wip
 priority: P1
 size: M
 stage: adoption-0.38
