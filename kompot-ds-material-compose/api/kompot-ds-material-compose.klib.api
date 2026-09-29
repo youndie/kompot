@@ -11,6 +11,15 @@ final class io.github.youndie.kompot.ds.material/KompotOverlays { // io.github.y
 
     final val isOpen // io.github.youndie.kompot.ds.material/KompotOverlays.isOpen|{}isOpen[0]
         final fun <get-isOpen>(): kotlin/Boolean // io.github.youndie.kompot.ds.material/KompotOverlays.isOpen.<get-isOpen>|<get-isOpen>(){}[0]
+
+    final var asking // io.github.youndie.kompot.ds.material/KompotOverlays.asking|{}asking[0]
+        final fun <get-asking>(): io.github.youndie.kompot.standard/ConfirmAction? // io.github.youndie.kompot.ds.material/KompotOverlays.asking.<get-asking>|<get-asking>(){}[0]
+    final var presented // io.github.youndie.kompot.ds.material/KompotOverlays.presented|{}presented[0]
+        final fun <get-presented>(): io.github.youndie.kompot.standard/PresentAction? // io.github.youndie.kompot.ds.material/KompotOverlays.presented.<get-presented>|<get-presented>(){}[0]
+
+    final fun agree(io.github.youndie.kompot/KompotActionHandler) // io.github.youndie.kompot.ds.material/KompotOverlays.agree|agree(io.github.youndie.kompot.KompotActionHandler){}[0]
+    final fun dismiss(): kotlin/Boolean // io.github.youndie.kompot.ds.material/KompotOverlays.dismiss|dismiss(){}[0]
+    final fun refuse() // io.github.youndie.kompot.ds.material/KompotOverlays.refuse|refuse(){}[0]
 }
 
 final class io.github.youndie.kompot.ds.material/Material3DesignSystem : io.github.youndie.kompot/KompotDesignSystem { // io.github.youndie.kompot.ds.material/Material3DesignSystem|null[0]

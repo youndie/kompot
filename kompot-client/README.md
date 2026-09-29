@@ -165,6 +165,24 @@ top =
 ```
 
 `KompotOverlayHost(overlays, top)` ставится над экраном — он рисует слой и вопрос тем же реестром.
+Переход (`navigate`) закрывает слой, прежде чем уйти дальше: слой лежит поверх экрана и уходит
+вместе с ним (§12.5), поэтому `KompotOverlays` можно держать и одно на весь навигационный хост.
+
+Шторка по своему макету, а не материаловская, — это свой хост. Он читает `presented` и `asking` и
+отвечает тремя вызовами: `dismiss()` — закрыть верхний слой (свайп, тап мимо, то же, что `close`),
+`refuse()` — отказаться от вопроса, `agree(top)` — согласиться и отдать действие вершине цепочки.
+Записать в слой что-то своё хост не может: слой меняют только цепочка и эти три вызова.
+
+```kotlin
+overlays.presented?.let { layer ->
+    MySheet(onDismiss = { overlays.dismiss() }) {
+        LocalKompotRegistry.current.RenderNode(layer.content, top, formController)
+    }
+}
+overlays.asking?.let { question ->
+    MyQuestion(question.question, onYes = { overlays.agree(top) }, onNo = { overlays.refuse() })
+}
+```
 `tabs` и `expandable` подключать не нужно: их состояние живёт в рендерерах `kompotStandardRenderers`.
 Загрузку и ошибку экрана рисует приложение (§12.6) — через `KompotScreenLoader(key, load, failed)`.
 

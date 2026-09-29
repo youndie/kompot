@@ -1,7 +1,12 @@
 public final class io/github/youndie/kompot/ds/material/KompotOverlays {
 	public static final field $stable I
 	public fun <init> ()V
+	public final fun agree (Lio/github/youndie/kompot/KompotActionHandler;)V
+	public final fun dismiss ()Z
+	public final fun getAsking ()Lio/github/youndie/kompot/standard/ConfirmAction;
+	public final fun getPresented ()Lio/github/youndie/kompot/standard/PresentAction;
 	public final fun isOpen ()Z
+	public final fun refuse ()V
 }
 
 public final class io/github/youndie/kompot/ds/material/Material3DesignSystem : io/github/youndie/kompot/KompotDesignSystem {

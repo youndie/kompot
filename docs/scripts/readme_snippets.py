@@ -78,6 +78,8 @@ PLACEHOLDERS = {
     "performOnServer",
     # обвязка цепочки обработчиков в kompot-client/README.md
     "myHandler", "mySnackbarHost", "reloadMyScreen",
+    # своя шторка и свой вопрос в примере хоста слоя там же
+    "MySheet", "MyQuestion",
     # прочие подстановки в примерах студии и TCK
     "showcaseComponents", "recordingsDir", "homeSubmitBody",
     # значения читателя в примере сборки экрана
@@ -108,6 +110,8 @@ def declared_names():
          r"([A-Za-z_][A-Za-z0-9_]*)$"),
         # `fun interface KompotDegradationSink` — имя третьим словом
         (r"fun interface +[A-Za-z_][A-Za-z0-9_]*", r"([A-Za-z_][A-Za-z0-9_]*)$"),
+        # обобщённая функция: `fun <T : KompotComponent> RenderNode(...)` — первый шаблон видит только `fun <`
+        (r"fun +<[A-Za-z0-9_:<>?, ]*> +[A-Za-z_][A-Za-z0-9_]*", r"([A-Za-z_][A-Za-z0-9_]*)$"),
         # расширение: `fun ApplicationCall.respondKompotComponent(...)`
         (r"fun +[A-Za-z_][A-Za-z0-9_<>?, ]*\.[A-Za-z_][A-Za-z0-9_]*", r"\.([A-Za-z_][A-Za-z0-9_]*)$"),
         # элементы enum: по одному на строке, заглавными
