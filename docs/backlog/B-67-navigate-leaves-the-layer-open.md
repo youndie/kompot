@@ -1,7 +1,7 @@
 ---
 id: B-67
 title: "Переход со шторки оставляет шторку открытой над новым экраном"
-status: open
+status: done
 priority: P1
 size: S
 stage: adoption-0.38
@@ -32,3 +32,16 @@ stage: adoption-0.38
   случаем корпуса, если поведение наблюдаемо без отрисовки.
 - Якоря: `kompot-ds-material-compose/src/commonMain/kotlin/io/github/youndie/kompot/ds/material/Overlays.kt`,
   `kompot-spec/SPEC.md` §12.5.
+
+## Сделано — 2026-09-30
+
+`withOverlays` на `navigate` закрывает вопрос и дерево и только потом отдаёт действие дальше; SPEC
+§12.5 получил пункт про `navigate` и `refresh`. Тесты: переход из шторки и переход, на который
+согласились в вопросе поверх дерева, — слой закрыт, `navigate` дошёл до приложения один раз.
+
+- **Случая корпуса нет:** `kompot-client-tck` §12.5 не покрывает вовсе — состояние слоя живёт в
+  Compose-модуле `kompot-ds-material-compose`, без отрисовки его не наблюдать. AC был условным
+  («если наблюдаемо без отрисовки»); не наблюдаемо.
+- `navigate` внутри `sequence` закрывает слой, если `withSequences` стоит над `withOverlays` и шлёт
+  шаги в вершину цепочки, как README и велит; при другом порядке шаг до `withOverlays` не дойдёт —
+  то же самое, что уже верно для `present` внутри `sequence`.

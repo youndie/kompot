@@ -1,7 +1,7 @@
 ---
 id: B-66
 title: "Слой поверх экрана рисует только Material: состояние KompotOverlays закрыто для чужого хоста"
-status: open
+status: done
 priority: P1
 size: S
 stage: adoption-0.38
@@ -40,3 +40,15 @@ stage: adoption-0.38
 - AC: README `kompot-ds-material-compose` (или `kompot-client`) говорит, как написать свой хост.
 - Якоря: `kompot-ds-material-compose/src/commonMain/kotlin/io/github/youndie/kompot/ds/material/Overlays.kt`,
   `kompot-ds-material-compose/src/desktopTest/kotlin/io/github/youndie/kompot/ds/material/OverlaysTest.kt`.
+
+## Сделано — 2026-09-30
+
+`presented` и `asking` читаются публично (`internal set`), ответы — `dismiss()`, `refuse()`,
+`agree(handler)`; `KompotOverlayHost` переписан на них и ничего другого не трогает. ABI-дамп —
+только добавления (четыре метода и два геттера). README `kompot-client` показывает свой хост.
+
+- **Тест чужого хоста живёт в том же модуле** (`OverlaysTest`, «a host written against the public
+  state…»): тестовый исходник модуля видит `internal`, так что компиляцию «снаружи» он не доказывает.
+  Это доказывает дамп ABI: сеттеров в нём нет, и `checkKotlinAbi` покраснеет, если они появятся.
+- Попутно: `readme_snippets.py` не видел обобщённых функций (`fun <T : …> RenderNode`) и считал
+  `RenderNode` необъявленным — шаблон добавлен, иначе блок README со своим хостом не проходил.
