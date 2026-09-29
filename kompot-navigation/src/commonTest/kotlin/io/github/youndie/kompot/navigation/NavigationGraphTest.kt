@@ -77,7 +77,7 @@ class NavigationGraphTest {
     }
 
     @Test
-    fun `a route says how it is shown, and a client shows what it can draw`() {
+    fun `a route says how it is shown and a client shows what it can draw`() {
         val confirm = ScreenRoute(deeplink = "app://confirm", endpoint = "/screens/confirm", presentation = ScreenRoutePresentation.SHEET)
 
         assertEquals(ScreenRoutePresentation.SHEET, confirm.presentedAs())
