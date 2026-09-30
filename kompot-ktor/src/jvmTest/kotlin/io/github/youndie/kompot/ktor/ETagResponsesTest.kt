@@ -17,6 +17,7 @@ import kotlinx.serialization.modules.subclass
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.KompotModifierNode
 import io.github.youndie.kompot.kompotCoreSerializersModule
+import io.github.youndie.kompot.navigation.PresentationHeader
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -109,5 +110,24 @@ class ETagResponsesTest {
 
             assertEquals(HttpStatusCode.OK, first.status)
             assertEquals(HttpStatusCode.NotModified, second.status)
+        }
+
+    // A client reusing its cached body must show it the way the server asked the first time.
+    @Test
+    fun `a presentation set before a cached response rides on the 200 and on the 304`() =
+        testApplication {
+            routing {
+                get("/order") {
+                    call.setPresentationHeader("sheet")
+                    call.respondKompotComponentCached(etagTestJson, ETagTestComponent(id = "root", label = "confirm"))
+                }
+            }
+
+            val first = client.get("/order")
+            val second = client.get("/order") { header("If-None-Match", first.headers["ETag"]!!) }
+
+            assertEquals("sheet", first.headers[PresentationHeader.HEADER_NAME])
+            assertEquals(HttpStatusCode.NotModified, second.status)
+            assertEquals("sheet", second.headers[PresentationHeader.HEADER_NAME])
         }
 }

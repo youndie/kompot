@@ -43,6 +43,13 @@ public final class io/github/youndie/kompot/navigation/NavigationGraph$Companion
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class io/github/youndie/kompot/navigation/PresentationHeader {
+	public static final field HEADER_NAME Ljava/lang/String;
+	public static final field INSTANCE Lio/github/youndie/kompot/navigation/PresentationHeader;
+	public final fun presentedAs (Ljava/lang/String;Lio/github/youndie/kompot/navigation/ScreenRoute;Ljava/util/Set;)Ljava/lang/String;
+	public static synthetic fun presentedAs$default (Lio/github/youndie/kompot/navigation/PresentationHeader;Ljava/lang/String;Lio/github/youndie/kompot/navigation/ScreenRoute;Ljava/util/Set;ILjava/lang/Object;)Ljava/lang/String;
+}
+
 public final class io/github/youndie/kompot/navigation/ScreenRoute {
 	public static final field Companion Lio/github/youndie/kompot/navigation/ScreenRoute$Companion;
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V

@@ -24,6 +24,8 @@ kotlin {
                 // variants nor decides what to show; it transports a decision the application has
                 // already made. See ExperimentHeaders.kt.
                 implementation(projects.experimentsCore)
+                // Only the presentation header's name and words (PresentationHeader); see PresentationHeaders.kt.
+                implementation(projects.kompotNavigation)
                 api(libs.ktor.serverCore)
                 implementation(libs.ktor.serverContentNegotiation)
                 implementation(libs.ktor.serializationJson)

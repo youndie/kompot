@@ -81,7 +81,7 @@ PLACEHOLDERS = {
     # своя шторка и свой вопрос в примере хоста слоя там же
     "MySheet", "MyQuestion",
     # граф, стек и загрузка экрана приложения в примере маршрута, показанного слоем
-    "myGraph", "myBackStack", "myLoadedScreen",
+    "myGraph", "myLoadScreen", "myShowScreen", "address",
     # прочие подстановки в примерах студии и TCK
     "showcaseComponents", "recordingsDir", "homeSubmitBody",
     # значения читателя в примере сборки экрана

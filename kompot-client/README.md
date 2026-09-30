@@ -183,22 +183,25 @@ overlays.asking?.let { question ->
     MyQuestion(question.question, onYes = { overlays.agree(top) }, onNo = { overlays.refuse() })
 }
 ```
-**Маршрут, показанный слоем.** Маршрут графа может попросить показать свой экран шторкой или
-диалогом (`presentation`, §12.1) — сервер ставит это в граф, не дожидаясь, пока уйдут старые
-клиенты: они подсказку не знают и открывают экран, как раньше. Клиент, который слой рисует,
-спрашивает маршрут и кладёт загруженное дерево в тот же слой, что и `present`, — значения
-`presentation` и `PresentKind` совпадают:
+
+**Экран, показанный слоем.** Сервер может попросить показать экран шторкой или диалогом двумя
+способами (§12.1): маршрутом графа (`presentation` — за адрес) и заголовком ответа
+`X-Kompot-Presentation` (за состояние: один адрес заказа отвечает и подтверждением, которое шторка,
+и результатом, который нет). Старый клиент не знает ни того, ни другого и открывает экран, как
+раньше, — поэтому сервер ставит их сразу. Клиент, который слой рисует, загружает экран, спрашивает
+`PresentationHeader` — заголовок побеждает маршрут — и кладёт дерево в тот же слой, что и `present`:
+значения `presentation` и `PresentKind` совпадают.
 
 ```kotlin
-val route = myGraph.routeFor(deeplink, ScreenRouteKind.known) ?: return
-when (val shownAs = route.presentedAs()) {
-    ScreenRoutePresentation.SCREEN -> myBackStack = myBackStack.push(route.deeplink)
-    else -> top.handle(PresentAction(content = myLoadedScreen(route), kind = shownAs))
+val (screen, header) = myLoadScreen(address)
+when (val shownAs = PresentationHeader.presentedAs(header, route = myGraph.routeFor(deeplink))) {
+    ScreenRoutePresentation.SCREEN -> myShowScreen(screen)
+    else -> top.handle(PresentAction(content = screen, kind = shownAs))
 }
 ```
 
-Клиент без слоя передаёт `presentedAs(setOf(ScreenRoutePresentation.SCREEN))` и получает экран на любой
-маршрут.
+Клиент без слоя передаёт `supported = setOf(ScreenRoutePresentation.SCREEN)` и получает экран на любой
+ответ. Сервер на Ktor ставит заголовок `call.setPresentationHeader("sheet")` до ответа.
 
 `tabs` и `expandable` подключать не нужно: их состояние живёт в рендерерах `kompotStandardRenderers`.
 Загрузку и ошибку экрана рисует приложение (§12.6) — через `KompotScreenLoader(key, load, failed)`.
