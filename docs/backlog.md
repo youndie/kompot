@@ -99,7 +99,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 |---|---|---|---|---|---|
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
 
-## Сделано (68)
+## Сделано (69)
 
 **Швы в toolkit'е**
 
@@ -184,6 +184,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 - [B-67](backlog/B-67-navigate-leaves-the-layer-open.md) — Переход со шторки оставляет шторку открытой над новым экраном
 - [B-68](backlog/B-68-present-has-no-way-to-degrade.md) — Что видит старый клиент вместо шторки: у present нет пути деградации
 - [B-69](backlog/B-69-route-presentation-hint.md) — Маршрут говорит «покажи шторкой», а старый клиент открывает его экраном
+- [B-70](backlog/B-70-presentation-header.md) — Шторка — состояние ответа, а не адреса: заголовок X-Kompot-Presentation
 
 **Без этапа**
 

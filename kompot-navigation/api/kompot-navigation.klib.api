@@ -94,6 +94,13 @@ final class io.github.youndie.kompot.navigation/ScreenRoute { // io.github.yound
     }
 }
 
+final object io.github.youndie.kompot.navigation/PresentationHeader { // io.github.youndie.kompot.navigation/PresentationHeader|null[0]
+    final const val HEADER_NAME // io.github.youndie.kompot.navigation/PresentationHeader.HEADER_NAME|{}HEADER_NAME[0]
+        final fun <get-HEADER_NAME>(): kotlin/String // io.github.youndie.kompot.navigation/PresentationHeader.HEADER_NAME.<get-HEADER_NAME>|<get-HEADER_NAME>(){}[0]
+
+    final fun presentedAs(kotlin/String?, io.github.youndie.kompot.navigation/ScreenRoute? = ..., kotlin.collections/Set<kotlin/String> = ...): kotlin/String // io.github.youndie.kompot.navigation/PresentationHeader.presentedAs|presentedAs(kotlin.String?;io.github.youndie.kompot.navigation.ScreenRoute?;kotlin.collections.Set<kotlin.String>){}[0]
+}
+
 final object io.github.youndie.kompot.navigation/ScreenRouteKind { // io.github.youndie.kompot.navigation/ScreenRouteKind|null[0]
     final const val FORM // io.github.youndie.kompot.navigation/ScreenRouteKind.FORM|{}FORM[0]
         final fun <get-FORM>(): kotlin/String // io.github.youndie.kompot.navigation/ScreenRouteKind.FORM.<get-FORM>|<get-FORM>(){}[0]
