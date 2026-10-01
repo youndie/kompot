@@ -1,6 +1,6 @@
 # kompot
 
-[![kotlin](https://img.shields.io/badge/Kotlin-2.4.10-blue?logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![kotlin](https://img.shields.io/badge/Kotlin-2.4.20-blue?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![maven central](https://img.shields.io/maven-central/v/io.github.youndie.kompot/kompot-core?label=kompot&color=40c14a)](https://central.sonatype.com/namespace/io.github.youndie.kompot)
 [![what a consumer gets](https://raw.githubusercontent.com/youndie/kompot/badges/io.github.youndie.kompot.kompot-core.svg)](https://github.com/youndie/proba)
 
