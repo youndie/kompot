@@ -2,16 +2,20 @@
 # The build conventions: where the group, the version, the toolchain, the jvm floor and the
 # publication come from. Bumping this changes how every module is built, so it is pinned like any
 # other dependency and moved deliberately.
-sborka = "0.4.0.91"
-androidGradlePlugin = "9.4.1"
-kotlin = "2.4.20"
-ktor = "3.5.2"
-ksp = "2.3.12"
+sborka = "0.4.0.111"
+# The compiler is not here: kotlin, ksp and the Android Gradle plugin come from `wip`, the catalog the
+# sborka release above publishes, so moving the compiler is moving that one number. Compose is the
+# exception and stays below — see `jewel`.
+ktor = "3.6.0"
 dokka = "2.2.0"
 kotlinpoet = "2.3.0"
 kotlinx-coroutines = "1.11.0"
 kotlinxSerializationJson = "1.11.0"
 lettuce = "7.6.0.RELEASE"
+# Compose stays OURS rather than `wip`'s, and the reason is the jewel entry below: the Compose line
+# moves in one commit with material3, jewel and viddik (B-40), and taking it from the shared catalog
+# would let a sborka bump move it alone — a build that resolves, compiles, and throws on the first
+# frame. The number matches `wip` (1.12.1); keeping it equal is a review item, not an automatism.
 compose-multiplatform = "1.12.1"
 compose-material3 = "1.12.0-alpha03"
 coil3 = "3.6.3"
@@ -37,8 +41,6 @@ ijPlatform = "262.10968.63"
 jbrApi = "1.9.0"
 
 [libraries]
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
-
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
@@ -87,29 +89,14 @@ jewel-int-ui-decorated-window = { module = "org.jetbrains.jewel:jewel-int-ui-dec
 jbr-api = { module = "org.jetbrains.runtime:jbr-api", version.ref = "jbrApi" }
 intellij-icons = { module = "com.jetbrains.intellij.platform:icons", version.ref = "ijPlatform" }
 
-ksp-symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
-
-# The Kotlin Gradle plugin as a LIBRARY, for a build plugin of ours that has to read a multiplatform
-# target's compilation. compileOnly wherever it is used: the build applying it already has the plugin,
-# and a second copy on a build classpath is how two versions of it meet.
-kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
 
 [plugins]
-# The Kotlin Multiplatform flavour of AGP: it adds an android target to a kotlin{} block rather than
-# asking a module to be an Android library that happens to share code, which is the wrong way round
-# for a toolkit whose modules are common code with no expect/actual anywhere.
-androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "androidGradlePlugin" }
-kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 # What fills the javadoc jar. Central takes an empty one and says nothing about it, so without this
 # the file every artefact must carry is a file with nothing in it.
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
-composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 # Wires viddik's processor onto the right KSP configuration, registers the generated sources and gives
 # the viddikRecord/viddikVerify tasks — what :kompot-ds-material-compose used to write by hand.
 viddik = { id = "io.github.youndie.viddik", version.ref = "viddik" }

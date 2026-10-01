@@ -18,7 +18,8 @@ jobs:
         uses: actions/checkout@v5
 
       # Java and Gradle in one step and at one version for the portfolio. The JDK here is what
-      # GRADLE runs on; what the modules compile to is `sborka.jvmToolchain=17`.
+      # GRADLE runs on; the modules compile on sborka's default toolchain (25) and compile TO
+      # `sborka.jvmFloor=17`.
       - name: Setup Java and Gradle
         uses: youndie/sborka/.github/actions/setup-kotlin@main
 

@@ -204,7 +204,7 @@ are its measuring instruments.
 ./gradlew build
 ```
 
-Java 17, as a toolchain. On a Mac without an iOS simulator runtime the simulator test tasks fail —
+JDK 25, as a toolchain (the bytecode stays Java 17). On a Mac without an iOS simulator runtime the simulator test tasks fail —
 install one through Xcode, or skip them:
 
 ```bash

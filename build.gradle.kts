@@ -1,11 +1,16 @@
 plugins {
-    alias(libs.plugins.kotlinJvm) apply false
-    alias(libs.plugins.kotlinMultiplatform) apply false
-    alias(libs.plugins.kotlinSerialization) apply false
-    alias(libs.plugins.ksp) apply false
+    // The compiler and everything versioned with it come from `wip`, the catalog a sborka release
+    // publishes: one number in gradle/libs.versions.toml moves all of them.
+    alias(wip.plugins.kotlinJvm) apply false
+    alias(wip.plugins.kotlinMultiplatform) apply false
+    alias(wip.plugins.kotlinSerialization) apply false
+    alias(wip.plugins.ksp) apply false
     alias(libs.plugins.composeMultiplatform) apply false
-    alias(libs.plugins.composeCompiler) apply false
-    alias(libs.plugins.androidKotlinMultiplatformLibrary) apply false
+    alias(wip.plugins.composeCompiler) apply false
+    // The Kotlin Multiplatform flavour of AGP: it adds an android target to a kotlin{} block rather
+    // than asking a module to be an Android library that happens to share code, which is the wrong
+    // way round for a toolkit whose modules are common code with no expect/actual anywhere.
+    alias(wip.plugins.androidKotlinMultiplatformLibrary) apply false
     // The build conventions, declared here and applied per module. `apply false` for the same reason
     // as the Kotlin plugins above: the plugin lands on the build classpath once, and a module asking
     // for a versioned copy of something already there fails with a message about the classpath.

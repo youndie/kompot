@@ -1,9 +1,9 @@
 plugins {
     kotlin("multiplatform")
-    alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(wip.plugins.androidKotlinMultiplatformLibrary)
     kotlin("plugin.serialization")
     alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
+    alias(wip.plugins.composeCompiler)
     id("io.github.youndie.sborka.kmp")
     alias(libs.plugins.dokka)
     id("io.github.youndie.sborka.publish")
