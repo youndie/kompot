@@ -1,10 +1,10 @@
 plugins {
     kotlin("multiplatform")
-    alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(wip.plugins.androidKotlinMultiplatformLibrary)
     kotlin("plugin.serialization")
     alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.ksp)
+    alias(wip.plugins.composeCompiler)
+    alias(wip.plugins.ksp)
     alias(libs.plugins.viddik)
     id("io.github.youndie.sborka.kmp")
     alias(libs.plugins.dokka)
@@ -109,31 +109,13 @@ viddik {
 
 // viddik 0.6 DECLARES Java 21 in its Gradle metadata (`org.gradle.jvm.version=21`); up to 0.1.1.8 it
 // only shipped class file 65 and said nothing. Declared, it is a resolution error: a desktopTest
-// classpath asking for Java 17 — the module's toolchain — finds no variant and the build stops before
-// compiling anything. So the TEST classpaths ask for 21, the same number the test launcher already
-// runs on; main code, and everything published, stays on the 17 floor.
+// classpath asking for Java 17 — the module's floor — finds no variant and the build stops before
+// compiling anything. So the TEST classpaths ask for 21, which the toolchain the tests run on (25)
+// clears; main code, and everything published, stays on the 17 floor.
 configurations
     .matching { it.isCanBeResolved && it.name.startsWith("desktopTest") }
     .configureEach { attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 21) }
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
-
-    // The published bytecode of this module is Java 17 like every other module's (`sborka.jvmFloor`);
-    // these TESTS are what needs a newer runtime. viddik ships class file 65 (Java 21), so on a 17
-    // launcher the screenshot suite dies at class loading — the very failure mode the floor exists to
-    // keep off consumers, arriving here from a dependency of the harness rather than from anything
-    // published.
-    //
-    // Only the launcher moves. Compiling the tests on 17 against a newer class file is fine, and
-    // keeping the compile there is what stops a test accidentally teaching main code to use an API
-    // no consumer has.
-    //
-    // The number is written here rather than in a constant: it was one of two in `buildSrc`, and the
-    // other one — the floor, which was the one repeated — is a line of `gradle.properties` now. This
-    // one has exactly one reader, and a constant with one reader only hides where it is read.
-    javaLauncher =
-        javaToolchains.launcherFor {
-            languageVersion = JavaLanguageVersion.of(21)
-        }
 }

@@ -2,7 +2,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
+    alias(wip.plugins.composeCompiler)
     id("io.github.youndie.sborka.kmp")
     alias(libs.plugins.dokka)
     id("io.github.youndie.sborka.publish")
@@ -201,9 +201,9 @@ afterEvaluate {
 
 // viddik 0.6 DECLARES Java 21 in its Gradle metadata (`org.gradle.jvm.version=21`); up to 0.1.1.8 it
 // only shipped class file 65 and said nothing. Declared, it is a resolution error: a desktopTest
-// classpath asking for Java 17 — the module's toolchain — finds no variant and the build stops before
-// compiling anything. So the TEST classpaths ask for 21, the same number the test launcher already
-// runs on; main code, and everything published, stays on the 17 floor.
+// classpath asking for Java 17 — the module's floor — finds no variant and the build stops before
+// compiling anything. So the TEST classpaths ask for 21, which the launcher below (25) clears; main
+// code, and everything published, stays on the 17 floor.
 configurations
     .matching { it.isCanBeResolved && it.name.startsWith("desktopTest") }
     .configureEach { attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 21) }
@@ -212,9 +212,8 @@ tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 
     // The SAME runtime the application runs on, and that identity is the point: a test that asserts
-    // the studio's runtime while running on a different one asserts nothing. It also clears the floor
-    // :kompot-ds-material-compose raises for the same suite — viddik ships class file 65 while
-    // everything here compiles on 17.
+    // the studio's runtime while running on a different one asserts nothing. It also clears the
+    // class file 65 viddik ships, while everything here compiles to the 17 floor.
     javaLauncher = jetBrainsRuntime
 
     // Where the checked-in DSL draft is regenerated to. Opt-in by property and absent otherwise, so

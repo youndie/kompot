@@ -29,7 +29,7 @@ dependencies {
     // The Kotlin Gradle plugin's model, for reading a multiplatform target's compilation. compileOnly:
     // a build applying this one has the Kotlin plugin already, and bringing a second copy of it onto a
     // build classpath is how two versions of it meet.
-    compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(wip.kotlin.gradle.plugin)
 }
 
 kotlin {
