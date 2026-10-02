@@ -7,6 +7,7 @@ plugins {
     alias(wip.plugins.ksp)
     alias(libs.plugins.viddik)
     id("io.github.youndie.sborka.kmp")
+    id("io.github.youndie.sborka.lint")
     alias(libs.plugins.dokka)
     id("io.github.youndie.sborka.publish")
 }

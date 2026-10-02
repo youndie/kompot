@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(wip.plugins.composeCompiler)
     id("io.github.youndie.sborka.kmp")
+    id("io.github.youndie.sborka.lint")
 }
 
 // THE ONLY MODULE HERE THAT IS PUBLISHED NOWHERE, and that is the point of it rather than an

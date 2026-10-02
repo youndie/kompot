@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
     id("io.github.youndie.sborka.jvm")
+    id("io.github.youndie.sborka.lint")
     alias(libs.plugins.dokka)
     id("io.github.youndie.sborka.publish")
 }
