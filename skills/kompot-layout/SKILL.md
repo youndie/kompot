@@ -49,6 +49,10 @@ The dictionary is the project's, not the toolkit's. Find, in this order:
    screenshot tool and the shell of a preview tool are pinned in the version catalogue beside the
    Compose version, and the three move in one commit or not at all.
 
+The canvas tools named here and below ship with this skill: installed as the `kompot` plugin they
+are in `${CLAUDE_PLUGIN_ROOT}/tools/canvas`, in a kompot checkout in `tools/canvas`; their README
+says what each one reads and writes.
+
 Project conventions beat this skill. This skill says what is the same everywhere.
 
 Between two designs on one codebase, what stays is the scaffold — the shell, the recording and

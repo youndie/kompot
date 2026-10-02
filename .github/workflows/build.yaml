@@ -60,6 +60,14 @@ jobs:
         env:
           BASE: ${{ github.event.pull_request.base.sha || github.event.before || 'HEAD^' }}
 
+      # The repository is also a Claude Code plugin (.claude-plugin/plugin.json), and an install
+      # compares the version string and nothing else. A change to the skill or to the canvas tools
+      # it runs, merged under the old number, reaches no install and says so nowhere.
+      - name: A change to what the plugin ships raises its version
+        run: python3 docs/scripts/plugin_version.py --base $BASE
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before || 'HEAD^' }}
+
       # Both audits below read real published metadata, which is why they publish locally first, and
       # both exist because the defect they look for is invisible to the build itself: everything
       # compiles, tests and publishes green, and only a consumer finds out.
