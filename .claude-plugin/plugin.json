@@ -1,6 +1,6 @@
 {
   "name": "kompot",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Laying out a screen on kompot's server-driven UI: the component tree on the server, the wire types, the renderers, a design canvas matched against the frame and every change priced as a server deploy or a client release. Ships the kompot-layout skill and the canvas tools it measures with.",
   "author": {
     "name": "youndie",
