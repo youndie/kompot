@@ -15,16 +15,21 @@ class KompotRegistryFallbackTest {
     @Test
     fun `a component type with no registered renderer falls back to the Unknown component placeholder`() =
         runDesktopComposeUiTest {
-                // The registry knows TextComponent but NOT ButtonComponent: both types are valid and
-                // both are known to the serialiser, but THIS registry instance cannot draw a button —
-                // an application forgot to merge a renderer plug-in, say.
+            // The registry knows TextComponent but NOT ButtonComponent: both types are valid and
+            // both are known to the serialiser, but THIS registry instance cannot draw a button —
+            // an application forgot to merge a renderer plug-in, say.
             val partialRegistry = KompotRegistry(mapOf(TextComponent::class to TextRenderer()))
 
             setContent {
                 TestKompotTheme {
                     CompositionLocalProvider(LocalKompotRegistry provides partialRegistry) {
                         partialRegistry.RenderNode(
-                            component = ButtonComponent(id = "btn", text = "Pay", action = NavigateAction(deeplink = "/pay")),
+                            component =
+                                ButtonComponent(
+                                    id = "btn",
+                                    text = "Pay",
+                                    action = NavigateAction(deeplink = "/pay"),
+                                ),
                             actionHandler = recordingActionHandler(),
                             formController = testFormController(),
                         )

@@ -1,12 +1,12 @@
 package io.github.youndie.kompot.ktor
 
+import io.github.youndie.kompot.KompotAction
+import io.github.youndie.kompot.encodeKompotAction
 import io.ktor.http.ContentType
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.response.respondText
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
-import io.github.youndie.kompot.KompotAction
-import io.github.youndie.kompot.encodeKompotAction
 
 // The same problem and the same fix as respondKompotComponent: KompotAction is an open interface,
 // not @Serializable, so a root call.respond(action) resolves the concrete runtime class's serialiser

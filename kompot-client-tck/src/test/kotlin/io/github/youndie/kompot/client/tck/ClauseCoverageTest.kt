@@ -89,7 +89,15 @@ class ClauseCoverageTest {
                 appendLine("|---|---|---|")
                 byRule.forEach { (rule, holders) ->
                     val who = if (holders.isNotEmpty()) "" else heldElsewhere[rule] ?: "**не назначено**"
-                    appendLine("| `$rule` | ${if (holders.isEmpty()) "—" else holders.joinToString(", ") { "`$it`" }} | $who |")
+                    appendLine(
+                        "| `$rule` | ${if (holders.isEmpty()) {
+                            "—"
+                        } else {
+                            holders.joinToString(
+                                ", ",
+                            ) { "`$it`" }
+                        }} | $who |",
+                    )
                 }
                 appendLine()
                 val covered = byRule.count { it.value.isNotEmpty() }

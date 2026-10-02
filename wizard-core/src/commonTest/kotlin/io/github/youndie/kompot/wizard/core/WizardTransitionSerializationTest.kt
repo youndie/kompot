@@ -13,7 +13,8 @@ private val json = Json { classDiscriminator = "type" }
 class WizardTransitionSerializationTest {
     @Test
     fun `Next Back and Finish round-trip through the open WizardTransition type`() {
-        val transitions: List<WizardTransition> = listOf(WizardTransition.Next, WizardTransition.Back, WizardTransition.Finish)
+        val transitions: List<WizardTransition> =
+            listOf(WizardTransition.Next, WizardTransition.Back, WizardTransition.Finish)
         for (transition in transitions) {
             val decoded = json.decodeFromString<WizardTransition>(json.encodeToString<WizardTransition>(transition))
             assertEquals(transition, decoded)

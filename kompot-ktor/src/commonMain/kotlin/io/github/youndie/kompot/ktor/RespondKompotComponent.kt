@@ -1,12 +1,12 @@
 package io.github.youndie.kompot.ktor
 
+import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.encodeKompotComponent
 import io.ktor.http.ContentType
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.response.respondText
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
-import io.github.youndie.kompot.KompotComponent
-import io.github.youndie.kompot.encodeKompotComponent
 
 // KompotComponent is an open interface, not @Serializable, so a plain call.respond(component)
 // serialises it through the CONCRETE runtime class's serialiser: ContentNegotiation resolves by the

@@ -91,9 +91,21 @@ public val LocalKompotDegradationSink: ProvidableCompositionLocal<KompotDegradat
 // enters the chain past the renderer's wrapper and used to be reported nowhere (B-60).
 internal fun KompotDegradationSink.reportUnknown(action: KompotAction) {
     when (action) {
-        is UnknownAction -> onUnknown(KompotDegradationKind.UNKNOWN_ACTION, action.originalType, KompotDegradationOutcome.NOTHING)
-        is SequenceAction -> action.actions.forEach { reportUnknown(it) }
-        else -> Unit
+        is UnknownAction -> {
+            onUnknown(
+                KompotDegradationKind.UNKNOWN_ACTION,
+                action.originalType,
+                KompotDegradationOutcome.NOTHING,
+            )
+        }
+
+        is SequenceAction -> {
+            action.actions.forEach { reportUnknown(it) }
+        }
+
+        else -> {
+            Unit
+        }
     }
 }
 

@@ -35,11 +35,16 @@ public object TckEventStream {
             val line = rawLine.removeSuffix("\r")
             when {
                 line.isEmpty() -> flush()
+
                 // A comment, and the usual way a server keeps a connection open. Carries no meaning.
                 line.startsWith(":") -> Unit
+
                 line.startsWith("data:") -> data += line.removePrefix("data:").removePrefix(" ")
+
                 line.startsWith("event:") -> name = line.removePrefix("event:").removePrefix(" ")
+
                 line.startsWith("id:") || line.startsWith("retry:") -> Unit
+
                 else -> malformed += line
             }
         }

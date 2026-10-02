@@ -34,8 +34,14 @@ class CrossModuleRegistryTest {
 
             // And the load-bearing half, since a package is only a convention: the two classes come
             // out of different compilation outputs, which is what "different module" actually means.
-            val componentSource = component.java.protectionDomain?.codeSource?.location
-            val rendererSource = renderer::class.java.protectionDomain?.codeSource?.location
+            val componentSource =
+                component.java.protectionDomain
+                    ?.codeSource
+                    ?.location
+            val rendererSource =
+                renderer::class.java.protectionDomain
+                    ?.codeSource
+                    ?.location
             if (componentSource != null && rendererSource != null) {
                 assertTrue(
                     componentSource != rendererSource,

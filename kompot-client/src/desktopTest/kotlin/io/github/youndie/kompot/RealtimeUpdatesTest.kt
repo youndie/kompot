@@ -84,8 +84,8 @@ class RealtimeUpdatesTest {
     @Test
     fun `a realtime update can swap the component type entirely, dispatched by its new type`() =
         runDesktopComposeUiTest {
-                // An update changes the TYPE of a node, not only its content — a text became a link,
-                // say — so the renderer lookup must go by actual::class rather than the original T.
+            // An update changes the TYPE of a node, not only its content — a text became a link,
+            // say — so the renderer lookup must go by actual::class rather than the original T.
             val registry =
                 KompotRegistry(
                     mapOf(

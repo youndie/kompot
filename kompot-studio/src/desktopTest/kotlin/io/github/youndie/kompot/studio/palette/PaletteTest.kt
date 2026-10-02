@@ -1,10 +1,10 @@
 package io.github.youndie.kompot.studio.palette
 
 import io.github.youndie.kompot.standard.TextComponent
+import io.github.youndie.kompot.studio.KompotStudioConfig
 import io.github.youndie.kompot.studio.diagnostics.Severity
 import io.github.youndie.kompot.studio.diagnostics.diagnose
 import io.github.youndie.kompot.studio.edit.JsonEdits
-import io.github.youndie.kompot.studio.KompotStudioConfig
 import io.github.youndie.kompot.studio.toolkitRegistry
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -98,7 +98,14 @@ class PaletteTest {
         assertEquals("column", node.getValue("type").jsonPrimitive.content)
         // `children` is required and a list, so it is written — as an empty one. A guessed child would
         // be a screen the studio wrote by itself.
-        assertEquals(emptyList<JsonObject>(), node.getValue("children").let { it as? kotlinx.serialization.json.JsonArray }.orEmpty())
+        assertEquals(
+            emptyList<JsonObject>(),
+            node
+                .getValue("children")
+                .let {
+                    it as? kotlinx.serialization.json.JsonArray
+                }.orEmpty(),
+        )
     }
 
     @Test

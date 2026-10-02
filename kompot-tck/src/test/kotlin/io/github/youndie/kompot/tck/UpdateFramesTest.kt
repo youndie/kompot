@@ -101,7 +101,13 @@ class UpdateFramesTest {
         // Zero rather than absent, and that is the useful answer: a check whose counter reads 0 says
         // out loud that it had nothing to look at, which is the whole reason the counters exist.
         assertEquals(0, report.exercised["updates"])
-        assertTrue(report.skipped.single().reason.contains("recordedUpdateStreams"), report.skipped.toString())
+        assertTrue(
+            report.skipped
+                .single()
+                .reason
+                .contains("recordedUpdateStreams"),
+            report.skipped.toString(),
+        )
     }
 
     private companion object {

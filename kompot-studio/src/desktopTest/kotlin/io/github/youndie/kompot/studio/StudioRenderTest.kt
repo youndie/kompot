@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import io.github.youndie.kompot.LocalKompotDesignSystem
 import io.github.youndie.kompot.ds.material.Material3DesignSystem
-import io.github.youndie.kompot.theme.KompotPalette
 import io.github.youndie.kompot.standard.KompotPageLoader
 import io.github.youndie.kompot.standard.KompotPageResponse
 import io.github.youndie.kompot.studio.tree.SELECTION_RGB
+import io.github.youndie.kompot.theme.KompotPalette
 import io.github.youndie.kompot.theme.KompotTheme
 import io.github.youndie.viddik.core.captureComposable
 import java.awt.image.BufferedImage

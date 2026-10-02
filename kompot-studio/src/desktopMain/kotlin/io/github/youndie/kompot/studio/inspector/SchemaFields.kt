@@ -112,8 +112,9 @@ private fun field(
             ?.firstOrNull { branch -> (branch["type"] as? JsonPrimitive)?.content != "null" }
             ?: property
 
-    val description = (property["description"] as? JsonPrimitive)?.content
-        ?: (unwrapped["description"] as? JsonPrimitive)?.content
+    val description =
+        (property["description"] as? JsonPrimitive)?.content
+            ?: (unwrapped["description"] as? JsonPrimitive)?.content
 
     val referenced = (unwrapped["\$ref"] as? JsonPrimitive)?.content?.substringAfterLast('/')
     val target = referenced?.let { findDefinition(schemas, it) }
@@ -128,10 +129,18 @@ private fun field(
     if (target != null) {
         val kind = (target["x-kompot-kind"] as? JsonPrimitive)?.content
         return when (kind) {
-            "token" ->
-                PropertyField(name, FieldKind.CHOICE, required, description, tokens[referenced].orEmpty(), tokenKind = referenced)
+            "token" -> {
+                PropertyField(
+                    name,
+                    FieldKind.CHOICE,
+                    required,
+                    description,
+                    tokens[referenced].orEmpty(),
+                    tokenKind = referenced,
+                )
+            }
 
-            "enum" ->
+            "enum" -> {
                 PropertyField(
                     name,
                     FieldKind.CHOICE,
@@ -139,9 +148,15 @@ private fun field(
                     description,
                     (target["enum"] as? JsonArray).orEmpty().map { (it as JsonPrimitive).content },
                 )
+            }
 
-            "hierarchy" -> PropertyField(name, FieldKind.NESTED, required, description, hierarchy = referenced)
-            else -> PropertyField(name, FieldKind.RAW, required, description)
+            "hierarchy" -> {
+                PropertyField(name, FieldKind.NESTED, required, description, hierarchy = referenced)
+            }
+
+            else -> {
+                PropertyField(name, FieldKind.RAW, required, description)
+            }
         }
     }
 
@@ -155,8 +170,11 @@ private fun field(
 
     return when (type) {
         "string" -> PropertyField(name, FieldKind.STRING, required, description, pattern = pattern)
+
         "integer", "number" -> PropertyField(name, FieldKind.NUMBER, required, description)
+
         "boolean" -> PropertyField(name, FieldKind.BOOLEAN, required, description)
+
         // An array, an object, anything else: text. The panel says what it is and lets somebody type
         // it rather than pretending the property is not there.
         else -> PropertyField(name, FieldKind.RAW, required, description)

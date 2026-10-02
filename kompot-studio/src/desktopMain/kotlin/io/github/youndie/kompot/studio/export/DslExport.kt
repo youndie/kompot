@@ -96,12 +96,24 @@ private class DslWriter(
 
             "text" -> {
                 used += "io.github.youndie.kompot.standard.text"
-                call("text", listOfNotNull(string(node["text"]), token(node, "style"), token(node, "color"), id, modifierBlock(modifiers)))
+                call(
+                    "text",
+                    listOfNotNull(
+                        string(node["text"]),
+                        token(node, "style"),
+                        token(node, "color"),
+                        id,
+                        modifierBlock(modifiers),
+                    ),
+                )
             }
 
             "button" -> {
                 used += "io.github.youndie.kompot.standard.button"
-                call("button", listOfNotNull(string(node["text"]), action(node["action"]), id, modifierBlock(modifiers)))
+                call(
+                    "button",
+                    listOfNotNull(string(node["text"]), action(node["action"]), id, modifierBlock(modifiers)),
+                )
             }
 
             "table" -> {
@@ -111,7 +123,9 @@ private class DslWriter(
                 head + "\n" + rows(node).prependIndent("    ") + "\n}"
             }
 
-            else -> constructor(node)
+            else -> {
+                constructor(node)
+            }
         }
     }
 
@@ -131,14 +145,22 @@ private class DslWriter(
         return "addComponent($call)" + if (marked) " $MARKER" else ""
     }
 
-    private fun isDslCall(printed: String): Boolean = DSL_CALLS.any { printed.startsWith("$it(") || printed.startsWith("$it {") }
+    private fun isDslCall(printed: String): Boolean =
+        DSL_CALLS.any {
+            printed.startsWith("$it(") ||
+                printed.startsWith("$it {")
+        }
 
     private fun containerBody(
         node: JsonObject,
         path: String,
     ): String {
         val lines = mutableListOf<String>()
-        (node["spacing"] as? JsonPrimitive)?.content?.toIntOrNull()?.takeIf { it != 0 }?.let { lines += "spacing($it)" }
+        (node["spacing"] as? JsonPrimitive)
+            ?.content
+            ?.toIntOrNull()
+            ?.takeIf { it != 0 }
+            ?.let { lines += "spacing($it)" }
         modifierBlock(node["modifiers"] as? JsonArray)?.let { lines += "modifier $it" }
         (node["children"] as? JsonArray).orEmpty().forEachIndexed { index, child ->
             (child as? JsonObject)?.let { lines += inBlock(it, "$path/$index") }
@@ -175,15 +197,48 @@ private class DslWriter(
         floats: Set<String> = emptySet(),
     ): String =
         when {
-            element is JsonNull -> "null"
-            key in floats && element is JsonPrimitive && !element.isString -> "${element.content}f"
-            key == "modifiers" && element is JsonArray -> "listOf(" + element.joinToString(", ") { modifierNode(it) } + ")"
-            key == "action" || key == "loadMoreAction" -> action(element) ?: "null"
-            key == "style" -> tokenValue("TypographyToken", element)
-            key == "color" -> tokenValue("ColorToken", element)
-            element is JsonArray -> "listOf(" + element.joinToString(", ") { value(key, it) } + ")"
-            element is JsonObject -> if (element[KompotProtocol.DISCRIMINATOR] != null) constructor(element) else "TODO(\"$key\")"
-            else -> primitive(element as JsonPrimitive)
+            element is JsonNull -> {
+                "null"
+            }
+
+            key in floats && element is JsonPrimitive && !element.isString -> {
+                "${element.content}f"
+            }
+
+            key == "modifiers" && element is JsonArray -> {
+                "listOf(" + element.joinToString(", ") { modifierNode(it) } +
+                    ")"
+            }
+
+            key == "action" || key == "loadMoreAction" -> {
+                action(element) ?: "null"
+            }
+
+            key == "style" -> {
+                tokenValue("TypographyToken", element)
+            }
+
+            key == "color" -> {
+                tokenValue("ColorToken", element)
+            }
+
+            element is JsonArray -> {
+                "listOf(" + element.joinToString(", ") { value(key, it) } + ")"
+            }
+
+            element is JsonObject -> {
+                if (element[KompotProtocol.DISCRIMINATOR] !=
+                    null
+                ) {
+                    constructor(element)
+                } else {
+                    "TODO(\"$key\")"
+                }
+            }
+
+            else -> {
+                primitive(element as JsonPrimitive)
+            }
         }
 
     // Every modifier node the toolkit defines is a nested class, and printing them out longhand is
@@ -199,9 +254,19 @@ private class DslWriter(
                 .map { (key, held) ->
                     val printed =
                         when {
-                            key == "color" -> tokenValue("ColorToken", held)
-                            key == "colors" && held is JsonArray -> "listOf(" + held.joinToString(", ") { tokenValue("ColorToken", it) } + ")"
-                            else -> value(key, held, floats)
+                            key == "color" -> {
+                                tokenValue("ColorToken", held)
+                            }
+
+                            key == "colors" && held is JsonArray -> {
+                                "listOf(" +
+                                    held.joinToString(", ") { tokenValue("ColorToken", it) } +
+                                    ")"
+                            }
+
+                            else -> {
+                                value(key, held, floats)
+                            }
                         }
                     "$key = $printed"
                 }
@@ -242,14 +307,29 @@ private class DslWriter(
                         if (sides.isEmpty()) null else call("padding", sides)
                     }
 
-                    "background" -> "background(${tokenValue("ColorToken", node.getValue("color"))})"
-                    "gradient" ->
-                        "gradientBackground(listOf(" +
-                            (node["colors"] as? JsonArray).orEmpty().joinToString(", ") { tokenValue("ColorToken", it) } + "))"
+                    "background" -> {
+                        "background(${tokenValue("ColorToken", node.getValue("color"))})"
+                    }
 
-                    "size" -> sizeCalls(node)
-                    "weight" -> "weight(${(node["value"] as? JsonPrimitive)?.content}f)"
-                    else -> null
+                    "gradient" -> {
+                        "gradientBackground(listOf(" +
+                            (node["colors"] as? JsonArray).orEmpty().joinToString(
+                                ", ",
+                            ) { tokenValue("ColorToken", it) } +
+                            "))"
+                    }
+
+                    "size" -> {
+                        sizeCalls(node)
+                    }
+
+                    "weight" -> {
+                        "weight(${(node["value"] as? JsonPrimitive)?.content}f)"
+                    }
+
+                    else -> {
+                        null
+                    }
                 }
             }
 
@@ -311,7 +391,9 @@ private class DslWriter(
     private fun floatProperties(wireType: String): Set<String> =
         definitionsFor(wireType)
             .flatMap { definition ->
-                (definition["properties"] as? JsonObject).orEmpty().entries
+                (definition["properties"] as? JsonObject)
+                    .orEmpty()
+                    .entries
                     .filter { (_, schema) -> (schema.jsonObject["format"] as? JsonPrimitive)?.content == "float" }
                     .map { it.key }
             }.toSet()
@@ -351,7 +433,8 @@ private class DslWriter(
 
     private fun int(element: JsonElement?): Int? = (element as? JsonPrimitive)?.content?.toIntOrNull()
 
-    private fun primitive(element: JsonPrimitive): String = if (element.isString) quote(element.content) else element.content
+    private fun primitive(element: JsonPrimitive): String =
+        if (element.isString) quote(element.content) else element.content
 
     private fun call(
         name: String,
@@ -371,7 +454,8 @@ private class DslWriter(
 internal fun identifier(name: String): String {
     val parts = name.split(Regex("[^A-Za-z0-9]+")).filter { it.isNotEmpty() }
     val joined =
-        parts.mapIndexed { index, part -> if (index == 0) part else part.replaceFirstChar { it.uppercaseChar() } }
+        parts
+            .mapIndexed { index, part -> if (index == 0) part else part.replaceFirstChar { it.uppercaseChar() } }
             .joinToString("")
     val safe = joined.ifEmpty { "screen" }
     return if (safe.first().isDigit()) "screen$safe" else safe
@@ -386,7 +470,12 @@ private fun camel(wireType: String): String =
     }
 
 private fun quote(text: String): String =
-    "\"" + text.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\$", "\\\$") + "\""
+    "\"" +
+        text
+            .replace("\\", "\\\\")
+            .replace("\"", "\\\"")
+            .replace("\n", "\\n")
+            .replace("\$", "\\\$") + "\""
 
 private fun <T> Collection<T>?.orEmpty(): Collection<T> = this ?: emptyList()
 

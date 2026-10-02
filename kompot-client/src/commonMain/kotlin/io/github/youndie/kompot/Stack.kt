@@ -116,10 +116,13 @@ public class DividerRenderer : KompotComponentRenderer<DividerComponent> {
     ) {
         // The table's rule when the server names nothing, so a divider and a table row line read as the
         // same line; a named token is resolved like any other.
-        val color = component.color?.let { LocalKompotDesignSystem.current.resolveColor(it) } ?: MaterialTheme.colorScheme.outlineVariant
+        val color =
+            component.color?.let { LocalKompotDesignSystem.current.resolveColor(it) }
+                ?: MaterialTheme.colorScheme.outlineVariant
         val modifier = component.modifiers.toComposeModifier()
         when (LocalKompotStackAxis.current) {
             KompotStackAxis.Vertical -> HorizontalDivider(modifier = modifier, color = color)
+
             // Fills the row's height, which the row makes finite by measuring itself at its intrinsic
             // height whenever a divider is among its children (RowRenderer).
             KompotStackAxis.Horizontal -> VerticalDivider(modifier = modifier.fillMaxHeight(), color = color)

@@ -2,10 +2,10 @@ package io.github.youndie.kompot
 
 import io.github.youndie.kompot.analytics.AnalyticsEvent
 import io.github.youndie.kompot.analytics.AnalyticsTracker
-import io.github.youndie.kompot.forms.SubmitFormAction
-import io.github.youndie.kompot.standard.NavigateAction
 import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.FormSchema
+import io.github.youndie.kompot.forms.SubmitFormAction
+import io.github.youndie.kompot.standard.NavigateAction
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -28,8 +28,11 @@ class FormSubmitAnalyticsTest {
 
         handler.handle(SubmitFormAction(formId = "transfer"))
 
-        assertEquals(listOf(AnalyticsEvent.FormSubmitAttempted("transfer"), AnalyticsEvent.FormSubmitBlocked("transfer")), tracked)
-            assertEquals(SubmitFormAction(formId = "transfer"), forwarded) // always forwarded, even when blocked
+        assertEquals(
+            listOf(AnalyticsEvent.FormSubmitAttempted("transfer"), AnalyticsEvent.FormSubmitBlocked("transfer")),
+            tracked,
+        )
+        assertEquals(SubmitFormAction(formId = "transfer"), forwarded) // always forwarded, even when blocked
     }
 
     @Test
@@ -42,7 +45,10 @@ class FormSubmitAnalyticsTest {
 
         handler.handle(SubmitFormAction(formId = "transfer"))
 
-        assertEquals(listOf(AnalyticsEvent.FormSubmitAttempted("transfer"), AnalyticsEvent.FormSubmitSucceeded("transfer")), tracked)
+        assertEquals(
+            listOf(AnalyticsEvent.FormSubmitAttempted("transfer"), AnalyticsEvent.FormSubmitSucceeded("transfer")),
+            tracked,
+        )
     }
 
     @Test
@@ -51,7 +57,12 @@ class FormSubmitAnalyticsTest {
         val tracker = AnalyticsTracker { tracked += it }
         val controller = FormController(submitTestSchema())
         var forwarded: KompotAction? = null
-        val handler = KompotActionHandler { forwarded = it }.withFormSubmitTracking(controller, tracker, formId = "transfer")
+        val handler =
+            KompotActionHandler { forwarded = it }.withFormSubmitTracking(
+                controller,
+                tracker,
+                formId = "transfer",
+            )
 
         handler.handle(NavigateAction(deeplink = "/home"))
 

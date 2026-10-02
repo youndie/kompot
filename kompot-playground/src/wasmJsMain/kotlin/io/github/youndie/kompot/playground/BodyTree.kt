@@ -61,15 +61,23 @@ private fun collect(
                         // The words the node carries, whatever property they live in: a label is what
                         // tells two buttons apart, and asking "is this a text node" would have missed
                         // the button that carries one (the same lesson the studio's tree learned).
-                        words = WORD_KEYS.firstNotNullOfOrNull { key -> (element[key] as? JsonPrimitive)?.takeIf { it.isString }?.content },
+                        words =
+                            WORD_KEYS.firstNotNullOfOrNull { key ->
+                                (element[key] as? JsonPrimitive)?.takeIf { it.isString }?.content
+                            },
                         depth = depth,
                     )
             }
             element.values.forEach { collect(it, next, into) }
         }
 
-        is JsonArray -> element.forEach { collect(it, depth, into) }
-        else -> Unit
+        is JsonArray -> {
+            element.forEach { collect(it, depth, into) }
+        }
+
+        else -> {
+            Unit
+        }
     }
 }
 
@@ -100,7 +108,9 @@ internal fun BodyTree(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .background(if (selected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface)
+                        .background(
+                            if (selected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface,
+                        )
                         // A second click on the selected node clears the selection: the outline in the
                         // render is a tool, and a tool you cannot put down is a mode.
                         .clickable { onSelect(node.id.takeIf { !selected }) }

@@ -1,11 +1,11 @@
 package io.github.youndie.kompot.images
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.KompotModifierNode
-import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.registry.KompotComponentMarker
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 // A content image. `url` is the single source of the picture: design-system SVG icons served as
 // versioned static files (ic_home_v2.svg and the like) and ordinary raster images arrive through the

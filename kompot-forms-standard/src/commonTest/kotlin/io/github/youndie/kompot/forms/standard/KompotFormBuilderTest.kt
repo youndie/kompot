@@ -1,10 +1,10 @@
 package io.github.youndie.kompot.forms.standard
 
+import io.github.youndie.kompot.form.FormFieldDefinition
 import io.github.youndie.kompot.standard.ColumnComponent
 import io.github.youndie.kompot.standard.RowComponent
 import io.github.youndie.kompot.standard.TextComponent
 import io.github.youndie.kompot.standard.text
-import io.github.youndie.kompot.form.FormFieldDefinition
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -26,7 +26,14 @@ class KompotFormBuilderTest {
 
         assertEquals("root_catalogue_filters", response.screen.id)
         assertIs<ColumnComponent>(response.screen)
-        assertEquals("Filters", (response.screen as ColumnComponent).children.single().let { it as TextComponent }.text)
+        assertEquals(
+            "Filters",
+            (response.screen as ColumnComponent)
+                .children
+                .single()
+                .let { it as TextComponent }
+                .text,
+        )
     }
 
     @Test

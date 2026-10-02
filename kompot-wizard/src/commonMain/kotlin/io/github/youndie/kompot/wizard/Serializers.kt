@@ -1,9 +1,9 @@
 package io.github.youndie.kompot.wizard
 
+import io.github.youndie.kompot.KompotAction
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import io.github.youndie.kompot.KompotAction
 
 // The serialisation "plug-in" for the wizard actions. The component itself is not listed here: the
 // @KompotComponentMarker on WizardScreenComponent makes :kompot-registry-processor generate its

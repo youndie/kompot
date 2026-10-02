@@ -72,7 +72,6 @@ class TextColorTest {
         return counted.filterValues { it >= 8 }
     }
 
-
     @Test
     fun `the node's own colour token wins over the colour of its typography token`() =
         runDesktopComposeUiTest {

@@ -1,14 +1,14 @@
 package io.github.youndie.kompot.standard
 
-import kotlinx.serialization.PolymorphicSerializer
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.plus
 import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.KompotAction
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.UnknownComponent
-import io.github.youndie.kompot.kompotCoreSerializersModule
 import io.github.youndie.kompot.generated.generatedStandardSerializersModule
+import io.github.youndie.kompot.kompotCoreSerializersModule
+import kotlinx.serialization.PolymorphicSerializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.plus
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -17,13 +17,15 @@ import kotlin.test.assertIs
 private val json =
     Json {
         classDiscriminator = "type"
-        serializersModule = kompotCoreSerializersModule + kompotStandardSerializersModule + generatedStandardSerializersModule
+        serializersModule =
+            kompotCoreSerializersModule + kompotStandardSerializersModule + generatedStandardSerializersModule
     }
 
 // The reified decodeFromString<T>() / encodeToString<T>() do not resolve a serialiser for a
 // NON-sealed interface on Kotlin/Native: it fails on the iOS simulator target while staying green on
 // JVM. An explicit PolymorphicSerializer(T::class) behaves the same on every target.
-private fun Json.encodeComponent(component: KompotComponent) = encodeToString(PolymorphicSerializer(KompotComponent::class), component)
+private fun Json.encodeComponent(component: KompotComponent) =
+    encodeToString(PolymorphicSerializer(KompotComponent::class), component)
 
 private fun Json.decodeComponent(text: String) = decodeFromString(PolymorphicSerializer(KompotComponent::class), text)
 

@@ -1,5 +1,7 @@
 package io.github.youndie.kompot.ktor
 
+import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.encodeKompotComponent
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
@@ -11,8 +13,6 @@ import io.ktor.server.response.respondText
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import io.github.youndie.kompot.KompotComponent
-import io.github.youndie.kompot.encodeKompotComponent
 import java.security.MessageDigest
 
 // java.security.MessageDigest is a JVM-specific API, so this whole file lives in jvmMain rather than

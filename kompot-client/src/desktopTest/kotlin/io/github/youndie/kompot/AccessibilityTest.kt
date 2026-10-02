@@ -44,7 +44,11 @@ class AccessibilityTest {
     private fun card(label: String? = null) =
         RowComponent(
             id = "card",
-            children = listOf(TextComponent(id = "t", text = "Fix the login"), TextComponent(id = "d", text = "due Friday")),
+            children =
+                listOf(
+                    TextComponent(id = "t", text = "Fix the login"),
+                    TextComponent(id = "d", text = "due Friday"),
+                ),
             action = open,
             accessibilityLabel = label,
         )
@@ -79,7 +83,14 @@ class AccessibilityTest {
         render(TextComponent(id = "h", text = "Today", heading = true)) {
             onNode(isHeading and hasText("Today")).assertExists()
         }
-        render(TextComponent(id = "h", text = "Today, 3 cards", heading = true, spans = listOf(TextSpan(text = "Today, 3 cards")))) {
+        render(
+            TextComponent(
+                id = "h",
+                text = "Today, 3 cards",
+                heading = true,
+                spans = listOf(TextSpan(text = "Today, 3 cards")),
+            ),
+        ) {
             onNode(isHeading and hasText("Today, 3 cards")).assertExists()
         }
         render(TextComponent(id = "p", text = "A paragraph")) {

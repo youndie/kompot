@@ -72,7 +72,10 @@ class DegradationStatesTest {
     // that named an equivalent. The difference is visible only in the outcome the sink carries.
     @Test
     fun `the same client draws the equivalent the server named`() =
-        checkingReports(PlaygroundClient(ClientMode.OLDER_WITH_FALLBACK, PROMO), SAMPLE_BODY.withServerFallback(true, PROMO)) { reported ->
+        checkingReports(
+            PlaygroundClient(ClientMode.OLDER_WITH_FALLBACK, PROMO),
+            SAMPLE_BODY.withServerFallback(true, PROMO),
+        ) { reported ->
             assertEquals(1, reported.size, reported.toString())
             assertTrue("server_fallback" in reported.single(), reported.toString())
         }
@@ -108,7 +111,14 @@ class DegradationStatesTest {
                             registry = today.registry,
                             designSystem = Material3DesignSystem(),
                             json = today.json,
-                            degradationSink = KompotDegradationSink { kind, type, outcome -> log.report(kind, type, outcome) },
+                            degradationSink =
+                                KompotDegradationSink {
+                                    kind,
+                                    type,
+                                    outcome,
+                                    ->
+                                    log.report(kind, type, outcome)
+                                },
                         )
                     }
                 }
@@ -128,7 +138,10 @@ class DegradationStatesTest {
 
     @Test
     fun `the same client draws the equivalent the server named for box`() =
-        checkingReports(PlaygroundClient(ClientMode.OLDER_WITH_FALLBACK, BOX), LAYERS.withServerFallback(true, BOX)) { reported ->
+        checkingReports(
+            PlaygroundClient(ClientMode.OLDER_WITH_FALLBACK, BOX),
+            LAYERS.withServerFallback(true, BOX),
+        ) { reported ->
             assertEquals(listOf("UNKNOWN_COMPONENT  \"box\"  server_fallback"), reported.toList())
         }
 
@@ -149,7 +162,10 @@ class DegradationStatesTest {
 
     @Test
     fun `the same client draws the equivalent named for a section`() =
-        checkingReports(PlaygroundClient(ClientMode.OLDER_WITH_FALLBACK, EXPANDABLE), DISCLOSURE.withServerFallback(true, EXPANDABLE)) { reported ->
+        checkingReports(
+            PlaygroundClient(ClientMode.OLDER_WITH_FALLBACK, EXPANDABLE),
+            DISCLOSURE.withServerFallback(true, EXPANDABLE),
+        ) { reported ->
             assertEquals(listOf("UNKNOWN_COMPONENT  \"expandable\"  server_fallback"), reported.toList())
         }
 
@@ -172,8 +188,15 @@ class DegradationStatesTest {
         val older = PlaygroundClient(ClientMode.OLDER, BOX).json
         val today = PlaygroundClient(ClientMode.CURRENT, BOX).json
         assertTrue(SAMPLE_BODY.componentTypes().isNotEmpty())
-        assertEquals(today.decodeKompotBody(SAMPLE_BODY).screen, older.decodeKompotBody(SAMPLE_BODY).screen, "no box in the sample: the two agree")
-        assertTrue(today.decodeKompotBody(LAYERS).screen != older.decodeKompotBody(LAYERS).screen, "the layers example has box: they differ")
+        assertEquals(
+            today.decodeKompotBody(SAMPLE_BODY).screen,
+            older.decodeKompotBody(SAMPLE_BODY).screen,
+            "no box in the sample: the two agree",
+        )
+        assertTrue(
+            today.decodeKompotBody(LAYERS).screen != older.decodeKompotBody(LAYERS).screen,
+            "the layers example has box: they differ",
+        )
     }
 
     @Test

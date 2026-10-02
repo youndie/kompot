@@ -1,13 +1,6 @@
 package io.github.youndie.kompot.forms.standard
 
 import io.github.youndie.kompot.dsl.KompotModifierBuilder
-import io.github.youndie.kompot.forms.SelectOption
-import io.github.youndie.kompot.forms.amountInput
-import io.github.youndie.kompot.forms.autocompleteInput
-import io.github.youndie.kompot.forms.checkboxInput
-import io.github.youndie.kompot.forms.radioGroup
-import io.github.youndie.kompot.forms.selectInput
-import io.github.youndie.kompot.forms.textInput
 import io.github.youndie.kompot.form.FormCondition
 import io.github.youndie.kompot.form.ValidationRulesBuilder
 import io.github.youndie.kompot.form.standard.AmountFieldDefinition
@@ -16,6 +9,13 @@ import io.github.youndie.kompot.form.standard.CheckboxFieldDefinition
 import io.github.youndie.kompot.form.standard.KeyboardType
 import io.github.youndie.kompot.form.standard.SelectionFieldDefinition
 import io.github.youndie.kompot.form.standard.TextFieldDefinition
+import io.github.youndie.kompot.forms.SelectOption
+import io.github.youndie.kompot.forms.amountInput
+import io.github.youndie.kompot.forms.autocompleteInput
+import io.github.youndie.kompot.forms.checkboxInput
+import io.github.youndie.kompot.forms.radioGroup
+import io.github.youndie.kompot.forms.selectInput
+import io.github.youndie.kompot.forms.textInput
 
 // Bound fields: one call both draws the component AND adds its definition to the form schema, so a
 // fieldId is declared once and the UI cannot drift from the schema.

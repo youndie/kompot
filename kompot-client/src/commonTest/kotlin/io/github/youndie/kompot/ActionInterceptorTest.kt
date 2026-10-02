@@ -46,7 +46,7 @@ class ActionInterceptorTest {
                         calls += "analytics"
                         chain.proceed()
                     },
-                        KompotActionInterceptor { calls += "permission-denied" }, // never calls proceed()
+                    KompotActionInterceptor { calls += "permission-denied" }, // never calls proceed()
                     KompotActionInterceptor { calls += "navigation" },
                 ),
             )
@@ -63,7 +63,7 @@ class ActionInterceptorTest {
 
         handler.handle(TestAction("tap"))
 
-            assertTrue(true) // reaching this line is the assertion: nothing blew up
+        assertTrue(true) // reaching this line is the assertion: nothing blew up
     }
 
     @Test

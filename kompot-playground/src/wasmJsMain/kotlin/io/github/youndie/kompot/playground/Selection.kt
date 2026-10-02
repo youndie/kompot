@@ -20,7 +20,13 @@ import io.github.youndie.kompot.form.FormController
 // `KompotRegistry.decorated` is the seam the studio already uses for this: the map stays private, and
 // what is added is the ability to WRAP a renderer, not to read the map.
 internal fun KompotRegistry.outlining(selectedId: String?): KompotRegistry =
-    if (selectedId == null) this else decorated { renderers -> renderers.mapValues { (_, renderer) -> Outlined(renderer, selectedId) } }
+    if (selectedId ==
+        null
+    ) {
+        this
+    } else {
+        decorated { renderers -> renderers.mapValues { (_, renderer) -> Outlined(renderer, selectedId) } }
+    }
 
 private class Outlined(
     private val delegate: KompotComponentRenderer<out KompotComponent>,

@@ -3,8 +3,8 @@ package io.github.youndie.kompot.studio.palette
 import io.github.youndie.kompot.encodeKompotComponent
 import io.github.youndie.kompot.spec.KompotProtocol
 import io.github.youndie.kompot.studio.KompotStudioConfig
-import io.github.youndie.kompot.studio.samplesByWireType
 import io.github.youndie.kompot.studio.inspector.defKeyFor
+import io.github.youndie.kompot.studio.samplesByWireType
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive

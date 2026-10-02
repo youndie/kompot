@@ -45,7 +45,10 @@ class OverlaysTest {
 
     private fun screen(
         raise: KompotAction,
-        host: @Composable (KompotOverlays, KompotActionHandler) -> Unit = { overlays, handler -> KompotOverlayHost(overlays, handler) },
+        host: @Composable (
+            KompotOverlays,
+            KompotActionHandler,
+        ) -> Unit = { overlays, handler -> KompotOverlayHost(overlays, handler) },
     ) =
         @Composable {
             val overlays = remember { KompotOverlays() }
@@ -81,7 +84,9 @@ class OverlaysTest {
     @Test
     fun `agreeing runs the guarded action, through the whole chain`() =
         runDesktopComposeUiTest {
-            setContent(screen(ConfirmAction(question = "Delete the board?", action = PerformAction(url = "/boards/3/delete"))))
+            setContent(
+                screen(ConfirmAction(question = "Delete the board?", action = PerformAction(url = "/boards/3/delete"))),
+            )
             onNodeWithText("raise").performClick()
             waitForIdle()
             onNodeWithText("Delete the board?").assertIsDisplayed()
@@ -95,7 +100,13 @@ class OverlaysTest {
     fun `refusing runs nothing`() =
         runDesktopComposeUiTest {
             setContent(
-                screen(ConfirmAction(question = "Delete the board?", action = PerformAction(url = "/boards/3/delete"), cancelLabel = "Keep it")),
+                screen(
+                    ConfirmAction(
+                        question = "Delete the board?",
+                        action = PerformAction(url = "/boards/3/delete"),
+                        cancelLabel = "Keep it",
+                    ),
+                ),
             )
             onNodeWithText("raise").performClick()
             waitForIdle()
@@ -144,7 +155,11 @@ class OverlaysTest {
                     children =
                         listOf(
                             TextComponent(id = "total", text = "Pay 12 dollars"),
-                            ButtonComponent(id = "pay", text = "Pay", action = NavigateAction(deeplink = "app://result")),
+                            ButtonComponent(
+                                id = "pay",
+                                text = "Pay",
+                                action = NavigateAction(deeplink = "app://result"),
+                            ),
                         ),
                 )
             setContent(screen(PresentAction(content = pay, kind = "sheet")))
@@ -153,7 +168,10 @@ class OverlaysTest {
             onNodeWithText("Pay").performClick()
             waitForIdle()
             onNodeWithText("Pay 12 dollars").assertDoesNotExist()
-            assertEquals(listOf<KompotAction>(NavigateAction(deeplink = "app://result")), received.filterIsInstance<NavigateAction>())
+            assertEquals(
+                listOf<KompotAction>(NavigateAction(deeplink = "app://result")),
+                received.filterIsInstance<NavigateAction>(),
+            )
         }
 
     @Test
@@ -168,7 +186,11 @@ class OverlaysTest {
                             ButtonComponent(
                                 id = "discard",
                                 text = "Discard",
-                                action = ConfirmAction(question = "Discard the draft?", action = NavigateAction(deeplink = "app://home")),
+                                action =
+                                    ConfirmAction(
+                                        question = "Discard the draft?",
+                                        action = NavigateAction(deeplink = "app://home"),
+                                    ),
                             ),
                         ),
                 )
@@ -181,7 +203,10 @@ class OverlaysTest {
             waitForIdle()
             onNodeWithText("Discard the draft?").assertDoesNotExist()
             onNodeWithText("Unsaved draft").assertDoesNotExist()
-            assertEquals(listOf<KompotAction>(NavigateAction(deeplink = "app://home")), received.filterIsInstance<NavigateAction>())
+            assertEquals(
+                listOf<KompotAction>(NavigateAction(deeplink = "app://home")),
+                received.filterIsInstance<NavigateAction>(),
+            )
         }
 
     // A design system with its own sheet: everything it needs is the public state and the three answers.
@@ -189,7 +214,8 @@ class OverlaysTest {
     @Test
     fun `a host written against the public state draws the layer and answers for it`() =
         runDesktopComposeUiTest {
-            val question = ConfirmAction(question = "Delete the board?", action = PerformAction(url = "/boards/3/delete"))
+            val question =
+                ConfirmAction(question = "Delete the board?", action = PerformAction(url = "/boards/3/delete"))
             val tree =
                 ColumnComponent(
                     id = "tree",

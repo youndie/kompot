@@ -4,7 +4,12 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class PresentationHeaderTest {
-    private val sheetRoute = ScreenRoute(deeplink = "app://confirm", endpoint = "/screens/confirm", presentation = ScreenRoutePresentation.SHEET)
+    private val sheetRoute =
+        ScreenRoute(
+            deeplink = "app://confirm",
+            endpoint = "/screens/confirm",
+            presentation = ScreenRoutePresentation.SHEET,
+        )
 
     @Test
     fun `a response asks for a sheet on an address that has no hint`() {

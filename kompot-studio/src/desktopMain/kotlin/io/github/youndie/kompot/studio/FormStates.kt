@@ -43,11 +43,12 @@ private fun sampleValues(body: JsonElement?): Map<String, FieldValue> {
         ((body as? JsonObject)?.get("schema") as? JsonObject)?.get("fields") as? JsonArray
             ?: return emptyMap()
 
-    return fields.mapNotNull { field ->
-        val definition = field as? JsonObject ?: return@mapNotNull null
-        val fieldId = (definition["fieldId"] as? JsonPrimitive)?.content ?: return@mapNotNull null
-        fieldId to sampleFor((definition["type"] as? JsonPrimitive)?.content)
-    }.toMap()
+    return fields
+        .mapNotNull { field ->
+            val definition = field as? JsonObject ?: return@mapNotNull null
+            val fieldId = (definition["fieldId"] as? JsonPrimitive)?.content ?: return@mapNotNull null
+            fieldId to sampleFor((definition["type"] as? JsonPrimitive)?.content)
+        }.toMap()
 }
 
 private fun sampleFor(wireType: String?): FieldValue =

@@ -1,38 +1,38 @@
 package io.github.youndie.kompot.studio
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import kotlin.math.roundToInt
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.input.pointer.isMetaPressed
-import androidx.compose.ui.input.pointer.isCtrlPressed
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.runtime.SideEffect
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Density
-import androidx.compose.foundation.border
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.isCtrlPressed
+import androidx.compose.ui.input.pointer.isMetaPressed
+import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
 
 // THE SIZE THE SCREEN IS BEING LOOKED AT, and it is a switch rather than "make the window smaller"
 // for a reason a run of the client shows every time: a fixed-height screen on a window shorter than
@@ -85,7 +85,12 @@ internal fun DeviceFrame(
             val density = LocalDensity.current
             val width = with(density) { (constraints.maxWidth / scale).toDp() }
             val height = with(density) { (constraints.maxHeight / scale).toDp() }
-            Box(Modifier.requiredSize(width, height).graphicsLayer { scaleX = scale; scaleY = scale }) { content() }
+            Box(
+                Modifier.requiredSize(width, height).graphicsLayer {
+                    scaleX = scale
+                    scaleY = scale
+                },
+            ) { content() }
         }
         return
     }
@@ -127,10 +132,13 @@ internal fun DeviceFrame(
                     // list scrolls itself, and a frame beyond its list scrolls as a whole.
                     .onPointerEvent(PointerEventType.Scroll) { event ->
                         val change = event.changes.firstOrNull() ?: return@onPointerEvent
-                        if (change.isConsumed || event.keyboardModifiers.isMetaPressed || event.keyboardModifiers.isCtrlPressed) return@onPointerEvent
+                        if (change.isConsumed || event.keyboardModifiers.isMetaPressed ||
+                            event.keyboardModifiers.isCtrlPressed
+                        ) {
+                            return@onPointerEvent
+                        }
                         pan += change.scrollDelta * WHEEL_PX
-                    }
-                    .layout { measurable, constraints ->
+                    }.layout { measurable, constraints ->
                         val placeable = measurable.measure(Constraints())
                         val viewport = IntSize(constraints.maxWidth, constraints.maxHeight)
                         val x = offsetFor(pan.x, placeable.width, viewport.width)
@@ -171,8 +179,7 @@ private fun offsetFor(
     pan: Float,
     content: Int,
     viewport: Int,
-): Int =
-    if (content <= viewport) (viewport - content) / 2 else (-pan).roundToInt().coerceIn(viewport - content, 0)
+): Int = if (content <= viewport) (viewport - content) / 2 else (-pan).roundToInt().coerceIn(viewport - content, 0)
 
 // Wheel ticks arrive in lines; this is the line, in px, the frame moves per tick.
 private const val WHEEL_PX = 24f

@@ -1,10 +1,10 @@
 package io.github.youndie.kompot.theme
 
+import io.github.youndie.kompot.ColorToken
+import io.github.youndie.kompot.TypographyToken
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import io.github.youndie.kompot.ColorToken
-import io.github.youndie.kompot.TypographyToken
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

@@ -84,13 +84,18 @@ private class JsonScanner(
         at++
         while (at < text.length) {
             when (text[at]) {
-                '\\' -> at += 2
+                '\\' -> {
+                    at += 2
+                }
+
                 '"' -> {
                     at++
                     return start until at
                 }
 
-                else -> at++
+                else -> {
+                    at++
+                }
             }
         }
         return null
@@ -170,9 +175,18 @@ private class JsonScanner(
         val start = at
 
         when {
-            text[at] == '{' -> readObject(path)
-            text[at] == '[' -> readArray(path)
-            text[at] == '"' -> readString()?.let { tokens += JsonToken(it.first, it.last + 1, TokenKind.STRING) }
+            text[at] == '{' -> {
+                readObject(path)
+            }
+
+            text[at] == '[' -> {
+                readArray(path)
+            }
+
+            text[at] == '"' -> {
+                readString()?.let { tokens += JsonToken(it.first, it.last + 1, TokenKind.STRING) }
+            }
+
             text[at] == '-' || text[at].isDigit() -> {
                 val start = at
                 while (at < text.length && (text[at].isDigit() || text[at] in "-+.eE")) at++
@@ -189,7 +203,9 @@ private class JsonScanner(
                 at += 5
             }
 
-            else -> Unit
+            else -> {
+                Unit
+            }
         }
 
         if (at > start) spans[path] = start until at

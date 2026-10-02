@@ -80,7 +80,10 @@ public class ClientCorpusRunner(
                 }
             }
         }.onFailure { failure ->
-            return CaseOutcome(listOf(ClientFinding(case.id, case.clause, "the case could not be run: $failure")), emptyList())
+            return CaseOutcome(
+                listOf(ClientFinding(case.id, case.clause, "the case could not be run: $failure")),
+                emptyList(),
+            )
         }
 
         val unchecked = mutableListOf<ClientFinding>()
@@ -89,7 +92,12 @@ public class ClientCorpusRunner(
             checks++
             val actual = client.visibleFields().sorted()
             if (actual != expected.sorted()) {
-                findings += ClientFinding(case.id, case.clause, "visible fields are $actual, expected ${expected.sorted()} — ${case.why}")
+                findings +=
+                    ClientFinding(
+                        case.id,
+                        case.clause,
+                        "visible fields are $actual, expected ${expected.sorted()} — ${case.why}",
+                    )
             }
         }
 
@@ -107,11 +115,21 @@ public class ClientCorpusRunner(
         case.expect.payload?.let { expected ->
             checks++
             when (val actual = client.payload()) {
-                null -> findings += ClientFinding(case.id, case.clause, "the submit was blocked, expected $expected — ${case.why}")
-                else ->
+                null -> {
+                    findings +=
+                        ClientFinding(case.id, case.clause, "the submit was blocked, expected $expected — ${case.why}")
+                }
+
+                else -> {
                     if (actual != expected) {
-                        findings += ClientFinding(case.id, case.clause, "the payload is $actual, expected $expected — ${case.why}")
+                        findings +=
+                            ClientFinding(
+                                case.id,
+                                case.clause,
+                                "the payload is $actual, expected $expected — ${case.why}",
+                            )
                     }
+                }
             }
         }
 
@@ -119,14 +137,24 @@ public class ClientCorpusRunner(
             checks++
             val actual = client.errors()[fieldId]
             if (actual != message) {
-                findings += ClientFinding(case.id, case.clause, "the error on \"$fieldId\" is ${actual ?: "absent"}, expected \"$message\" — ${case.why}")
+                findings +=
+                    ClientFinding(
+                        case.id,
+                        case.clause,
+                        "the error on \"$fieldId\" is ${actual ?: "absent"}, expected \"$message\" — ${case.why}",
+                    )
             }
         }
 
         case.expect.noErrors?.forEach { fieldId ->
             checks++
             client.errors()[fieldId]?.let { message ->
-                findings += ClientFinding(case.id, case.clause, "\"$fieldId\" carries the error \"$message\" and should carry none — ${case.why}")
+                findings +=
+                    ClientFinding(
+                        case.id,
+                        case.clause,
+                        "\"$fieldId\" carries the error \"$message\" and should carry none — ${case.why}",
+                    )
             }
         }
 
@@ -134,18 +162,24 @@ public class ClientCorpusRunner(
         // runner reports something that is neither a pass nor a violation.
         case.expect.requests?.let { expected ->
             when (val actual = client.requests()) {
-                null ->
+                null -> {
                     unchecked +=
                         ClientFinding(
                             case.id,
                             case.clause,
                             "this adapter does not record what the client sends, so the case was not run — see KompotFormClient.requests",
                         )
+                }
 
                 else -> {
                     checks++
                     if (actual != expected) {
-                        findings += ClientFinding(case.id, case.clause, "the client sent $actual, expected $expected — ${case.why}")
+                        findings +=
+                            ClientFinding(
+                                case.id,
+                                case.clause,
+                                "the client sent $actual, expected $expected — ${case.why}",
+                            )
                     }
                 }
             }
@@ -177,7 +211,11 @@ public class ClientCorpusRunner(
         // Internal: the runner's own parser, not something the kit offers. A consumer reads cases
         // through casesFrom or ClientCorpusResources; the discriminator this configures is a fact of
         // the case schema that ships beside the corpus, so nobody needs this instance to know it.
-        internal val json = Json { ignoreUnknownKeys = false; classDiscriminator = "step" }
+        internal val json =
+            Json {
+                ignoreUnknownKeys = false
+                classDiscriminator = "step"
+            }
 
         public fun casesFrom(
             index: String,

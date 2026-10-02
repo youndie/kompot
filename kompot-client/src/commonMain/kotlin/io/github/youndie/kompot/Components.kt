@@ -4,38 +4,38 @@ package io.github.youndie.kompot
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.github.youndie.kompot.form.FieldValue
+import io.github.youndie.kompot.form.FormController
+import io.github.youndie.kompot.standard.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
-import io.github.youndie.kompot.standard.*
-import io.github.youndie.kompot.form.FieldValue
-import io.github.youndie.kompot.form.FormController
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializerOrNull
 import kotlin.reflect.KClass
@@ -66,22 +66,27 @@ public class ColumnRenderer : KompotComponentRenderer<ColumnComponent> {
     ) {
         val registry = LocalKompotRegistry.current
         ComposeColumn(
-                // The tap goes on the CONTAINER rather than on a child: the whole row is the target,
-                // which is the gesture a list of openable items expects.
-            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler, component.accessibilityLabel),
+            // The tap goes on the CONTAINER rather than on a child: the whole row is the target,
+            // which is the gesture a list of openable items expects.
+            modifier =
+                component.modifiers.toComposeModifier().clickableWith(
+                    component.action,
+                    actionHandler,
+                    component.accessibilityLabel,
+                ),
             verticalArrangement = StackArrangement(component.arrangement, component.spacing.dp),
             horizontalAlignment = columnAlignment(component.alignment),
         ) {
             CompositionLocalProvider(LocalKompotStackAxis provides KompotStackAxis.Vertical) {
-            component.children.forEach { child ->
+                component.children.forEach { child ->
                     // weight is a share of the height inside a column, carried by a modifier node on
                     // the CHILD. Outside a column the general mapper ignores it — it is extracted and
                     // applied here, by the parent, because only the parent has a ColumnScope.
-                val weight =
-                    child.modifiers
-                        .filterIsInstance<KompotModifierNode.Weight>()
-                        .firstOrNull()
-                        ?.value
+                    val weight =
+                        child.modifiers
+                            .filterIsInstance<KompotModifierNode.Weight>()
+                            .firstOrNull()
+                            ?.value
                     // propagateMinConstraints is what makes weight mean what the word says. Compose's
                     // own RowScope.weight fills by default, but it fills the node it is applied to —
                     // here that is this wrapper Box, and a Box hands its child a MAXIMUM without a
@@ -91,13 +96,13 @@ public class ColumnRenderer : KompotComponentRenderer<ColumnComponent> {
                     // Invisible while the data is long: text that wraps stretches itself to the
                     // constraint, so a screen of long titles looks right and the same tree with short
                     // ones does not.
-                Box(
-                    modifier = if (weight != null) Modifier.weight(weight) else Modifier,
-                    propagateMinConstraints = weight != null,
-                ) {
-                    registry.RenderNode(child, actionHandler, formController)
+                    Box(
+                        modifier = if (weight != null) Modifier.weight(weight) else Modifier,
+                        propagateMinConstraints = weight != null,
+                    ) {
+                        registry.RenderNode(child, actionHandler, formController)
+                    }
                 }
-            }
             }
         }
     }
@@ -117,25 +122,43 @@ public class RowRenderer : KompotComponentRenderer<RowComponent> {
         // A vertical divider has to be as tall as the row, and a row inside a scrolling column is
         // offered unbounded height — so a row that holds one measures itself at its intrinsic height
         // first. Only then: intrinsics cost a second measure pass, and nothing else in a row needs it.
-        val rule = if (component.children.any { it is DividerComponent }) Modifier.height(IntrinsicSize.Min) else Modifier
+        val rule =
+            if (component.children.any { it is DividerComponent }) {
+                Modifier.height(
+                    IntrinsicSize.Min,
+                )
+            } else {
+                Modifier
+            }
         Row(
-            modifier = component.modifiers.toComposeModifier().clickableWith(component.action, actionHandler, component.accessibilityLabel).then(scroll).then(rule),
+            modifier =
+                component.modifiers
+                    .toComposeModifier()
+                    .clickableWith(
+                        component.action,
+                        actionHandler,
+                        component.accessibilityLabel,
+                    ).then(scroll)
+                    .then(rule),
             horizontalArrangement = StackArrangement(component.arrangement, component.spacing.dp),
             verticalAlignment = rowAlignment(component.alignment),
         ) {
             CompositionLocalProvider(LocalKompotStackAxis provides KompotStackAxis.Horizontal) {
-            component.children.forEach { child ->
+                component.children.forEach { child ->
                     // weight is a share of the width inside a row, carried by a modifier node on the
                     // CHILD. Outside a row the general mapper ignores it — it is extracted and applied
                     // here, by the parent, because only the parent has a RowScope.
-                val weight =
-                    // A share of an unbounded width is nothing: in a row that scrolls, weight is ignored
-                    // (SPEC.md §4.9) rather than left to Compose, which has no sensible answer to it.
-                    if (component.scrollable) null else
-                    child.modifiers
-                        .filterIsInstance<KompotModifierNode.Weight>()
-                        .firstOrNull()
-                        ?.value
+                    val weight =
+                        // A share of an unbounded width is nothing: in a row that scrolls, weight is ignored
+                        // (SPEC.md §4.9) rather than left to Compose, which has no sensible answer to it.
+                        if (component.scrollable) {
+                            null
+                        } else {
+                            child.modifiers
+                                .filterIsInstance<KompotModifierNode.Weight>()
+                                .firstOrNull()
+                                ?.value
+                        }
                     // propagateMinConstraints is what makes weight mean what the word says. Compose's
                     // own RowScope.weight fills by default, but it fills the node it is applied to —
                     // here that is this wrapper Box, and a Box hands its child a MAXIMUM without a
@@ -145,13 +168,13 @@ public class RowRenderer : KompotComponentRenderer<RowComponent> {
                     // Invisible while the data is long: text that wraps stretches itself to the
                     // constraint, so a screen of long titles looks right and the same tree with short
                     // ones does not.
-                Box(
-                    modifier = if (weight != null) Modifier.weight(weight) else Modifier,
-                    propagateMinConstraints = weight != null,
-                ) {
-                    registry.RenderNode(child, actionHandler, formController)
+                    Box(
+                        modifier = if (weight != null) Modifier.weight(weight) else Modifier,
+                        propagateMinConstraints = weight != null,
+                    ) {
+                        registry.RenderNode(child, actionHandler, formController)
+                    }
                 }
-            }
             }
         }
     }
@@ -186,9 +209,9 @@ public class TextRenderer : KompotComponentRenderer<TextComponent> {
         formController: FormController,
     ) {
         val designSystem = LocalKompotDesignSystem.current
-            // A null style means the server did not name one: the standard text component
-            // deliberately has no "default" typography token, so the local default lives here, in
-            // a concrete Material3 implementation.
+        // A null style means the server did not name one: the standard text component
+        // deliberately has no "default" typography token, so the local default lives here, in
+        // a concrete Material3 implementation.
         val style = component.style?.let { designSystem.resolveTypography(it) } ?: MaterialTheme.typography.bodyMedium
 
         val color = resolveTextColor(component.color, style, designSystem)
@@ -202,9 +225,9 @@ public class TextRenderer : KompotComponentRenderer<TextComponent> {
             text = component.text,
             style = style,
             color = color,
-                // What becomes of a string that does not fit is the server's to decide, because §14
-                // makes it the only party allowed to produce one. Absent, nothing is capped and the
-                // text takes the lines it needs, exactly as before.
+            // What becomes of a string that does not fit is the server's to decide, because §14
+            // makes it the only party allowed to produce one. Absent, nothing is capped and the
+            // text takes the lines it needs, exactly as before.
             maxLines = component.maxLines ?: Int.MAX_VALUE,
             overflow = if (component.ellipsis) TextOverflow.Ellipsis else TextOverflow.Clip,
             modifier = component.modifiers.toComposeModifier().headingIf(component.heading),
@@ -222,9 +245,9 @@ public class ButtonRenderer : KompotComponentRenderer<ButtonComponent> {
         val surface = LocalKompotDesignSystem.current.resolveSurface(KompotSurfaceRoles.button(component.variant))
         Button(
             onClick = { actionHandler.handle(component.action) },
-                // ButtonDefaults.shape is CircleShape and does NOT come from MaterialTheme.shapes, so
-                // a theme with square corners changed nothing here until the design system could
-                // answer for the role.
+            // ButtonDefaults.shape is CircleShape and does NOT come from MaterialTheme.shapes, so
+            // a theme with square corners changed nothing here until the design system could
+            // answer for the role.
             shape = surface.shape ?: ButtonDefaults.shape,
             colors =
                 ButtonDefaults.buttonColors().let { base ->
@@ -232,32 +255,47 @@ public class ButtonRenderer : KompotComponentRenderer<ButtonComponent> {
                         base
                     } else {
                         base.copy(
-                            containerColor = if (surface.container == Color.Unspecified) base.containerColor else surface.container,
-                            contentColor = if (surface.content == Color.Unspecified) base.contentColor else surface.content,
+                            containerColor =
+                                if (surface.container ==
+                                    Color.Unspecified
+                                ) {
+                                    base.containerColor
+                                } else {
+                                    surface.container
+                                },
+                            contentColor =
+                                if (surface.content ==
+                                    Color.Unspecified
+                                ) {
+                                    base.contentColor
+                                } else {
+                                    surface.content
+                                },
                         )
                     }
                 },
             border = if (surface.outline == Color.Unspecified) null else BorderStroke(1.dp, surface.outline),
-                // defaultMinSize rather than height: the design system names a floor, and a button
-                // whose label wraps to two lines is still allowed to be taller than it.
+            // defaultMinSize rather than height: the design system names a floor, and a button
+            // whose label wraps to two lines is still allowed to be taller than it.
             contentPadding = surface.contentPadding ?: ButtonDefaults.ContentPadding,
             modifier =
                 component.modifiers.toComposeModifier().minHeightOf(surface).then(
-                    component.accessibilityLabel?.let { label -> Modifier.semantics { contentDescription = label } } ?: Modifier,
+                    component.accessibilityLabel?.let { label -> Modifier.semantics { contentDescription = label } }
+                        ?: Modifier,
                 ),
         ) {
-                // The label goes through the design system too. Without it a button's words are set in
-                // the platform's fallback font: Material's own typography names no family, and the
-                // label's width follows the font, so two machines disagree even about where the
-                // button's edge is.
+            // The label goes through the design system too. Without it a button's words are set in
+            // the platform's fallback font: Material's own typography names no family, and the
+            // label's width follows the font, so two machines disagree even about where the
+            // button's edge is.
             Text(
                 text = component.text,
-                    // Explicitly, and not through the style: a Text resolves its colour as argument,
-                    // then style.color, then LocalContentColor — so an ambient text style that names a
-                    // colour of its own wins over the contentColor the Button was given, and both a
-                    // primary and a quiet button come out in the theme's grey. The container half
-                    // worked all along, which is what made the fill look like the only channel
-                    // emphasis had.
+                // Explicitly, and not through the style: a Text resolves its colour as argument,
+                // then style.color, then LocalContentColor — so an ambient text style that names a
+                // colour of its own wins over the contentColor the Button was given, and both a
+                // primary and a quiet button come out in the theme's grey. The container half
+                // worked all along, which is what made the fill look like the only channel
+                // emphasis had.
                 color = surface.content,
                 style = surface.textStyle ?: LocalTextStyle.current,
             )
@@ -284,7 +322,9 @@ public class TableRenderer : KompotComponentRenderer<TableComponent> {
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .let { mod -> if (row.header) mod.background(MaterialTheme.colorScheme.surfaceVariant) else mod },
+                            .let { mod ->
+                                if (row.header) mod.background(MaterialTheme.colorScheme.surfaceVariant) else mod
+                            },
                 ) {
                     row.cells.forEach { cell ->
                         Text(
@@ -336,26 +376,26 @@ private fun rememberPaginatedListState(
     val isReloading = remember(component.id) { mutableStateOf(false) }
     val isLoadingMore = remember(component.id) { mutableStateOf(false) }
 
-        // A fresh version of this very component arrives under the same id from TWO directions, and
-        // the remember above sees neither: the id has not changed, so the remember key has not
-        // changed either. Both are therefore applied explicitly, unlike a genuine remount where the
-        // id really is fresh every time.
-        //
-        // The first is a whole new tree for the screen — which is the ordinary way anything changes,
-        // since §16.4's idiom is that an action answers with a navigate and the client re-opens the
-        // screen. Without this the answer arrived, the screen reloaded and the list went on showing
-        // what it was first given; on a board, where every card lives in a list, nothing a person did
-        // was ever visible.
-        //
-        // Keyed on the component rather than on its items: equal trees must not disturb a list that
-        // has since loaded further pages, and a data class compares by value.
+    // A fresh version of this very component arrives under the same id from TWO directions, and
+    // the remember above sees neither: the id has not changed, so the remember key has not
+    // changed either. Both are therefore applied explicitly, unlike a genuine remount where the
+    // id really is fresh every time.
+    //
+    // The first is a whole new tree for the screen — which is the ordinary way anything changes,
+    // since §16.4's idiom is that an action answers with a navigate and the client re-opens the
+    // screen. Without this the answer arrived, the screen reloaded and the list went on showing
+    // what it was first given; on a board, where every card lives in a list, nothing a person did
+    // was ever visible.
+    //
+    // Keyed on the component rather than on its items: equal trees must not disturb a list that
+    // has since loaded further pages, and a data class compares by value.
     LaunchedEffect(component) {
         items.value = component.initialItems
         nextLoadAction.value = component.loadMoreAction
     }
 
-        // The second is a live update for this node alone. It stays LAST so that a targeted patch is
-        // not undone by a tree that merely arrived again unchanged.
+    // The second is a live update for this node alone. It stays LAST so that a targeted patch is
+    // not undone by a tree that merely arrived again unchanged.
     val realtimeUpdate = LocalKompotRealtimeUpdates.current[component.id] as? PaginatedListComponent
     LaunchedEffect(realtimeUpdate) {
         if (realtimeUpdate != null) {
@@ -368,8 +408,8 @@ private fun rememberPaginatedListState(
     if (reloadUrl != null) {
         LaunchedEffect(component.id) {
             formController.fieldsState
-                    // The very first value is skipped: initialItems already show the same thing for
-                    // the current (empty) filters, and asking again for it would be pointless.
+                // The very first value is skipped: initialItems already show the same thing for
+                // the current (empty) filters, and asking again for it would be pointless.
                 .drop(1)
                 .debounce(LIST_FILTER_DEBOUNCE_MS)
                 .collectLatest {
@@ -436,15 +476,15 @@ public class PaginatedListRenderer : KompotComponentRenderer<PaginatedListCompon
         val pageLoader = LocalKompotPageLoader.current
         val state = rememberPaginatedListState(component, pageLoader, formController)
 
-            // Whether this list can scroll is decided by the box it was given, and the box is the only
-            // thing that can decide it. Paging is the point of the component, and laying every item out
-            // in an ordinary column meant it could never reach its own end: anything past the bottom was
-            // clipped, so loadMoreAction could not fire by scrolling to it. It looked like "some
-            // screens" because a root COLUMN takes the lazy projection below and scrolls; a board
-            // rooted in a row took this path and scrolled nowhere.
-            //
-            // Unbounded height is the case that must NOT become a lazy list: inside an already
-            // scrolling parent Compose cannot measure one, which is exactly why the projection exists.
+        // Whether this list can scroll is decided by the box it was given, and the box is the only
+        // thing that can decide it. Paging is the point of the component, and laying every item out
+        // in an ordinary column meant it could never reach its own end: anything past the bottom was
+        // clipped, so loadMoreAction could not fire by scrolling to it. It looked like "some
+        // screens" because a root COLUMN takes the lazy projection below and scrolls; a board
+        // rooted in a row took this path and scrolled nowhere.
+        //
+        // Unbounded height is the case that must NOT become a lazy list: inside an already
+        // scrolling parent Compose cannot measure one, which is exactly why the projection exists.
         BoxWithConstraints(modifier = component.modifiers.toComposeModifier().fillMaxWidth()) {
             if (constraints.hasBoundedHeight) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -564,17 +604,29 @@ public class UnknownComponentRenderer(
             // The outcome is the truth about the screen, so the flag decides it rather than decorating
             // it: a run that drew the placeholder must not report NOTHING.
             if (drawPlaceholder) {
-                sink.onUnknown(KompotDegradationKind.UNKNOWN_COMPONENT, component.originalType, KompotDegradationOutcome.PLACEHOLDER)
+                sink.onUnknown(
+                    KompotDegradationKind.UNKNOWN_COMPONENT,
+                    component.originalType,
+                    KompotDegradationOutcome.PLACEHOLDER,
+                )
                 UnknownComponentPlaceholder()
             } else {
-                sink.onUnknown(KompotDegradationKind.UNKNOWN_COMPONENT, component.originalType, KompotDegradationOutcome.NOTHING)
+                sink.onUnknown(
+                    KompotDegradationKind.UNKNOWN_COMPONENT,
+                    component.originalType,
+                    KompotDegradationOutcome.NOTHING,
+                )
             }
             return
         }
 
         // The server's equivalent wins in both modes: the flag is about what happens when there is
         // nothing to draw, and a deployment that asked to see holes did not ask to lose fallbacks.
-        sink.onUnknown(KompotDegradationKind.UNKNOWN_COMPONENT, component.originalType, KompotDegradationOutcome.SERVER_FALLBACK)
+        sink.onUnknown(
+            KompotDegradationKind.UNKNOWN_COMPONENT,
+            component.originalType,
+            KompotDegradationOutcome.SERVER_FALLBACK,
+        )
         LocalKompotRegistry.current.RenderNode(fallback, actionHandler, formController)
     }
 }
@@ -661,16 +713,16 @@ public fun KompotLazyScreen(
     CompositionLocalProvider(LocalKompotRegistry provides registry) {
         val rootColumn = rootComponent as? ColumnComponent
         if (rootColumn == null) {
-                // The root is not a column. This should not happen for either screen builder, but a
-                // future DSL variant degrades to the ordinary, non-lazy render rather than breaking.
+            // The root is not a column. This should not happen for either screen builder, but a
+            // future DSL variant degrades to the ordinary, non-lazy render rather than breaking.
             Box(modifier = modifier.fillMaxSize().padding(contentPadding)) {
                 KompotNode(registry, formController, rootComponent, actionHandler)
             }
         } else {
             val pageLoader = LocalKompotPageLoader.current
-                // The pagination state for EVERY paginated list among the root's direct children is
-                // computed here, in an ordinary composable body where remember and LaunchedEffect
-                // work, rather than inside the LazyColumn builder below, where they cannot be.
+            // The pagination state for EVERY paginated list among the root's direct children is
+            // computed here, in an ordinary composable body where remember and LaunchedEffect
+            // work, rather than inside the LazyColumn builder below, where they cannot be.
             val paginatedStates =
                 rootColumn.children.filterIsInstance<PaginatedListComponent>().associateWith { child ->
                     key(child.id) {
@@ -730,11 +782,15 @@ internal fun KompotComponent.wireType(): String =
     when (this) {
         // It knows its own: the type the server sent, kept through decoding precisely so it can be
         // named afterwards.
-        is UnknownComponent -> originalType
-        else ->
+        is UnknownComponent -> {
+            originalType
+        }
+
+        else -> {
             runCatching { this::class.serializerOrNull()?.descriptor?.serialName }.getOrNull()
                 ?: this::class.simpleName
                 ?: "unknown"
+        }
     }
 
 public typealias RenderersMap = Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>>
@@ -773,21 +829,22 @@ public class KompotRegistry(
         actionHandler: KompotActionHandler,
         formController: FormController,
     ) {
-            // A live update substitutes a node by id before dispatch — the single place this has to
-            // be accounted for, and no component renderer knows the update channel exists. An update
-            // may in principle change the type of a component, so the renderer lookup goes by
-            // actual::class rather than by the static T.
+        // A live update substitutes a node by id before dispatch — the single place this has to
+        // be accounted for, and no component renderer knows the update channel exists. An update
+        // may in principle change the type of a component, so the renderer lookup goes by
+        // actual::class rather than by the static T.
         val realtimeUpdates = LocalKompotRealtimeUpdates.current
         val actual: KompotComponent = realtimeUpdates[component.id] ?: component
-            // The registry keys renderers by the component's class, so it is the key that guarantees
-            // the types line up, not the type system: a compiler cannot check this.
+
+        // The registry keys renderers by the component's class, so it is the key that guarantees
+        // the types line up, not the type system: a compiler cannot check this.
         @Suppress("UNCHECKED_CAST")
         val renderer = renderers[actual::class] as? KompotComponentRenderer<KompotComponent>
 
-            // Wrapped here because this is the single point every render passes through, so an action
-            // no renderer understands is reported once wherever it was raised. Already-wrapped handlers
-            // are passed on as they are: a child receives its parent's wrapper, and wrapping again
-            // would report a tap once per level of the tree.
+        // Wrapped here because this is the single point every render passes through, so an action
+        // no renderer understands is reported once wherever it was raised. Already-wrapped handlers
+        // are passed on as they are: a child receives its parent's wrapper, and wrapping again
+        // would report a tap once per level of the tree.
         val sink = LocalKompotDegradationSink.current
         val reporting =
             if (actionHandler is ReportingActionHandler) actionHandler else ReportingActionHandler(actionHandler, sink)
@@ -826,7 +883,15 @@ private fun Modifier.clickableWith(
         this
     } else {
         clickable(role = Role.Button) { actionHandler.handle(action) }
-            .then(if (accessibilityLabel != null) Modifier.semantics { contentDescription = accessibilityLabel } else Modifier)
+            .then(
+                if (accessibilityLabel !=
+                    null
+                ) {
+                    Modifier.semantics { contentDescription = accessibilityLabel }
+                } else {
+                    Modifier
+                },
+            )
     }
 
 // A heading for assistive technology to navigate by (SPEC.md §4.11).
@@ -845,12 +910,12 @@ private fun SpannedText(
     designSystem: KompotDesignSystem,
     actionHandler: KompotActionHandler,
 ) {
-        // Resolved before the builder rather than inside it: resolveTypography is @Composable and the
-        // annotated-string builder is not a composable context.
+    // Resolved before the builder rather than inside it: resolveTypography is @Composable and the
+    // annotated-string builder is not a composable context.
     val styles = component.spans.map { span -> span.style?.let { designSystem.resolveTypography(it) } }
-        // A run's colour is decided the same way the node's is, one step shorter: its own token, then
-        // the colour of its own typography token, then nothing — which leaves the node's, since a span
-        // style that names no colour must not repaint the run in the ambient default.
+    // A run's colour is decided the same way the node's is, one step shorter: its own token, then
+    // the colour of its own typography token, then nothing — which leaves the node's, since a span
+    // style that names no colour must not repaint the run in the ambient default.
     val colors =
         component.spans.mapIndexed { index, span ->
             span.color?.let { designSystem.resolveColor(it) }
@@ -872,9 +937,9 @@ private fun SpannedText(
                     return@forEachIndexed
                 }
 
-                    // A link annotation rather than a click on the whole node: only the run itself is
-                    // pressable, which is the difference between a sentence containing a link and a
-                    // sentence that is one.
+                // A link annotation rather than a click on the whole node: only the run itself is
+                // pressable, which is the difference between a sentence containing a link and a
+                // sentence that is one.
                 withLink(LinkAnnotation.Clickable(tag = "kompot-span-$index") { actionHandler.handle(action) }) {
                     if (spanStyle == null) append(span.text) else withStyle(spanStyle) { append(span.text) }
                 }

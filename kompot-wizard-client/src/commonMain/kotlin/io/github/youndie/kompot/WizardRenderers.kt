@@ -13,10 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.registry.KompotComponentMarker
 import io.github.youndie.kompot.wizard.PrevStepAction
 import io.github.youndie.kompot.wizard.WizardScreenComponent
-import io.github.youndie.kompot.form.FormController
 
 // The wrapper renderer of a wizard step. It draws no content of its own — that is delegated to
 // registry.RenderNode — only the chrome: a Back button when canGoBack, and a progress indicator when

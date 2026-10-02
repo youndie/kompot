@@ -1,31 +1,20 @@
 package io.github.youndie.kompot
 
-import androidx.compose.ui.graphics.Color
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column as ComposeColumn
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
-import io.github.youndie.kompot.forms.AmountInputComponent
-import io.github.youndie.kompot.forms.AutocompleteInputComponent
-import io.github.youndie.kompot.forms.CheckboxInputComponent
-import io.github.youndie.kompot.forms.KompotCheckboxVariants
-import io.github.youndie.kompot.forms.ReadOnlyFieldComponent
-import io.github.youndie.kompot.forms.RadioGroupComponent
-import io.github.youndie.kompot.forms.SelectInputComponent
-import io.github.youndie.kompot.forms.TextInputComponent
-import io.github.youndie.kompot.registry.KompotComponentMarker
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.collectFieldState
@@ -34,6 +23,17 @@ import io.github.youndie.kompot.form.standard.AmountValue
 import io.github.youndie.kompot.form.standard.BooleanValue
 import io.github.youndie.kompot.form.standard.EntityValue
 import io.github.youndie.kompot.form.standard.TextValue
+import io.github.youndie.kompot.forms.AmountInputComponent
+import io.github.youndie.kompot.forms.AutocompleteInputComponent
+import io.github.youndie.kompot.forms.CheckboxInputComponent
+import io.github.youndie.kompot.forms.KompotCheckboxVariants
+import io.github.youndie.kompot.forms.RadioGroupComponent
+import io.github.youndie.kompot.forms.ReadOnlyFieldComponent
+import io.github.youndie.kompot.forms.SelectInputComponent
+import io.github.youndie.kompot.forms.TextInputComponent
+import io.github.youndie.kompot.registry.KompotComponentMarker
+import kotlinx.coroutines.delay
+import androidx.compose.foundation.layout.Column as ComposeColumn
 
 // The renderers of the :kompot-forms components. The package is deliberately the same one the core
 // renderers live in, so a consumer's imports do not depend on which module a renderer sits in.
@@ -68,12 +68,16 @@ public class ReadOnlyFieldRenderer : KompotComponentRenderer<ReadOnlyFieldCompon
             readOnly = true,
             label = { Text(component.label) },
             supportingText = component.helperText?.let { { Text(it) } },
-                // Drawn as a disabled input, this control says the opposite of what it exists to say:
-                // four of them beside each other read as a form somebody could type into. What it
-                // should look like instead belongs to the deployment, so it asks by role.
+            // Drawn as a disabled input, this control says the opposite of what it exists to say:
+            // four of them beside each other read as a form somebody could type into. What it
+            // should look like instead belongs to the deployment, so it asks by role.
             shape = surface.shape ?: OutlinedTextFieldDefaults.shape,
             colors = outlinedColorsFor(surface),
-            modifier = component.modifiers.toComposeModifier().fillMaxWidth().minHeightOf(surface),
+            modifier =
+                component.modifiers
+                    .toComposeModifier()
+                    .fillMaxWidth()
+                    .minHeightOf(surface),
         )
     }
 }
@@ -141,14 +145,14 @@ public class TextInputRenderer : KompotComponentRenderer<TextInputComponent> {
                 } else {
                     KeyboardOptions.Default
                 },
-                // Only minLines, and singleLine is deliberately left as it was. Passing
-                // `singleLine = !multiline` would have been the truer reading of the flag — and it
-                // changed how every existing single-line field renders, which two screenshots caught.
-                // Whether an ordinary field should stop wrapping is a behavioural decision for every
-                // screen already drawn, not something to carry in on the back of a new field.
+            // Only minLines, and singleLine is deliberately left as it was. Passing
+            // `singleLine = !multiline` would have been the truer reading of the flag — and it
+            // changed how every existing single-line field renders, which two screenshots caught.
+            // Whether an ordinary field should stop wrapping is a behavioural decision for every
+            // screen already drawn, not something to carry in on the back of a new field.
             minLines = if (component.multiline) MULTILINE_MIN_LINES else 1,
-                // An outlined field draws a transparent container and a border by default, and neither
-                // is a theme role — so a token named "the fill of an input field" had nowhere to go.
+            // An outlined field draws a transparent container and a border by default, and neither
+            // is a theme role — so a token named "the fill of an input field" had nowhere to go.
             shape = fieldSurface.shape ?: OutlinedTextFieldDefaults.shape,
             colors = outlinedColorsFor(fieldSurface),
             modifier =
@@ -239,9 +243,15 @@ public class AmountInputRenderer : KompotComponentRenderer<AmountInputComponent>
             visualTransformation =
                 remember(currencySymbol, drawnBefore, component.currencySpaced) {
                     if (drawnBefore) {
-                        AmountVisualTransformation(currencyPrefix = currencySymbol, currencySpaced = component.currencySpaced)
+                        AmountVisualTransformation(
+                            currencyPrefix = currencySymbol,
+                            currencySpaced = component.currencySpaced,
+                        )
                     } else {
-                        AmountVisualTransformation(currencySuffix = currencySymbol, currencySpaced = component.currencySpaced)
+                        AmountVisualTransformation(
+                            currencySuffix = currencySymbol,
+                            currencySpaced = component.currencySpaced,
+                        )
                     }
                 },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -287,8 +297,8 @@ public class CheckboxInputRenderer : KompotComponentRenderer<CheckboxInputCompon
                 formController.onValueChanged(component.fieldId, BooleanValue(checked))
                 formController.requestPatchIfNeeded(component.fieldId)
             }
-                // The one variant this renderer knows. An unfamiliar word draws a checkbox rather than
-                // failing — the same degradation an unknown component gets, one field down.
+            // The one variant this renderer knows. An unfamiliar word draws a checkbox rather than
+            // failing — the same degradation an unknown component gets, one field down.
             if (component.variant == KompotCheckboxVariants.SWITCH) {
                 Switch(checked = isChecked, onCheckedChange = toggle)
             } else {
@@ -560,7 +570,11 @@ private const val MULTILINE_MIN_LINES = 3
 @Composable
 private fun outlinedColorsFor(surface: KompotSurface): TextFieldColors {
     val base = OutlinedTextFieldDefaults.colors()
-    if (surface.container == Color.Unspecified && surface.outline == Color.Unspecified && surface.content == Color.Unspecified) return base
+    if (surface.container == Color.Unspecified && surface.outline == Color.Unspecified &&
+        surface.content == Color.Unspecified
+    ) {
+        return base
+    }
 
     return base.copy(
         focusedContainerColor = surface.container.orElse(base.focusedContainerColor),

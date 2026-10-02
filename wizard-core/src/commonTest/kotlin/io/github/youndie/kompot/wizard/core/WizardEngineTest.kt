@@ -17,11 +17,21 @@ private const val APPROVAL_THRESHOLD = 1_000_000L
 private val orderResolver =
     WizardStepResolver<Map<String, Long>> { currentStepId, draft ->
         when (currentStepId) {
-            STEP_DETAILS ->
+            STEP_DETAILS -> {
                 if ((draft["amount"] ?: 0L) > APPROVAL_THRESHOLD) STEP_APPROVAL else STEP_CONFIRMATION
-            STEP_APPROVAL -> STEP_CONFIRMATION
-            STEP_CONFIRMATION -> null
-            else -> null
+            }
+
+            STEP_APPROVAL -> {
+                STEP_CONFIRMATION
+            }
+
+            STEP_CONFIRMATION -> {
+                null
+            }
+
+            else -> {
+                null
+            }
         }
     }
 
@@ -57,7 +67,12 @@ class WizardEngineTest {
         val afterDetails = engine.transition(session, WizardTransition.Next, mapOf("amount" to 2_000_000L))
         assertEquals(STEP_APPROVAL, afterDetails.currentStepId)
 
-        val afterApproval = engine.transition(afterDetails, WizardTransition.Next, afterDetails.draft + ("approval" to 1L))
+        val afterApproval =
+            engine.transition(
+                afterDetails,
+                WizardTransition.Next,
+                afterDetails.draft + ("approval" to 1L),
+            )
         assertEquals(STEP_CONFIRMATION, afterApproval.currentStepId)
         assertEquals(listOf(STEP_DETAILS, STEP_APPROVAL), afterApproval.history)
     }

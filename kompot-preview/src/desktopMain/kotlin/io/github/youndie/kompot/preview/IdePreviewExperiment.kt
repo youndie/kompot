@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.KompotDesignSystem
@@ -12,12 +13,11 @@ import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.kompotCoreRenderers
 import io.github.youndie.kompot.kompotJson
 import io.github.youndie.kompot.kompotStandardRenderers
-import kotlinx.serialization.PolymorphicSerializer
 import io.github.youndie.kompot.standard.ButtonComponent
 import io.github.youndie.kompot.standard.CloseAction
 import io.github.youndie.kompot.standard.ColumnComponent
 import io.github.youndie.kompot.standard.TextComponent
-import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.serialization.PolymorphicSerializer
 
 // THE EXPERIMENT OF #109, and nothing else yet.
 //

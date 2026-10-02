@@ -36,26 +36,28 @@ private fun words(
 ): List<Finding> {
     if (config.vocabulary.isEmpty()) return emptyList()
 
-    return walkJsonObjects(body).flatMap { node ->
-        val wireType = (node.value[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content
-        val fields = config.vocabulary[wireType].orEmpty()
+    return walkJsonObjects(body)
+        .flatMap { node ->
+            val wireType = (node.value[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content
+            val fields = config.vocabulary[wireType].orEmpty()
 
-        fields.entries.mapNotNull { (field, words) ->
-            val value = (node.value[field] as? JsonPrimitive)?.takeIf { it.isString }?.content
-            if (value == null || value in words) {
-                null
-            } else {
-                Finding(
-                    layer = "vocabulary",
-                    path = (node.path + field).toString(),
-                    message =
-                        "$wireType.$field = \"$value\" is not one of ${words.sorted()} — " +
-                            "this client draws the neutral variant",
-                    severity = Severity.WARNING,
-                )
-            }
-        }.asSequence()
-    }.toList()
+            fields.entries
+                .mapNotNull { (field, words) ->
+                    val value = (node.value[field] as? JsonPrimitive)?.takeIf { it.isString }?.content
+                    if (value == null || value in words) {
+                        null
+                    } else {
+                        Finding(
+                            layer = "vocabulary",
+                            path = (node.path + field).toString(),
+                            message =
+                                "$wireType.$field = \"$value\" is not one of ${words.sorted()} — " +
+                                    "this client draws the neutral variant",
+                            severity = Severity.WARNING,
+                        )
+                    }
+                }.asSequence()
+        }.toList()
 }
 
 // A token has to be named in EVERY kit and in BOTH palettes of each, or it is the built-in palette
@@ -82,7 +84,7 @@ private fun tokens(
         config.themes.entries.sortedBy { it.key }.flatMap { (brand, theme) ->
             val missing =
                 when (use.kind) {
-                    COLOR_TOKEN ->
+                    COLOR_TOKEN -> {
                         listOfNotNull(
                             "light".takeIf { use.value !in theme.light.colors.keys },
                             // A kit with no dark palette says "this brand described no dark theme",
@@ -90,9 +92,15 @@ private fun tokens(
                             // brand's decision, not a gap, so it is not reported.
                             theme.dark?.let { dark -> "dark".takeIf { use.value !in dark.colors.keys } },
                         )
+                    }
 
-                    TYPOGRAPHY_TOKEN -> listOfNotNull("typography".takeIf { use.value !in theme.typography.keys })
-                    else -> emptyList()
+                    TYPOGRAPHY_TOKEN -> {
+                        listOfNotNull("typography".takeIf { use.value !in theme.typography.keys })
+                    }
+
+                    else -> {
+                        emptyList()
+                    }
                 }
 
             missing.map { palette ->

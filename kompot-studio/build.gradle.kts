@@ -184,7 +184,11 @@ dependencies {
 // the `plugins` block — so this one runs after.
 afterEvaluate {
     tasks.named<JavaExec>("run") {
-        setExecutable(jetBrainsRuntime.get().executablePath.asFile.absolutePath)
+        setExecutable(
+            jetBrainsRuntime
+                .get()
+                .executablePath.asFile.absolutePath,
+        )
         classpath += studioRuntime
         // The trackpad pinch: Apple's gesture API lives in a package java.desktop does not export,
         // and without this the studio's reflective listener is refused and the preview has no pinch.
@@ -225,7 +229,10 @@ tasks.withType<Test>().configureEach {
     // The same file, handed to the suite so it can check the exporter still produces it. DECLARED as
     // an input rather than just read: a test that reads a file Gradle does not know about goes on
     // passing from cache after that file changes, which is the one failure a drift guard must not have.
-    val draft = layout.projectDirectory.file("src/desktopTest/kotlin/io/github/youndie/kompot/studio/export/SampleScreenDraft.kt")
+    val draft =
+        layout.projectDirectory.file(
+            "src/desktopTest/kotlin/io/github/youndie/kompot/studio/export/SampleScreenDraft.kt",
+        )
     inputs.file(draft).withPathSensitivity(PathSensitivity.RELATIVE)
     systemProperty("draft.checkedIn", draft.asFile.absolutePath)
 }

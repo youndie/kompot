@@ -89,8 +89,15 @@ internal class KompotRegistrySymbolProcessor(
             }
 
             val superTypes = symbol.getAllSuperTypes().toList()
-            val implementsComponent = superTypes.any { it.declaration.qualifiedName?.asString() == KOMPOT_COMPONENT_FQN }
-            val rendererSuperType = superTypes.firstOrNull { it.declaration.qualifiedName?.asString() == KOMPOT_COMPONENT_RENDERER_FQN }
+            val implementsComponent =
+                superTypes.any {
+                    it.declaration.qualifiedName?.asString() == KOMPOT_COMPONENT_FQN
+                }
+            val rendererSuperType =
+                superTypes.firstOrNull {
+                    it.declaration.qualifiedName?.asString() ==
+                        KOMPOT_COMPONENT_RENDERER_FQN
+                }
 
             when {
                 implementsComponent && rendererSuperType != null -> {
@@ -108,7 +115,11 @@ internal class KompotRegistrySymbolProcessor(
                 }
 
                 rendererSuperType != null -> {
-                    val componentType = rendererSuperType.arguments.firstOrNull()?.type?.resolve()
+                    val componentType =
+                        rendererSuperType.arguments
+                            .firstOrNull()
+                            ?.type
+                            ?.resolve()
                     // isError, and it is the whole point of this branch reading the way it does. An
                     // unresolved type still answers with a declaration — carrying the REFERENCE's
                     // package rather than the real one — so without this the processor writes a
@@ -131,7 +142,11 @@ internal class KompotRegistrySymbolProcessor(
                         renderers +=
                             RendererEntry(
                                 componentClassName = componentClassName,
-                                rendererClassName = ClassName(symbol.packageName.asString(), symbol.simpleName.asString()),
+                                rendererClassName =
+                                    ClassName(
+                                        symbol.packageName.asString(),
+                                        symbol.simpleName.asString(),
+                                    ),
                             )
                         symbol.containingFile?.let { sourceFiles += it }
                     }

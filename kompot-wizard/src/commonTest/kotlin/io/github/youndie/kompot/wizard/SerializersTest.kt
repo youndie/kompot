@@ -1,5 +1,16 @@
 package io.github.youndie.kompot.wizard
 
+import io.github.youndie.kompot.KompotAction
+import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.form.FieldValue
+import io.github.youndie.kompot.form.FormFieldDefinition
+import io.github.youndie.kompot.form.FormSchema
+import io.github.youndie.kompot.form.ValidationRule
+import io.github.youndie.kompot.generated.generatedStandardSerializersModule
+import io.github.youndie.kompot.generated.generatedWizardSerializersModule
+import io.github.youndie.kompot.kompotCoreSerializersModule
+import io.github.youndie.kompot.standard.TextComponent
+import io.github.youndie.kompot.wizard.core.WizardTransition
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -10,17 +21,6 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import io.github.youndie.kompot.KompotAction
-import io.github.youndie.kompot.KompotComponent
-import io.github.youndie.kompot.kompotCoreSerializersModule
-import io.github.youndie.kompot.generated.generatedStandardSerializersModule
-import io.github.youndie.kompot.generated.generatedWizardSerializersModule
-import io.github.youndie.kompot.standard.TextComponent
-import io.github.youndie.kompot.form.FieldValue
-import io.github.youndie.kompot.form.FormFieldDefinition
-import io.github.youndie.kompot.form.FormSchema
-import io.github.youndie.kompot.form.ValidationRule
-import io.github.youndie.kompot.wizard.core.WizardTransition
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -79,15 +79,27 @@ class SerializersTest {
                 content = TextComponent(id = "t", text = "Enter an amount"),
             )
 
-        val decoded = json.decodeFromString(kompotComponentSerializer, json.encodeToString(kompotComponentSerializer, component))
+        val decoded =
+            json.decodeFromString(
+                kompotComponentSerializer,
+                json.encodeToString(kompotComponentSerializer, component),
+            )
 
         assertEquals(component, decoded)
     }
 
     @Test
     fun `NextStepAction PrevStepAction and FinishWizardAction round-trip through the open KompotAction type`() {
-        for (action in listOf<KompotAction>(NextStepAction("checkout"), PrevStepAction("checkout"), FinishWizardAction("checkout"))) {
-            val decoded = json.decodeFromString(kompotActionSerializer, json.encodeToString(kompotActionSerializer, action))
+        for (action in listOf<KompotAction>(
+            NextStepAction("checkout"),
+            PrevStepAction("checkout"),
+            FinishWizardAction("checkout"),
+        )) {
+            val decoded =
+                json.decodeFromString(
+                    kompotActionSerializer,
+                    json.encodeToString(kompotActionSerializer, action),
+                )
             assertEquals(action, decoded)
         }
     }
@@ -117,7 +129,12 @@ class SerializersTest {
 
     @Test
     fun `WizardResumeRequest round-trips its transition and typed field values`() {
-        val request = WizardResumeRequest(transition = WizardTransition.Next, values = mapOf("full_name" to TestValue("Ada Lovelace")))
+        val request =
+            WizardResumeRequest(
+                transition = WizardTransition.Next,
+                values =
+                    mapOf("full_name" to TestValue("Ada Lovelace")),
+            )
 
         val decoded = json.decodeFromString<WizardResumeRequest>(json.encodeToString(request))
 

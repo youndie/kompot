@@ -92,7 +92,10 @@ internal fun DegradationLogPane(
         ) {
             Column(Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
                 if (log.lines.isEmpty()) {
-                    Text("Nothing — every type on the wire was known to it.", style = MaterialTheme.typography.bodySmall)
+                    Text(
+                        "Nothing — every type on the wire was known to it.",
+                        style = MaterialTheme.typography.bodySmall,
+                    )
                 } else {
                     log.lines.forEach { line ->
                         Text(line, style = MaterialTheme.typography.bodySmall, fontFamily = FontFamily.Monospace)

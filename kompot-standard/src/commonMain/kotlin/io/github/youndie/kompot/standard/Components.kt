@@ -1,14 +1,14 @@
 package io.github.youndie.kompot.standard
 
-import kotlinx.serialization.Polymorphic
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.KompotAction
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.KompotModifierNode
 import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.registry.KompotComponentMarker
+import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /** A vertical stack of nodes. The root of most screens, and the only container that scrolls. */
 @Serializable
@@ -48,6 +48,7 @@ public data class ColumnComponent(
 // A horizontal container — a pair of fields side by side, say a document number and its date. A
 // child's share of the width is set by a KompotModifierNode.Weight node in the child's own
 // modifiers rather than by a property here, the same trick as Compose's RowScope.weight.
+
 /** A horizontal row of nodes. Unlike a column it never scrolls: a row is one item of its parent. */
 @Serializable
 @SerialName("row")

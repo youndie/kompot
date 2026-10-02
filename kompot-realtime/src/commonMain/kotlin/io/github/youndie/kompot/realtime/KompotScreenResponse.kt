@@ -1,8 +1,8 @@
 package io.github.youndie.kompot.realtime
 
+import io.github.youndie.kompot.KompotComponent
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
-import io.github.youndie.kompot.KompotComponent
 
 // A screen that names the channel its updates arrive on.
 //

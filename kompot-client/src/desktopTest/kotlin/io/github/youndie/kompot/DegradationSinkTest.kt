@@ -48,7 +48,9 @@ class DegradationSinkTest {
             setContent(render(UnknownComponent(id = "x", originalType = "promo_banner")))
 
             assertEquals(
-                listOf(Reported(KompotDegradationKind.UNKNOWN_COMPONENT, "promo_banner", KompotDegradationOutcome.NOTHING)),
+                listOf(
+                    Reported(KompotDegradationKind.UNKNOWN_COMPONENT, "promo_banner", KompotDegradationOutcome.NOTHING),
+                ),
                 reported,
             )
         }
@@ -118,7 +120,10 @@ class DegradationSinkTest {
                         originalType = "promo_banner",
                         fallback = TextComponent(id = "t", text = "Promo"),
                     ),
-                    registry = KompotRegistry(kompotCoreRenderers + kompotStandardRenderers + kompotVisiblePlaceholderRenderers),
+                    registry =
+                        KompotRegistry(
+                            kompotCoreRenderers + kompotStandardRenderers + kompotVisiblePlaceholderRenderers,
+                        ),
                 ),
             )
 
@@ -135,7 +140,13 @@ class DegradationSinkTest {
             setContent(render(TextComponent(id = "t", text = "hi"), registry = KompotRegistry(kompotCoreRenderers)))
 
             assertEquals(
-                listOf(Reported(KompotDegradationKind.UNRENDERABLE_COMPONENT, "text", KompotDegradationOutcome.PLACEHOLDER)),
+                listOf(
+                    Reported(
+                        KompotDegradationKind.UNRENDERABLE_COMPONENT,
+                        "text",
+                        KompotDegradationOutcome.PLACEHOLDER,
+                    ),
+                ),
                 reported,
             )
         }
@@ -171,19 +182,26 @@ class DegradationSinkTest {
             val tree =
                 ColumnComponent(
                     id = "a",
-                    children = listOf(
-                        ColumnComponent(
-                            id = "b",
-                            children = listOf(
-                                ColumnComponent(
-                                    id = "c",
-                                    children = listOf(
-                                        ButtonComponent(id = "d", text = "Go", action = UnknownAction(originalType = "open_esim")),
+                    children =
+                        listOf(
+                            ColumnComponent(
+                                id = "b",
+                                children =
+                                    listOf(
+                                        ColumnComponent(
+                                            id = "c",
+                                            children =
+                                                listOf(
+                                                    ButtonComponent(
+                                                        id = "d",
+                                                        text = "Go",
+                                                        action = UnknownAction(originalType = "open_esim"),
+                                                    ),
+                                                ),
+                                        ),
                                     ),
-                                ),
                             ),
                         ),
-                    ),
                 )
             setContent(render(tree))
 

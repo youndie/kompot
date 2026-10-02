@@ -59,7 +59,12 @@ private val COLOURS =
         spacing = 12,
         children =
             listOf(
-                TextComponent(id = "own", text = "Its own token wins", style = TypographyToken("quiet"), color = ColorToken("danger")),
+                TextComponent(
+                    id = "own",
+                    text = "Its own token wins",
+                    style = TypographyToken("quiet"),
+                    color = ColorToken("danger"),
+                ),
                 TextComponent(id = "styled", text = "The typography token's colour", style = TypographyToken("quiet")),
                 TextComponent(
                     id = "spans",
@@ -74,7 +79,12 @@ private val COLOURS =
             ),
     )
 
-@ViddikScreenshot(name = "Text - a colour token on the node and on one run", group = "Renderer", width = 420, height = 150)
+@ViddikScreenshot(
+    name = "Text - a colour token on the node and on one run",
+    group = "Renderer",
+    width = 420,
+    height = 150,
+)
 @Composable
 fun TextColorScreenshot() {
     MaterialTheme(typography = viddikTypography()) {

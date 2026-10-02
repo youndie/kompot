@@ -99,7 +99,12 @@ class DragAndDropTest {
                 JsonEdits.insertInto(body, "$", "children", 1, """{ "type": "text", "id": "new" }""", many = true),
             )
 
-        val ids = Json.parseToJsonElement(added).let { screenTree(it, slots) }!!.children.map { it.id }
+        val ids =
+            Json
+                .parseToJsonElement(added)
+                .let { screenTree(it, slots) }!!
+                .children
+                .map { it.id }
         assertEquals(listOf("one", "new", "inner"), ids)
         // The text around it is untouched: this is a splice, so a body somebody has formatted by hand
         // comes back formatted by hand.
@@ -111,7 +116,10 @@ class DragAndDropTest {
     fun `a slot that is not in the body yet is written as a list of one`() {
         val empty = """{ "type": "column", "id": "root" }"""
 
-        val added = assertNotNull(JsonEdits.insertInto(empty, "$", "children", 0, """{ "type": "text", "id": "new" }""", many = true))
+        val added =
+            assertNotNull(
+                JsonEdits.insertInto(empty, "$", "children", 0, """{ "type": "text", "id": "new" }""", many = true),
+            )
 
         // A container a server sent without its `children` is the ordinary empty container, and it has
         // to be fillable — refusing here would make the palette work only on boxes already full.
@@ -140,18 +148,31 @@ class DragAndDropTest {
         val root = assertNotNull(screenTree(Json.parseToJsonElement(moved), slots))
         assertEquals(listOf("inner", "one"), root.children.map { it.id })
         // The whole subtree travelled, not just the node that was grabbed.
-        assertEquals(listOf("two"), root.children.first().children.map { it.id })
+        assertEquals(
+            listOf("two"),
+            root.children
+                .first()
+                .children
+                .map { it.id },
+        )
     }
 
     @Test
     fun `moving a node into a different container moves it out of the old one`() {
-        val moved = assertNotNull(JsonEdits.moveInto(body, "$.children[0]", "$.children[1]", "children", 0, many = true))
+        val moved =
+            assertNotNull(JsonEdits.moveInto(body, "$.children[0]", "$.children[1]", "children", 0, many = true))
 
         val root = assertNotNull(screenTree(Json.parseToJsonElement(moved), slots))
         // One child left at the top, and it is the row.
         assertEquals(listOf("inner"), root.children.map { it.id })
         // The text arrived inside it, ahead of what was already there.
-        assertEquals(listOf("one", "two"), root.children.first().children.map { it.id })
+        assertEquals(
+            listOf("one", "two"),
+            root.children
+                .first()
+                .children
+                .map { it.id },
+        )
     }
 
     @Test

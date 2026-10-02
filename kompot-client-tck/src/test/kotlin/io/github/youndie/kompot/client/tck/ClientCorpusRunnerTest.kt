@@ -75,7 +75,10 @@ class ClientCorpusRunnerTest {
 
     @Test
     fun `a case that does assert something is clean`() {
-        val report = ClientCorpusRunner(listOf(case(ClientExpectation(visibleFields = emptyList())))) { FormControllerAdapter() }.run()
+        val report =
+            ClientCorpusRunner(listOf(case(ClientExpectation(visibleFields = emptyList())))) {
+                FormControllerAdapter()
+            }.run()
 
         assertTrue(report.isClean, report.toString())
     }

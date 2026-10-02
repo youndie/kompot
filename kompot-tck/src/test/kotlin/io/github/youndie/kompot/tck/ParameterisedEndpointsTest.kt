@@ -44,7 +44,13 @@ class ParameterisedEndpointsTest {
         val (report, asked) = runWith(config())
 
         assertTrue(asked.none { it.startsWith("/forms/task") }, asked.toString())
-        assertTrue(report.skipped.single().reason.contains("pathParameters"), report.skipped.toString())
+        assertTrue(
+            report.skipped
+                .single()
+                .reason
+                .contains("pathParameters"),
+            report.skipped.toString(),
+        )
     }
 
     // The placeholder is substituted, not merely accepted: what the transport is asked for is the

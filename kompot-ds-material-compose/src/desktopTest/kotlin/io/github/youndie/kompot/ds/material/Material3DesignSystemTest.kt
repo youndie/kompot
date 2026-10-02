@@ -106,7 +106,8 @@ class Material3DesignSystemTest {
             setContent {
                 MaterialTheme {
                     typography = MaterialTheme.typography
-                    resolved = typographyCases.associate { (token, _) -> token to designSystem.resolveTypography(token) }
+                    resolved =
+                        typographyCases.associate { (token, _) -> token to designSystem.resolveTypography(token) }
                 }
             }
 

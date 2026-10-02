@@ -42,7 +42,9 @@ class DividerAndSpacerTest {
                                 component: DividerComponent,
                                 actionHandler: KompotActionHandler,
                                 formController: io.github.youndie.kompot.form.FormController,
-                            ) = Box(Modifier.testTag(component.id)) { DividerRenderer().Render(component, actionHandler, formController) }
+                            ) = Box(
+                                Modifier.testTag(component.id),
+                            ) { DividerRenderer().Render(component, actionHandler, formController) }
                         },
                 ),
         )
@@ -51,7 +53,11 @@ class DividerAndSpacerTest {
         label: String,
         width: Int = 50,
         height: Int = 20,
-    ) = TextComponent(id = label, text = label, modifiers = listOf(KompotModifierNode.Size(widthDp = width, heightDp = height)))
+    ) = TextComponent(
+        id = label,
+        text = label,
+        modifiers = listOf(KompotModifierNode.Size(widthDp = width, heightDp = height)),
+    )
 
     private val rule = DividerComponent(id = "rule")
 
@@ -63,7 +69,16 @@ class DividerAndSpacerTest {
         setContent {
             TestKompotTheme {
                 CompositionLocalProvider(LocalKompotRegistry provides renderers) {
-                    val host = if (scrolling) Modifier.size(400.dp, 400.dp).verticalScroll(rememberScrollState()) else Modifier.size(400.dp, 400.dp)
+                    val host =
+                        if (scrolling) {
+                            Modifier
+                                .size(
+                                    400.dp,
+                                    400.dp,
+                                ).verticalScroll(rememberScrollState())
+                        } else {
+                            Modifier.size(400.dp, 400.dp)
+                        }
                     Column(host) {
                         renderers.RenderNode(node, recordingActionHandler(), testFormController())
                     }
@@ -83,7 +98,9 @@ class DividerAndSpacerTest {
 
     @Test
     fun `a spacer in a column is room below, a spacer in a row room beside`() {
-        layOut(ColumnComponent(id = "c", children = listOf(leaf("a"), SpacerComponent(id = "s", size = 24), leaf("b")))) {
+        layOut(
+            ColumnComponent(id = "c", children = listOf(leaf("a"), SpacerComponent(id = "s", size = 24), leaf("b"))),
+        ) {
             near(44.dp, bounds("b").top, "20 of a, then 24 of room")
         }
         layOut(RowComponent(id = "r", children = listOf(leaf("a"), SpacerComponent(id = "s", size = 24), leaf("b")))) {
@@ -98,7 +115,12 @@ class DividerAndSpacerTest {
             RowComponent(
                 id = "r",
                 modifiers = listOf(KompotModifierNode.Size(widthDp = 300)),
-                children = listOf(leaf("a"), SpacerComponent(id = "s", modifiers = listOf(KompotModifierNode.Weight(1f))), leaf("b")),
+                children =
+                    listOf(
+                        leaf("a"),
+                        SpacerComponent(id = "s", modifiers = listOf(KompotModifierNode.Weight(1f))),
+                        leaf("b"),
+                    ),
             ),
         ) {
             near(300.dp, bounds("b").right, "b at the right edge of the 300 dp row")

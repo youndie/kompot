@@ -7,12 +7,12 @@ import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.remember
 import io.github.youndie.kompot.AmountInputRenderer
 import io.github.youndie.kompot.AutocompleteInputRenderer
-import io.github.youndie.kompot.KompotAction
-import io.github.youndie.kompot.KompotActionHandler
-import io.github.youndie.kompot.KompotRegistry
 import io.github.youndie.kompot.ButtonRenderer
 import io.github.youndie.kompot.CheckboxInputRenderer
 import io.github.youndie.kompot.ColumnRenderer
+import io.github.youndie.kompot.KompotAction
+import io.github.youndie.kompot.KompotActionHandler
+import io.github.youndie.kompot.KompotRegistry
 import io.github.youndie.kompot.LocalKompotDesignSystem
 import io.github.youndie.kompot.LocalKompotRegistry
 import io.github.youndie.kompot.RadioGroupRenderer
@@ -23,26 +23,6 @@ import io.github.youndie.kompot.TableRenderer
 import io.github.youndie.kompot.TextInputRenderer
 import io.github.youndie.kompot.TextRenderer
 import io.github.youndie.kompot.TypographyToken
-import io.github.youndie.kompot.material3.*
-import io.github.youndie.kompot.kompotCoreRenderers
-import io.github.youndie.kompot.kompotStandardRenderers
-import io.github.youndie.kompot.generated.generatedFormsClientRenderers
-import io.github.youndie.kompot.forms.AmountInputComponent
-import io.github.youndie.kompot.forms.AutocompleteInputComponent
-import io.github.youndie.kompot.forms.CheckboxInputComponent
-import io.github.youndie.kompot.forms.KompotCheckboxVariants
-import io.github.youndie.kompot.forms.ReadOnlyFieldComponent
-import io.github.youndie.kompot.forms.RadioGroupComponent
-import io.github.youndie.kompot.forms.SelectInputComponent
-import io.github.youndie.kompot.forms.SelectOption
-import io.github.youndie.kompot.forms.TextInputComponent
-import io.github.youndie.kompot.standard.ButtonComponent
-import io.github.youndie.kompot.standard.CloseAction
-import io.github.youndie.kompot.standard.ColumnComponent
-import io.github.youndie.kompot.standard.RowComponent
-import io.github.youndie.kompot.standard.TableComponent
-import io.github.youndie.kompot.standard.TableRow
-import io.github.youndie.kompot.standard.TextComponent
 import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.FormSchema
 import io.github.youndie.kompot.form.standard.AmountFieldDefinition
@@ -55,13 +35,34 @@ import io.github.youndie.kompot.form.standard.RequiredRule
 import io.github.youndie.kompot.form.standard.SelectionFieldDefinition
 import io.github.youndie.kompot.form.standard.TextFieldDefinition
 import io.github.youndie.kompot.form.standard.TextValue
+import io.github.youndie.kompot.forms.AmountInputComponent
+import io.github.youndie.kompot.forms.AutocompleteInputComponent
+import io.github.youndie.kompot.forms.CheckboxInputComponent
+import io.github.youndie.kompot.forms.KompotCheckboxVariants
+import io.github.youndie.kompot.forms.RadioGroupComponent
+import io.github.youndie.kompot.forms.ReadOnlyFieldComponent
+import io.github.youndie.kompot.forms.SelectInputComponent
+import io.github.youndie.kompot.forms.SelectOption
+import io.github.youndie.kompot.forms.TextInputComponent
+import io.github.youndie.kompot.generated.generatedFormsClientRenderers
+import io.github.youndie.kompot.kompotCoreRenderers
+import io.github.youndie.kompot.kompotStandardRenderers
+import io.github.youndie.kompot.material3.*
+import io.github.youndie.kompot.standard.ButtonComponent
+import io.github.youndie.kompot.standard.CloseAction
+import io.github.youndie.kompot.standard.ColumnComponent
+import io.github.youndie.kompot.standard.RowComponent
+import io.github.youndie.kompot.standard.TableComponent
+import io.github.youndie.kompot.standard.TableRow
+import io.github.youndie.kompot.standard.TextComponent
 import io.github.youndie.viddik.annotations.ViddikScreenshot
 import io.github.youndie.viddik.core.viddikTypography
 
 // Text, Button and Column read no FormController, but the renderer interface asks for one uniformly.
 // internal rather than private, because ComplexFormScreenshots.kt in this module uses it too and a
 // top-level private is scoped to the FILE, not the package.
-internal fun testFormController(): FormController = FormController(FormSchema(formId = "screenshot", fields = emptyList()))
+internal fun testFormController(): FormController =
+    FormController(FormSchema(formId = "screenshot", fields = emptyList()))
 
 internal fun recordingActionHandler(onAction: (KompotAction) -> Unit = {}) = KompotActionHandler { onAction(it) }
 
@@ -178,7 +179,11 @@ fun CheckboxInputSwitchVariantScreenshot() {
     val controller =
         remember {
             FormController(
-                schema = FormSchema(formId = "screenshot", fields = listOf(CheckboxFieldDefinition(fieldId = "roaming"))),
+                schema =
+                    FormSchema(
+                        formId = "screenshot",
+                        fields = listOf(CheckboxFieldDefinition(fieldId = "roaming")),
+                    ),
                 initialValues = mapOf("roaming" to BooleanValue(true)),
             )
         }
@@ -229,7 +234,11 @@ fun TextInputRendererFilledScreenshot() {
     val controller =
         remember {
             FormController(
-                schema = FormSchema(formId = "screenshot", fields = listOf(TextFieldDefinition(fieldId = "login", rules = emptyList()))),
+                schema =
+                    FormSchema(
+                        formId = "screenshot",
+                        fields = listOf(TextFieldDefinition(fieldId = "login", rules = emptyList())),
+                    ),
                 initialValues = mapOf("login" to TextValue("admin")),
             )
         }
@@ -251,7 +260,10 @@ fun TextInputRendererSecretScreenshot() {
         remember {
             FormController(
                 schema =
-                    FormSchema(formId = "screenshot", fields = listOf(TextFieldDefinition(fieldId = "password", rules = emptyList()))),
+                    FormSchema(
+                        formId = "screenshot",
+                        fields = listOf(TextFieldDefinition(fieldId = "password", rules = emptyList())),
+                    ),
                 initialValues = mapOf("password" to TextValue("hunter2")),
             )
         }
@@ -271,14 +283,24 @@ fun AmountInputRendererFilledScreenshot() {
     val controller =
         remember {
             FormController(
-                schema = FormSchema(formId = "screenshot", fields = listOf(AmountFieldDefinition(fieldId = "amount", rules = emptyList()))),
+                schema =
+                    FormSchema(
+                        formId = "screenshot",
+                        fields = listOf(AmountFieldDefinition(fieldId = "amount", rules = emptyList())),
+                    ),
                 initialValues = mapOf("amount" to AmountValue(150_000L)),
             )
         }
 
     RendererScreenshotTheme {
         AmountInputRenderer().Render(
-            component = AmountInputComponent(id = "amount_input", fieldId = "amount", label = "Amount", currencySuffix = "EUR"),
+            component =
+                AmountInputComponent(
+                    id = "amount_input",
+                    fieldId = "amount",
+                    label = "Amount",
+                    currencySuffix = "EUR",
+                ),
             actionHandler = recordingActionHandler(),
             formController = controller,
         )
@@ -294,7 +316,13 @@ fun AmountInputRendererErrorScreenshot() {
                 schema =
                     FormSchema(
                         formId = "screenshot",
-                        fields = listOf(AmountFieldDefinition(fieldId = "amount", rules = listOf(RequiredRule("Enter an amount")))),
+                        fields =
+                            listOf(
+                                AmountFieldDefinition(
+                                    fieldId = "amount",
+                                    rules = listOf(RequiredRule("Enter an amount")),
+                                ),
+                            ),
                     ),
             )
         }
@@ -302,7 +330,13 @@ fun AmountInputRendererErrorScreenshot() {
 
     RendererScreenshotTheme {
         AmountInputRenderer().Render(
-            component = AmountInputComponent(id = "amount_input", fieldId = "amount", label = "Amount", currencySuffix = "EUR"),
+            component =
+                AmountInputComponent(
+                    id = "amount_input",
+                    fieldId = "amount",
+                    label = "Amount",
+                    currencySuffix = "EUR",
+                ),
             actionHandler = recordingActionHandler(),
             formController = controller,
         )
@@ -330,7 +364,12 @@ fun AutocompleteInputRendererScreenshot() {
     RendererScreenshotTheme {
         AutocompleteInputRenderer().Render(
             component =
-                AutocompleteInputComponent(id = "autocomplete_input", fieldId = "beneficiary", label = "Recipient", dataSourceId = "search"),
+                AutocompleteInputComponent(
+                    id = "autocomplete_input",
+                    fieldId = "beneficiary",
+                    label = "Recipient",
+                    dataSourceId = "search",
+                ),
             actionHandler = recordingActionHandler(),
             formController = controller,
         )
@@ -349,14 +388,24 @@ fun SelectInputRendererScreenshot() {
     val controller =
         remember {
             FormController(
-                schema = FormSchema(formId = "screenshot", fields = listOf(SelectionFieldDefinition(fieldId = "currency"))),
+                schema =
+                    FormSchema(
+                        formId = "screenshot",
+                        fields = listOf(SelectionFieldDefinition(fieldId = "currency")),
+                    ),
                 initialValues = mapOf("currency" to EntityValue(id = "usd", title = "US dollar")),
             )
         }
 
     RendererScreenshotTheme {
         SelectInputRenderer().Render(
-            component = SelectInputComponent(id = "select_input", fieldId = "currency", label = "Currency", options = currencyOptions),
+            component =
+                SelectInputComponent(
+                    id = "select_input",
+                    fieldId = "currency",
+                    label = "Currency",
+                    options = currencyOptions,
+                ),
             actionHandler = recordingActionHandler(),
             formController = controller,
         )
@@ -372,7 +421,13 @@ fun SelectInputRendererErrorScreenshot() {
                 schema =
                     FormSchema(
                         formId = "screenshot",
-                        fields = listOf(SelectionFieldDefinition(fieldId = "currency", rules = listOf(RequiredRule("Choose a currency")))),
+                        fields =
+                            listOf(
+                                SelectionFieldDefinition(
+                                    fieldId = "currency",
+                                    rules = listOf(RequiredRule("Choose a currency")),
+                                ),
+                            ),
                     ),
             )
         }
@@ -380,7 +435,13 @@ fun SelectInputRendererErrorScreenshot() {
 
     RendererScreenshotTheme {
         SelectInputRenderer().Render(
-            component = SelectInputComponent(id = "select_input", fieldId = "currency", label = "Currency", options = currencyOptions),
+            component =
+                SelectInputComponent(
+                    id = "select_input",
+                    fieldId = "currency",
+                    label = "Currency",
+                    options = currencyOptions,
+                ),
             actionHandler = recordingActionHandler(),
             formController = controller,
         )
@@ -399,14 +460,24 @@ fun RadioGroupRendererScreenshot() {
     val controller =
         remember {
             FormController(
-                schema = FormSchema(formId = "screenshot", fields = listOf(SelectionFieldDefinition(fieldId = "payer_type"))),
+                schema =
+                    FormSchema(
+                        formId = "screenshot",
+                        fields = listOf(SelectionFieldDefinition(fieldId = "payer_type")),
+                    ),
                 initialValues = mapOf("payer_type" to EntityValue(id = "individual", title = "Individual")),
             )
         }
 
     RendererScreenshotTheme {
         RadioGroupRenderer().Render(
-            component = RadioGroupComponent(id = "radio_group", fieldId = "payer_type", label = "Customer type", options = payerTypeOptions),
+            component =
+                RadioGroupComponent(
+                    id = "radio_group",
+                    fieldId = "payer_type",
+                    label = "Customer type",
+                    options = payerTypeOptions,
+                ),
             actionHandler = recordingActionHandler(),
             formController = controller,
         )
@@ -424,7 +495,10 @@ fun RadioGroupRendererErrorScreenshot() {
                         formId = "screenshot",
                         fields =
                             listOf(
-                                SelectionFieldDefinition(fieldId = "payer_type", rules = listOf(RequiredRule("Choose a customer type"))),
+                                SelectionFieldDefinition(
+                                    fieldId = "payer_type",
+                                    rules = listOf(RequiredRule("Choose a customer type")),
+                                ),
                             ),
                     ),
             )
@@ -433,7 +507,13 @@ fun RadioGroupRendererErrorScreenshot() {
 
     RendererScreenshotTheme {
         RadioGroupRenderer().Render(
-            component = RadioGroupComponent(id = "radio_group", fieldId = "payer_type", label = "Customer type", options = payerTypeOptions),
+            component =
+                RadioGroupComponent(
+                    id = "radio_group",
+                    fieldId = "payer_type",
+                    label = "Customer type",
+                    options = payerTypeOptions,
+                ),
             actionHandler = recordingActionHandler(),
             formController = controller,
         )
@@ -446,7 +526,12 @@ fun ReadOnlyFieldRendererScreenshot() {
     RendererScreenshotTheme {
         ReadOnlyFieldRenderer().Render(
             component =
-                ReadOnlyFieldComponent(id = "readonly", label = "Sender", value = "Ada Lovelace", helperText = "From your profile"),
+                ReadOnlyFieldComponent(
+                    id = "readonly",
+                    label = "Sender",
+                    value = "Ada Lovelace",
+                    helperText = "From your profile",
+                ),
             actionHandler = recordingActionHandler(),
             formController = testFormController(),
         )

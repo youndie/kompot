@@ -1,5 +1,8 @@
 package io.github.youndie.kompot.interop
 
+import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.KompotModifierNode
+import io.github.youndie.kompot.kompotCoreSerializersModule
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -7,9 +10,6 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import io.github.youndie.kompot.KompotComponent
-import io.github.youndie.kompot.KompotModifierNode
-import io.github.youndie.kompot.kompotCoreSerializersModule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -30,7 +30,7 @@ private val json =
         classDiscriminator = "type"
         serializersModule =
             kompotCoreSerializersModule +
-                SerializersModule { polymorphic(KompotComponent::class) { subclass(TestNode::class) } }
+            SerializersModule { polymorphic(KompotComponent::class) { subclass(TestNode::class) } }
     }
 
 class KompotJsonBridgeTest {

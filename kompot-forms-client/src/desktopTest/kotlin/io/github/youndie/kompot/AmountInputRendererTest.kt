@@ -9,7 +9,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.requestFocus
-import io.github.youndie.kompot.forms.AmountInputComponent
 import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.FormSchema
 import io.github.youndie.kompot.form.standard.AmountFieldDefinition
@@ -20,6 +19,7 @@ import io.github.youndie.kompot.form.standard.EntityValue
 import io.github.youndie.kompot.form.standard.EqualsCondition
 import io.github.youndie.kompot.form.standard.RequiredRule
 import io.github.youndie.kompot.form.standard.SelectionFieldDefinition
+import io.github.youndie.kompot.forms.AmountInputComponent
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -38,7 +38,13 @@ class AmountInputRendererTest {
             setContent {
                 TestKompotTheme {
                     AmountInputRenderer().Render(
-                        component = AmountInputComponent(id = "c", fieldId = "amount", label = "Amount", currencySuffix = "UZS"),
+                        component =
+                            AmountInputComponent(
+                                id = "c",
+                                fieldId = "amount",
+                                label = "Amount",
+                                currencySuffix = "UZS",
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )
@@ -51,7 +57,10 @@ class AmountInputRendererTest {
     @Test
     fun `typing digits updates the FormController with the numeric value`() =
         runFormsComposeUiTest {
-            val controller = FormController(FormSchema("form", fields = listOf(AmountFieldDefinition("amount", rules = emptyList()))))
+            val controller =
+                FormController(
+                    FormSchema("form", fields = listOf(AmountFieldDefinition("amount", rules = emptyList()))),
+                )
 
             setContent {
                 TestKompotTheme {
@@ -113,14 +122,28 @@ class AmountInputRendererTest {
             setContent {
                 TestKompotTheme {
                     AmountInputRenderer().Render(
-                        component = AmountInputComponent(id = "c", fieldId = "amount", label = "Amount", currencyFromField = "account"),
+                        component =
+                            AmountInputComponent(
+                                id = "c",
+                                fieldId = "amount",
+                                label = "Amount",
+                                currencyFromField = "account",
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )
                 }
             }
 
-            controller.onValueChanged("account", EntityValue(id = "acc_1", title = "Main source", rawMetadata = mapOf("currency" to "USD")))
+            controller.onValueChanged(
+                "account",
+                EntityValue(
+                    id = "acc_1",
+                    title = "Main source",
+                    rawMetadata =
+                        mapOf("currency" to "USD"),
+                ),
+            )
             waitForIdle()
 
             assertEquals("USD", controller.getTypedState<AmountValue>("amount").value?.currency)
@@ -141,7 +164,13 @@ class AmountInputRendererTest {
             setContent {
                 TestKompotTheme {
                     AmountInputRenderer().Render(
-                        component = AmountInputComponent(id = "c", fieldId = "amount", label = "Amount", currencyPrefix = "$"),
+                        component =
+                            AmountInputComponent(
+                                id = "c",
+                                fieldId = "amount",
+                                label = "Amount",
+                                currencyPrefix = "$",
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )
@@ -186,7 +215,15 @@ class AmountInputRendererTest {
                 }
             }
 
-            controller.onValueChanged("account", EntityValue(id = "acc_1", title = "Yen", rawMetadata = mapOf("currency" to "¥")))
+            controller.onValueChanged(
+                "account",
+                EntityValue(
+                    id = "acc_1",
+                    title = "Yen",
+                    rawMetadata =
+                        mapOf("currency" to "¥"),
+                ),
+            )
             waitForIdle()
 
             onNodeWithText("¥ 1 500").assertIsDisplayed()
@@ -238,7 +275,13 @@ class AmountInputRendererTest {
             setContent {
                 TestKompotTheme {
                     AmountInputRenderer().Render(
-                        component = AmountInputComponent(id = "c", fieldId = "amount", label = "Amount", currencySuffix = "UZS"),
+                        component =
+                            AmountInputComponent(
+                                id = "c",
+                                fieldId = "amount",
+                                label = "Amount",
+                                currencySuffix = "UZS",
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )

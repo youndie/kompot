@@ -75,7 +75,9 @@ private class TokenWalk(
                 }
             }
 
-            else -> Unit
+            else -> {
+                Unit
+            }
         }
     }
 

@@ -1,14 +1,14 @@
 package io.github.youndie.kompot.images
 
+import io.github.youndie.kompot.ColorToken
+import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.generated.generatedImagesSerializersModule
+import io.github.youndie.kompot.kompotCoreSerializersModule
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.plus
-import io.github.youndie.kompot.KompotComponent
-import io.github.youndie.kompot.ColorToken
-import io.github.youndie.kompot.kompotCoreSerializersModule
-import io.github.youndie.kompot.generated.generatedImagesSerializersModule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

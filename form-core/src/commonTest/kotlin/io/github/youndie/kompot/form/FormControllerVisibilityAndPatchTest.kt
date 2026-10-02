@@ -27,14 +27,18 @@ private data class FakeValue(
 private data class FakeRequiredRule(
     override val errorMessage: String,
 ) : ValidationRule {
-    override fun validate(value: FieldValue?, getFieldValue: (fieldId: String) -> FieldValue?): Boolean = value is FakeValue && value.value.isNotBlank()
+    override fun validate(
+        value: FieldValue?,
+        getFieldValue: (fieldId: String) -> FieldValue?,
+    ): Boolean = value is FakeValue && value.value.isNotBlank()
 }
 
 private data class FakeEqualsCondition(
     val fieldId: String,
     val expectedValue: FieldValue,
 ) : FormCondition {
-    override fun evaluate(getFieldValue: (fieldId: String) -> FieldValue?): Boolean = getFieldValue(fieldId) == expectedValue
+    override fun evaluate(getFieldValue: (fieldId: String) -> FieldValue?): Boolean =
+        getFieldValue(fieldId) == expectedValue
 }
 
 private data class FakeFieldDefinition(
@@ -214,7 +218,10 @@ class FormControllerPatchTest {
             var fetcherCalled = false
             val scope = controllerScope()
             val controller =
-                FormController(schema(), patchFetcher = { _, _ -> fetcherCalled = true; FormPatch() }, scope = scope)
+                FormController(schema(), patchFetcher = { _, _ ->
+                    fetcherCalled = true
+                    FormPatch()
+                }, scope = scope)
 
             controller.requestPatchIfNeeded("bic") // bic has triggersPatch = false
             advanceUntilIdle()

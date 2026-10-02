@@ -5,14 +5,14 @@ import io.github.youndie.kompot.KompotModifierNode
 import io.github.youndie.kompot.dsl.KompotContainerContext
 import io.github.youndie.kompot.dsl.KompotDsl
 import io.github.youndie.kompot.dsl.KompotModifierBuilder
-import io.github.youndie.kompot.forms.KompotFormResponse
-import io.github.youndie.kompot.standard.ColumnComponent
-import io.github.youndie.kompot.standard.ROOT_PATH
-import io.github.youndie.kompot.standard.RowComponent
 import io.github.youndie.kompot.form.FormFieldDefinition
 import io.github.youndie.kompot.form.FormSchema
 import io.github.youndie.kompot.form.ValidationRule
 import io.github.youndie.kompot.form.ValidationRulesBuilder
+import io.github.youndie.kompot.forms.KompotFormResponse
+import io.github.youndie.kompot.standard.ColumnComponent
+import io.github.youndie.kompot.standard.ROOT_PATH
+import io.github.youndie.kompot.standard.RowComponent
 
 // An extension of KompotContainerContext that adds field(...), the entry point for the bound builders
 // in BoundFields.kt. The screen is still built exactly as before — columns, text, buttons, unbound
@@ -153,4 +153,5 @@ public fun KompotFormContext.row(
     addComponent(FormRowBuilder(this, id, id ?: nextChildPath()).apply(block).build())
 }
 
-internal fun buildRules(rules: ValidationRulesBuilder.() -> Unit): List<ValidationRule> = ValidationRulesBuilder().apply(rules).build()
+internal fun buildRules(rules: ValidationRulesBuilder.() -> Unit): List<ValidationRule> =
+    ValidationRulesBuilder().apply(rules).build()

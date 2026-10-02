@@ -270,27 +270,49 @@ public class KompotSchemaGenerator(
     private fun propertySchema(descriptor: SerialDescriptor): JsonObject {
         val schema =
             when {
-                descriptor.isInline -> bareRef(descriptor)
-                descriptor.kind == SerialKind.ENUM -> bareRef(descriptor)
-                descriptor.kind is PrimitiveKind -> primitiveSchema(descriptor.kind)
-                descriptor.kind == StructureKind.LIST ->
+                descriptor.isInline -> {
+                    bareRef(descriptor)
+                }
+
+                descriptor.kind == SerialKind.ENUM -> {
+                    bareRef(descriptor)
+                }
+
+                descriptor.kind is PrimitiveKind -> {
+                    primitiveSchema(descriptor.kind)
+                }
+
+                descriptor.kind == StructureKind.LIST -> {
                     buildJsonObject {
                         put("type", "array")
                         put("items", propertySchema(descriptor.getElementDescriptor(0)))
                     }
+                }
 
-                descriptor.kind == StructureKind.MAP ->
+                descriptor.kind == StructureKind.MAP -> {
                     buildJsonObject {
                         put("type", "object")
                         put("additionalProperties", propertySchema(descriptor.getElementDescriptor(1)))
                     }
+                }
 
                 // An open hierarchy: refer to the base schema rather than to a list of variants — the
                 // closed list is assembled only in the profile.
-                descriptor.kind == PolymorphicKind.OPEN -> ref(openHierarchyName(descriptor.serialName))
-                descriptor.kind == PolymorphicKind.SEALED -> bareRef(descriptor)
-                descriptor.kind == StructureKind.CLASS || descriptor.kind == StructureKind.OBJECT -> bareRef(descriptor)
-                else -> error("Unsupported SerialKind ${descriptor.kind} on ${descriptor.serialName}")
+                descriptor.kind == PolymorphicKind.OPEN -> {
+                    ref(openHierarchyName(descriptor.serialName))
+                }
+
+                descriptor.kind == PolymorphicKind.SEALED -> {
+                    bareRef(descriptor)
+                }
+
+                descriptor.kind == StructureKind.CLASS || descriptor.kind == StructureKind.OBJECT -> {
+                    bareRef(descriptor)
+                }
+
+                else -> {
+                    error("Unsupported SerialKind ${descriptor.kind} on ${descriptor.serialName}")
+                }
             }
 
         return if (descriptor.isNullable) nullable(schema) else schema
@@ -330,8 +352,14 @@ public class KompotSchemaGenerator(
     private fun primitiveSchema(kind: SerialKind): JsonObject =
         buildJsonObject {
             when (kind) {
-                PrimitiveKind.BOOLEAN -> put("type", "boolean")
-                PrimitiveKind.BYTE, PrimitiveKind.SHORT, PrimitiveKind.INT, PrimitiveKind.LONG -> put("type", "integer")
+                PrimitiveKind.BOOLEAN -> {
+                    put("type", "boolean")
+                }
+
+                PrimitiveKind.BYTE, PrimitiveKind.SHORT, PrimitiveKind.INT, PrimitiveKind.LONG -> {
+                    put("type", "integer")
+                }
+
                 // `format` beside `type`, because "number" alone loses the one thing a Kotlin reader
                 // of this schema needs: whether the property is a Float or a Double. A validator ignores
                 // an unfamiliar format by the JSON Schema rules, so nothing that checks bodies changes;
@@ -353,8 +381,13 @@ public class KompotSchemaGenerator(
                     put("maxLength", 1)
                 }
 
-                PrimitiveKind.STRING -> put("type", "string")
-                else -> error("Unsupported primitive $kind")
+                PrimitiveKind.STRING -> {
+                    put("type", "string")
+                }
+
+                else -> {
+                    error("Unsupported primitive $kind")
+                }
             }
         }
 }

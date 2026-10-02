@@ -28,7 +28,13 @@ import kotlin.test.assertEquals
 @OptIn(ExperimentalTestApi::class)
 class ImpressionVisibilityTest {
     private val recorded = mutableListOf<String>()
-    private val tracker = AnalyticsTracker { if (it is AnalyticsEvent.ComponentImpression) recorded += it.descriptor.properties["componentId"].toString() }
+    private val tracker =
+        AnalyticsTracker {
+            if (it is AnalyticsEvent.ComponentImpression) {
+                recorded +=
+                    it.descriptor.properties["componentId"].toString()
+            }
+        }
     private val page = ScrollState(0)
     private lateinit var scope: CoroutineScope
 
@@ -37,14 +43,28 @@ class ImpressionVisibilityTest {
             id = "root",
             children =
                 listOf(
-                    TextComponent(id = "top", text = "top", modifiers = listOf(KompotModifierNode.Size(heightDp = 1000))),
-                    TextComponent(id = "card", text = "card", modifiers = listOf(KompotModifierNode.Size(heightDp = 100))),
+                    TextComponent(
+                        id = "top",
+                        text = "top",
+                        modifiers = listOf(KompotModifierNode.Size(heightDp = 1000)),
+                    ),
+                    TextComponent(
+                        id = "card",
+                        text = "card",
+                        modifiers = listOf(KompotModifierNode.Size(heightDp = 100)),
+                    ),
                 ),
         )
 
     private fun DesktopComposeUiTest.screen(visibility: ImpressionVisibility) {
         val registry =
-            KompotRegistry((kompotCoreRenderers + kompotStandardRenderers).withImpressionTracking(tracker, KompotEventNamingRegistry(), visibility))
+            KompotRegistry(
+                (kompotCoreRenderers + kompotStandardRenderers).withImpressionTracking(
+                    tracker,
+                    KompotEventNamingRegistry(),
+                    visibility,
+                ),
+            )
         setContent {
             scope = rememberCoroutineScope()
             TestKompotTheme {

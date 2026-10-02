@@ -1,11 +1,11 @@
 package io.github.youndie.kompot.interop
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import io.github.youndie.kompot.form.FieldState
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormController
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 // getTypedState<T>() and getFieldFlow<T>() on FormController are the only methods of the controller
 // that do not survive the bridge: both are inline fun <reified T>, and the Kotlin/Native ObjC export
@@ -18,4 +18,5 @@ import io.github.youndie.kompot.form.FormController
 public fun FormController.fieldFlow(fieldId: String): Flow<FieldState<FieldValue>> =
     fieldsState.map { it[fieldId] ?: FieldState(null) }.distinctUntilChanged()
 
-public fun FormController.fieldState(fieldId: String): FieldState<FieldValue> = fieldsState.value[fieldId] ?: FieldState(null)
+public fun FormController.fieldState(fieldId: String): FieldState<FieldValue> =
+    fieldsState.value[fieldId] ?: FieldState(null)

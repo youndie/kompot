@@ -30,12 +30,19 @@ class EventNamingRegistryTest {
             componentNaming =
                 mapOf(
                     NamingTestComponent::class to
-                        KompotComponentEventNaming { c -> KompotEventDescriptor("named_component", mapOf("id" to c.id)) },
+                        KompotComponentEventNaming { c ->
+                            KompotEventDescriptor("named_component", mapOf("id" to c.id))
+                        },
                 ),
             actionNaming =
                 mapOf(
                     NamingTestAction::class to
-                        KompotActionEventNaming { a -> KompotEventDescriptor("named_action", mapOf("target" to (a as NamingTestAction).target)) },
+                        KompotActionEventNaming { a ->
+                            KompotEventDescriptor(
+                                "named_action",
+                                mapOf("target" to (a as NamingTestAction).target),
+                            )
+                        },
                 ),
         )
 

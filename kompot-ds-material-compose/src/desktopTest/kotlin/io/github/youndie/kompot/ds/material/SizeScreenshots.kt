@@ -62,7 +62,10 @@ private val FIXED_EXTENTS_TREE =
                                         KompotModifierNode.Background(M3Colors.SurfaceVariant),
                                         KompotModifierNode.Padding(all = 8),
                                     ),
-                                children = listOf(TextComponent(id = "wide", text = "150 dp", style = M3Typography.BodyMedium)),
+                                children =
+                                    listOf(
+                                        TextComponent(id = "wide", text = "150 dp", style = M3Typography.BodyMedium),
+                                    ),
                             ),
                             ColumnComponent(
                                 id = "narrow_panel",
@@ -72,10 +75,13 @@ private val FIXED_EXTENTS_TREE =
                                         KompotModifierNode.Background(M3Colors.SecondaryContainer),
                                         KompotModifierNode.Padding(all = 8),
                                     ),
-                                children = listOf(TextComponent(id = "narrow", text = "80 dp", style = M3Typography.BodyMedium)),
+                                children =
+                                    listOf(
+                                        TextComponent(id = "narrow", text = "80 dp", style = M3Typography.BodyMedium),
+                                    ),
                             ),
                         ),
-                )
+                ),
             ),
     )
 

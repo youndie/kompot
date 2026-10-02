@@ -1,11 +1,11 @@
 package io.github.youndie.kompot.realtime
 
+import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.UnknownComponent
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import io.github.youndie.kompot.KompotComponent
-import io.github.youndie.kompot.UnknownComponent
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

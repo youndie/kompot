@@ -95,7 +95,11 @@ public class BoxRenderer : KompotComponentRenderer<BoxComponent> {
             layout(width, height) {
                 placeables.forEach { placeable ->
                     placeable!!.place(
-                        alignment.align(IntSize(placeable.width, placeable.height), IntSize(width, height), layoutDirection),
+                        alignment.align(
+                            IntSize(placeable.width, placeable.height),
+                            IntSize(width, height),
+                            layoutDirection,
+                        ),
                     )
                 }
             }
@@ -107,5 +111,6 @@ public class BoxRenderer : KompotComponentRenderer<BoxComponent> {
 // absolute number overriding it (the number wins, SPEC.md §5.4).
 private fun KompotComponent.fillAxes(): Pair<Boolean, Boolean> {
     val size = modifiers.filterIsInstance<KompotModifierNode.Size>().lastOrNull() ?: return false to false
-    return (size.width == SizeType.Fill && size.widthDp == null) to (size.height == SizeType.Fill && size.heightDp == null)
+    return (size.width == SizeType.Fill && size.widthDp == null) to
+        (size.height == SizeType.Fill && size.heightDp == null)
 }

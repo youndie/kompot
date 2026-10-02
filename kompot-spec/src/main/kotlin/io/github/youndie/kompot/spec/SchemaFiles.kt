@@ -47,9 +47,15 @@ public object SchemaFiles {
     // Every file in the directory: module schemas, the profile and the OpenAPI document. The validator
     // and the reference check need all of them, because $refs travel between all three kinds.
     public fun loadAll(): Map<String, JsonObject> =
-        names().associateWith { name -> json.decodeFromString(JsonObject.serializer(), File(directory, name).readText()) }
+        names().associateWith { name ->
+            json.decodeFromString(JsonObject.serializer(), File(directory, name).readText())
+        }
 
-    public fun names(): List<String> = (directory.listFiles { file -> file.name.endsWith(".json") } ?: emptyArray()).map { it.name }.sorted()
+    public fun names(): List<String> =
+        (directory.listFiles { file -> file.name.endsWith(".json") } ?: emptyArray())
+            .map {
+                it.name
+            }.sorted()
 }
 
 // The corpus of reference JSON bodies. A directory of its own rather than a subfolder of schema/: a
@@ -78,7 +84,13 @@ public object ExampleFiles {
     }
 
     public fun parse(fileName: String): JsonElement =
-        json.parseToJsonElement(read(fileName) ?: error("No example file $fileName — regenerate with ${SchemaFiles.RECORD_ENV}=true"))
+        json.parseToJsonElement(
+            read(fileName) ?: error("No example file $fileName — regenerate with ${SchemaFiles.RECORD_ENV}=true"),
+        )
 
-    public fun names(): List<String> = (directory.listFiles { file -> file.name.endsWith(".json") } ?: emptyArray()).map { it.name }.sorted()
+    public fun names(): List<String> =
+        (directory.listFiles { file -> file.name.endsWith(".json") } ?: emptyArray())
+            .map {
+                it.name
+            }.sorted()
 }

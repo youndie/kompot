@@ -17,10 +17,10 @@ import io.github.youndie.kompot.form.standard.AmountValue
 import io.github.youndie.kompot.form.standard.BooleanValue
 import io.github.youndie.kompot.form.standard.EntityValue
 import io.github.youndie.kompot.form.standard.TextValue
-import io.github.youndie.kompot.standard.NavigateAction
 import io.github.youndie.kompot.standard.CloseAction
-import kotlinx.serialization.json.Json
+import io.github.youndie.kompot.standard.NavigateAction
 import io.github.youndie.viddik.core.captureComposable
+import kotlinx.serialization.json.Json
 import java.awt.image.BufferedImage
 import kotlin.test.Test
 import kotlin.test.assertEquals

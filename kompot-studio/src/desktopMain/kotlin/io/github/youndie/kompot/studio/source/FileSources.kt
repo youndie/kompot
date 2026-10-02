@@ -86,8 +86,7 @@ internal class DirectorySourceSession(
                             id = path.toAbsolutePath().toString(),
                             title = path.name.removeSuffix(source.extension),
                         )
-                    }
-                    .toList()
+                    }.toList()
             }
         }.getOrDefault(emptyList()).sortedBy { it.title }
 }

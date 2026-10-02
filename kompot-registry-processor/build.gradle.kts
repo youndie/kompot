@@ -6,7 +6,6 @@ plugins {
     id("io.github.youndie.sborka.publish")
 }
 
-
 dependencies {
     // The KSP API at the version of the KSP plugin, which comes from `wip`. Spelled here against
     // `wip.versions` rather than as a catalog entry: the shared catalog carries what going out of step

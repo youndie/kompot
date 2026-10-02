@@ -30,12 +30,28 @@ internal fun installMagnification(
                         null
                     }
 
-                    "hashCode" -> System.identityHashCode(proxy)
-                    "equals" -> proxy === args?.get(0)
-                    "toString" -> "MagnificationListener"
-                    else -> null
+                    "hashCode" -> {
+                        System.identityHashCode(proxy)
+                    }
+
+                    "equals" -> {
+                        proxy === args?.get(0)
+                    }
+
+                    "toString" -> {
+                        "MagnificationListener"
+                    }
+
+                    else -> {
+                        null
+                    }
                 }
             }
-        utilities.getMethod("addGestureListenerTo", JComponent::class.java, gestureType).invoke(null, component, listener)
+        utilities
+            .getMethod(
+                "addGestureListenerTo",
+                JComponent::class.java,
+                gestureType,
+            ).invoke(null, component, listener)
         true
     }.getOrDefault(false)

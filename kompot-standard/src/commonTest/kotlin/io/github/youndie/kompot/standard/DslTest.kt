@@ -1,7 +1,7 @@
 package io.github.youndie.kompot.standard
 
-import io.github.youndie.kompot.KompotModifierNode
 import io.github.youndie.kompot.ColorToken
+import io.github.youndie.kompot.KompotModifierNode
 import io.github.youndie.kompot.SizeType
 import io.github.youndie.kompot.TypographyToken
 import kotlin.test.Test

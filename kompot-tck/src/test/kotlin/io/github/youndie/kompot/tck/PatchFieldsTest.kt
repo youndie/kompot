@@ -42,7 +42,10 @@ class PatchFieldsTest {
            {"type":"read_only_field","id":"p","label":"Price","value":"0","fieldId":"price"}]}}
         """.trimIndent()
 
-    private class Server(private val patch: String, private val form: String) : TckTransport {
+    private class Server(
+        private val patch: String,
+        private val form: String,
+    ) : TckTransport {
         override suspend fun request(
             method: String,
             path: String,
@@ -69,7 +72,13 @@ class PatchFieldsTest {
                     openApi = openApi,
                     patchEndpoints = if (paired) mapOf("/forms/package/patch" to "/forms/package") else emptyMap(),
                     submitPayloads =
-                        if (body) mapOf("/forms/package/patch" to buildJsonObject { put("formId", "package") }) else emptyMap(),
+                        if (body) {
+                            mapOf(
+                                "/forms/package/patch" to buildJsonObject { put("formId", "package") },
+                            )
+                        } else {
+                            emptyMap()
+                        },
                 ),
             ).run()
         }.findings.filter { it.check == "patch" }

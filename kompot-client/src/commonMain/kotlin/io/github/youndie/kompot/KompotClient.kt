@@ -1,7 +1,6 @@
 package io.github.youndie.kompot
 
 import androidx.compose.foundation.background
-import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,12 +10,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.EmptySerializersModule
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.plus
 import io.github.youndie.kompot.forms.kompotFormsSerializersModule
 import io.github.youndie.kompot.generated.generatedFormsSerializersModule
 import io.github.youndie.kompot.generated.generatedImagesSerializersModule
@@ -24,13 +20,17 @@ import io.github.youndie.kompot.generated.generatedStandardSerializersModule
 import io.github.youndie.kompot.generated.generatedWizardSerializersModule
 import io.github.youndie.kompot.standard.kompotStandardSerializersModule
 import io.github.youndie.kompot.wizard.kompotWizardSerializersModule
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.EmptySerializersModule
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.plus
 
-    // The types the engine itself speaks: the core, with its fallback for an unknown type — without it
-    // a newer backend would take an older client's whole screen down — plus the plug-ins the engine
-    // draws. The generated modules are the component registrations KSP writes; the hand-written ones
-    // register the actions that annotation does not cover.
+// The types the engine itself speaks: the core, with its fallback for an unknown type — without it
+// a newer backend would take an older client's whole screen down — plus the plug-ins the engine
+// draws. The generated modules are the component registrations KSP writes; the hand-written ones
+// register the actions that annotation does not cover.
 //
-    // Nothing of an application's own belongs here: which components an application has, it knows.
+// Nothing of an application's own belongs here: which components an application has, it knows.
 public val kompotEngineSerializersModule: SerializersModule =
     kompotCoreSerializersModule +
         kompotStandardSerializersModule +
@@ -97,8 +97,8 @@ public fun List<KompotModifierNode>.toComposeModifier(): Modifier {
             is KompotModifierNode.Background -> {
                 val color = designSystem.resolveColor(node.color)
                 val shape = node.role?.let { designSystem.resolveSurface(SurfaceRole(it)).shape }
-                    // Clipped as well as painted: a card whose fill is rounded and whose content is
-                    // not is a card with square corners under the first child that reaches the edge.
+                // Clipped as well as painted: a card whose fill is rounded and whose content is
+                // not is a card with square corners under the first child that reaches the edge.
                 if (shape == null) currentModifier.background(color) else currentModifier.clip(shape).background(color)
             }
 
@@ -107,8 +107,8 @@ public fun List<KompotModifierNode>.toComposeModifier(): Modifier {
                     val colors = node.colors.map { designSystem.resolveColor(it) }
                     currentModifier.background(Brush.verticalGradient(colors))
                 } else {
-                        // Fewer than two colours is a degenerate gradient; painting one solid colour
-                        // is more sensible than silently drawing nothing.
+                    // Fewer than two colours is a degenerate gradient; painting one solid colour
+                    // is more sensible than silently drawing nothing.
                     node.colors.firstOrNull()?.let { currentModifier.background(designSystem.resolveColor(it)) }
                         ?: currentModifier
                 }
@@ -123,8 +123,8 @@ public fun List<KompotModifierNode>.toComposeModifier(): Modifier {
                 )
             }
 
-                // A scope modifier, applied by the parent inside its own RowScope/ColumnScope. The
-                // general mapper ignores it deliberately.
+            // A scope modifier, applied by the parent inside its own RowScope/ColumnScope. The
+            // general mapper ignores it deliberately.
             is KompotModifierNode.Weight -> {
                 currentModifier
             }

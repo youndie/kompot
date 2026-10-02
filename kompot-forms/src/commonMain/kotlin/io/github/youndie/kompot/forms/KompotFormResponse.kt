@@ -1,10 +1,10 @@
 package io.github.youndie.kompot.forms
 
-import kotlinx.serialization.Polymorphic
-import kotlinx.serialization.Serializable
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormSchema
+import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.Serializable
 
 // The BFF response envelope: the form schema (validation and masks, form-core) plus the render tree
 // (kompot-core). :kompot-forms is the natural home for this DTO, since it already describes "a form

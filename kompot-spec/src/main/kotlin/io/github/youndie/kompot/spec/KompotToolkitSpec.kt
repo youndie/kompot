@@ -1,5 +1,31 @@
 package io.github.youndie.kompot.spec
 
+import io.github.youndie.kompot.ColorToken
+import io.github.youndie.kompot.KompotModifierNode
+import io.github.youndie.kompot.TypographyToken
+import io.github.youndie.kompot.auth.kompotAuthSerializersModule
+import io.github.youndie.kompot.commands.kompotCommandsSerializersModule
+import io.github.youndie.kompot.form.FormPatch
+import io.github.youndie.kompot.form.FormSchema
+import io.github.youndie.kompot.form.standard.formStandardSerializersModule
+import io.github.youndie.kompot.forms.FormPatchRequest
+import io.github.youndie.kompot.forms.KompotFormResponse
+import io.github.youndie.kompot.forms.kompotFormsSerializersModule
+import io.github.youndie.kompot.generated.generatedFormsSerializersModule
+import io.github.youndie.kompot.generated.generatedImagesSerializersModule
+import io.github.youndie.kompot.generated.generatedStandardDocs
+import io.github.youndie.kompot.generated.generatedStandardSerializersModule
+import io.github.youndie.kompot.generated.generatedWizardSerializersModule
+import io.github.youndie.kompot.kompotCoreSerializersModule
+import io.github.youndie.kompot.navigation.NavigationGraph
+import io.github.youndie.kompot.realtime.KompotScreenResponse
+import io.github.youndie.kompot.realtime.UpdateComponentMessage
+import io.github.youndie.kompot.standard.KompotPageResponse
+import io.github.youndie.kompot.standard.kompotStandardSerializersModule
+import io.github.youndie.kompot.theme.KompotTheme
+import io.github.youndie.kompot.wizard.WizardResumeRequest
+import io.github.youndie.kompot.wizard.core.WizardTransition
+import io.github.youndie.kompot.wizard.kompotWizardSerializersModule
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -7,32 +33,6 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import kotlinx.serialization.modules.plus
-import io.github.youndie.kompot.KompotModifierNode
-import io.github.youndie.kompot.ColorToken
-import io.github.youndie.kompot.TypographyToken
-import io.github.youndie.kompot.auth.kompotAuthSerializersModule
-import io.github.youndie.kompot.kompotCoreSerializersModule
-import io.github.youndie.kompot.forms.KompotFormResponse
-import io.github.youndie.kompot.forms.FormPatchRequest
-import io.github.youndie.kompot.forms.kompotFormsSerializersModule
-import io.github.youndie.kompot.generated.generatedFormsSerializersModule
-import io.github.youndie.kompot.generated.generatedImagesSerializersModule
-import io.github.youndie.kompot.generated.generatedStandardDocs
-import io.github.youndie.kompot.generated.generatedStandardSerializersModule
-import io.github.youndie.kompot.generated.generatedWizardSerializersModule
-import io.github.youndie.kompot.navigation.NavigationGraph
-import io.github.youndie.kompot.realtime.KompotScreenResponse
-import io.github.youndie.kompot.realtime.UpdateComponentMessage
-import io.github.youndie.kompot.standard.KompotPageResponse
-import io.github.youndie.kompot.commands.kompotCommandsSerializersModule
-import io.github.youndie.kompot.form.standard.formStandardSerializersModule
-import io.github.youndie.kompot.theme.KompotTheme
-import io.github.youndie.kompot.standard.kompotStandardSerializersModule
-import io.github.youndie.kompot.wizard.WizardResumeRequest
-import io.github.youndie.kompot.wizard.kompotWizardSerializersModule
-import io.github.youndie.kompot.form.FormPatch
-import io.github.youndie.kompot.form.FormSchema
-import io.github.youndie.kompot.wizard.core.WizardTransition
 
 // The spec modules that belong to the toolkit itself: one per Gradle module, exactly as there is one
 // schema file per module. Order matters — whoever comes first owns a shared definition — but the list
@@ -99,7 +99,10 @@ public object KompotToolkitSpec {
                                     putJsonObject("modifiers") {
                                         put("type", "array")
                                         put("items", buildJsonObject { put("\$ref", "#/\$defs/KompotModifierNode") })
-                                        put("description", "The order of nodes matters — they are applied left to right")
+                                        put(
+                                            "description",
+                                            "The order of nodes matters — they are applied left to right",
+                                        )
                                     }
                                     // On every node, because the writer cannot know which reader lacks the
                                     // type: only a client that does NOT know it reads the key (SPEC.md §2.1),
@@ -172,7 +175,10 @@ public object KompotToolkitSpec {
                                                 ),
                                             ),
                                         )
-                                        put("description", "Evaluated by the client locally, with no round trip to the server")
+                                        put(
+                                            "description",
+                                            "Evaluated by the client locally, with no round trip to the server",
+                                        )
                                     }
                                     putJsonObject("triggersPatch") {
                                         put("type", "boolean")
@@ -241,9 +247,22 @@ public object KompotToolkitSpec {
                                         "allowlist in front of it",
                                 ),
                         ),
-                    "LoadPage" to mapOf("url" to KompotSpec.constrained(KompotProtocol.ENDPOINT_PATTERN, "The relative address of the next page")),
+                    "LoadPage" to
+                        mapOf(
+                            "url" to
+                                KompotSpec.constrained(
+                                    KompotProtocol.ENDPOINT_PATTERN,
+                                    "The relative address of the next page",
+                                ),
+                        ),
                     "KompotActionLoadPage" to
-                        mapOf("url" to KompotSpec.constrained(KompotProtocol.ENDPOINT_PATTERN, "The relative address of the next page")),
+                        mapOf(
+                            "url" to
+                                KompotSpec.constrained(
+                                    KompotProtocol.ENDPOINT_PATTERN,
+                                    "The relative address of the next page",
+                                ),
+                        ),
                     "KompotComponentPaginatedList" to
                         mapOf(
                             "reloadUrl" to

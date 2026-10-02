@@ -38,7 +38,12 @@ class ImpressionTrackingTest {
             val recorded = mutableListOf<AnalyticsEvent>()
             val tracker = AnalyticsTracker { recorded += it }
             val trackedRegistry =
-                KompotRegistry((kompotCoreRenderers + kompotStandardRenderers).withImpressionTracking(tracker, KompotEventNamingRegistry()))
+                KompotRegistry(
+                    (kompotCoreRenderers + kompotStandardRenderers).withImpressionTracking(
+                        tracker,
+                        KompotEventNamingRegistry(),
+                    ),
+                )
 
             setContent {
                 TestKompotTheme {
@@ -72,7 +77,12 @@ class ImpressionTrackingTest {
             val recorded = mutableListOf<AnalyticsEvent>()
             val tracker = AnalyticsTracker { recorded += it }
             val trackedRegistry =
-                KompotRegistry((kompotCoreRenderers + kompotStandardRenderers).withImpressionTracking(tracker, KompotEventNamingRegistry()))
+                KompotRegistry(
+                    (kompotCoreRenderers + kompotStandardRenderers).withImpressionTracking(
+                        tracker,
+                        KompotEventNamingRegistry(),
+                    ),
+                )
 
             setContent {
                 TestKompotTheme {
@@ -95,9 +105,9 @@ class ImpressionTrackingTest {
             waitForIdle()
             assertEquals(3, recorded.size)
 
-                onNodeWithText("toggle").performClick() // unmounted
+            onNodeWithText("toggle").performClick() // unmounted
             waitForIdle()
-                onNodeWithText("toggle").performClick() // mounted again
+            onNodeWithText("toggle").performClick() // mounted again
             waitForIdle()
 
             assertEquals(6, recorded.size)

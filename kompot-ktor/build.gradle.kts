@@ -7,8 +7,6 @@ plugins {
     id("io.github.youndie.sborka.publish")
 }
 
-
-
 kotlin {
     @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
     abiValidation { }

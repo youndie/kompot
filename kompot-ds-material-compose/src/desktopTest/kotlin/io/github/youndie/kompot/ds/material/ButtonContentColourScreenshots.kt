@@ -39,7 +39,12 @@ private class TwoToneButtons : KompotDesignSystem {
         }
 }
 
-@ViddikScreenshot(name = "Button - the label takes its surface's content colour", group = "Renderer", width = 380, height = 80)
+@ViddikScreenshot(
+    name = "Button - the label takes its surface's content colour",
+    group = "Renderer",
+    width = 380,
+    height = 80,
+)
 @Composable
 fun ButtonContentColourScreenshot() {
     MaterialTheme(typography = viddikTypography()) {

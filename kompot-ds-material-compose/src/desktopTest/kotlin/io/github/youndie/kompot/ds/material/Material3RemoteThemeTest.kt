@@ -69,12 +69,26 @@ class Material3RemoteThemeTest {
         val expected = Color(0xFF010203)
 
         listOf(
-            scheme.primary, scheme.onPrimary, scheme.primaryContainer, scheme.onPrimaryContainer,
-            scheme.secondary, scheme.onSecondary, scheme.secondaryContainer, scheme.onSecondaryContainer,
-            scheme.surface, scheme.onSurface, scheme.surfaceVariant, scheme.onSurfaceVariant,
-            scheme.background, scheme.onBackground,
-            scheme.error, scheme.onError, scheme.errorContainer, scheme.onErrorContainer,
-            scheme.outline, scheme.outlineVariant,
+            scheme.primary,
+            scheme.onPrimary,
+            scheme.primaryContainer,
+            scheme.onPrimaryContainer,
+            scheme.secondary,
+            scheme.onSecondary,
+            scheme.secondaryContainer,
+            scheme.onSecondaryContainer,
+            scheme.surface,
+            scheme.onSurface,
+            scheme.surfaceVariant,
+            scheme.onSurfaceVariant,
+            scheme.background,
+            scheme.onBackground,
+            scheme.error,
+            scheme.onError,
+            scheme.errorContainer,
+            scheme.onErrorContainer,
+            scheme.outline,
+            scheme.outlineVariant,
         ).forEachIndexed { index, slot ->
             assertEquals(expected, slot, "slot #$index did not pick the value up from the theme")
         }

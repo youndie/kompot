@@ -40,12 +40,27 @@ private class SquareDesignSystem : KompotDesignSystem {
     @Composable
     override fun resolveSurface(role: SurfaceRole): KompotSurface =
         when (role) {
-            KompotSurfaceRoles.Button -> KompotSurface(shape = SQUARE)
-            KompotSurfaceRoles.button("quiet") -> KompotSurface(shape = SQUARE, container = Color(0xFFE7E0EC), content = Color(0xFF1D1B20))
+            KompotSurfaceRoles.Button -> {
+                KompotSurface(shape = SQUARE)
+            }
+
+            KompotSurfaceRoles.button("quiet") -> {
+                KompotSurface(shape = SQUARE, container = Color(0xFFE7E0EC), content = Color(0xFF1D1B20))
+            }
+
             // A value, not an input: filled, and with the border a form control would have removed.
-            KompotSurfaceRoles.ReadOnlyField ->
-                KompotSurface(shape = SQUARE, container = Color(0xFFE8E6EA), content = Color(0xFF1D1B20), outline = Color.Transparent)
-            else -> KompotSurface()
+            KompotSurfaceRoles.ReadOnlyField -> {
+                KompotSurface(
+                    shape = SQUARE,
+                    container = Color(0xFFE8E6EA),
+                    content = Color(0xFF1D1B20),
+                    outline = Color.Transparent,
+                )
+            }
+
+            else -> {
+                KompotSurface()
+            }
         }
 
     private companion object {

@@ -2,6 +2,7 @@ package io.github.youndie.kompot
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.runtime.Composable
@@ -18,7 +19,6 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.shape.RoundedCornerShape
 import io.github.youndie.kompot.standard.ColumnComponent
 import io.github.youndie.kompot.standard.TextComponent
 import kotlin.test.Test
@@ -32,7 +32,9 @@ import kotlin.test.assertTrue
 class BackgroundRoleTest {
     private val fill = Color(0xFF2E7D32)
 
-    private inner class CardDesignSystem(private val cardShape: Shape?) : KompotDesignSystem {
+    private inner class CardDesignSystem(
+        private val cardShape: Shape?,
+    ) : KompotDesignSystem {
         @Composable
         override fun resolveColor(token: ColorToken): Color = fill
 

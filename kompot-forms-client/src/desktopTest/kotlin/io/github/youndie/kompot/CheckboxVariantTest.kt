@@ -33,7 +33,11 @@ class CheckboxVariantTest {
         runFormsComposeUiTest {
             setContent {
                 TestKompotTheme {
-                    CheckboxInputRenderer().Render(component(KompotCheckboxVariants.SWITCH), recordingActionHandler(), controller())
+                    CheckboxInputRenderer().Render(
+                        component(KompotCheckboxVariants.SWITCH),
+                        recordingActionHandler(),
+                        controller(),
+                    )
                 }
             }
 
@@ -59,7 +63,11 @@ class CheckboxVariantTest {
         runFormsComposeUiTest {
             setContent {
                 TestKompotTheme {
-                    CheckboxInputRenderer().Render(component(variant = "segmented"), recordingActionHandler(), controller())
+                    CheckboxInputRenderer().Render(
+                        component(variant = "segmented"),
+                        recordingActionHandler(),
+                        controller(),
+                    )
                 }
             }
 
@@ -74,7 +82,11 @@ class CheckboxVariantTest {
             val controller = controller()
             setContent {
                 TestKompotTheme {
-                    CheckboxInputRenderer().Render(component(KompotCheckboxVariants.SWITCH), recordingActionHandler(), controller)
+                    CheckboxInputRenderer().Render(
+                        component(KompotCheckboxVariants.SWITCH),
+                        recordingActionHandler(),
+                        controller,
+                    )
                 }
             }
 

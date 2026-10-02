@@ -1,12 +1,12 @@
 package io.github.youndie.kompot.analytics
 
+import io.github.youndie.kompot.form.FieldState
+import io.github.youndie.kompot.form.FieldValue
+import io.github.youndie.kompot.form.FormController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import io.github.youndie.kompot.form.FieldState
-import io.github.youndie.kompot.form.FieldValue
-import io.github.youndie.kompot.form.FormController
 
 // FormController offers no callbacks on field changes, so this subscribes to fieldsState from the
 // outside and diffs consecutive snapshots itself, changing nothing in form-core. It returns a Job:

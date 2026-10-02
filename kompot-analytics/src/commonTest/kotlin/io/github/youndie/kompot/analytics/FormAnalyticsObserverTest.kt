@@ -1,13 +1,13 @@
 package io.github.youndie.kompot.analytics
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runTest
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.FormFieldDefinition
 import io.github.youndie.kompot.form.FormSchema
 import io.github.youndie.kompot.form.ValidationRule
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -70,7 +70,12 @@ class FormAnalyticsObserverTest {
     @Test
     fun `mounting the observer on a pre-filled form does not report the initial value as a change`() =
         runTest {
-            val controller = FormController(observerTestSchema(), initialValues = mapOf("name" to ObserverTestValue("Alice")))
+            val controller =
+                FormController(
+                    observerTestSchema(),
+                    initialValues =
+                        mapOf("name" to ObserverTestValue("Alice")),
+                )
             val tracker = RecordingTracker()
 
             val job = observeFormAnalytics(controller, tracker, this, formId = "test_form")

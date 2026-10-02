@@ -189,7 +189,8 @@ public class TabsBuilder(
         tabs.add(TabsItem(title, ColumnBuilder(id, contentPath).apply(block).build()))
     }
 
-    public fun build(selected: Int): TabsComponent = TabsComponent(id = id ?: path, modifiers = modifiers, tabs = tabs, selected = selected)
+    public fun build(selected: Int): TabsComponent =
+        TabsComponent(id = id ?: path, modifiers = modifiers, tabs = tabs, selected = selected)
 }
 
 /** Tabs switched on the client (SPEC.md §4.12); [selected] is the one the screen opens on. */

@@ -7,11 +7,11 @@ import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.KompotDesignSystem
 import io.github.youndie.kompot.KompotSurface
 import io.github.youndie.kompot.KompotSurfaceRoles
 import io.github.youndie.kompot.SurfaceRole
-import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.material3.M3Colors
 import io.github.youndie.kompot.material3.M3Typography
@@ -73,7 +73,10 @@ class RemoteThemeDesignSystemTest {
 
             waitForIdle()
             assertEquals(Color(0xFFB8860B), resolved)
-            assertTrue(fallback.requestedColors.isEmpty(), "the fallback must not be asked for a token the theme describes")
+            assertTrue(
+                fallback.requestedColors.isEmpty(),
+                "the fallback must not be asked for a token the theme describes",
+            )
         }
 
     // The property that matters: a theme is LAID OVER the built-in design system rather than
@@ -129,8 +132,18 @@ class RemoteThemeDesignSystemTest {
             var dark: Color? = null
 
             setContent {
-                light = RemoteThemeDesignSystem(theme, FakeDesignSystem(), darkModeOverride = false).resolveColor(M3Colors.Primary)
-                dark = RemoteThemeDesignSystem(theme, FakeDesignSystem(), darkModeOverride = true).resolveColor(M3Colors.Primary)
+                light =
+                    RemoteThemeDesignSystem(
+                        theme,
+                        FakeDesignSystem(),
+                        darkModeOverride = false,
+                    ).resolveColor(M3Colors.Primary)
+                dark =
+                    RemoteThemeDesignSystem(
+                        theme,
+                        FakeDesignSystem(),
+                        darkModeOverride = true,
+                    ).resolveColor(M3Colors.Primary)
             }
 
             waitForIdle()
@@ -268,7 +281,10 @@ class RemoteThemeDesignSystemTest {
         runDesktopComposeUiTest {
             val designSystem =
                 RemoteThemeDesignSystem(
-                    theme = kompotTheme("broken") { typography { style(M3Typography.TitleLarge, color = "rebeccapurple") } },
+                    theme =
+                        kompotTheme(
+                            "broken",
+                        ) { typography { style(M3Typography.TitleLarge, color = "rebeccapurple") } },
                     fallback = FakeDesignSystem(),
                     darkModeOverride = false,
                 )

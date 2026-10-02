@@ -133,14 +133,20 @@ class UpdateIsolationTest {
         val reported = run(FakeChannelServer(sharedTopic = true), config(withTrigger = false)).isolation()
 
         assertTrue(reported.any { "same topic" in it.message }, reported.toString())
-        assertTrue(reported.none { "inconclusive" in it.message }, "nothing was listened to, so nothing is inconclusive")
+        assertTrue(
+            reported.none { "inconclusive" in it.message },
+            "nothing was listened to, so nothing is inconclusive",
+        )
     }
 
     // A capture is a stream like any other and is held to the same frame rules — a server whose
     // recording was clean and whose live channel is not would otherwise pass.
     @Test
     fun `a malformed frame in the live capture is reported by the frame rules`() {
-        val reported = run(FakeChannelServer(frame = """{"componentId":"x"}""")).findings.filter { it.check == "updates" }
+        val reported =
+            run(
+                FakeChannelServer(frame = """{"componentId":"x"}"""),
+            ).findings.filter { it.check == "updates" }
 
         assertTrue(reported.any { "(live)" in it.target }, reported.toString())
     }
@@ -207,15 +213,22 @@ private open class FakeChannelServer(
 
         val subject = subjectOf(headers) ?: return TckResponse(401, emptyMap(), "")
         return when {
-            path.startsWith("/home") ->
-                TckResponse(200, emptyMap(), """{"screen":{"type":"text","id":"t","text":"42"},"realtimeTopic":"${topicOf(subject)}"}""")
+            path.startsWith("/home") -> {
+                TckResponse(
+                    200,
+                    emptyMap(),
+                    """{"screen":{"type":"text","id":"t","text":"42"},"realtimeTopic":"${topicOf(subject)}"}""",
+                )
+            }
 
             path.startsWith("/submit") -> {
                 if (raisesAnything) raised = topicOf(subject)
                 TckResponse(200, emptyMap(), """{"type":"update_session","accessToken":"token-$subject"}""")
             }
 
-            else -> TckResponse(404, emptyMap(), "")
+            else -> {
+                TckResponse(404, emptyMap(), "")
+            }
         }
     }
 

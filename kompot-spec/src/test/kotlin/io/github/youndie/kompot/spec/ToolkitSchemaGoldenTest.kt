@@ -29,7 +29,11 @@ class ToolkitSchemaGoldenTest {
             return
         }
 
-        val stale = documents.filterKeys { fileName -> SchemaFiles.read(fileName) != SchemaFiles.render(documents.getValue(fileName)) }
+        val stale =
+            documents.filterKeys { fileName ->
+                SchemaFiles.read(fileName) !=
+                    SchemaFiles.render(documents.getValue(fileName))
+            }
         assertTrue(
             stale.isEmpty(),
             "The schema has drifted from the code: ${stale.keys.sorted()}. " +

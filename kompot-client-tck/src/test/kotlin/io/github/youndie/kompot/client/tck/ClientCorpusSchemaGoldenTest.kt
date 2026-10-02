@@ -20,7 +20,11 @@ import kotlin.test.assertEquals
 class ClientCorpusSchemaGoldenTest {
     private val file = File("corpus/client-corpus.schema.json")
 
-    private val json = Json { prettyPrint = true; prettyPrintIndent = "  " }
+    private val json =
+        Json {
+            prettyPrint = true
+            prettyPrintIndent = "  "
+        }
 
     private fun generated(): JsonElement =
         KompotSpec

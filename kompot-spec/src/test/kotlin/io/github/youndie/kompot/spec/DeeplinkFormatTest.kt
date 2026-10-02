@@ -22,7 +22,9 @@ class DeeplinkFormatTest {
     ): List<String> = validator.validate(json(deeplink), ref).map { it.toString() }
 
     private fun json(deeplink: String): JsonElement =
-        Json.parseToJsonElement("""{"type":"navigate","deeplink":${Json.encodeToString(String.serializer(), deeplink)}}""")
+        Json.parseToJsonElement(
+            """{"type":"navigate","deeplink":${Json.encodeToString(String.serializer(), deeplink)}}""",
+        )
 
     @Test
     fun `an application deeplink is accepted`() {
@@ -56,7 +58,10 @@ class DeeplinkFormatTest {
         assertTrue(validator.validate(route, ROUTE).isNotEmpty())
         assertEquals(
             emptyList(),
-            validator.validate(Json.parseToJsonElement("""{"deeplink":"app://home","endpoint":"/screens/home"}"""), ROUTE),
+            validator.validate(
+                Json.parseToJsonElement("""{"deeplink":"app://home","endpoint":"/screens/home"}"""),
+                ROUTE,
+            ),
         )
     }
 
@@ -75,7 +80,7 @@ class DeeplinkFormatTest {
 
     private fun patternsOf(element: JsonElement): List<String> =
         when (element) {
-            is kotlinx.serialization.json.JsonObject ->
+            is kotlinx.serialization.json.JsonObject -> {
                 element.flatMap { (key, value) ->
                     if (key == "pattern" && value is kotlinx.serialization.json.JsonPrimitive && value.isString) {
                         listOf(value.content)
@@ -83,9 +88,15 @@ class DeeplinkFormatTest {
                         patternsOf(value)
                     }
                 }
+            }
 
-            is kotlinx.serialization.json.JsonArray -> element.flatMap { patternsOf(it) }
-            else -> emptyList()
+            is kotlinx.serialization.json.JsonArray -> {
+                element.flatMap { patternsOf(it) }
+            }
+
+            else -> {
+                emptyList()
+            }
         }
 
     private companion object {

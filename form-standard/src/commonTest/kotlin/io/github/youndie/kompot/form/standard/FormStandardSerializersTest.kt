@@ -1,12 +1,12 @@
 package io.github.youndie.kompot.form.standard
 
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.PolymorphicSerializer
-import kotlinx.serialization.json.Json
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormCondition
 import io.github.youndie.kompot.form.FormFieldDefinition
 import io.github.youndie.kompot.form.ValidationRule
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.PolymorphicSerializer
+import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -67,7 +67,11 @@ class FormStandardSerializersTest {
             listOf(
                 RequiredRule("required"),
                 RegexRule(pattern = "^[A-Z0-9]{8}$", errorMessage = "invalid"),
-                RequiredIfRule(targetFieldId = "is_gift", expectedValue = BooleanValue(true), errorMessage = "required"),
+                RequiredIfRule(
+                    targetFieldId = "is_gift",
+                    expectedValue = BooleanValue(true),
+                    errorMessage = "required",
+                ),
                 MaxAmountRule(balanceFieldId = "source", errorMessage = "not enough left"),
             )
 

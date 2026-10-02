@@ -2,8 +2,8 @@ package io.github.youndie.kompot.playground
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -96,9 +96,15 @@ public class PlaygroundClient(
 ) {
     public val json: Json by lazy {
         when (mode) {
-            ClientMode.CURRENT, ClientMode.MISSING_RENDERER -> TODAY_JSON
-            ClientMode.OLDER, ClientMode.OLDER_WITH_FALLBACK ->
-                Json(from = TODAY_JSON) { serializersModule = TODAY_JSON.serializersModule.withoutComponent(unfamiliar) }
+            ClientMode.CURRENT, ClientMode.MISSING_RENDERER -> {
+                TODAY_JSON
+            }
+
+            ClientMode.OLDER, ClientMode.OLDER_WITH_FALLBACK -> {
+                Json(
+                    from = TODAY_JSON,
+                ) { serializersModule = TODAY_JSON.serializersModule.withoutComponent(unfamiliar) }
+            }
         }
     }
 
@@ -116,7 +122,8 @@ public class PlaygroundClient(
 // that is older by ONE word, not one that speaks half the protocol.
 private val TODAY_JSON: Json = kompotJson(formStandardSerializersModule + demoSerializersModule)
 
-private val TODAY_RENDERERS = kompotCoreRenderers + kompotStandardRenderers + generatedFormsClientRenderers + demoRenderers
+private val TODAY_RENDERERS =
+    kompotCoreRenderers + kompotStandardRenderers + generatedFormsClientRenderers + demoRenderers
 
 /** Every component type today's client decodes, by wire name — read off its module, not listed. */
 @OptIn(ExperimentalSerializationApi::class)
@@ -130,7 +137,12 @@ internal val TODAY_COMPONENTS: Map<String, KClass<out KompotComponent>> by lazy 
                 actualSerializer: KSerializer<Sub>,
             ) {
                 @Suppress("UNCHECKED_CAST")
-                if (baseClass == KompotComponent::class) found[actualSerializer.descriptor.serialName] = actualClass as KClass<out KompotComponent>
+                if (baseClass ==
+                    KompotComponent::class
+                ) {
+                    found[actualSerializer.descriptor.serialName] =
+                        actualClass as KClass<out KompotComponent>
+                }
             }
         },
     )
@@ -155,7 +167,11 @@ private fun SerializersModule.withoutComponent(wireName: String): SerializersMod
                     actualClass: KClass<Sub>,
                     actualSerializer: KSerializer<Sub>,
                 ) {
-                    if (baseClass == KompotComponent::class && actualSerializer.descriptor.serialName == wireName) return
+                    if (baseClass == KompotComponent::class &&
+                        actualSerializer.descriptor.serialName == wireName
+                    ) {
+                        return
+                    }
                     into.polymorphic(baseClass, actualClass, actualSerializer)
                 }
 
@@ -213,7 +229,11 @@ internal fun ClientSwitch(
 
         // The word the other clients lack, chosen among the ones the body actually sends: a type that
         // is not in the body would make every state look the same and prove nothing.
-        Text("The type it does not know", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.outline)
+        Text(
+            "The type it does not know",
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.outline,
+        )
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             words.forEach { word ->
                 FilterChip(

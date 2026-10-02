@@ -1,12 +1,5 @@
 package io.github.youndie.kompot.forms.standard
 
-import io.github.youndie.kompot.forms.AmountInputComponent
-import io.github.youndie.kompot.forms.AutocompleteInputComponent
-import io.github.youndie.kompot.forms.CheckboxInputComponent
-import io.github.youndie.kompot.forms.RadioGroupComponent
-import io.github.youndie.kompot.forms.SelectInputComponent
-import io.github.youndie.kompot.forms.SelectOption
-import io.github.youndie.kompot.forms.TextInputComponent
 import io.github.youndie.kompot.form.standard.AmountFieldDefinition
 import io.github.youndie.kompot.form.standard.AutocompleteFieldDefinition
 import io.github.youndie.kompot.form.standard.BooleanValue
@@ -15,6 +8,13 @@ import io.github.youndie.kompot.form.standard.SelectionFieldDefinition
 import io.github.youndie.kompot.form.standard.TextFieldDefinition
 import io.github.youndie.kompot.form.standard.equals
 import io.github.youndie.kompot.form.standard.required
+import io.github.youndie.kompot.forms.AmountInputComponent
+import io.github.youndie.kompot.forms.AutocompleteInputComponent
+import io.github.youndie.kompot.forms.CheckboxInputComponent
+import io.github.youndie.kompot.forms.RadioGroupComponent
+import io.github.youndie.kompot.forms.SelectInputComponent
+import io.github.youndie.kompot.forms.SelectOption
+import io.github.youndie.kompot.forms.TextInputComponent
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -48,7 +48,12 @@ class BoundFieldsTest {
     fun `boundAmountInput puts the currency on the UI component, where a renderer actually reads it`() {
         val response =
             buildFormScreen("form") {
-                boundAmountInput(fieldId = "amount", label = "Amount", currencySuffix = "USD", currencyFromField = "source")
+                boundAmountInput(
+                    fieldId = "amount",
+                    label = "Amount",
+                    currencySuffix = "USD",
+                    currencyFromField = "source",
+                )
             }
 
         val ui = uiChild<AmountInputComponent>(response)
@@ -82,7 +87,11 @@ class BoundFieldsTest {
     fun `boundAutocompleteInput carries dataSourceId to the UI and registers an AutocompleteFieldDefinition`() {
         val response =
             buildFormScreen("form") {
-                boundAutocompleteInput(fieldId = "beneficiary", label = "Recipient", dataSourceId = "beneficiaries_search")
+                boundAutocompleteInput(
+                    fieldId = "beneficiary",
+                    label = "Recipient",
+                    dataSourceId = "beneficiaries_search",
+                )
             }
 
         assertEquals("beneficiaries_search", uiChild<AutocompleteInputComponent>(response).dataSourceId)
@@ -93,11 +102,13 @@ class BoundFieldsTest {
     fun `boundSelectInput and boundRadioGroup both back onto a SelectionFieldDefinition`() {
         val options = listOf(SelectOption("a", "A"))
 
-        val selectResponse = buildFormScreen("form") { boundSelectInput(fieldId = "status", label = "Status", options = options) }
+        val selectResponse =
+            buildFormScreen("form") { boundSelectInput(fieldId = "status", label = "Status", options = options) }
         assertEquals(options, uiChild<SelectInputComponent>(selectResponse).options)
         schemaField<SelectionFieldDefinition>(selectResponse)
 
-        val radioResponse = buildFormScreen("form") { boundRadioGroup(fieldId = "commission", label = "Fee", options = options) }
+        val radioResponse =
+            buildFormScreen("form") { boundRadioGroup(fieldId = "commission", label = "Fee", options = options) }
         assertEquals(options, uiChild<RadioGroupComponent>(radioResponse).options)
         schemaField<SelectionFieldDefinition>(radioResponse)
     }
@@ -116,7 +127,18 @@ class BoundFieldsTest {
 
         val field = schemaField<TextFieldDefinition>(response)
         assertTrue(field.triggersPatch)
-        assertEquals(true, field.visibleIf?.evaluate { fieldId -> if (fieldId == "is_gift") BooleanValue(true) else null })
+        assertEquals(
+            true,
+            field.visibleIf?.evaluate { fieldId ->
+                if (fieldId ==
+                    "is_gift"
+                ) {
+                    BooleanValue(true)
+                } else {
+                    null
+                }
+            },
+        )
     }
 
     @Test

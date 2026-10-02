@@ -1,12 +1,12 @@
 package io.github.youndie.kompot.standard
 
-import kotlinx.serialization.Polymorphic
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import io.github.youndie.kompot.KompotAction
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.KompotModifierNode
 import io.github.youndie.kompot.registry.KompotComponentMarker
+import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 // A paginated list container: the server sends the first page of items inside the screen body
 // (initialItems), and the client loads the rest through loadMoreAction/KompotPageResponse.

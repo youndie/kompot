@@ -60,13 +60,19 @@ private fun node(
     val children =
         declared.orEmpty().flatMap { slot ->
             when (val held = value[slot.name]) {
-                is JsonArray ->
+                is JsonArray -> {
                     held.mapIndexedNotNull { index, element ->
                         (element as? JsonObject)?.let { node(it, "$path.${slot.name}[$index]", slots) }
                     }
+                }
 
-                is JsonObject -> listOfNotNull(node(held, "$path.${slot.name}", slots))
-                else -> emptyList()
+                is JsonObject -> {
+                    listOfNotNull(node(held, "$path.${slot.name}", slots))
+                }
+
+                else -> {
+                    emptyList()
+                }
             }
         }
 

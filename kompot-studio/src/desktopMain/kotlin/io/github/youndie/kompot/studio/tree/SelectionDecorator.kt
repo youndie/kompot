@@ -3,18 +3,18 @@ package io.github.youndie.kompot.studio.tree
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.github.youndie.kompot.KompotActionHandler
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.KompotComponentRenderer
@@ -84,7 +84,11 @@ private class SelectionBorderRenderer<T : KompotComponent>(
                         val layout = measurer.measure(label, TAG_STYLE)
                         val pad = 4.dp.toPx()
                         val height = layout.size.height + 2.dp.toPx()
-                        drawRect(SELECTION_COLOUR, Offset(-1.dp.toPx(), -height), Size(layout.size.width + pad * 2, height))
+                        drawRect(
+                            SELECTION_COLOUR,
+                            Offset(-1.dp.toPx(), -height),
+                            Size(layout.size.width + pad * 2, height),
+                        )
                         drawText(layout, Color.White, Offset(-1.dp.toPx() + pad, -height + 1.dp.toPx()))
                     },
             propagateMinConstraints = true,

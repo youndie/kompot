@@ -1,12 +1,12 @@
 package io.github.youndie.kompot.cache
 
+import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.decodeKompotComponent
+import io.github.youndie.kompot.encodeKompotComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
-import io.github.youndie.kompot.KompotComponent
-import io.github.youndie.kompot.decodeKompotComponent
-import io.github.youndie.kompot.encodeKompotComponent
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
@@ -52,8 +52,15 @@ public class CachedKompotScreenProvider(
         etag: String?,
     ) {
         when (val result = fetcher.fetch(key, ifNoneMatch = etag)) {
-            is KompotFetchResult.Modified -> store.put(CachedScreenEntry(key, encode(result.component), result.etag, now()))
-            KompotFetchResult.NotModified -> Unit
+            is KompotFetchResult.Modified -> {
+                store.put(
+                    CachedScreenEntry(key, encode(result.component), result.etag, now()),
+                )
+            }
+
+            KompotFetchResult.NotModified -> {
+                Unit
+            }
         }
     }
 

@@ -7,7 +7,6 @@ plugins {
     id("io.github.youndie.sborka.publish")
 }
 
-
 dependencies {
     // api rather than implementation: a consumer configures the runner with its own schemas and its
     // own OpenAPI document, so the spec types are part of this module's own surface.

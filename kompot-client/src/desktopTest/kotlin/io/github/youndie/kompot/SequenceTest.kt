@@ -48,7 +48,11 @@ class SequenceTest {
                 LocalKompotRegistry provides KompotRegistry(kompotCoreRenderers + kompotStandardRenderers),
                 LocalKompotDegradationSink provides KompotDegradationSink { _, type, _ -> reported += type },
             ) {
-                LocalKompotRegistry.current.RenderNode(ButtonComponent(id = "go", text = "go", action = raise), handler, testFormController())
+                LocalKompotRegistry.current.RenderNode(
+                    ButtonComponent(id = "go", text = "go", action = raise),
+                    handler,
+                    testFormController(),
+                )
             }
         }
     }
@@ -96,7 +100,9 @@ class SequenceTest {
     fun `an unknown part is reported and the rest still runs`() =
         runDesktopComposeUiTest {
             val reported = mutableListOf<String>()
-            setContent(raising(SequenceAction(listOf(a, UnknownAction(originalType = "vibrate"), c)), reported = reported))
+            setContent(
+                raising(SequenceAction(listOf(a, UnknownAction(originalType = "vibrate"), c)), reported = reported),
+            )
             onNodeWithText("go").performClick()
             waitForIdle()
             assertEquals(listOf("vibrate"), reported)

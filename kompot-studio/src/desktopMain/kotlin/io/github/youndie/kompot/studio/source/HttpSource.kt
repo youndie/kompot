@@ -95,7 +95,9 @@ internal class HttpSourceSession(
                         when (response.statusCode()) {
                             // The whole reason this source counts checks separately: nothing was sent
                             // back but a header, and the window has to be able to say so.
-                            NOT_MODIFIED -> previous.copy(error = null, checks = previous.checks + 1)
+                            NOT_MODIFIED -> {
+                                previous.copy(error = null, checks = previous.checks + 1)
+                            }
 
                             OK -> {
                                 etag = response.headers().firstValue("ETag").orElse(null)
@@ -117,11 +119,12 @@ internal class HttpSourceSession(
                                 )
                             }
 
-                            else ->
+                            else -> {
                                 previous.copy(
                                     error = "${ref.id}: HTTP ${response.statusCode()}",
                                     checks = previous.checks + 1,
                                 )
+                            }
                         }
                 }.onFailure { failure ->
                     state.value =

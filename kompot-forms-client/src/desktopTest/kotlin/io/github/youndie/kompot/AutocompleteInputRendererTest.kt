@@ -9,7 +9,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.waitUntilExactlyOneExists
-import io.github.youndie.kompot.forms.AutocompleteInputComponent
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.FormSchema
@@ -19,6 +18,7 @@ import io.github.youndie.kompot.form.standard.BooleanValue
 import io.github.youndie.kompot.form.standard.CheckboxFieldDefinition
 import io.github.youndie.kompot.form.standard.EntityValue
 import io.github.youndie.kompot.form.standard.EqualsCondition
+import io.github.youndie.kompot.forms.AutocompleteInputComponent
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -43,7 +43,10 @@ class AutocompleteInputRendererTest {
         runFormsComposeUiTest {
             val controller =
                 FormController(
-                    FormSchema("form", fields = listOf(AutocompleteFieldDefinition("beneficiary", dataSourceId = "search"))),
+                    FormSchema(
+                        "form",
+                        fields = listOf(AutocompleteFieldDefinition("beneficiary", dataSourceId = "search")),
+                    ),
                     initialValues = mapOf("beneficiary" to EntityValue(id = "b1", title = "Ada Lovelace")),
                 )
 
@@ -51,7 +54,12 @@ class AutocompleteInputRendererTest {
                 TestKompotTheme {
                     AutocompleteInputRenderer().Render(
                         component =
-                            AutocompleteInputComponent(id = "c", fieldId = "beneficiary", label = "Recipient", dataSourceId = "search"),
+                            AutocompleteInputComponent(
+                                id = "c",
+                                fieldId = "beneficiary",
+                                label = "Recipient",
+                                dataSourceId = "search",
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )
@@ -71,7 +79,10 @@ class AutocompleteInputRendererTest {
                 )
             val controller =
                 FormController(
-                    FormSchema("form", fields = listOf(AutocompleteFieldDefinition("beneficiary", dataSourceId = "search"))),
+                    FormSchema(
+                        "form",
+                        fields = listOf(AutocompleteFieldDefinition("beneficiary", dataSourceId = "search")),
+                    ),
                     dataSourceResolver = resolver,
                 )
 
@@ -79,7 +90,12 @@ class AutocompleteInputRendererTest {
                 TestKompotTheme {
                     AutocompleteInputRenderer().Render(
                         component =
-                            AutocompleteInputComponent(id = "c", fieldId = "beneficiary", label = "Recipient", dataSourceId = "search"),
+                            AutocompleteInputComponent(
+                                id = "c",
+                                fieldId = "beneficiary",
+                                label = "Recipient",
+                                dataSourceId = "search",
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )
@@ -101,7 +117,10 @@ class AutocompleteInputRendererTest {
                 )
             val controller =
                 FormController(
-                    FormSchema("form", fields = listOf(AutocompleteFieldDefinition("beneficiary", dataSourceId = "search"))),
+                    FormSchema(
+                        "form",
+                        fields = listOf(AutocompleteFieldDefinition("beneficiary", dataSourceId = "search")),
+                    ),
                     dataSourceResolver = resolver,
                 )
 
@@ -109,7 +128,12 @@ class AutocompleteInputRendererTest {
                 TestKompotTheme {
                     AutocompleteInputRenderer().Render(
                         component =
-                            AutocompleteInputComponent(id = "c", fieldId = "beneficiary", label = "Recipient", dataSourceId = "search"),
+                            AutocompleteInputComponent(
+                                id = "c",
+                                fieldId = "beneficiary",
+                                label = "Recipient",
+                                dataSourceId = "search",
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )
@@ -122,7 +146,10 @@ class AutocompleteInputRendererTest {
             onNodeWithText("Ada Lovelace").performClick()
             waitForIdle()
 
-            assertEquals(EntityValue(id = "b1", title = "Ada Lovelace"), controller.getTypedState<EntityValue>("beneficiary").value)
+            assertEquals(
+                EntityValue(id = "b1", title = "Ada Lovelace"),
+                controller.getTypedState<EntityValue>("beneficiary").value,
+            )
         }
 
     @Test
@@ -148,7 +175,12 @@ class AutocompleteInputRendererTest {
                 TestKompotTheme {
                     AutocompleteInputRenderer().Render(
                         component =
-                            AutocompleteInputComponent(id = "c", fieldId = "beneficiary", label = "Recipient", dataSourceId = "search"),
+                            AutocompleteInputComponent(
+                                id = "c",
+                                fieldId = "beneficiary",
+                                label = "Recipient",
+                                dataSourceId = "search",
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )

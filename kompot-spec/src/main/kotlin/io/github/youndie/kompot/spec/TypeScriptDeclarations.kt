@@ -42,8 +42,10 @@ public object TypeScriptDeclarations {
         val openHierarchies =
             modules.values
                 .flatMap { (it["\$defs"]?.jsonObject ?: JsonObject(emptyMap())).entries }
-                .filter { (_, def) -> def.jsonObject.kind() == "hierarchy" && def.jsonObject["x-kompot-open"]?.jsonPrimitive?.content == "true" }
-                .map { it.key }
+                .filter { (_, def) ->
+                    def.jsonObject.kind() == "hierarchy" &&
+                        def.jsonObject["x-kompot-open"]?.jsonPrimitive?.content == "true"
+                }.map { it.key }
                 .toSet()
                 .takeUnless { strict } ?: emptySet()
 
@@ -86,7 +88,15 @@ public object TypeScriptDeclarations {
                 // list — the closed modifier chain, the wizard's transitions — is printed here, from
                 // its own oneOf.
                 if (def.kind() == "hierarchy" && name in profile) return@forEach
-                out.append(if (def.kind() == "hierarchy") hierarchy(name, def, open = name in openHierarchies) else declaration(name, def, inherited[name]))
+                out.append(
+                    if (def.kind() ==
+                        "hierarchy"
+                    ) {
+                        hierarchy(name, def, open = name in openHierarchies)
+                    } else {
+                        declaration(name, def, inherited[name])
+                    },
+                )
                 out.appendLine()
             }
         }
@@ -112,7 +122,9 @@ public object TypeScriptDeclarations {
             val unknown = "Unknown$name"
             out.appendLine("export type $name = ${(variants + unknown).joinToString(" | ")};")
             out.appendLine()
-            out.appendLine("/** A $name this build does not know — the protocol promises it may arrive (SPEC.md §2.1). */")
+            out.appendLine(
+                "/** A $name this build does not know — the protocol promises it may arrive (SPEC.md §2.1). */",
+            )
             out.appendLine("export interface $unknown {")
             out.appendLine("  type: string;")
             out.appendLine("  [property: string]: unknown;")
@@ -138,7 +150,11 @@ public object TypeScriptDeclarations {
         val required = def["required"]?.jsonArray?.map { it.jsonPrimitive.content }?.toSet() ?: emptySet()
         // The discriminator is the variant's own; everything else the base declares and the variant does
         // not is added after the variant's properties, always optional.
-        val fromBase = (inherited ?: JsonObject(emptyMap())).filterKeys { it !in properties && it != KompotProtocol.DISCRIMINATOR }
+        val fromBase =
+            (inherited ?: JsonObject(emptyMap())).filterKeys {
+                it !in properties &&
+                    it != KompotProtocol.DISCRIMINATOR
+            }
         out.appendLine("export interface $name {")
         (properties + fromBase).forEach { (property, schema) ->
             schema.jsonObject.description()?.let { out.appendLine("  /** ${it.replace("*/", "* /")} */") }
@@ -154,7 +170,9 @@ public object TypeScriptDeclarations {
         schema["\$ref"]?.jsonPrimitive?.content?.let { return it.substringAfterLast("/") }
         schema["const"]?.let { return literal(it) }
         schema["enum"]?.jsonArray?.let { values -> return values.joinToString(" | ") { literal(it) } }
-        (schema["oneOf"] ?: schema["anyOf"])?.jsonArray?.let { options -> return options.joinToString(" | ") { typeOf(it) }.distinctUnion() }
+        (schema["oneOf"] ?: schema["anyOf"])?.jsonArray?.let { options ->
+            return options.joinToString(" | ") { typeOf(it) }.distinctUnion()
+        }
 
         val types =
             when (val t = schema["type"]) {
@@ -170,20 +188,37 @@ public object TypeScriptDeclarations {
         schema: JsonObject,
     ): String =
         when (type) {
-            "string" -> "string"
-            "integer", "number" -> "number"
-            "boolean" -> "boolean"
-            "null" -> "null"
+            "string" -> {
+                "string"
+            }
+
+            "integer", "number" -> {
+                "number"
+            }
+
+            "boolean" -> {
+                "boolean"
+            }
+
+            "null" -> {
+                "null"
+            }
+
             "array" -> {
                 val item = schema["items"]?.let { typeOf(it) } ?: "unknown"
                 if (" | " in item) "($item)[]" else "$item[]"
             }
-            "object" ->
+
+            "object" -> {
                 when (val additional = schema["additionalProperties"]) {
                     is JsonObject -> "Record<string, ${typeOf(additional)}>"
                     else -> "Record<string, unknown>"
                 }
-            else -> "unknown"
+            }
+
+            else -> {
+                "unknown"
+            }
         }
 
     private fun literal(value: JsonElement): String =

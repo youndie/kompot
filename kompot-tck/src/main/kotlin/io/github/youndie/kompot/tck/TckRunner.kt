@@ -1,8 +1,8 @@
 package io.github.youndie.kompot.tck
 
-import io.github.youndie.kompot.spec.JsonSchemaValidator
 import io.github.youndie.kompot.navigation.ScreenRouteKind
 import io.github.youndie.kompot.spec.BodyRules
+import io.github.youndie.kompot.spec.JsonSchemaValidator
 import io.github.youndie.kompot.spec.KompotProtocol
 import io.github.youndie.kompot.spec.collectJsonObjects
 import kotlinx.coroutines.async
@@ -53,7 +53,12 @@ public data class TckReport(
         val head =
             if (isClean) {
                 "TCK: no violations. Checks: " + exercised.entries.joinToString { "${it.key}=${it.value}" } +
-                    if (declaredExtensions.isEmpty()) "" else ". Deployment extensions: " + declaredExtensions.sorted().joinToString()
+                    if (declaredExtensions.isEmpty()) {
+                        ""
+                    } else {
+                        ". Deployment extensions: " +
+                            declaredExtensions.sorted().joinToString()
+                    }
             } else {
                 "TCK: ${findings.size} violations\n" + findings.joinToString("\n")
             }
@@ -190,7 +195,8 @@ public class TckRunner(
     private val json = Json { prettyPrint = false }
     private val schemas = config.schemas
     private val profile = schemas.getValue(KompotProtocol.PROFILE_FILE_NAME)
-    private val validator = JsonSchemaValidator(schemas, strictProfile = profile, extensionTypes = config.extensionTypes)
+    private val validator =
+        JsonSchemaValidator(schemas, strictProfile = profile, extensionTypes = config.extensionTypes)
     private val endpoints = TckEndpoints.fromOpenApi(config.openApi)
 
     private val componentTypes: Set<String> = discriminatorsOf("KompotComponent")
@@ -285,13 +291,23 @@ public class TckRunner(
         val response = transport.request("POST", loginPath, body = json.encodeToString(JsonElement.serializer(), body))
 
         if (response.status != 200) {
-            return null to listOf(TckFinding("auth", loginPath, "login failed: ${response.status} ${response.body.take(200)}"))
+            return null to
+                listOf(TckFinding("auth", loginPath, "login failed: ${response.status} ${response.body.take(200)}"))
         }
 
         val action = parse(response.body)?.jsonObject
         val accessToken = (action?.get("accessToken") as? JsonPrimitive)?.content
-        if (action == null || (action[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content != "update_session" || accessToken == null) {
-            return null to listOf(TckFinding("auth", loginPath, "the login response is not an update_session carrying an accessToken"))
+        if (action == null || (action[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content != "update_session" ||
+            accessToken == null
+        ) {
+            return null to
+                listOf(
+                    TckFinding(
+                        "auth",
+                        loginPath,
+                        "the login response is not an update_session carrying an accessToken",
+                    ),
+                )
         }
 
         return accessToken to emptyList()
@@ -315,10 +331,19 @@ public class TckRunner(
             val body = endpoint.successBody
 
             when {
-                response.status != endpoint.successStatus ->
-                    listOf(TckFinding("status", endpoint.path, "expected ${endpoint.successStatus}, got ${response.status}"))
+                response.status != endpoint.successStatus -> {
+                    listOf(
+                        TckFinding(
+                            "status",
+                            endpoint.path,
+                            "expected ${endpoint.successStatus}, got ${response.status}",
+                        ),
+                    )
+                }
 
-                body == null -> emptyList()
+                body == null -> {
+                    emptyList()
+                }
 
                 else -> {
                     val element = parse(response.body)
@@ -354,12 +379,19 @@ public class TckRunner(
             // toString(), which prints exactly the line this report has always carried. The validator
             // keeps the path structured now, and a report a person reads has no use for it — the
             // consumer that does is a tool pointing at a node, and this is not one.
-            !body.isList -> validator.validate(element, body.ref).map { it.toString() }
-            element !is JsonArray -> listOf("$: the endpoint declares a list of ${body.ref}, and the body is not an array")
-            else ->
+            !body.isList -> {
+                validator.validate(element, body.ref).map { it.toString() }
+            }
+
+            element !is JsonArray -> {
+                listOf("$: the endpoint declares a list of ${body.ref}, and the body is not an array")
+            }
+
+            else -> {
                 element.flatMapIndexed { index, item ->
                     validator.validate(item, body.ref).map { "[$index]$it" }
                 }
+            }
         }
 
     // A node's id addresses point updates (SPEC.md §4.2): an empty or duplicated id makes the address
@@ -407,23 +439,38 @@ public class TckRunner(
             val form = endpoints.firstOrNull { it.path == formPath && it.method == "GET" }
             if (form == null) {
                 return@flatMap listOf(
-                    TckFinding("patch", patchPath, "the form it patches, \"$formPath\", is not a GET endpoint of the description"),
+                    TckFinding(
+                        "patch",
+                        patchPath,
+                        "the form it patches, \"$formPath\", is not a GET endpoint of the description",
+                    ),
                 )
             }
 
             val declared =
-                (parse(get(form).body)?.jsonObject?.get("schema")?.jsonObject?.get("fields") as? JsonArray)
-                    .orEmpty()
+                (
+                    parse(get(form).body)
+                        ?.jsonObject
+                        ?.get("schema")
+                        ?.jsonObject
+                        ?.get("fields") as? JsonArray
+                ).orEmpty()
                     .mapNotNull { (it.jsonObject["fieldId"] as? JsonPrimitive)?.content }
                     .toSet()
             if (declared.isEmpty()) {
-                return@flatMap listOf(TckFinding("patch", patchPath, "\"$formPath\" answered no schema, so nothing could be checked"))
+                return@flatMap listOf(
+                    TckFinding("patch", patchPath, "\"$formPath\" answered no schema, so nothing could be checked"),
+                )
             }
 
             val body = config.submitPayloads[patchPath]
             if (body == null) {
                 return@flatMap listOf(
-                    TckFinding("patch", patchPath, "no body for this address in submitPayloads, so the patch was never asked for"),
+                    TckFinding(
+                        "patch",
+                        patchPath,
+                        "no body for this address in submitPayloads, so the patch was never asked for",
+                    ),
                 )
             }
 
@@ -432,18 +479,39 @@ public class TckRunner(
                 transport.request("POST", patchPath, authHeaders(), json.encodeToString(JsonElement.serializer(), body))
             val patch = parse(response.body)?.jsonObject
             when {
-                response.status != 200 ->
-                    listOf(TckFinding("patch", patchPath, "the patch answered ${response.status} ${response.body.take(200)}"))
+                response.status != 200 -> {
+                    listOf(
+                        TckFinding(
+                            "patch",
+                            patchPath,
+                            "the patch answered ${response.status} ${response.body.take(200)}",
+                        ),
+                    )
+                }
 
-                patch == null -> listOf(TckFinding("patch", patchPath, "the body is not valid JSON"))
+                patch == null -> {
+                    listOf(TckFinding("patch", patchPath, "the body is not valid JSON"))
+                }
 
                 else -> {
                     val updates = (patch["updates"] as? JsonObject)?.keys.orEmpty()
-                    val cleared = (patch["clearFields"] as? JsonArray).orEmpty().mapNotNull { (it as? JsonPrimitive)?.content }
+                    val cleared =
+                        (patch["clearFields"] as? JsonArray).orEmpty().mapNotNull {
+                            (it as? JsonPrimitive)
+                                ?.content
+                        }
                     val focus = (patch["focusOn"] as? JsonPrimitive)?.takeIf { it.isString }?.content
 
-                    (updates - declared).map { TckFinding("patch", patchPath, "updates a field \"$it\" the form does not declare") } +
-                        (cleared.toSet() - declared).map { TckFinding("patch", patchPath, "clears a field \"$it\" the form does not declare") } +
+                    (updates - declared).map {
+                        TckFinding(
+                            "patch",
+                            patchPath,
+                            "updates a field \"$it\" the form does not declare",
+                        )
+                    } +
+                        (cleared.toSet() - declared).map {
+                            TckFinding("patch", patchPath, "clears a field \"$it\" the form does not declare")
+                        } +
                         listOfNotNull(
                             focus?.takeUnless { it in declared }?.let {
                                 TckFinding("patch", patchPath, "focuses \"$it\", which the form does not declare")
@@ -463,8 +531,9 @@ public class TckRunner(
             val element = parse(get(endpoint).body) ?: return@flatMap emptyList()
 
             collectJsonObjects(element)
-                .filter { (it[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content == KompotProtocol.ACTION_PERFORM }
-                .mapNotNull { (it["url"] as? JsonPrimitive)?.takeIf { url -> url.isString }?.content }
+                .filter {
+                    (it[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content == KompotProtocol.ACTION_PERFORM
+                }.mapNotNull { (it["url"] as? JsonPrimitive)?.takeIf { url -> url.isString }?.content }
                 .distinct()
                 .mapNotNull { url ->
                     // A literal path first, so an exact declaration always wins over a template that
@@ -473,17 +542,25 @@ public class TckRunner(
                         endpoints.firstOrNull { it.path == url && it.method == "POST" }
                             ?: endpoints.firstOrNull { it.matches(url) && it.method == "POST" }
                     when {
-                        target == null ->
-                            TckFinding("perform", endpoint.path, "a perform action posts to \"$url\", which the HTTP description does not declare")
+                        target == null -> {
+                            TckFinding(
+                                "perform",
+                                endpoint.path,
+                                "a perform action posts to \"$url\", which the HTTP description does not declare",
+                            )
+                        }
 
-                        target.kind != "submit" ->
+                        target.kind != "submit" -> {
                             TckFinding(
                                 "perform",
                                 endpoint.path,
                                 "a perform action posts to \"$url\", declared as kind \"${target.kind}\" rather than \"submit\"",
                             )
+                        }
 
-                        else -> null
+                        else -> {
+                            null
+                        }
                     }
                 }
         }
@@ -496,7 +573,13 @@ public class TckRunner(
             .filter { it.kind == UPDATES_KIND && it.path in config.recordedUpdateStreams }
             .exercising("updates")
             .onEach { visited += it.key }
-            .flatMap { endpoint -> frameFindings(endpoint.path, config.recordedUpdateStreams.getValue(endpoint.path), emptyIsAFinding = true) }
+            .flatMap { endpoint ->
+                frameFindings(
+                    endpoint.path,
+                    config.recordedUpdateStreams.getValue(endpoint.path),
+                    emptyIsAFinding = true,
+                )
+            }
 
     // Every rule about a frame, over a stream from wherever it came: a recording handed to the kit, or
     // a capture the kit took itself while listening. One reader and one list of rules — a live capture
@@ -521,17 +604,28 @@ public class TckRunner(
             val where = "$at (event #${index + 1})"
 
             event.malformed.forEach { line ->
-                findings += TckFinding("updates", where, "a line belongs to no SSE field and is not a comment: \"$line\"")
+                findings +=
+                    TckFinding("updates", where, "a line belongs to no SSE field and is not a comment: \"$line\"")
             }
 
             when {
-                event.name == HEARTBEAT_EVENT && event.data != null ->
-                    findings += TckFinding("updates", where, "the heartbeat carries data, which gives it a meaning the protocol does not define")
+                event.name == HEARTBEAT_EVENT && event.data != null -> {
+                    findings +=
+                        TckFinding(
+                            "updates",
+                            where,
+                            "the heartbeat carries data, which gives it a meaning the protocol does not define",
+                        )
+                }
 
-                event.name == HEARTBEAT_EVENT -> Unit
+                event.name == HEARTBEAT_EVENT -> {
+                    Unit
+                }
 
-                event.data == null ->
-                    findings += TckFinding("updates", where, "an event with no data and no name: a frame that says nothing")
+                event.data == null -> {
+                    findings +=
+                        TckFinding("updates", where, "an event with no data and no name: a frame that says nothing")
+                }
 
                 else -> {
                     val payload = parse(event.data)
@@ -589,7 +683,11 @@ public class TckRunner(
         if (secondToken == null) {
             exercised[ISOLATION] = 0
             return loginFindings +
-                TckFinding(ISOLATION, endpoint.path, "the second identity \"${second.name}\" obtained no session, so nothing was compared")
+                TckFinding(
+                    ISOLATION,
+                    endpoint.path,
+                    "the second identity \"${second.name}\" obtained no session, so nothing was compared",
+                )
         }
 
         val findings = mutableListOf<TckFinding>()
@@ -664,7 +762,15 @@ public class TckRunner(
                 val own =
                     ownTopic
                         ?.takeIf { it != topic }
-                        ?.let { async { transport.stream(address(endpoint, parameter, it), bearer(secondToken), window) } }
+                        ?.let {
+                            async {
+                                transport.stream(
+                                    address(endpoint, parameter, it),
+                                    bearer(secondToken),
+                                    window,
+                                )
+                            }
+                        }
 
                 delay(settle)
                 fire(trigger, first)
@@ -749,7 +855,12 @@ public class TckRunner(
                     mapOf(IDEMPOTENCY_HEADER to "tck-isolation-" + trigger.body.hashCode().toString(16))
                 }
 
-        transport.request(trigger.method, trigger.path, headers, json.encodeToString(JsonElement.serializer(), trigger.body))
+        transport.request(
+            trigger.method,
+            trigger.path,
+            headers,
+            json.encodeToString(JsonElement.serializer(), trigger.body),
+        )
     }
 
     private fun address(
@@ -787,16 +898,35 @@ public class TckRunner(
             val first = get(endpoint)
             val etag =
                 first.header("etag")
-                    ?: return@flatMap listOf(TckFinding("etag", endpoint.path, "304 is declared but no ETag header arrived"))
+                    ?: return@flatMap listOf(
+                        TckFinding("etag", endpoint.path, "304 is declared but no ETag header arrived"),
+                    )
 
             val second = get(endpoint, mapOf("If-None-Match" to etag))
             val findings = mutableListOf<TckFinding>()
-            if (second.status != 304) findings += TckFinding("etag", endpoint.path, "a repeat with If-None-Match gave ${second.status} instead of 304")
-            if (second.body.isNotEmpty()) findings += TckFinding("etag", endpoint.path, "the 304 response carried a body")
+            if (second.status !=
+                304
+            ) {
+                findings +=
+                    TckFinding(
+                        "etag",
+                        endpoint.path,
+                        "a repeat with If-None-Match gave ${second.status} instead of 304",
+                    )
+            }
+            if (second.body.isNotEmpty()) {
+                findings +=
+                    TckFinding("etag", endpoint.path, "the 304 response carried a body")
+            }
 
             // Without a stable body an ETag is pointless: it would change on every request.
             val third = get(endpoint)
-            if (third.header("etag") != etag) findings += TckFinding("etag", endpoint.path, "the ETag of an unchanged screen differs between requests")
+            if (third.header("etag") !=
+                etag
+            ) {
+                findings +=
+                    TckFinding("etag", endpoint.path, "the ETag of an unchanged screen differs between requests")
+            }
 
             findings
         }
@@ -819,7 +949,8 @@ public class TckRunner(
                     findings += validateBody(page, body).map { TckFinding("pagination", url, it) }
                 }
 
-                val next = (page["nextLoadAction"] as? JsonObject)?.get("url") as? JsonPrimitive ?: return@flatMap findings
+                val next =
+                    (page["nextLoadAction"] as? JsonObject)?.get("url") as? JsonPrimitive ?: return@flatMap findings
                 url = next.content
                 visited++
             }
@@ -839,7 +970,11 @@ public class TckRunner(
                 // A route without `kind` is a screen — the default in ScreenRoute, and what every graph
                 // written before the field existed means.
                 val routeKind = (route.jsonObject["kind"] as? JsonPrimitive)?.content ?: ScreenRouteKind.SCREEN
-                val declared = endpoints.firstOrNull { it.path == target && it.method == "GET" }?.also { visited += it.key }
+                val declared =
+                    endpoints.firstOrNull { it.path == target && it.method == "GET" }?.also {
+                        visited +=
+                            it.key
+                    }
                 val findings = mutableListOf<TckFinding>()
 
                 // The route says what a client will parse the body as; the HTTP description says what
@@ -857,7 +992,10 @@ public class TckRunner(
                 val response = transport.request("GET", target, authHeaders(declared))
 
                 when {
-                    response.status != 200 -> findings + TckFinding("navigation", target, "a route of the graph answers ${response.status}")
+                    response.status != 200 -> {
+                        findings +
+                            TckFinding("navigation", target, "a route of the graph answers ${response.status}")
+                    }
 
                     else -> {
                         val element = parse(response.body)
@@ -885,8 +1023,10 @@ public class TckRunner(
             // wizard_resume as well as submit: a finishing transition performs the same domain action a
             // submit does, and §16.5 now says so. A rule no check keeps is a rule two implementations
             // disagree about in silence.
-            .filter { it.kind in STATE_CHANGING_KINDS && 400 in it.statuses && 409 in it.statuses && it.path in config.submitPayloads }
-            .exercising("idempotency")
+            .filter {
+                it.kind in STATE_CHANGING_KINDS && 400 in it.statuses && 409 in it.statuses &&
+                    it.path in config.submitPayloads
+            }.exercising("idempotency")
             .flatMap { endpoint ->
                 visited += endpoint.key
                 val payload = config.submitPayloads.getValue(endpoint.path)
@@ -896,16 +1036,28 @@ public class TckRunner(
                 val at = endpoint.walkAddress() ?: endpoint.path
                 val withoutKey = transport.request("POST", at, authHeaders(), body)
                 if (withoutKey.status != 400) {
-                    findings += TckFinding("idempotency", endpoint.path, "expected 400 without a key, got ${withoutKey.status}")
+                    findings +=
+                        TckFinding("idempotency", endpoint.path, "expected 400 without a key, got ${withoutKey.status}")
                 }
 
                 val key = "tck-" + body.hashCode().toString(16)
                 transport.request("POST", at, authHeaders() + mapOf(IDEMPOTENCY_HEADER to key), body)
 
                 val different = json.encodeToString(JsonElement.serializer(), mutate(payload))
-                val conflict = transport.request("POST", at, authHeaders() + mapOf(IDEMPOTENCY_HEADER to key), different)
+                val conflict =
+                    transport.request(
+                        "POST",
+                        at,
+                        authHeaders() + mapOf(IDEMPOTENCY_HEADER to key),
+                        different,
+                    )
                 if (conflict.status != 409) {
-                    findings += TckFinding("idempotency", endpoint.path, "the same key with a different body gave ${conflict.status} instead of 409")
+                    findings +=
+                        TckFinding(
+                            "idempotency",
+                            endpoint.path,
+                            "the same key with a different body gave ${conflict.status} instead of 409",
+                        )
                 }
 
                 findings
@@ -935,7 +1087,12 @@ public class TckRunner(
         }
 
         val query = config.queryParameters[path].orEmpty()
-        return if (query.isEmpty()) resolved else resolved + "?" + query.entries.joinToString("&") { "${it.key}=${it.value}" }
+        return if (query.isEmpty()) {
+            resolved
+        } else {
+            resolved + "?" +
+                query.entries.joinToString("&") { "${it.key}=${it.value}" }
+        }
     }
 
     // Why an endpoint was left out, in the reader's terms rather than in the kit's. The reason is
@@ -946,27 +1103,42 @@ public class TckRunner(
             .map { endpoint ->
                 val reason =
                     when {
-                        endpoint.deprecated -> "declared deprecated"
-                        endpoint.hasPathParams ->
+                        endpoint.deprecated -> {
+                            "declared deprecated"
+                        }
+
+                        endpoint.hasPathParams -> {
                             "no value in TckConfig.pathParameters for the placeholders of \"${endpoint.path}\""
-                        endpoint.kind == UPDATES_KIND ->
+                        }
+
+                        endpoint.kind == UPDATES_KIND -> {
                             "neither a recording in TckConfig.recordedUpdateStreams nor a live probe of it " +
                                 "(TckConfig.secondIdentity with updateTrigger, and a transport that can stream)"
+                        }
 
-                        !endpoint.respondsWithJson ->
+                        !endpoint.respondsWithJson -> {
                             "the response is ${endpoint.successContentType ?: "not declared"}, not one JSON document"
+                        }
 
-                        endpoint.method != "GET" && endpoint.kind == "submit" && !config.allowStateChangingChecks ->
+                        endpoint.method != "GET" && endpoint.kind == "submit" && !config.allowStateChangingChecks -> {
                             "state-changing checks are switched off"
+                        }
 
-                        endpoint.method != "GET" && endpoint.kind == "submit" ->
+                        endpoint.method != "GET" && endpoint.kind == "submit" -> {
                             "no body for it in TckConfig.submitPayloads"
+                        }
 
-                        endpoint.kind == PATCH_KIND ->
+                        endpoint.kind == PATCH_KIND -> {
                             "no pairing for it in TckConfig.patchEndpoints, so the form it patches is unknown"
+                        }
 
-                        endpoint.method != "GET" -> "only GET endpoints are walked blind"
-                        else -> "no check claims it"
+                        endpoint.method != "GET" -> {
+                            "only GET endpoints are walked blind"
+                        }
+
+                        else -> {
+                            "no check claims it"
+                        }
                     }
 
                 TckSkip(endpoint.method, endpoint.path, reason)
@@ -975,7 +1147,11 @@ public class TckRunner(
     private suspend fun get(
         endpoint: TckEndpoint,
         extraHeaders: Map<String, String> = emptyMap(),
-    ) = transport.request(endpoint.method, endpoint.walkAddress() ?: endpoint.path, authHeaders(endpoint) + extraHeaders)
+    ) = transport.request(
+        endpoint.method,
+        endpoint.walkAddress() ?: endpoint.path,
+        authHeaders(endpoint) + extraHeaders,
+    )
 
     private fun authHeaders(endpoint: TckEndpoint? = null): Map<String, String> {
         val required = endpoint?.secured ?: true
@@ -997,7 +1173,14 @@ public class TckRunner(
         val amountKey = values.keys.firstOrNull { key -> (values[key]?.jsonObject?.get("long")) != null }
         val mutatedValues =
             if (amountKey == null) {
-                values + ("tck_marker" to buildJsonObjectOf(KompotProtocol.DISCRIMINATOR to JsonPrimitive("text_value"), "text" to JsonPrimitive("tck")))
+                values +
+                    (
+                        "tck_marker" to
+                            buildJsonObjectOf(
+                                KompotProtocol.DISCRIMINATOR to JsonPrimitive("text_value"),
+                                "text" to JsonPrimitive("tck"),
+                            )
+                    )
             } else {
                 val amount = values.getValue(amountKey).jsonObject
                 val long = (amount.getValue("long") as JsonPrimitive).content.toLong()

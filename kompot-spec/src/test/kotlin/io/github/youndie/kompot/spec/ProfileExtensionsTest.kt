@@ -60,10 +60,20 @@ class ProfileExtensionsTest {
     @Test
     fun `a profile without extensions is byte-identical to the one before this existed`() {
         val plain = KompotSpec.profile(schemas)
-        val component = plain.getValue("\$defs").jsonObject.getValue("KompotComponent").jsonObject
+        val component =
+            plain
+                .getValue("\$defs")
+                .jsonObject
+                .getValue("KompotComponent")
+                .jsonObject
 
         assertEquals(null, component["x-kompot-extensions"])
-        assertTrue(plain.getValue("\$defs").jsonObject.keys.none { it.endsWith(KompotProtocol.EXTENSION_SUFFIX) })
+        assertTrue(
+            plain
+                .getValue("\$defs")
+                .jsonObject.keys
+                .none { it.endsWith(KompotProtocol.EXTENSION_SUFFIX) },
+        )
     }
 
     // The cost of an undeclared type differs by hierarchy, so the sentence justifying a missing shape
@@ -106,7 +116,14 @@ class ProfileExtensionsTest {
         fromModules.forEach { (hierarchy, declared) ->
             assertEquals(
                 declared,
-                (profile.getValue("\$defs").jsonObject.getValue(hierarchy).jsonObject["x-kompot-degrades"] as? JsonPrimitive)?.content,
+                (
+                    profile
+                        .getValue(
+                            "\$defs",
+                        ).jsonObject
+                        .getValue(hierarchy)
+                        .jsonObject["x-kompot-degrades"] as? JsonPrimitive
+                )?.content,
                 "the profile disagrees with the module about $hierarchy",
             )
         }
@@ -116,12 +133,23 @@ class ProfileExtensionsTest {
         defs: JsonObject,
         hierarchy: String,
     ): String =
-        (defs.getValue("$hierarchy${KompotProtocol.EXTENSION_SUFFIX}").jsonObject.getValue("description") as JsonPrimitive).content
+        (
+            defs
+                .getValue(
+                    "$hierarchy${KompotProtocol.EXTENSION_SUFFIX}",
+                ).jsonObject
+                .getValue("description") as JsonPrimitive
+        ).content
 
     @Test
     fun `the names are readable without parsing the oneOf`() {
         val profile = KompotSpec.profile(schemas, mapOf("KompotAction" to setOf("open_chat", "share")))
-        val action = profile.getValue("\$defs").jsonObject.getValue("KompotAction").jsonObject
+        val action =
+            profile
+                .getValue("\$defs")
+                .jsonObject
+                .getValue("KompotAction")
+                .jsonObject
 
         assertEquals(
             JsonArray(listOf(JsonPrimitive("open_chat"), JsonPrimitive("share"))),

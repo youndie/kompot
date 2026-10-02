@@ -1,9 +1,9 @@
 package io.github.youndie.kompot.interop
 
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
 import io.github.youndie.kompot.KompotAction
 import io.github.youndie.kompot.KompotComponent
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
 
 // Swift cannot reach a component's or an action's wire type tag through KClass reflection the way a
 // Compose client does, keyed by KClass<out KompotComponent>: Kotlin/Native does not export that kind
@@ -18,7 +18,10 @@ public fun kompotComponentTypeName(
     component: KompotComponent,
     json: Json,
 ): String =
-    json.serializersModule.getPolymorphic(KompotComponent::class, component)?.descriptor?.serialName
+    json.serializersModule
+        .getPolymorphic(KompotComponent::class, component)
+        ?.descriptor
+        ?.serialName
         ?: error("No serializer registered for ${component::class}")
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -26,5 +29,8 @@ public fun kompotActionTypeName(
     action: KompotAction,
     json: Json,
 ): String =
-    json.serializersModule.getPolymorphic(KompotAction::class, action)?.descriptor?.serialName
+    json.serializersModule
+        .getPolymorphic(KompotAction::class, action)
+        ?.descriptor
+        ?.serialName
         ?: error("No serializer registered for ${action::class}")

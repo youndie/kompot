@@ -76,7 +76,8 @@ public object TckEndpoints {
                 val json = operation.jsonObject
                 val responses = json.getValue("responses").jsonObject
                 val statuses = responses.keys.mapNotNull { it.toIntOrNull() }.toSet()
-                val success = statuses.filter { it in 200..299 }.minOrNull() ?: error("$method $path: no success status")
+                val success =
+                    statuses.filter { it in 200..299 }.minOrNull() ?: error("$method $path: no success status")
 
                 TckEndpoint(
                     method = method.uppercase(),
@@ -102,7 +103,8 @@ public object TckEndpoints {
     // must answer 200, and no server could be conformant with a public screen at all.
     private fun securedBy(security: JsonArray?): Boolean = security != null && security.isNotEmpty()
 
-    private fun successContentType(response: JsonObject): String? = (response["content"] as? JsonObject)?.keys?.firstOrNull()
+    private fun successContentType(response: JsonObject): String? =
+        (response["content"] as? JsonObject)?.keys?.firstOrNull()
 
     // The operation's own parameters plus the ones the path item declares for every method under it:
     // where a description puts them is its business, and a reader that looked in one place would find
@@ -128,7 +130,12 @@ public object TckEndpoints {
     // answering exactly what it declared.
     private fun successBody(response: JsonObject): TckResponseBody? {
         val content = response["content"] as? JsonObject ?: return null
-        val schema = content.values.firstOrNull()?.jsonObject?.get("schema")?.jsonObject ?: return null
+        val schema =
+            content.values
+                .firstOrNull()
+                ?.jsonObject
+                ?.get("schema")
+                ?.jsonObject ?: return null
         (schema["\$ref"] as? JsonPrimitive)?.let { return TckResponseBody(it.content, isList = false) }
         val items = (schema["items"] as? JsonObject)?.get("\$ref") as? JsonPrimitive ?: return null
         return TckResponseBody(items.content, isList = true)

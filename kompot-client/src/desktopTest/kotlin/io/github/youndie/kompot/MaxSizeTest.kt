@@ -46,9 +46,13 @@ class MaxSizeTest {
             setContent {
                 TestKompotTheme {
                     CompositionLocalProvider(LocalKompotRegistry provides renderers) {
-                    Box(Modifier.size(1200.dp, 300.dp)) {
-                        ColumnRenderer().Render(column(maxWidthDp = 400), recordingActionHandler(), testFormController())
-                    }
+                        Box(Modifier.size(1200.dp, 300.dp)) {
+                            ColumnRenderer().Render(
+                                column(maxWidthDp = 400),
+                                recordingActionHandler(),
+                                testFormController(),
+                            )
+                        }
                     }
                 }
             }
@@ -65,9 +69,13 @@ class MaxSizeTest {
             setContent {
                 TestKompotTheme {
                     CompositionLocalProvider(LocalKompotRegistry provides renderers) {
-                    Box(Modifier.size(300.dp, 300.dp)) {
-                        ColumnRenderer().Render(column(maxWidthDp = 400), recordingActionHandler(), testFormController())
-                    }
+                        Box(Modifier.size(300.dp, 300.dp)) {
+                            ColumnRenderer().Render(
+                                column(maxWidthDp = 400),
+                                recordingActionHandler(),
+                                testFormController(),
+                            )
+                        }
                     }
                 }
             }
@@ -85,9 +93,13 @@ class MaxSizeTest {
             setContent {
                 TestKompotTheme {
                     CompositionLocalProvider(LocalKompotRegistry provides renderers) {
-                    Box(Modifier.size(1200.dp, 300.dp)) {
-                        ColumnRenderer().Render(column(maxWidthDp = null), recordingActionHandler(), testFormController())
-                    }
+                        Box(Modifier.size(1200.dp, 300.dp)) {
+                            ColumnRenderer().Render(
+                                column(maxWidthDp = null),
+                                recordingActionHandler(),
+                                testFormController(),
+                            )
+                        }
                     }
                 }
             }

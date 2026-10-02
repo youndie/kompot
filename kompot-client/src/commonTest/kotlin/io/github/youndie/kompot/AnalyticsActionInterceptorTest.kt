@@ -23,7 +23,12 @@ class AnalyticsActionInterceptorTest {
                 actionNaming =
                     mapOf(
                         InterceptorTestAction::class to
-                            KompotActionEventNaming { a -> KompotEventDescriptor("tap", mapOf("tag" to (a as InterceptorTestAction).tag)) },
+                            KompotActionEventNaming { a ->
+                                KompotEventDescriptor(
+                                    "tap",
+                                    mapOf("tag" to (a as InterceptorTestAction).tag),
+                                )
+                            },
                     ),
             )
         var reachedEnd = false
@@ -37,7 +42,17 @@ class AnalyticsActionInterceptorTest {
 
         handler.handle(InterceptorTestAction("submit"))
 
-        assertEquals(listOf<AnalyticsEvent>(AnalyticsEvent.ActionTracked(KompotEventDescriptor("tap", mapOf("tag" to "submit")))), tracked)
+        assertEquals(
+            listOf<AnalyticsEvent>(
+                AnalyticsEvent.ActionTracked(
+                    KompotEventDescriptor(
+                        "tap",
+                        mapOf("tag" to "submit"),
+                    ),
+                ),
+            ),
+            tracked,
+        )
         assertTrue(reachedEnd)
     }
 
@@ -49,6 +64,9 @@ class AnalyticsActionInterceptorTest {
 
         handler.handle(InterceptorTestAction("submit"))
 
-        assertEquals(listOf<AnalyticsEvent>(AnalyticsEvent.ActionTracked(KompotEventDescriptor("InterceptorTestAction"))), tracked)
+        assertEquals(
+            listOf<AnalyticsEvent>(AnalyticsEvent.ActionTracked(KompotEventDescriptor("InterceptorTestAction"))),
+            tracked,
+        )
     }
 }

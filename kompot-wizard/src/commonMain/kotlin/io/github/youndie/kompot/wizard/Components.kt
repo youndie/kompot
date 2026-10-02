@@ -1,13 +1,13 @@
 package io.github.youndie.kompot.wizard
 
-import kotlinx.serialization.Polymorphic
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import io.github.youndie.kompot.KompotAction
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.KompotModifierNode
-import io.github.youndie.kompot.registry.KompotComponentMarker
 import io.github.youndie.kompot.form.FormSchema
+import io.github.youndie.kompot.registry.KompotComponentMarker
+import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 // The container of one wizard step. Not the content of the step — that arrives fully built, as any
 // KompotComponent, typically the tree of an ordinary form screen — but a wrapper around it carrying

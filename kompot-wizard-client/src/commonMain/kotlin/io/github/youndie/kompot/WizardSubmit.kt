@@ -1,12 +1,12 @@
 package io.github.youndie.kompot
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import io.github.youndie.kompot.form.FieldValue
+import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.wizard.FinishWizardAction
 import io.github.youndie.kompot.wizard.NextStepAction
 import io.github.youndie.kompot.wizard.PrevStepAction
-import io.github.youndie.kompot.form.FieldValue
-import io.github.youndie.kompot.form.FormController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 // The counterpart of withLoginSubmit for wizard navigation: it intercepts Next/Finish/Prev rather
 // than a submit action, because a wizard has THREE transitions instead of one, and Back must not
@@ -42,6 +42,8 @@ public fun KompotActionHandler.withWizardNavigation(
                 scope.launch { onBack(formController.getRawValues()) }
             }
 
-            else -> handle(action)
+            else -> {
+                handle(action)
+            }
         }
     }
