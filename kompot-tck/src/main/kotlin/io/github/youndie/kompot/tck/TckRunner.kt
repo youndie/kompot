@@ -618,9 +618,7 @@ public class TckRunner(
                         )
                 }
 
-                event.name == HEARTBEAT_EVENT -> {
-                    Unit
-                }
+                event.name == HEARTBEAT_EVENT -> {}
 
                 event.data == null -> {
                     findings +=

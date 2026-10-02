@@ -75,9 +75,7 @@ private fun collect(
             element.forEach { collect(it, depth, into) }
         }
 
-        else -> {
-            Unit
-        }
+        else -> {}
     }
 }
 

@@ -305,9 +305,7 @@ public class JsonSchemaValidator(
                     }
                 }
 
-                else -> {
-                    Unit
-                }
+                else -> {}
             }
         }
     }

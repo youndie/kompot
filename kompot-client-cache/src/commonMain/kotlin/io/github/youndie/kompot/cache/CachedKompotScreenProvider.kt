@@ -58,9 +58,7 @@ public class CachedKompotScreenProvider(
                 )
             }
 
-            KompotFetchResult.NotModified -> {
-                Unit
-            }
+            KompotFetchResult.NotModified -> {}
         }
     }
 

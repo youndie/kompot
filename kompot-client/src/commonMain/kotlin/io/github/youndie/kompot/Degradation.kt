@@ -103,9 +103,7 @@ internal fun KompotDegradationSink.reportUnknown(action: KompotAction) {
             action.actions.forEach { reportUnknown(it) }
         }
 
-        else -> {
-            Unit
-        }
+        else -> {}
     }
 }
 

@@ -87,9 +87,7 @@ private fun String.componentCounts(): Map<String, Int> {
                 element.forEach(::walk)
             }
 
-            else -> {
-                Unit
-            }
+            else -> {}
         }
     }
     walk(root)

@@ -203,9 +203,7 @@ private class JsonScanner(
                 at += 5
             }
 
-            else -> {
-                Unit
-            }
+            else -> {}
         }
 
         if (at > start) spans[path] = start until at
