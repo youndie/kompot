@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://kompot.workinprogress.ru/schema/client-corpus.schema.json",
+  "$id": "https://kompot.kotlin.website/schema/client-corpus.schema.json",
   "title": "client-corpus",
   "description": "The format of a client conformance case: a form, the steps somebody takes on it, and what must be true afterwards. Not part of the wire — a client never sends or receives one of these.",
   "x-kompot-generated-by": "KompotSchemaGenerator — this file is generated, do not edit by hand",

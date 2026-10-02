@@ -9,9 +9,15 @@ public object KompotProtocol {
 
     public const val SCHEMA_DIALECT: String = "https://json-schema.org/draft/2020-12/schema"
 
-    // The $id prefix. It resolves to nothing over the network; it exists so that relative $refs
-    // between files ("kompot-core.schema.json#/${'$'}defs/X") have an unambiguous base for validators.
-    public const val ID_PREFIX: String = "https://kompot.workinprogress.ru/schema/"
+    // The $id prefix. It is an identifier rather than an address: nothing serves the files there, and
+    // JsonSchemaValidator resolves a $ref by file name without looking at it. It exists so that
+    // relative $refs between files ("kompot-core.schema.json#/${'$'}defs/X") have an unambiguous base
+    // for validators that register a schema under its $id.
+    //
+    // It still has to sit under a domain this project controls. A validator configured to fetch an
+    // unknown $id goes wherever the name points, and until 0.39 the name was a domain somebody else
+    // owns (see the subsection on file identifiers at the top of SPEC.md).
+    public const val ID_PREFIX: String = "https://kompot.kotlin.website/schema/"
 
     // The specification as it ships in the artefact, beside the schemas it describes.
     public const val SPEC_FILE_NAME: String = "SPEC.md"
