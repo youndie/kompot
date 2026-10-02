@@ -32,9 +32,13 @@ public class JsonPath private constructor(
     public val segments: List<Segment>,
 ) {
     public sealed interface Segment {
-        public data class Name(val name: String) : Segment
+        public data class Name(
+            val name: String,
+        ) : Segment
 
-        public data class Index(val index: Int) : Segment
+        public data class Index(
+            val index: Int,
+        ) : Segment
     }
 
     public operator fun plus(name: String): JsonPath = JsonPath(segments + Segment.Name(name))
@@ -132,7 +136,9 @@ public class JsonSchemaValidator(
         var lastSegment = ""
         ref.substringAfter('#').split('/').filter { it.isNotEmpty() }.forEach { segment ->
             lastSegment = segment.replace("~1", "/").replace("~0", "~")
-            node = (node as? JsonObject)?.get(lastSegment) ?: error("Unresolvable \$ref: $ref (no segment \"$lastSegment\")")
+            node =
+                (node as? JsonObject)?.get(lastSegment)
+                    ?: error("Unresolvable \$ref: $ref (no segment \"$lastSegment\")")
         }
         return Resolved(node.jsonObject, file, lastSegment)
     }
@@ -289,13 +295,17 @@ public class JsonSchemaValidator(
                 return@forEach
             }
             when (val additional = schema["additionalProperties"]) {
-                is JsonObject -> check(element, additional, file, path + name, findings)
-                is JsonPrimitive ->
+                is JsonObject -> {
+                    check(element, additional, file, path + name, findings)
+                }
+
+                is JsonPrimitive -> {
                     if (additional.booleanOrNull == false) {
                         findings += SchemaFinding(path, "additionalProperties", "unknown property \"$name\"")
                     }
+                }
 
-                else -> Unit
+                else -> {}
             }
         }
     }

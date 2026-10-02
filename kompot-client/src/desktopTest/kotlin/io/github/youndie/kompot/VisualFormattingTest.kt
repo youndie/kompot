@@ -43,7 +43,7 @@ class VisualFormattingTest {
         val transformation = MaskVisualTransformation("+998 (##) ###-##-##")
         val transformed = transformation.filter(AnnotatedString("901234567"))
 
-            // The caret after the third raw digit ("901") must sit right after "90" and before "1"
+        // The caret after the third raw digit ("901") must sit right after "90" and before "1"
         val transformedOffset = transformed.offsetMapping.originalToTransformed(3)
         assertEquals(3, transformed.offsetMapping.transformedToOriginal(transformedOffset))
     }
@@ -67,8 +67,14 @@ class VisualFormattingTest {
 
     @Test
     fun `AmountVisualTransformation omits the suffix entirely when it is null or blank`() {
-        assertEquals("1 500", AmountVisualTransformation(currencySuffix = null).filter(AnnotatedString("1500")).text.text)
-        assertEquals("1 500", AmountVisualTransformation(currencySuffix = " ").filter(AnnotatedString("1500")).text.text)
+        assertEquals(
+            "1 500",
+            AmountVisualTransformation(currencySuffix = null).filter(AnnotatedString("1500")).text.text,
+        )
+        assertEquals(
+            "1 500",
+            AmountVisualTransformation(currencySuffix = " ").filter(AnnotatedString("1500")).text.text,
+        )
     }
 
     // Where the symbol goes is a property of the currency: of five a product might ship, two write it
@@ -99,9 +105,13 @@ class VisualFormattingTest {
     // spaced one, so a mapping that assumed the gap puts the cursor off by exactly that character.
     @Test
     fun `AmountVisualTransformation offset mapping follows the narrower prefix of an unspaced currency`() {
-        val transformed = AmountVisualTransformation(currencyPrefix = "$", currencySpaced = false).filter(AnnotatedString("1500"))
+        val transformed =
+            AmountVisualTransformation(
+                currencyPrefix = "$",
+                currencySpaced = false,
+            ).filter(AnnotatedString("1500"))
 
-            // "$1 500": the caret before the first digit sits right after the symbol.
+        // "$1 500": the caret before the first digit sits right after the symbol.
         assertEquals(1, transformed.offsetMapping.originalToTransformed(0))
         assertEquals(0, transformed.offsetMapping.transformedToOriginal(1))
         assertEquals(transformed.text.text.length, transformed.offsetMapping.originalToTransformed(4))
@@ -125,10 +135,10 @@ class VisualFormattingTest {
     fun `AmountVisualTransformation offset mapping carries the width of a prefix`() {
         val transformed = AmountVisualTransformation(currencyPrefix = "$").filter(AnnotatedString("1500"))
 
-            // "$ 1 500": the caret after all four digits sits at the end of the string.
+        // "$ 1 500": the caret after all four digits sits at the end of the string.
         assertEquals(transformed.text.text.length, transformed.offsetMapping.originalToTransformed(4))
         assertEquals(4, transformed.offsetMapping.transformedToOriginal(transformed.text.text.length))
-            // And the caret before the first digit is after the symbol, not at the very start.
+        // And the caret before the first digit is after the symbol, not at the very start.
         assertEquals(2, transformed.offsetMapping.originalToTransformed(0))
         assertEquals(0, transformed.offsetMapping.transformedToOriginal(2))
     }
@@ -138,7 +148,7 @@ class VisualFormattingTest {
         val transformation = AmountVisualTransformation()
         val transformed = transformation.filter(AnnotatedString("1500000"))
 
-            // The caret after all seven digits — the end of the raw number.
+        // The caret after all seven digits — the end of the raw number.
         val transformedOffset = transformed.offsetMapping.originalToTransformed(7)
         assertEquals(7, transformed.offsetMapping.transformedToOriginal(transformedOffset))
     }

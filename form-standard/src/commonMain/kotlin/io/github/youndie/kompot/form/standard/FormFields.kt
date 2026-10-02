@@ -1,12 +1,12 @@
 package io.github.youndie.kompot.form.standard
 
-import kotlinx.serialization.Polymorphic
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormCondition
 import io.github.youndie.kompot.form.FormFieldDefinition
 import io.github.youndie.kompot.form.ValidationRule
+import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 public enum class KeyboardType {
     TEXT,

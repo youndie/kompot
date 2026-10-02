@@ -39,7 +39,7 @@ public fun KompotActionHandler.withPerform(
                 handle(answer)
             }
         }
-            // Forwarded even when it was handled, exactly as withLoginSubmit forwards a submit: an
-            // analytics wrapper further along the chain has to see that the button was pressed.
+        // Forwarded even when it was handled, exactly as withLoginSubmit forwards a submit: an
+        // analytics wrapper further along the chain has to see that the button was pressed.
         handle(action)
     }

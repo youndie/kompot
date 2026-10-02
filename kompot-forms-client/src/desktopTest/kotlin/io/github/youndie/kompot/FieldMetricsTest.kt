@@ -21,7 +21,9 @@ import kotlin.test.Test
 // replace a standard renderer to change one number, or ship the wrong height.
 @OptIn(ExperimentalTestApi::class)
 class FieldMetricsTest {
-    private class SizingDesignSystem(private val minHeight: Dp = Dp.Unspecified) : KompotDesignSystem {
+    private class SizingDesignSystem(
+        private val minHeight: Dp = Dp.Unspecified,
+    ) : KompotDesignSystem {
         @Composable
         override fun resolveColor(token: ColorToken): Color = Color.Black
 

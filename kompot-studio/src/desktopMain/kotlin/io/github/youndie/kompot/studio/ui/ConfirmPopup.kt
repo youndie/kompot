@@ -72,7 +72,9 @@ internal fun ConfirmPopup(
                             true
                         }
 
-                        else -> false
+                        else -> {
+                            false
+                        }
                     }
                 },
             verticalArrangement = Arrangement.spacedBy(8.dp),

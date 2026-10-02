@@ -1,17 +1,17 @@
 package io.github.youndie.kompot
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import io.github.youndie.kompot.generated.generatedStandardSerializersModule
 import io.github.youndie.kompot.standard.TextComponent
+import io.github.youndie.kompot.standard.kompotStandardSerializersModule
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.plus
-import io.github.youndie.kompot.standard.kompotStandardSerializersModule
-import io.github.youndie.kompot.generated.generatedStandardSerializersModule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -20,7 +20,8 @@ private val json =
     Json {
         classDiscriminator = "type"
         ignoreUnknownKeys = true
-        serializersModule = kompotCoreSerializersModule + kompotStandardSerializersModule + generatedStandardSerializersModule
+        serializersModule =
+            kompotCoreSerializersModule + kompotStandardSerializersModule + generatedStandardSerializersModule
     }
 
 // A server that replaces a toolkit component with one of its own knows the exact stand-in and had no
@@ -46,7 +47,15 @@ class UnknownFallbackTest {
     fun `the fallback is what reaches the screen`() =
         runDesktopComposeUiTest {
             val decoded = json.decodeFromString(PolymorphicSerializer(KompotComponent::class), body)
-            setContent { WithRenderers { LocalKompotRegistry.current.RenderNode(decoded, recordingActionHandler(), testFormController()) } }
+            setContent {
+                WithRenderers {
+                    LocalKompotRegistry.current.RenderNode(
+                        decoded,
+                        recordingActionHandler(),
+                        testFormController(),
+                    )
+                }
+            }
 
             onNodeWithText("Plain instead").assertIsDisplayed()
         }
@@ -55,7 +64,11 @@ class UnknownFallbackTest {
     // obligation to say it.
     @Test
     fun `an unfamiliar type with no fallback still decodes to a placeholder`() {
-        val decoded = json.decodeFromString(PolymorphicSerializer(KompotComponent::class), """{"type":"nonesuch","id":"x"}""")
+        val decoded =
+            json.decodeFromString(
+                PolymorphicSerializer(KompotComponent::class),
+                """{"type":"nonesuch","id":"x"}""",
+            )
 
         assertIs<UnknownComponent>(decoded)
         assertEquals(null, decoded.fallback)

@@ -1,15 +1,15 @@
 package io.github.youndie.kompot.forms
 
+import io.github.youndie.kompot.KompotAction
+import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.form.FormSchema
+import io.github.youndie.kompot.generated.generatedFormsSerializersModule
+import io.github.youndie.kompot.kompotCoreSerializersModule
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.plus
-import io.github.youndie.kompot.KompotAction
-import io.github.youndie.kompot.KompotComponent
-import io.github.youndie.kompot.kompotCoreSerializersModule
-import io.github.youndie.kompot.generated.generatedFormsSerializersModule
-import io.github.youndie.kompot.form.FormSchema
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -28,10 +28,25 @@ class SerializersTest {
                 TextInputComponent(id = "1", fieldId = "search", label = "Search", uppercase = true),
                 AmountInputComponent(id = "2", fieldId = "amount", label = "Amount", currencyFromField = "bucket"),
                 CheckboxInputComponent(id = "3", fieldId = "auto", label = "Auto"),
-                CheckboxInputComponent(id = "3s", fieldId = "roaming", label = "Roaming", variant = KompotCheckboxVariants.SWITCH),
+                CheckboxInputComponent(
+                    id = "3s",
+                    fieldId = "roaming",
+                    label = "Roaming",
+                    variant = KompotCheckboxVariants.SWITCH,
+                ),
                 AutocompleteInputComponent(id = "4", fieldId = "b", label = "Recipient", dataSourceId = "search"),
-                SelectInputComponent(id = "5", fieldId = "status", label = "Status", options = listOf(SelectOption("a", "A"))),
-                RadioGroupComponent(id = "6", fieldId = "commission", label = "Surcharge", options = listOf(SelectOption("a", "A"))),
+                SelectInputComponent(
+                    id = "5",
+                    fieldId = "status",
+                    label = "Status",
+                    options = listOf(SelectOption("a", "A")),
+                ),
+                RadioGroupComponent(
+                    id = "6",
+                    fieldId = "commission",
+                    label = "Surcharge",
+                    options = listOf(SelectOption("a", "A")),
+                ),
                 ReadOnlyFieldComponent(id = "7", label = "Company", value = "TEBO"),
             )
 
@@ -39,7 +54,11 @@ class SerializersTest {
         // for a NON-sealed interface on Kotlin/Native: it fails on the iOS simulator target.
         val componentSerializer = PolymorphicSerializer(KompotComponent::class)
         components.forEach { component ->
-            val decoded = json.decodeFromString(componentSerializer, json.encodeToString(componentSerializer, component))
+            val decoded =
+                json.decodeFromString(
+                    componentSerializer,
+                    json.encodeToString(componentSerializer, component),
+                )
             assertEquals(component, decoded)
         }
     }
@@ -56,7 +75,16 @@ class SerializersTest {
 
     @Test
     fun `SelectOption rawMetadata survives a round-trip and defaults to null`() {
-        val withMetadata = SelectOption(id = "acc_1", label = "UZS", rawMetadata = mapOf("currency" to "UZS", "capacity" to "1000"))
+        val withMetadata =
+            SelectOption(
+                id = "acc_1",
+                label = "UZS",
+                rawMetadata =
+                    mapOf(
+                        "currency" to "UZS",
+                        "capacity" to "1000",
+                    ),
+            )
         val decoded = json.decodeFromString<SelectOption>(json.encodeToString(withMetadata))
         assertEquals(withMetadata, decoded)
 

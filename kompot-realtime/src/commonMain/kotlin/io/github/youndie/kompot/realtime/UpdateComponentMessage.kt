@@ -1,8 +1,8 @@
 package io.github.youndie.kompot.realtime
 
+import io.github.youndie.kompot.KompotComponent
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
-import io.github.youndie.kompot.KompotComponent
 
 // The update-channel protocol (see KompotRealtimeSource). The transport itself is not described
 // here; this is only the frame contract, encoded in the data field of each ServerSentEvent.

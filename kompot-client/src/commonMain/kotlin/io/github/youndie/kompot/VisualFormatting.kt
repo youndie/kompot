@@ -6,9 +6,9 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 
 /**
-     * A general input mask of the form "+1 (###) ###-##-##", where "#" is a placeholder for the next
-     * raw character and every other character is a literal inserted on the fly. An OffsetMapping keeps
-     * the caret in step with the mask.
+ * A general input mask of the form "+1 (###) ###-##-##", where "#" is a placeholder for the next
+ * raw character and every other character is a literal inserted on the fly. An OffsetMapping keeps
+ * the caret in step with the mask.
  */
 public class MaskVisualTransformation(
     private val mask: String,
@@ -62,13 +62,13 @@ public class MaskVisualTransformation(
 }
 
 /**
-     * Visual formatting of an amount: digits grouped in threes from the right, plus an optional
-     * currency symbol on either side. The stored value stays a number with no spaces.
-     *
-     * The side matters to the caret, not only to the eye: a symbol drawn in front shifts every digit
-     * of the field, so the offset mapping carries its width or the cursor lands one place per
-     * character away from where it was typed. The gap counts toward that width, which is why it is
-     * this class that draws it rather than the caller pre-pending a space to the symbol.
+ * Visual formatting of an amount: digits grouped in threes from the right, plus an optional
+ * currency symbol on either side. The stored value stays a number with no spaces.
+ *
+ * The side matters to the caret, not only to the eye: a symbol drawn in front shifts every digit
+ * of the field, so the offset mapping carries its width or the cursor lands one place per
+ * character away from where it was typed. The gap counts toward that width, which is why it is
+ * this class that draws it rather than the caller pre-pending a space to the symbol.
  */
 public class AmountVisualTransformation(
     private val currencySuffix: String? = null,
@@ -98,7 +98,14 @@ public class AmountVisualTransformation(
         // Whether a gap is drawn is the currency's business too, not only the symbol and its side.
         val gap = if (currencySpaced) " " else ""
         val suffixText = if (!currencySuffix.isNullOrBlank() && n > 0) "$gap$currencySuffix" else ""
-        val prefixText = if (suffixText.isEmpty() && !currencyPrefix.isNullOrBlank() && n > 0) "$currencyPrefix$gap" else ""
+        val prefixText =
+            if (suffixText.isEmpty() && !currencyPrefix.isNullOrBlank() &&
+                n > 0
+            ) {
+                "$currencyPrefix$gap"
+            } else {
+                ""
+            }
         val fullText = prefixText + grouped.toString() + suffixText
         val shift = prefixText.length
 

@@ -31,7 +31,11 @@ class BoxLayoutTest {
         label: String,
         width: Int,
         height: Int,
-    ) = TextComponent(id = label, text = label, modifiers = listOf(KompotModifierNode.Size(widthDp = width, heightDp = height)))
+    ) = TextComponent(
+        id = label,
+        text = label,
+        modifiers = listOf(KompotModifierNode.Size(widthDp = width, heightDp = height)),
+    )
 
     private val picture = leaf("picture", 200, 100)
 
@@ -53,7 +57,10 @@ class BoxLayoutTest {
     ) = runDesktopComposeUiTest(width = 400, height = 400) {
         setContent {
             TestKompotTheme {
-                CompositionLocalProvider(LocalKompotRegistry provides renderers, LocalLayoutDirection provides direction) {
+                CompositionLocalProvider(
+                    LocalKompotRegistry provides renderers,
+                    LocalLayoutDirection provides direction,
+                ) {
                     Box(Modifier.size(400.dp, 400.dp)) {
                         renderers.RenderNode(node, recordingActionHandler(), testFormController())
                     }

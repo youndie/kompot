@@ -18,7 +18,10 @@ class SpecificationResourceTest {
     fun `the specification travels in the artefact`() {
         val text = resources.specification()
 
-        assertTrue(text.startsWith("# Спецификация протокола KOMPOT"), "the first line reads: ${text.lineSequence().first()}")
+        assertTrue(
+            text.startsWith("# Спецификация протокола KOMPOT"),
+            "the first line reads: ${text.lineSequence().first()}",
+        )
         assertTrue("## 9. Формы" in text)
     }
 

@@ -1,9 +1,9 @@
 package io.github.youndie.kompot.wizard
 
-import kotlinx.serialization.Polymorphic
-import kotlinx.serialization.Serializable
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.wizard.core.WizardTransition
+import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.Serializable
 
 // The body of a wizard's resume request, mirroring FormPatchRequest in :kompot-forms: the client sends
 // typed FieldValue instances — what a FormController has already collected — rather than raw strings.

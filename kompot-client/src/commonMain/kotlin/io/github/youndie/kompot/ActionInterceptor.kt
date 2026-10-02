@@ -15,13 +15,13 @@ public fun interface KompotActionInterceptor {
 public interface KompotActionChain {
     public val action: KompotAction
 
-        // Passes the same action on by default; an interceptor may substitute another one — a
-        // wrapped, enriched version, say — by passing it explicitly.
+    // Passes the same action on by default; an interceptor may substitute another one — a
+    // wrapped, enriched version, say — by passing it explicitly.
     public fun proceed(action: KompotAction = this.action)
 }
 
-    // Folds the list of interceptors into a single handler, which is what component renderers
-    // actually call.
+// Folds the list of interceptors into a single handler, which is what component renderers
+// actually call.
 public fun kompotActionHandler(interceptors: List<KompotActionInterceptor>): KompotActionHandler =
     KompotActionHandler { action -> RealKompotActionChain(interceptors, 0, action).proceed(action) }
 
@@ -31,8 +31,8 @@ private class RealKompotActionChain(
     override val action: KompotAction,
 ) : KompotActionChain {
     override fun proceed(action: KompotAction) {
-            // The chain is exhausted: either the list was empty, or the last interceptor did not
-            // call proceed() — it handled the action terminally.
+        // The chain is exhausted: either the list was empty, or the last interceptor did not
+        // call proceed() — it handled the action terminally.
         if (index >= interceptors.size) return
 
         val nextChain = RealKompotActionChain(interceptors, index + 1, action)

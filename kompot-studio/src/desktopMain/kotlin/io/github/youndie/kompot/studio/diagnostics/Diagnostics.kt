@@ -8,11 +8,11 @@ import io.github.youndie.kompot.spec.childSlots
 import io.github.youndie.kompot.spec.paginatingTypes
 import io.github.youndie.kompot.spec.walkJsonObjects
 import io.github.youndie.kompot.studio.KompotStudioConfig
-import kotlinx.serialization.SerializationException
 import io.github.youndie.kompot.studio.palette.definitionOf
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 
 // FOUR SOURCES, ONE RECORD. "A screen ships without a client release" means the compiler never sees
@@ -134,8 +134,10 @@ internal fun unfilledFields(
 
             required
                 .asSequence()
-                .filter { name -> (node.value[name] as? JsonPrimitive)?.takeIf { it.isString }?.content?.isBlank() == true }
-                .map { name ->
+                .filter { name ->
+                    (node.value[name] as? JsonPrimitive)?.takeIf { it.isString }?.content?.isBlank() ==
+                        true
+                }.map { name ->
                     Finding(
                         layer = "draft",
                         path = node.path.toString(),
@@ -150,8 +152,7 @@ private fun JsonArray?.orEmpty(): List<JsonElement> = this ?: emptyList()
 internal fun capturingIsSafe(
     config: KompotStudioConfig,
     body: String,
-): Boolean =
-    runCatching { stubbedPagination(config, Json.parseToJsonElement(body)).isEmpty() }.getOrDefault(true)
+): Boolean = runCatching { stubbedPagination(config, Json.parseToJsonElement(body)).isEmpty() }.getOrDefault(true)
 
 private const val DISCRIMINATOR = "type"
 
@@ -203,7 +204,12 @@ private fun syntaxFinding(
     failure: SerializationException,
 ): Finding {
     val message = failure.message.orEmpty()
-    val offset = OFFSET.find(message)?.groupValues?.get(1)?.toIntOrNull()
+    val offset =
+        OFFSET
+            .find(message)
+            ?.groupValues
+            ?.get(1)
+            ?.toIntOrNull()
 
     if (offset == null || offset > body.length) {
         return Finding("syntax", null, message, Severity.ERROR)

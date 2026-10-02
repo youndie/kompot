@@ -3,10 +3,10 @@ package io.github.youndie.kompot.studio
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import io.github.youndie.kompot.ColorToken
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.KompotActionHandler
 import io.github.youndie.kompot.KompotDegradationKind
 import io.github.youndie.kompot.LocalKompotDesignSystem
@@ -98,32 +98,32 @@ internal fun StudioRenderPane(
                 val ground = designSystem.resolveColor(BACKGROUND)
 
                 Box(Modifier.fillMaxSize().background(ground)) {
-                // Read back from inside the frame and decorated HERE rather than above it: a frame
-                // that installs its own registry — konekt's does — must be the one that gets
-                // decorated, or the frame would quietly opt out of the highlight.
-                val registry =
-                    LocalKompotRegistry.current.let { installed ->
-                        if (selectedId == null && dropId == null) {
-                            installed
-                        } else {
-                            installed.decorated { it.withSelectionBorder(selectedId, dropId) }
+                    // Read back from inside the frame and decorated HERE rather than above it: a frame
+                    // that installs its own registry — konekt's does — must be the one that gets
+                    // decorated, or the frame would quietly opt out of the highlight.
+                    val registry =
+                        LocalKompotRegistry.current.let { installed ->
+                            if (selectedId == null && dropId == null) {
+                                installed
+                            } else {
+                                installed.decorated { it.withSelectionBorder(selectedId, dropId) }
+                            }
                         }
-                    }
 
-                KompotPreview(
-                    body = body,
-                    registry = registry,
-                    designSystem = designSystem,
-                    state = state,
-                    json = config.json,
-                    actionHandler = actionHandler,
-                    // Collecting rather than the default, which throws. The default is right for a
-                    // golden and wrong for a window somebody is typing into: a half-written body
-                    // degrades on every keystroke, and a preview that dies on the first one cannot be
-                    // typed in at all.
-                    onDegraded = onDegraded,
-                    pageLoader = config.pageLoader,
-                )
+                    KompotPreview(
+                        body = body,
+                        registry = registry,
+                        designSystem = designSystem,
+                        state = state,
+                        json = config.json,
+                        actionHandler = actionHandler,
+                        // Collecting rather than the default, which throws. The default is right for a
+                        // golden and wrong for a window somebody is typing into: a half-written body
+                        // degrades on every keystroke, and a preview that dies on the first one cannot be
+                        // typed in at all.
+                        onDegraded = onDegraded,
+                        pageLoader = config.pageLoader,
+                    )
                 }
             }
         }

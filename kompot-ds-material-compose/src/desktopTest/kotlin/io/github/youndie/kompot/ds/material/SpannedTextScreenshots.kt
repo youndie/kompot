@@ -33,9 +33,20 @@ private class ProseDesignSystem : KompotDesignSystem {
     @Composable
     override fun resolveTypography(token: TypographyToken): TextStyle =
         when (token.key) {
-            "code" -> MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold, color = Color(0xFF7A3E00))
-            "link" -> MaterialTheme.typography.bodyMedium.copy(color = Color(0xFF1B3FA8), textDecoration = TextDecoration.Underline)
-            else -> MaterialTheme.typography.bodyMedium
+            "code" -> {
+                MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold, color = Color(0xFF7A3E00))
+            }
+
+            "link" -> {
+                MaterialTheme.typography.bodyMedium.copy(
+                    color = Color(0xFF1B3FA8),
+                    textDecoration = TextDecoration.Underline,
+                )
+            }
+
+            else -> {
+                MaterialTheme.typography.bodyMedium
+            }
         }
 }
 
@@ -73,13 +84,22 @@ private val PROSE =
                             TextSpan(text = HEAD),
                             TextSpan(text = CODE, style = TypographyToken("code")),
                             TextSpan(text = TAIL),
-                            TextSpan(text = LINK, style = TypographyToken("link"), action = OpenUrlAction("https://example.org/backlog/42")),
+                            TextSpan(
+                                text = LINK,
+                                style = TypographyToken("link"),
+                                action = OpenUrlAction("https://example.org/backlog/42"),
+                            ),
                         ),
                 ),
             ),
     )
 
-@ViddikScreenshot(name = "Text - a span carries its own style and an action", group = "Renderer", width = 420, height = 170)
+@ViddikScreenshot(
+    name = "Text - a span carries its own style and an action",
+    group = "Renderer",
+    width = 420,
+    height = 170,
+)
 @Composable
 fun SpannedTextScreenshot() {
     MaterialTheme(typography = viddikTypography()) {

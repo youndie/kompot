@@ -11,7 +11,12 @@ class DslTest {
     @Test
     fun `wizardScreen generates an id when none is given and defaults totalSteps to null and canGoBack to false`() {
         val screen =
-            wizardScreen(formId = "checkout", stepId = "details", stepIndex = 0, content = TextComponent(id = "t", text = "hi"))
+            wizardScreen(
+                formId = "checkout",
+                stepId = "details",
+                stepIndex = 0,
+                content = TextComponent(id = "t", text = "hi"),
+            )
 
         assertTrue(screen.id.isNotBlank())
         assertEquals("checkout", screen.formId)

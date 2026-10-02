@@ -62,16 +62,16 @@ class RefreshTest {
                 TestKompotTheme {
                     // No list here, so no page is ever asked for; the screen still requires a loader.
                     androidx.compose.runtime.CompositionLocalProvider(LocalKompotPageLoader provides noPages) {
-                    Column {
-                        Button(onClick = { handler.handle(RefreshAction) }) { Text("refresh") }
-                        KompotLazyScreen(
-                            rootComponent = tree,
-                            registry = KompotRegistry(kompotCoreRenderers + kompotStandardRenderers),
-                            formController = testFormController(),
-                            actionHandler = handler,
-                            modifier = Modifier.fillMaxWidth().height(200.dp).testTag("screen"),
-                        )
-                    }
+                        Column {
+                            Button(onClick = { handler.handle(RefreshAction) }) { Text("refresh") }
+                            KompotLazyScreen(
+                                rootComponent = tree,
+                                registry = KompotRegistry(kompotCoreRenderers + kompotStandardRenderers),
+                                formController = testFormController(),
+                                actionHandler = handler,
+                                modifier = Modifier.fillMaxWidth().height(200.dp).testTag("screen"),
+                            )
+                        }
                     }
                 }
             }

@@ -8,12 +8,12 @@ import androidx.compose.ui.test.DesktopComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.compose.ui.text.TextStyle
+import io.github.youndie.kompot.form.FormController
+import io.github.youndie.kompot.form.FormSchema
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import io.github.youndie.kompot.form.FormController
-import io.github.youndie.kompot.form.FormSchema
 
 // A stand-in design system: renderers resolve tokens through LocalKompotDesignSystem, and a UI test
 // cares that something rendered and what text it shows, not about the exact colour or font.

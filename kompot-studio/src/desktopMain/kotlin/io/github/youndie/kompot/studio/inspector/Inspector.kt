@@ -10,55 +10,53 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import org.jetbrains.jewel.ui.component.Divider
-import org.jetbrains.jewel.ui.Orientation
-import androidx.compose.ui.window.PopupProperties
-import androidx.compose.ui.unit.em
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.foundation.text.input.TextFieldLineLimits
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.material3.M3Colors
@@ -82,8 +80,10 @@ import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.Outline
 import org.jetbrains.jewel.ui.component.Checkbox
+import org.jetbrains.jewel.ui.component.Divider
 import org.jetbrains.jewel.ui.component.ListComboBox
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextField
@@ -138,10 +138,22 @@ internal fun InspectorPane(
             )
         }
 
-        Column(Modifier.padding(start = 12.dp, end = 12.dp, top = 6.dp, bottom = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            fun write(name: String, written: String?) {
+        Column(
+            Modifier.padding(start = 12.dp, end = 12.dp, top = 6.dp, bottom = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            fun write(
+                name: String,
+                written: String?,
+            ) {
                 val edited =
-                    if (written == null) JsonEdits.removeProperty(body, node.path, name) else JsonEdits.setProperty(body, node.path, name, written)
+                    if (written ==
+                        null
+                    ) {
+                        JsonEdits.removeProperty(body, node.path, name)
+                    } else {
+                        JsonEdits.setProperty(body, node.path, name, written)
+                    }
                 edited?.let(onEdit)
             }
 
@@ -150,27 +162,33 @@ internal fun InspectorPane(
                     field.name == "children" -> {
                         val count = node.children.size
                         LabelledRow("children", required = field.required, top = false) {
-                            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
                                 Text("$count nodes — edit in Structure", color = colors.dim)
                                 Icon(StudioIcon.NAVIGATE, colors.dim)
                             }
                         }
                     }
 
-                    field.name == "modifiers" ->
+                    field.name == "modifiers" -> {
                         LabelledRow("modifiers", required = field.required, top = true) {
                             ModifiersTable(config, values["modifiers"], resolver, onChange = { write("modifiers", it) })
                         }
+                    }
 
-                    field.kind == FieldKind.NESTED && field.hierarchy != null ->
+                    field.kind == FieldKind.NESTED && field.hierarchy != null -> {
                         LabelledRow(field.name, required = field.required, top = true) {
                             NestedForm(config, field, values[field.name], resolver) { write(field.name, it) }
                         }
+                    }
 
-                    else ->
+                    else -> {
                         LabelledRow(field.name, required = field.required, top = false) {
                             FieldEditor(field, values[field.name], resolver) { write(field.name, it) }
                         }
+                    }
                 }
             }
 
@@ -181,13 +199,23 @@ internal fun InspectorPane(
             val undescribed = values.keys.filterNot { it in described }.sorted()
             if (!node.known) {
                 LabelledRow("id", required = true, top = false) {
-                    FieldEditor(PropertyField("id", FieldKind.STRING, true, null), values["id"], resolver) { write("id", it) }
+                    FieldEditor(
+                        PropertyField("id", FieldKind.STRING, true, null),
+                        values["id"],
+                        resolver,
+                    ) { write("id", it) }
                 }
                 RawBlock(values.filterKeys { it != "id" && it != "type" })
             } else {
                 undescribed.forEach { name ->
                     LabelledRow(name, required = false, top = false, dim = true) {
-                        FieldEditor(PropertyField(name, FieldKind.RAW, false, "not in this build's schema"), values[name], resolver) { write(name, it) }
+                        FieldEditor(
+                            PropertyField(name, FieldKind.RAW, false, "not in this build's schema"),
+                            values[name],
+                            resolver,
+                        ) {
+                            write(name, it)
+                        }
                     }
                 }
             }
@@ -211,7 +239,10 @@ private fun LabelledRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = if (top) Alignment.Top else Alignment.CenterVertically,
     ) {
-        Row(Modifier.width(LABEL_WIDTH).padding(top = if (top) 5.dp else 0.dp), horizontalArrangement = Arrangement.spacedBy(3.dp)) {
+        Row(
+            Modifier.width(LABEL_WIDTH).padding(top = if (top) 5.dp else 0.dp),
+            horizontalArrangement = Arrangement.spacedBy(3.dp),
+        ) {
             Text(label, color = if (dim) colors.dim else colors.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (required) Text("*", color = colors.dim)
         }
@@ -228,14 +259,24 @@ private fun FieldEditor(
 ) {
     val colors = studioColors()
     when (field.kind) {
-        FieldKind.BOOLEAN ->
+        FieldKind.BOOLEAN -> {
             Checkbox(checked = raw == "true", onCheckedChange = { onWrite(it.toString()) })
+        }
 
-        FieldKind.CHOICE ->
+        FieldKind.CHOICE -> {
             when {
-                field.options.isEmpty() -> Text("no values declared for this field", color = colors.dim)
-                field.tokenKind == "ColorToken" -> TokenPicker(field, raw, resolver, onWrite)
-                field.tokenKind == "TypographyToken" -> TokenPicker(field, raw, resolver, onWrite)
+                field.options.isEmpty() -> {
+                    Text("no values declared for this field", color = colors.dim)
+                }
+
+                field.tokenKind == "ColorToken" -> {
+                    TokenPicker(field, raw, resolver, onWrite)
+                }
+
+                field.tokenKind == "TypographyToken" -> {
+                    TokenPicker(field, raw, resolver, onWrite)
+                }
+
                 else -> {
                     // A list, not a row of radio buttons: a typography scale has a dozen tokens, and
                     // a dozen buttons in the inspector's width squeezed the last of them to a column
@@ -251,6 +292,7 @@ private fun FieldEditor(
                     )
                 }
             }
+        }
 
         FieldKind.NUMBER -> {
             val state = remember(field.name, raw) { TextFieldState(raw.orEmpty()) }
@@ -273,7 +315,10 @@ private fun FieldEditor(
                     onWrite(it.takeIf { it.isNotBlank() })
                 }
                 if (blank) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
                         Icon(StudioIcon.ERROR, colors.error)
                         Text("Required — left empty.", color = colors.error, fontSize = 12.sp)
                     }
@@ -398,7 +443,9 @@ private fun TokenPopup(
                             true
                         }
 
-                        else -> false
+                        else -> {
+                            false
+                        }
                     }
                 },
         ) {
@@ -450,7 +497,11 @@ private fun TokenPopup(
                     }
                 }
                 if (matches.isEmpty() && !custom) {
-                    Text("Nothing in the dictionary matches.", Modifier.padding(horizontal = 12.dp, vertical = 4.dp), color = colors.dim)
+                    Text(
+                        "Nothing in the dictionary matches.",
+                        Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+                        color = colors.dim,
+                    )
                 }
             }
 
@@ -598,13 +649,31 @@ private fun ModifiersTable(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(type, Modifier.width(72.dp), maxLines = 1)
-                Row(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    ModifierControls(config, modifier, resolver) { changed -> commit(modifiers.toMutableList().also { it[index] = changed }) }
+                Row(
+                    Modifier.weight(1f),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    ModifierControls(config, modifier, resolver) { changed ->
+                        commit(
+                            modifiers.toMutableList().also {
+                                it[index] =
+                                    changed
+                            },
+                        )
+                    }
                 }
                 Icon(
                     StudioIcon.REMOVE,
                     colors.dim,
-                    Modifier.focusProperties { canFocus = false }.clickable { commit(modifiers.filterIndexed { i, _ -> i != index }) },
+                    Modifier.focusProperties { canFocus = false }.clickable {
+                        commit(
+                            modifiers.filterIndexed { i, _ ->
+                                i !=
+                                    index
+                            },
+                        )
+                    },
                 )
             }
             Spacer(Modifier.fillMaxWidth().height(1.dp).background(colors.line))
@@ -616,7 +685,15 @@ private fun ModifiersTable(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                if (modifiers.isEmpty()) Text("No modifiers", Modifier.weight(1f), color = colors.dim) else Spacer(Modifier.weight(1f))
+                if (modifiers.isEmpty()) {
+                    Text(
+                        "No modifiers",
+                        Modifier.weight(1f),
+                        color = colors.dim,
+                    )
+                } else {
+                    Spacer(Modifier.weight(1f))
+                }
                 Row(
                     Modifier.focusProperties { canFocus = false }.clickable { adding = !adding },
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -632,8 +709,16 @@ private fun ModifiersTable(
                     Column(
                         Modifier
                             .width(160.dp)
-                            .background(if (colors.field == Color.White) Color.White else Color(0xFF2B2D30), RoundedCornerShape(8.dp))
-                            .border(1.dp, colors.controlLine, RoundedCornerShape(8.dp))
+                            .background(
+                                if (colors.field ==
+                                    Color.White
+                                ) {
+                                    Color.White
+                                } else {
+                                    Color(0xFF2B2D30)
+                                },
+                                RoundedCornerShape(8.dp),
+                            ).border(1.dp, colors.controlLine, RoundedCornerShape(8.dp))
                             .padding(vertical = 6.dp),
                     ) {
                         MODIFIER_TYPES.forEach { type ->
@@ -657,7 +742,9 @@ private fun androidx.compose.foundation.layout.RowScope.ModifierControls(
     onChange: (JsonObject) -> Unit,
 ) {
     val colors = studioColors()
+
     fun int(name: String): Int? = (modifier[name] as? JsonPrimitive)?.content?.toIntOrNull()
+
     fun with(vararg pairs: Pair<String, JsonElement?>): JsonObject =
         buildJsonObject {
             modifier.forEach { (k, v) -> if (pairs.none { it.first == k }) put(k, v) }
@@ -672,14 +759,25 @@ private fun androidx.compose.foundation.layout.RowScope.ModifierControls(
             val bySides = sides.any { int(it) != null }
             SmallSegmented(listOf("All", "Sides"), if (bySides) "Sides" else "All") { picked ->
                 if (picked == "All") {
-                    onChange(with("all" to JsonPrimitive(int("all") ?: int("top") ?: 0), *sides.map { it to null }.toTypedArray()))
+                    onChange(
+                        with(
+                            "all" to JsonPrimitive(int("all") ?: int("top") ?: 0),
+                            *sides.map { it to null }.toTypedArray(),
+                        ),
+                    )
                 } else {
                     val v = int("all") ?: 0
                     onChange(with("all" to null, *sides.map { it to JsonPrimitive(int(it) ?: v) }.toTypedArray()))
                 }
             }
             if (bySides) {
-                sides.forEach { side -> DpField(side.take(1).uppercase(), int(side) ?: 0) { onChange(with(side to JsonPrimitive(it))) } }
+                sides.forEach { side ->
+                    DpField(side.take(1).uppercase(), int(side) ?: 0) {
+                        onChange(
+                            with(side to JsonPrimitive(it)),
+                        )
+                    }
+                }
             } else {
                 DpField(null, int("all") ?: 0) { onChange(with("all" to JsonPrimitive(it))) }
             }
@@ -717,7 +815,9 @@ private fun androidx.compose.foundation.layout.RowScope.ModifierControls(
             }
         }
 
-        else -> Mono(modifier.toString(), colors.dim, Modifier.weight(1f))
+        else -> {
+            Mono(modifier.toString(), colors.dim, Modifier.weight(1f))
+        }
     }
 }
 
@@ -729,11 +829,12 @@ private fun SizeAxis(
     onChange: (symbolic: String?, dp: Int?) -> Unit,
 ) {
     val colors = studioColors()
-    val current = when {
-        dp != null -> "dp"
-        symbolic is JsonPrimitive -> symbolic.content
-        else -> "wrap"
-    }
+    val current =
+        when {
+            dp != null -> "dp"
+            symbolic is JsonPrimitive -> symbolic.content
+            else -> "wrap"
+        }
     val options = listOf("fill", "wrap", "dp")
     Text(label, color = colors.dim, fontSize = 12.sp)
     ListComboBox(
@@ -781,10 +882,17 @@ private fun NestedForm(
     val type = current?.get("type")?.jsonPrimitive?.content
     val subFields =
         remember(config, type) {
-            type?.let { defKeyFor(config.schemas, it, hierarchy) }?.let { fieldsFor(config.schemas, it, tokens = tokenOptions(config)) }.orEmpty()
+            type
+                ?.let {
+                    defKeyFor(config.schemas, it, hierarchy)
+                }?.let { fieldsFor(config.schemas, it, tokens = tokenOptions(config)) }
+                .orEmpty()
         }
 
-    fun rewrite(typeName: String?, values: Map<String, JsonElement>) {
+    fun rewrite(
+        typeName: String?,
+        values: Map<String, JsonElement>,
+    ) {
         if (typeName == null) return onWrite(null)
         onWrite(
             buildJsonObject {
@@ -794,7 +902,10 @@ private fun NestedForm(
         )
     }
 
-    Column(Modifier.fillMaxWidth().border(1.dp, colors.line, RoundedCornerShape(6.dp)).padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(
+        Modifier.fillMaxWidth().border(1.dp, colors.line, RoundedCornerShape(6.dp)).padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("type", Modifier.width(72.dp), color = colors.dim)
             val options = listOf(UNSET) + members
@@ -812,10 +923,22 @@ private fun NestedForm(
                     if (sub.required) Text("*", color = colors.dim)
                 }
                 Box(Modifier.weight(1f)) {
-                    val subRaw = current?.get(sub.name)?.let { if (it is JsonPrimitive && it.isString) "\"${it.content}\"" else it.toString() }
+                    val subRaw =
+                        current?.get(sub.name)?.let {
+                            if (it is JsonPrimitive &&
+                                it.isString
+                            ) {
+                                "\"${it.content}\""
+                            } else {
+                                it.toString()
+                            }
+                        }
                     FieldEditor(sub, subRaw, resolver) { written ->
                         val values = current.orEmpty().filterKeys { it != "type" && it != sub.name }.toMutableMap()
-                        written?.let { text -> values[sub.name] = runCatching { Json.parseToJsonElement(text) }.getOrElse { JsonPrimitive(text) } }
+                        written?.let { text ->
+                            values[sub.name] =
+                                runCatching { Json.parseToJsonElement(text) }.getOrElse { JsonPrimitive(text) }
+                        }
                         rewrite(type, values)
                     }
                 }
@@ -823,7 +946,6 @@ private fun NestedForm(
         }
     }
 }
-
 
 // A text field that WRITES on Enter and on leaving the field. The keyboard-action callback is the
 // IME's and never fires from a desktop keyboard's Return, so a value typed into the inspector stayed
@@ -837,6 +959,7 @@ private fun CommittingField(
     onCommit: (String) -> Unit,
 ) {
     var last by remember(state) { mutableStateOf(state.text.toString()) }
+
     fun commit() {
         val now = state.text.toString()
         if (now != last) {
@@ -849,7 +972,9 @@ private fun CommittingField(
         modifier =
             modifier
                 .onPreviewKeyEvent { event ->
-                    if (event.type == KeyEventType.KeyDown && (event.key == Key.Enter || event.key == Key.NumPadEnter)) {
+                    if (event.type == KeyEventType.KeyDown &&
+                        (event.key == Key.Enter || event.key == Key.NumPadEnter)
+                    ) {
                         commit()
                         true
                     } else {
@@ -898,7 +1023,15 @@ private fun Mono(
     color: Color,
     modifier: Modifier = Modifier,
 ) {
-    Text(text, modifier, color = color, fontFamily = FontFamily.Monospace, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+    Text(
+        text,
+        modifier,
+        color = color,
+        fontFamily = FontFamily.Monospace,
+        fontSize = 12.sp,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+    )
 }
 
 // What a key resolves to in the brand being looked at. Answered from the kit the configuration
@@ -929,7 +1062,8 @@ private class TokenResolver(
 }
 
 private fun parseModifiers(raw: String?): List<JsonObject> =
-    raw?.let { runCatching { Json.parseToJsonElement(it) as? JsonArray }.getOrNull() }
+    raw
+        ?.let { runCatching { Json.parseToJsonElement(it) as? JsonArray }.getOrNull() }
         ?.mapNotNull { it as? JsonObject }
         .orEmpty()
 
@@ -946,10 +1080,33 @@ private fun printModifiers(list: List<JsonObject>): String =
 
 private fun newModifier(type: String): JsonObject =
     when (type) {
-        "padding" -> buildJsonObject { put("type", JsonPrimitive("padding")); put("all", JsonPrimitive(16)) }
-        "size" -> buildJsonObject { put("type", JsonPrimitive("size")); put("width", JsonPrimitive("fill")) }
-        "weight" -> buildJsonObject { put("type", JsonPrimitive("weight")); put("value", JsonPrimitive(1.0)) }
-        else -> buildJsonObject { put("type", JsonPrimitive("background")); put("color", JsonPrimitive("surface")) }
+        "padding" -> {
+            buildJsonObject {
+                put("type", JsonPrimitive("padding"))
+                put("all", JsonPrimitive(16))
+            }
+        }
+
+        "size" -> {
+            buildJsonObject {
+                put("type", JsonPrimitive("size"))
+                put("width", JsonPrimitive("fill"))
+            }
+        }
+
+        "weight" -> {
+            buildJsonObject {
+                put("type", JsonPrimitive("weight"))
+                put("value", JsonPrimitive(1.0))
+            }
+        }
+
+        else -> {
+            buildJsonObject {
+                put("type", JsonPrimitive("background"))
+                put("color", JsonPrimitive("surface"))
+            }
+        }
     }
 
 private fun fieldsOf(
@@ -965,8 +1122,16 @@ private fun fieldsOf(
 // fallback.
 private fun tokenOptions(config: KompotStudioConfig): Map<String, List<String>> {
     val colours =
-        (config.themes.values.flatMap { it.light.colors.keys + it.dark?.colors?.keys.orEmpty() } +
-            M3Colors.all.map { it.key }).distinct().sorted()
+        (
+            config.themes.values.flatMap {
+                it.light.colors.keys +
+                    it.dark
+                        ?.colors
+                        ?.keys
+                        .orEmpty()
+            } +
+                M3Colors.all.map { it.key }
+        ).distinct().sorted()
     val typography =
         (config.themes.values.flatMap { it.typography.keys } + M3Typography.all.map { it.key })
             .distinct()

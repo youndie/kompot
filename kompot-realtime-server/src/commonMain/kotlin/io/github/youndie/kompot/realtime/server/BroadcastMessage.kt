@@ -1,7 +1,7 @@
 package io.github.youndie.kompot.realtime.server
 
-import kotlinx.serialization.json.Json
 import io.github.youndie.kompot.realtime.UpdateComponentMessage
+import kotlinx.serialization.json.Json
 
 // A typed wrapper over broadcast(topic, payload). The bus itself carries an opaque string (see
 // KompotBusMessage), which is what keeps it ignorant of the protocol and unaffected by its evolution;

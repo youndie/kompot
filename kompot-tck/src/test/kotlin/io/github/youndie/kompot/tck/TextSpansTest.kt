@@ -46,7 +46,10 @@ class TextSpansTest {
 
         val reported = findings(body)
 
-        assertTrue(reported.any { "see the item" in it.message && "see something else" in it.message }, reported.toString())
+        assertTrue(
+            reported.any { "see the item" in it.message && "see something else" in it.message },
+            reported.toString(),
+        )
     }
 
     // A node without spans is the ordinary case and must not be dragged into this at all.

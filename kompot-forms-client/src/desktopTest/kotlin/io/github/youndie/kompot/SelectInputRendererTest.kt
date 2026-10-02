@@ -6,8 +6,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import io.github.youndie.kompot.forms.SelectInputComponent
-import io.github.youndie.kompot.forms.SelectOption
 import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.FormSchema
 import io.github.youndie.kompot.form.standard.BooleanValue
@@ -15,6 +13,8 @@ import io.github.youndie.kompot.form.standard.CheckboxFieldDefinition
 import io.github.youndie.kompot.form.standard.EntityValue
 import io.github.youndie.kompot.form.standard.EqualsCondition
 import io.github.youndie.kompot.form.standard.SelectionFieldDefinition
+import io.github.youndie.kompot.forms.SelectInputComponent
+import io.github.youndie.kompot.forms.SelectOption
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -38,7 +38,13 @@ class SelectInputRendererTest {
             setContent {
                 TestKompotTheme {
                     SelectInputRenderer().Render(
-                        component = SelectInputComponent(id = "c", fieldId = "currency", label = "Currency", options = options),
+                        component =
+                            SelectInputComponent(
+                                id = "c",
+                                fieldId = "currency",
+                                label = "Currency",
+                                options = options,
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )
@@ -57,7 +63,13 @@ class SelectInputRendererTest {
             setContent {
                 TestKompotTheme {
                     SelectInputRenderer().Render(
-                        component = SelectInputComponent(id = "c", fieldId = "currency", label = "Currency", options = options),
+                        component =
+                            SelectInputComponent(
+                                id = "c",
+                                fieldId = "currency",
+                                label = "Currency",
+                                options = options,
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )
@@ -81,13 +93,23 @@ class SelectInputRendererTest {
             val controller =
                 FormController(
                     FormSchema("form", fields = listOf(SelectionFieldDefinition("currency"))),
-                    initialValues = mapOf("currency" to EntityValue(id = "usd", title = "US dollar", rawMetadata = mapOf("currency" to "USD"))),
+                    initialValues =
+                        mapOf(
+                            "currency" to
+                                EntityValue(id = "usd", title = "US dollar", rawMetadata = mapOf("currency" to "USD")),
+                        ),
                 )
 
             setContent {
                 TestKompotTheme {
                     SelectInputRenderer().Render(
-                        component = SelectInputComponent(id = "c", fieldId = "currency", label = "Currency", options = options),
+                        component =
+                            SelectInputComponent(
+                                id = "c",
+                                fieldId = "currency",
+                                label = "Currency",
+                                options = options,
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )
@@ -115,7 +137,10 @@ class SelectInputRendererTest {
                         fields =
                             listOf(
                                 CheckboxFieldDefinition("gate"),
-                                SelectionFieldDefinition("currency", visibleIf = EqualsCondition("gate", BooleanValue(true))),
+                                SelectionFieldDefinition(
+                                    "currency",
+                                    visibleIf = EqualsCondition("gate", BooleanValue(true)),
+                                ),
                             ),
                     ),
                 )
@@ -123,7 +148,13 @@ class SelectInputRendererTest {
             setContent {
                 TestKompotTheme {
                     SelectInputRenderer().Render(
-                        component = SelectInputComponent(id = "c", fieldId = "currency", label = "Currency", options = options),
+                        component =
+                            SelectInputComponent(
+                                id = "c",
+                                fieldId = "currency",
+                                label = "Currency",
+                                options = options,
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )

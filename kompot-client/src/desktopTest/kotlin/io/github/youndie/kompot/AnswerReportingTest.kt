@@ -43,7 +43,11 @@ class AnswerReportingTest {
                 LocalKompotRegistry provides KompotRegistry(kompotCoreRenderers + kompotStandardRenderers),
                 LocalKompotDegradationSink provides sink,
             ) {
-                LocalKompotRegistry.current.RenderNode(ButtonComponent(id = "go", text = "go", action = raise), handler, controller)
+                LocalKompotRegistry.current.RenderNode(
+                    ButtonComponent(id = "go", text = "go", action = raise),
+                    handler,
+                    controller,
+                )
             }
         }
     }
@@ -63,7 +67,9 @@ class AnswerReportingTest {
             setContent(
                 raising(
                     PerformAction(url = "/cards/7/archive"),
-                    SequenceAction(listOf(NavigateAction(deeplink = "app://board"), UnknownAction(originalType = "haptic"))),
+                    SequenceAction(
+                        listOf(NavigateAction(deeplink = "app://board"), UnknownAction(originalType = "haptic")),
+                    ),
                 ),
             )
             onNodeWithText("go").performClick()

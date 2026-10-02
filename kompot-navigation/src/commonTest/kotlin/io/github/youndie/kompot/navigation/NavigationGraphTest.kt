@@ -19,7 +19,11 @@ class NavigationGraphTest {
                 routes =
                     listOf(
                         ScreenRoute(deeplink = "app://promo", endpoint = "/api/v1/promo"),
-                        ScreenRoute(deeplink = "app://catalogue/item", endpoint = "/api/v1/catalogue/item", title = "Catalogue"),
+                        ScreenRoute(
+                            deeplink = "app://catalogue/item",
+                            endpoint = "/api/v1/catalogue/item",
+                            title = "Catalogue",
+                        ),
                     ),
             )
 
@@ -30,8 +34,10 @@ class NavigationGraphTest {
 
     @Test
     fun `routeFor finds the matching route by deeplink`() {
-        val offer = ScreenRoute(deeplink = "app://catalogue/item", endpoint = "/api/v1/catalogue/item", title = "Catalogue")
-        val graph = NavigationGraph(routes = listOf(ScreenRoute(deeplink = "app://promo", endpoint = "/api/v1/promo"), offer))
+        val offer =
+            ScreenRoute(deeplink = "app://catalogue/item", endpoint = "/api/v1/catalogue/item", title = "Catalogue")
+        val graph =
+            NavigationGraph(routes = listOf(ScreenRoute(deeplink = "app://promo", endpoint = "/api/v1/promo"), offer))
 
         assertEquals(offer, graph.routeFor("app://catalogue/item"))
     }
@@ -64,7 +70,10 @@ class NavigationGraphTest {
 
     @Test
     fun `a route without kind is a screen — so graphs written before the field keep working`() {
-        val decoded = json.decodeFromString<NavigationGraph>("""{"routes":[{"deeplink":"app://home","endpoint":"/screens/home"}]}""")
+        val decoded =
+            json.decodeFromString<NavigationGraph>(
+                """{"routes":[{"deeplink":"app://home","endpoint":"/screens/home"}]}""",
+            )
 
         assertEquals(ScreenRouteKind.SCREEN, decoded.routes.single().kind)
     }
@@ -78,11 +87,19 @@ class NavigationGraphTest {
 
     @Test
     fun `a route says how it is shown and a client shows what it can draw`() {
-        val confirm = ScreenRoute(deeplink = "app://confirm", endpoint = "/screens/confirm", presentation = ScreenRoutePresentation.SHEET)
+        val confirm =
+            ScreenRoute(
+                deeplink = "app://confirm",
+                endpoint = "/screens/confirm",
+                presentation = ScreenRoutePresentation.SHEET,
+            )
 
         assertEquals(ScreenRoutePresentation.SHEET, confirm.presentedAs())
         assertEquals(ScreenRoutePresentation.SCREEN, confirm.presentedAs(setOf(ScreenRoutePresentation.SCREEN)))
-        assertEquals(ScreenRoutePresentation.SCREEN, ScreenRoute(deeplink = "app://home", endpoint = "/screens/home").presentedAs())
+        assertEquals(
+            ScreenRoutePresentation.SCREEN,
+            ScreenRoute(deeplink = "app://home", endpoint = "/screens/home").presentedAs(),
+        )
     }
 
     // The opposite of an unknown kind: the route stays, as a screen. Hiding it would leave the button that
@@ -103,7 +120,10 @@ class NavigationGraphTest {
     // it the only way it knows — as a screen.
     @Test
     fun `a graph with a presentation is read by a client that predates the field`() {
-        val body = wire.encodeToString(NavigationGraph(listOf(ScreenRoute("app://confirm", "/screens/confirm", presentation = "sheet"))))
+        val body =
+            wire.encodeToString(
+                NavigationGraph(listOf(ScreenRoute("app://confirm", "/screens/confirm", presentation = "sheet"))),
+            )
 
         val older = wire.decodeFromString<GraphBeforePresentation>(body)
 

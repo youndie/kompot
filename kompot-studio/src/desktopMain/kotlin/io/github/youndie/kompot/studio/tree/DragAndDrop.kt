@@ -27,7 +27,8 @@ internal fun DropTarget.kindFor(target: ScreenNode): DropKind =
     }
 
 // A node cannot be dropped into itself or into anything it contains.
-internal fun String.isWithin(ancestor: String): Boolean = this == ancestor || startsWith("$ancestor.") || startsWith("$ancestor[")
+internal fun String.isWithin(ancestor: String): Boolean =
+    this == ancestor || startsWith("$ancestor.") || startsWith("$ancestor[")
 
 // A drop ON a node means two different things and both are what somebody expects:
 //
@@ -52,14 +53,19 @@ internal fun dropTargetFor(
 
     return when {
         // A sibling in a list: after the node the drop landed on.
-        index != null -> DropTarget(target.path.substringBeforeLast('.'), slot, index + 1, replacing = false)
+        index != null -> {
+            DropTarget(target.path.substringBeforeLast('.'), slot, index + 1, replacing = false)
+        }
 
         // The only child of a single-value slot, or the root itself: there is no "next to" here, and
         // the honest answers are "replace this" and "nowhere".
-        slot.isNotEmpty() && !slot.startsWith("$") ->
+        slot.isNotEmpty() && !slot.startsWith("$") -> {
             DropTarget(target.path.substringBeforeLast('.'), slot, 0, replacing = true)
+        }
 
-        else -> null
+        else -> {
+            null
+        }
     }
 }
 

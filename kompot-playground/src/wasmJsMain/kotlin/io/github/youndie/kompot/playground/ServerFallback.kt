@@ -31,7 +31,8 @@ private fun JsonElement.mapNodes(fallbackFor: String?): JsonElement =
         is JsonObject -> {
             val mapped = entries.associate { (key, value) -> key to value.mapNodes(fallbackFor) }
             val id = (this[ID] as? JsonPrimitive)?.content
-            val ours = id != null && ((this[FALLBACK] as? JsonObject)?.get(ID) as? JsonPrimitive)?.content == equivalentId(id)
+            val ours =
+                id != null && ((this[FALLBACK] as? JsonObject)?.get(ID) as? JsonPrimitive)?.content == equivalentId(id)
             val wanted = id != null && (this[TYPE] as? JsonPrimitive)?.content == fallbackFor
             when {
                 wanted && FALLBACK !in this -> JsonObject(mapped + (FALLBACK to equivalent(id)))
@@ -40,8 +41,13 @@ private fun JsonElement.mapNodes(fallbackFor: String?): JsonElement =
             }
         }
 
-        is JsonArray -> JsonArray(map { it.mapNodes(fallbackFor) })
-        else -> this
+        is JsonArray -> {
+            JsonArray(map { it.mapNodes(fallbackFor) })
+        }
+
+        else -> {
+            this
+        }
     }
 
 /**
@@ -70,11 +76,18 @@ private fun String.componentCounts(): Map<String, Int> {
     fun walk(element: JsonElement) {
         when (element) {
             is JsonObject -> {
-                (element[TYPE] as? JsonPrimitive)?.content?.takeIf { it in TODAY_COMPONENTS }?.let { found[it] = (found[it] ?: 0) + 1 }
+                (element[TYPE] as? JsonPrimitive)?.content?.takeIf { it in TODAY_COMPONENTS }?.let {
+                    found[it] =
+                        (found[it] ?: 0) + 1
+                }
                 element.values.forEach(::walk)
             }
-            is JsonArray -> element.forEach(::walk)
-            else -> Unit
+
+            is JsonArray -> {
+                element.forEach(::walk)
+            }
+
+            else -> {}
         }
     }
     walk(root)
@@ -89,7 +102,10 @@ private fun equivalent(id: String): JsonObject =
         mapOf(
             TYPE to JsonPrimitive("text"),
             ID to JsonPrimitive(equivalentId(id)),
-            "text" to JsonPrimitive("The server named this text as the equivalent: this client is too old to draw what stood here."),
+            "text" to
+                JsonPrimitive(
+                    "The server named this text as the equivalent: this client is too old to draw what stood here.",
+                ),
             "style" to JsonPrimitive("body_medium"),
             "color" to JsonPrimitive("on_surface_variant"),
         ),
@@ -99,7 +115,11 @@ private fun equivalentId(id: String) = "$id-equivalent"
 
 // The editor's own Json, and it has nothing to do with the two a client uses: this one only reshapes
 // text a person reads, so it prints rather than decodes.
-private val editorJson = Json { prettyPrint = true; prettyPrintIndent = "  " }
+private val editorJson =
+    Json {
+        prettyPrint = true
+        prettyPrintIndent = "  "
+    }
 
 private const val TYPE = "type"
 private const val ID = "id"

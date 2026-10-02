@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(wip.plugins.composeCompiler)
     id("io.github.youndie.sborka.kmp")
+    id("io.github.youndie.sborka.lint")
     alias(libs.plugins.dokka)
     id("io.github.youndie.sborka.publish")
 }

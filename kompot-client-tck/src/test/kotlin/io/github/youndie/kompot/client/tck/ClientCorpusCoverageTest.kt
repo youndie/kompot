@@ -3,13 +3,13 @@ package io.github.youndie.kompot.client.tck
 import io.github.youndie.kompot.form.standard.formStandardSerializersModule
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.modules.SerializersModuleCollector
-import kotlinx.serialization.descriptors.SerialDescriptor
 import java.io.File
 import kotlin.reflect.KClass
 import kotlin.test.Test
@@ -33,8 +33,10 @@ class ClientCorpusCoverageTest {
     // rather than belonging to it, and both are named by the index rather than by a rule written here,
     // so renaming one cannot leave this test quietly excluding a file that is a case.
     private fun caseFiles(): List<File> =
-        (corpus.listFiles { file -> file.name.endsWith(".json") && file.name !in setOf("index.json", index.schema) } ?: emptyArray())
-            .sortedBy { it.name }
+        (
+            corpus.listFiles { file -> file.name.endsWith(".json") && file.name !in setOf("index.json", index.schema) }
+                ?: emptyArray()
+        ).sortedBy { it.name }
 
     private fun registeredNames(): Set<String> {
         val names = mutableSetOf<String>()
@@ -55,7 +57,9 @@ class ClientCorpusCoverageTest {
 
                 override fun <Base : Any> polymorphicDefaultDeserializer(
                     baseClass: KClass<Base>,
-                    defaultDeserializerProvider: (className: String?) -> kotlinx.serialization.DeserializationStrategy<Base>?,
+                    defaultDeserializerProvider: (
+                        className: String?,
+                    ) -> kotlinx.serialization.DeserializationStrategy<Base>?,
                 ) = Unit
 
                 override fun <Base : Any> polymorphicDefaultSerializer(
@@ -69,13 +73,27 @@ class ClientCorpusCoverageTest {
 
     private fun typeNamesIn(element: JsonElement): Set<String> =
         when (element) {
-            is JsonObject ->
+            is JsonObject -> {
                 element.entries.flatMapTo(mutableSetOf()) { (key, value) ->
-                    val own = if (key == "type" && value is JsonPrimitive && value.isString) setOf(value.content) else emptySet()
+                    val own =
+                        if (key == "type" && value is JsonPrimitive &&
+                            value.isString
+                        ) {
+                            setOf(value.content)
+                        } else {
+                            emptySet()
+                        }
                     own + typeNamesIn(value)
                 }
-            is JsonArray -> element.flatMapTo(mutableSetOf()) { typeNamesIn(it) }
-            else -> emptySet()
+            }
+
+            is JsonArray -> {
+                element.flatMapTo(mutableSetOf()) { typeNamesIn(it) }
+            }
+
+            else -> {
+                emptySet()
+            }
         }
 
     // A case file nobody listed is a case nobody runs, and it looks exactly like one that passes.
@@ -91,7 +109,10 @@ class ClientCorpusCoverageTest {
     @Test
     fun `every type that can travel in a form is used by at least one case`() {
         val registered = registeredNames()
-        val used = caseFiles().flatMapTo(mutableSetOf()) { file -> typeNamesIn(Json.parseToJsonElement(file.readText())) }
+        val used =
+            caseFiles().flatMapTo(
+                mutableSetOf(),
+            ) { file -> typeNamesIn(Json.parseToJsonElement(file.readText())) }
 
         assertTrue(registered.isNotEmpty(), "no registered types were found — this test proved nothing")
 

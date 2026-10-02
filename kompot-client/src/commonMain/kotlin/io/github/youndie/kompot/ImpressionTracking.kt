@@ -48,7 +48,8 @@ public data class ImpressionVisibility(
 public fun Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>>.withImpressionTracking(
     tracker: AnalyticsTracker,
     naming: KompotEventNamingRegistry,
-): Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>> = withImpressionTracking(tracker, naming, ImpressionVisibility())
+): Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>> =
+    withImpressionTracking(tracker, naming, ImpressionVisibility())
 
 public fun Map<KClass<out KompotComponent>, KompotComponentRenderer<out KompotComponent>>.withImpressionTracking(
     tracker: AnalyticsTracker,

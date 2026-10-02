@@ -1,18 +1,18 @@
 package io.github.youndie.kompot.realtime
 
+import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.UnknownComponent
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import io.github.youndie.kompot.KompotComponent
-import io.github.youndie.kompot.UnknownComponent
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 private val json =
     Json {
         classDiscriminator = "type"
-        // kompot-realtime itself knows no concrete KompotComponent (see Messages.kt), so
+        // kompot-realtime itself knows no concrete KompotComponent (see UpdateComponentMessage.kt), so
         // UnknownComponent stands in for "any component" in this round-trip test. It is registered
         // here rather than in kompotCoreSerializersModule, where UnknownComponent exists only as the
         // decode fallback for UNREGISTERED types, not as an ordinary encodable component.
@@ -26,7 +26,7 @@ private val json =
 
 // UpdateComponentMessage is no longer a sealed variant of a socket-message wrapper (that went away
 // together with SubscribeMessage: SSE is one-way and the client has nothing to send after the
-// handshake, see Messages.kt). It is the only frame type, so it serialises and deserialises directly
+// handshake, see UpdateComponentMessage.kt). It is the only frame type, so it serialises and deserialises directly
 // through its own serialiser, with no PolymorphicSerializer on top.
 class SerializersTest {
     @Test

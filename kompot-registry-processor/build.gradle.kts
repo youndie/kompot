@@ -1,10 +1,10 @@
 plugins {
     kotlin("jvm")
     id("io.github.youndie.sborka.jvm")
+    id("io.github.youndie.sborka.lint")
     alias(libs.plugins.dokka)
     id("io.github.youndie.sborka.publish")
 }
-
 
 dependencies {
     // The KSP API at the version of the KSP plugin, which comes from `wip`. Spelled here against

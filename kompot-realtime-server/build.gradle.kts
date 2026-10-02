@@ -2,10 +2,10 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("io.github.youndie.sborka.kmp")
+    id("io.github.youndie.sborka.lint")
     alias(libs.plugins.dokka)
     id("io.github.youndie.sborka.publish")
 }
-
 
 kotlin {
     @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)

@@ -41,7 +41,11 @@ class RailTest {
             modifiers = listOf(KompotModifierNode.Size(widthDp = 300, heightDp = 60)),
             children =
                 labels.map {
-                    TextComponent(id = it, text = it, modifiers = listOf(KompotModifierNode.Size(widthDp = 100, heightDp = 60)))
+                    TextComponent(
+                        id = it,
+                        text = it,
+                        modifiers = listOf(KompotModifierNode.Size(widthDp = 100, heightDp = 60)),
+                    )
                 },
             scrollable = scrollable,
         )
@@ -119,7 +123,14 @@ class RailTest {
                 RowComponent(
                     id = "rail",
                     modifiers = listOf(KompotModifierNode.Size(widthDp = 300, heightDp = 60)),
-                    children = listOf("p", "q").map { TextComponent(id = it, text = it, modifiers = listOf(KompotModifierNode.Size(widthDp = 50, heightDp = 60))) },
+                    children =
+                        listOf("p", "q").map {
+                            TextComponent(
+                                id = it,
+                                text = it,
+                                modifiers = listOf(KompotModifierNode.Size(widthDp = 50, heightDp = 60)),
+                            )
+                        },
                     arrangement = "end",
                     scrollable = true,
                 ),
@@ -140,9 +151,17 @@ class RailTest {
                             TextComponent(
                                 id = "w",
                                 text = "w",
-                                modifiers = listOf(KompotModifierNode.Weight(1f), KompotModifierNode.Size(widthDp = 100, heightDp = 60)),
+                                modifiers =
+                                    listOf(
+                                        KompotModifierNode.Weight(1f),
+                                        KompotModifierNode.Size(widthDp = 100, heightDp = 60),
+                                    ),
                             ),
-                            TextComponent(id = "x", text = "x", modifiers = listOf(KompotModifierNode.Size(widthDp = 100, heightDp = 60))),
+                            TextComponent(
+                                id = "x",
+                                text = "x",
+                                modifiers = listOf(KompotModifierNode.Size(widthDp = 100, heightDp = 60)),
+                            ),
                         ),
                     scrollable = true,
                 ),

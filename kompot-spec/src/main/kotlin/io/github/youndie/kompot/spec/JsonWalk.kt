@@ -40,14 +40,18 @@ private fun walk(
     path: JsonPath,
 ): Sequence<JsonNode> =
     when (element) {
-        is JsonObject ->
+        is JsonObject -> {
             sequenceOf(JsonNode(path, element)) +
                 element.entries.asSequence().flatMap { (name, value) -> walk(value, path + name) }
+        }
 
-        is JsonArray ->
+        is JsonArray -> {
             element.asSequence().flatMapIndexed { index, value -> walk(value, path + index) }
+        }
 
-        else -> emptySequence()
+        else -> {
+            emptySequence()
+        }
     }
 
 // A property of a component that holds other components.

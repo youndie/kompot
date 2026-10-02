@@ -1,7 +1,9 @@
 package io.github.youndie.kompot.studio.tree
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,24 +13,22 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.alpha
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.border
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.github.youndie.kompot.studio.diagnostics.Severity
 import io.github.youndie.kompot.studio.ui.Icon
 import io.github.youndie.kompot.studio.ui.StudioIcon
@@ -58,7 +58,9 @@ internal fun ScreenTreePane(
     // The node a drag is over, for whatever else wants to point at it — the preview draws a dashed
     // frame around the same container the tree tints.
     onHover: (ScreenNode?) -> Unit = {},
-    empty: @Composable () -> Unit = { Text("The body carries no component tree.", Modifier.padding(12.dp), color = studioColors().dim) },
+    empty: @Composable () -> Unit = {
+        Text("The body carries no component tree.", Modifier.padding(12.dp), color = studioColors().dim)
+    },
     onSelect: (ScreenNode) -> Unit,
 ) {
     if (root == null) {
@@ -92,7 +94,10 @@ internal fun ScreenTreePane(
                 mark = marks[row.node.path],
                 hover = hover,
                 dimmed = moving != null && row.node.path.isWithin(moving),
-                onHover = { over -> hoveredPath = if (over) row.node.path else hoveredPath.takeIf { it != row.node.path } },
+                onHover = { over ->
+                    hoveredPath =
+                        if (over) row.node.path else hoveredPath.takeIf { it != row.node.path }
+                },
                 onDrop = onDrop,
                 onSelect = onSelect,
             )
@@ -100,7 +105,10 @@ internal fun ScreenTreePane(
     }
 }
 
-private data class Hover(val path: String, val kind: DropKind)
+private data class Hover(
+    val path: String,
+    val kind: DropKind,
+)
 
 private class TreeRow(
     val node: ScreenNode,
@@ -166,7 +174,9 @@ private fun TreeRow(
             .clickable { onSelect(node) }
             .padding(start = 8.dp + INDENT * row.depth, end = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp),
+        horizontalArrangement =
+            androidx.compose.foundation.layout.Arrangement
+                .spacedBy(6.dp),
     ) {
         if (node.children.isNotEmpty()) {
             val expanded = open[node.path] == true
@@ -182,11 +192,25 @@ private fun TreeRow(
         // The glyph says what kind of node this is; a type outside the profile gets the one with the
         // question mark, in the warning colour, because that is the single most useful thing this
         // panel can say and it has to survive a screenshot and a colour-blind reader.
-        Icon(iconFor(node), if (!node.known) colors.warning else if (selected) colors.text else colors.dim)
+        Icon(
+            iconFor(node),
+            if (!node.known) {
+                colors.warning
+            } else if (selected) {
+                colors.text
+            } else {
+                colors.dim
+            },
+        )
 
         // The label is what is picked up; the whole row is where things land. Kept apart because that
         // is the arrangement the move was verified on, not because the other was shown to fail.
-        Row(drag.weight(1f), horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp)) {
+        Row(
+            drag.weight(1f),
+            horizontalArrangement =
+                androidx.compose.foundation.layout.Arrangement
+                    .spacedBy(6.dp),
+        ) {
             // The slot a single-value child sits in, before its type: "action button" says which of
             // the banner's two children this is, and the type alone does not.
             slotOf(node.path)?.let { Text(it, color = colors.dim, fontSize = 12.sp, maxLines = 1) }
@@ -200,14 +224,26 @@ private fun TreeRow(
         }
 
         when (kind) {
-            DropKind.INTO -> Icon(StudioIcon.DROP_HERE, colors.accent)
-            DropKind.REPLACE -> Icon(StudioIcon.SLOT_REPLACE, colors.warning)
+            DropKind.INTO -> {
+                Icon(StudioIcon.DROP_HERE, colors.accent)
+            }
+
+            DropKind.REPLACE -> {
+                Icon(StudioIcon.SLOT_REPLACE, colors.warning)
+            }
+
             else -> {}
         }
 
         when (mark) {
-            Severity.ERROR -> Icon(StudioIcon.ERROR, colors.error)
-            Severity.WARNING -> Icon(StudioIcon.WARNING, colors.warning)
+            Severity.ERROR -> {
+                Icon(StudioIcon.ERROR, colors.error)
+            }
+
+            Severity.WARNING -> {
+                Icon(StudioIcon.WARNING, colors.warning)
+            }
+
             null -> {}
         }
     }
@@ -219,14 +255,25 @@ private fun TreeRow(
 internal fun iconFor(node: ScreenNode): StudioIcon =
     when {
         !node.known -> StudioIcon.UNKNOWN
+
         node.wireType == "column" -> StudioIcon.COLUMN
+
         node.wireType == "row" -> StudioIcon.ROW
+
         node.wireType == "text" -> StudioIcon.TEXT
+
         node.wireType == "button" -> StudioIcon.BUTTON
+
         node.wireType == "image" -> StudioIcon.IMAGE
+
         node.wireType.endsWith("_list") || node.wireType == "list" -> StudioIcon.LIST
-        node.wireType.endsWith("_input") || node.wireType.endsWith("_field") || node.wireType.endsWith("_group") -> StudioIcon.FIELD
+
+        node.wireType.endsWith(
+            "_input",
+        ) || node.wireType.endsWith("_field") || node.wireType.endsWith("_group") -> StudioIcon.FIELD
+
         node.children.isNotEmpty() -> StudioIcon.SURFACE
+
         else -> StudioIcon.SURFACE
     }
 

@@ -1,5 +1,7 @@
 package io.github.youndie.kompot.cache
 
+import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.KompotModifierNode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -9,8 +11,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import io.github.youndie.kompot.KompotComponent
-import io.github.youndie.kompot.KompotModifierNode
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -70,7 +70,9 @@ class CachedKompotScreenProviderTest {
             val store = FakeCacheStore()
             val fetcher =
                 FakeFetcher(
-                    mutableListOf(KompotFetchResult.Modified(ProviderTestComponent("c1", label = "hello"), etag = "\"v1\"")),
+                    mutableListOf(
+                        KompotFetchResult.Modified(ProviderTestComponent("c1", label = "hello"), etag = "\"v1\""),
+                    ),
                 )
             val provider = CachedKompotScreenProvider(store, fetcher, testJson, this)
 
@@ -88,7 +90,11 @@ class CachedKompotScreenProviderTest {
             store.entries["home"] =
                 CachedScreenEntry(
                     key = "home",
-                    payload = testJson.encodeToString(PolymorphicSerializer(KompotComponent::class), ProviderTestComponent("cached", label = "old")),
+                    payload =
+                        testJson.encodeToString(
+                            PolymorphicSerializer(KompotComponent::class),
+                            ProviderTestComponent("cached", label = "old"),
+                        ),
                     etag = "\"v1\"",
                     fetchedAt = 0L,
                 )
@@ -113,7 +119,11 @@ class CachedKompotScreenProviderTest {
             val originalEntry =
                 CachedScreenEntry(
                     key = "home",
-                    payload = testJson.encodeToString(PolymorphicSerializer(KompotComponent::class), ProviderTestComponent("cached")),
+                    payload =
+                        testJson.encodeToString(
+                            PolymorphicSerializer(KompotComponent::class),
+                            ProviderTestComponent("cached"),
+                        ),
                     etag = "\"v1\"",
                     fetchedAt = 42L,
                 )
@@ -134,13 +144,19 @@ class CachedKompotScreenProviderTest {
             store.entries["home"] =
                 CachedScreenEntry(
                     key = "home",
-                    payload = testJson.encodeToString(PolymorphicSerializer(KompotComponent::class), ProviderTestComponent("old", label = "stale")),
+                    payload =
+                        testJson.encodeToString(
+                            PolymorphicSerializer(KompotComponent::class),
+                            ProviderTestComponent("old", label = "stale"),
+                        ),
                     etag = "\"v1\"",
                     fetchedAt = 0L,
                 )
             val fetcher =
                 FakeFetcher(
-                    mutableListOf(KompotFetchResult.Modified(ProviderTestComponent("new", label = "fresh"), etag = "\"v2\"")),
+                    mutableListOf(
+                        KompotFetchResult.Modified(ProviderTestComponent("new", label = "fresh"), etag = "\"v2\""),
+                    ),
                 )
             val provider = CachedKompotScreenProvider(store, fetcher, testJson, this)
 
@@ -178,13 +194,22 @@ class CachedKompotScreenProviderTest {
             store.entries["home"] =
                 CachedScreenEntry(
                     key = "home",
-                    payload = testJson.encodeToString(PolymorphicSerializer(KompotComponent::class), ProviderTestComponent("stale", label = "old balance")),
+                    payload =
+                        testJson.encodeToString(
+                            PolymorphicSerializer(KompotComponent::class),
+                            ProviderTestComponent("stale", label = "old balance"),
+                        ),
                     etag = "\"v1\"",
                     fetchedAt = 0L,
                 )
             val fetcher =
                 FakeFetcher(
-                    mutableListOf(KompotFetchResult.Modified(ProviderTestComponent("fresh", label = "new balance"), etag = "\"v2\"")),
+                    mutableListOf(
+                        KompotFetchResult.Modified(
+                            ProviderTestComponent("fresh", label = "new balance"),
+                            etag = "\"v2\"",
+                        ),
+                    ),
                 )
             val provider = CachedKompotScreenProvider(store, fetcher, testJson, this)
 
@@ -201,7 +226,8 @@ class CachedKompotScreenProviderTest {
     fun `invalidate on an already-empty key is a harmless no-op`() =
         runTest {
             val store = FakeCacheStore()
-            val fetcher = FakeFetcher(mutableListOf(KompotFetchResult.Modified(ProviderTestComponent("c1"), etag = "\"v1\"")))
+            val fetcher =
+                FakeFetcher(mutableListOf(KompotFetchResult.Modified(ProviderTestComponent("c1"), etag = "\"v1\"")))
             val provider = CachedKompotScreenProvider(store, fetcher, testJson, this)
 
             provider.invalidate("home")

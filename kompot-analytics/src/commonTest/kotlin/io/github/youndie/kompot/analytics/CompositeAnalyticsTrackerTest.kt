@@ -38,6 +38,9 @@ class CompositeAnalyticsTrackerTest {
         composite.track(AnalyticsEvent.ScreenView("home"))
         composite.track(AnalyticsEvent.ScreenView("offer"))
 
-        assertEquals(listOf<AnalyticsEvent>(AnalyticsEvent.ScreenView("home"), AnalyticsEvent.ScreenView("offer")), tracker.received)
+        assertEquals(
+            listOf<AnalyticsEvent>(AnalyticsEvent.ScreenView("home"), AnalyticsEvent.ScreenView("offer")),
+            tracker.received,
+        )
     }
 }

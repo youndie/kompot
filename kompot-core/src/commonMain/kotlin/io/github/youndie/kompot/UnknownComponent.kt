@@ -55,7 +55,8 @@ private class UnknownComponentSerializer(
         value: UnknownComponent,
     ) = delegate.serialize(encoder, value)
 
-    override fun deserialize(decoder: Decoder): UnknownComponent = delegate.deserialize(decoder).copy(originalType = originalType)
+    override fun deserialize(decoder: Decoder): UnknownComponent =
+        delegate.deserialize(decoder).copy(originalType = originalType)
 }
 
 private class UnknownActionSerializer(
@@ -69,5 +70,6 @@ private class UnknownActionSerializer(
         value: UnknownAction,
     ) = delegate.serialize(encoder, value)
 
-    override fun deserialize(decoder: Decoder): UnknownAction = delegate.deserialize(decoder).copy(originalType = originalType)
+    override fun deserialize(decoder: Decoder): UnknownAction =
+        delegate.deserialize(decoder).copy(originalType = originalType)
 }

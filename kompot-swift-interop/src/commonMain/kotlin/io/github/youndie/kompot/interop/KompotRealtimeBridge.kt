@@ -1,7 +1,7 @@
 package io.github.youndie.kompot.interop
 
-import kotlinx.serialization.json.Json
 import io.github.youndie.kompot.realtime.UpdateComponentMessage
+import kotlinx.serialization.json.Json
 
 // UpdateComponentMessage is not polymorphic itself — a plain @Serializable data class, like
 // KompotFormResponse — only its `component` is, and that is settled by the SerializersModule of the

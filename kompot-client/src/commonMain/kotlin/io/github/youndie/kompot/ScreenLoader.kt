@@ -23,6 +23,11 @@ private sealed interface KompotScreenState {
     ) : KompotScreenState
 }
 
+// Slots rather than defaults the toolkit draws: loading and error are the application's screens
+// (SPEC.md §12.6), and a default of ours would be a spinner in the wrong place and an English word on
+// every phone. `loading` may be left empty — nothing is drawn — while `failed` has to be given: a
+// screen that failed and showed nothing looks exactly like one that is still loading.
+
 /**
  * Loads a screen with [load] and draws it with [content]; while it is on its way, [loading], and when
  * it did not arrive, [failed] with a retry.
@@ -32,10 +37,6 @@ private sealed interface KompotScreenState {
  * [failed]'s retry loads the same key again. Cancellation is not a failure: leaving the screen while it
  * loads draws nothing.
  */
-// Slots rather than defaults the toolkit draws: loading and error are the application's screens
-// (SPEC.md §12.6), and a default of ours would be a spinner in the wrong place and an English word on
-// every phone. `loading` may be left empty — nothing is drawn — while `failed` has to be given: a
-// screen that failed and showed nothing looks exactly like one that is still loading.
 @Composable
 public fun KompotScreenLoader(
     key: Any?,

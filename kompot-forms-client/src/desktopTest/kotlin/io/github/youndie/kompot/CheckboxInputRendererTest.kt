@@ -6,12 +6,12 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import io.github.youndie.kompot.forms.CheckboxInputComponent
 import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.FormSchema
 import io.github.youndie.kompot.form.standard.BooleanValue
 import io.github.youndie.kompot.form.standard.CheckboxFieldDefinition
 import io.github.youndie.kompot.form.standard.EqualsCondition
+import io.github.youndie.kompot.forms.CheckboxInputComponent
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -71,7 +71,10 @@ class CheckboxInputRendererTest {
                         fields =
                             listOf(
                                 CheckboxFieldDefinition("gate"),
-                                CheckboxFieldDefinition("auto", visibleIf = EqualsCondition("gate", BooleanValue(true))),
+                                CheckboxFieldDefinition(
+                                    "auto",
+                                    visibleIf = EqualsCondition("gate", BooleanValue(true)),
+                                ),
                             ),
                     ),
                 )

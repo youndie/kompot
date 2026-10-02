@@ -11,12 +11,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
-import androidx.compose.ui.unit.width
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.width
 import io.github.youndie.kompot.standard.ButtonComponent
 import io.github.youndie.kompot.standard.CloseAction
 import kotlin.test.Test
@@ -96,7 +96,10 @@ class ButtonMetricsTest {
                 MaterialTheme {
                     Column {
                         Button("default", SizingDesignSystem())
-                        Button("roomy", SizingDesignSystem(contentPadding = PaddingValues(horizontal = 48.dp, vertical = 8.dp)))
+                        Button(
+                            "roomy",
+                            SizingDesignSystem(contentPadding = PaddingValues(horizontal = 48.dp, vertical = 8.dp)),
+                        )
                     }
                 }
             }

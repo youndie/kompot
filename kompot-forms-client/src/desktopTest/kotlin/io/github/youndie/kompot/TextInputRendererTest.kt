@@ -9,7 +9,6 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.requestFocus
-import io.github.youndie.kompot.forms.TextInputComponent
 import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.FormSchema
 import io.github.youndie.kompot.form.standard.BooleanValue
@@ -18,6 +17,7 @@ import io.github.youndie.kompot.form.standard.EqualsCondition
 import io.github.youndie.kompot.form.standard.RequiredRule
 import io.github.youndie.kompot.form.standard.TextFieldDefinition
 import io.github.youndie.kompot.form.standard.TextValue
+import io.github.youndie.kompot.forms.TextInputComponent
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -36,7 +36,13 @@ class TextInputRendererTest {
             setContent {
                 TestKompotTheme {
                     TextInputRenderer().Render(
-                        component = TextInputComponent(id = "c", fieldId = "name", label = "Name", placeholder = "Enter a name"),
+                        component =
+                            TextInputComponent(
+                                id = "c",
+                                fieldId = "name",
+                                label = "Name",
+                                placeholder = "Enter a name",
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )
@@ -49,7 +55,8 @@ class TextInputRendererTest {
     @Test
     fun `typing a value updates the FormController with the raw value`() =
         runFormsComposeUiTest {
-            val controller = FormController(FormSchema("form", fields = listOf(TextFieldDefinition("name", rules = emptyList()))))
+            val controller =
+                FormController(FormSchema("form", fields = listOf(TextFieldDefinition("name", rules = emptyList()))))
 
             setContent {
                 TestKompotTheme {
@@ -70,7 +77,8 @@ class TextInputRendererTest {
     @Test
     fun `a mask strips non-digit characters and truncates to the mask's raw length`() =
         runFormsComposeUiTest {
-            val controller = FormController(FormSchema("form", fields = listOf(TextFieldDefinition("phone", rules = emptyList()))))
+            val controller =
+                FormController(FormSchema("form", fields = listOf(TextFieldDefinition("phone", rules = emptyList()))))
 
             setContent {
                 TestKompotTheme {
@@ -97,7 +105,8 @@ class TextInputRendererTest {
     @Test
     fun `uppercase transforms both the display and the stored value`() =
         runFormsComposeUiTest {
-            val controller = FormController(FormSchema("form", fields = listOf(TextFieldDefinition("swift", rules = emptyList()))))
+            val controller =
+                FormController(FormSchema("form", fields = listOf(TextFieldDefinition("swift", rules = emptyList()))))
 
             setContent {
                 TestKompotTheme {

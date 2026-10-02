@@ -6,9 +6,9 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidedValue
+import io.github.youndie.kompot.ColumnRenderer
 import io.github.youndie.kompot.KompotDesignSystem
 import io.github.youndie.kompot.KompotModifierNode
-import io.github.youndie.kompot.ColumnRenderer
 import io.github.youndie.kompot.LocalKompotDesignSystem
 import io.github.youndie.kompot.LocalKompotRegistry
 import io.github.youndie.kompot.SizeType
@@ -19,8 +19,8 @@ import io.github.youndie.kompot.standard.CloseAction
 import io.github.youndie.kompot.standard.ColumnComponent
 import io.github.youndie.kompot.standard.TextComponent
 import io.github.youndie.kompot.theme.KompotTheme
-import io.github.youndie.kompot.theme.kompotTheme
 import io.github.youndie.kompot.theme.client.RemoteThemeDesignSystem
+import io.github.youndie.kompot.theme.kompotTheme
 import io.github.youndie.viddik.annotations.ViddikScreenshot
 import io.github.youndie.viddik.core.viddikTypography
 

@@ -62,15 +62,25 @@ class LoginShapeTest {
             val bearer = headers["Authorization"]
             if (bearer != null) authorized += path
             return when {
-                path == "/auth/otp/verify" ->
+                path == "/auth/otp/verify" -> {
                     if (body != null && body == expectedLoginBody) {
                         TckResponse(200, emptyMap(), """{"type":"update_session","accessToken":"tok-1"}""")
                     } else {
-                        TckResponse(400, emptyMap(), """{"error":"the login body was not the plain DTO this server takes"}""")
+                        TckResponse(
+                            400,
+                            emptyMap(),
+                            """{"error":"the login body was not the plain DTO this server takes"}""",
+                        )
                     }
+                }
 
-                bearer == "Bearer tok-1" -> TckResponse(200, emptyMap(), """{"type":"text","id":"t","text":"Home"}""")
-                else -> TckResponse(401, emptyMap(), "")
+                bearer == "Bearer tok-1" -> {
+                    TckResponse(200, emptyMap(), """{"type":"text","id":"t","text":"Home"}""")
+                }
+
+                else -> {
+                    TckResponse(401, emptyMap(), "")
+                }
             }
         }
     }
@@ -94,7 +104,11 @@ class LoginShapeTest {
     @Test
     fun `a login body of the application's own shape is posted verbatim`() {
         val server = OtpServer(expectedLoginBody = plainDto)
-        val body = buildJsonObject { put("msisdn", "+37255500000"); put("code", "0000") }
+        val body =
+            buildJsonObject {
+                put("msisdn", "+37255500000")
+                put("code", "0000")
+            }
 
         val report = runBlocking { TckRunner(server, config(loginBody = body)).run() }
 
@@ -122,7 +136,10 @@ class LoginShapeTest {
         val report = runBlocking { TckRunner(server, config(bearerToken = "tok-1")).run() }
 
         assertEquals(emptyList(), report.findings, report.toString())
-        assertTrue(server.calls.none { it.second == "/auth/otp/verify" }, "the kit tried to log in anyway: ${server.calls}")
+        assertTrue(
+            server.calls.none { it.second == "/auth/otp/verify" },
+            "the kit tried to log in anyway: ${server.calls}",
+        )
     }
 
     // The care the report asks for: a handed-over token must not become a header the transport always
@@ -139,7 +156,8 @@ class LoginShapeTest {
 
         runBlocking { TckRunner(server, config(bearerToken = "tok-1")).run() }
 
-        val anonymous = server.calls.count { it.second == "/screens/home" } - server.authorized.count { it == "/screens/home" }
+        val anonymous =
+            server.calls.count { it.second == "/screens/home" } - server.authorized.count { it == "/screens/home" }
         assertTrue(anonymous >= 1, "every call to the secured screen carried the token: ${server.calls}")
     }
 }

@@ -1,8 +1,8 @@
 package io.github.youndie.kompot.ktor
 
+import io.github.youndie.kompot.experiments.ExperimentHeaderCodec
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.response.header
-import io.github.youndie.kompot.experiments.ExperimentHeaderCodec
 
 // Puts the experiment assignments the application has already made (experimentId -> variantId, see
 // ExperimentAssigner in :experiments-core) into a response header — the same trick as the ETag in

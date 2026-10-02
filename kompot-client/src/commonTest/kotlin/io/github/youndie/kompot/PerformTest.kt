@@ -44,7 +44,11 @@ class PerformTest {
     fun `two buttons of one list send two different payloads to one address`() =
         runTest {
             val sent = mutableListOf<Pair<String, Map<String, FieldValue>>>()
-            val handler = KompotActionHandler {}.withPerform(this) { url, payload -> sent += url to payload; PerformTestResultAction("/board") }
+            val handler =
+                KompotActionHandler {}.withPerform(this) { url, payload ->
+                    sent += url to payload
+                    PerformTestResultAction("/board")
+                }
 
             handler.handle(PerformAction(url = "/tasks/move", payload = mapOf("taskId" to TestValue("T-1"))))
             handler.handle(PerformAction(url = "/tasks/move", payload = mapOf("taskId" to TestValue("T-2"))))
@@ -64,12 +68,15 @@ class PerformTest {
         runTest {
             var forwarded: KompotAction? = null
             val action = PerformAction(url = "/tasks/move", payload = mapOf("taskId" to TestValue("T-42")))
-            val handler = KompotActionHandler { forwarded = it }.withPerform(this) { _, _ -> PerformTestResultAction("/board") }
+            val handler =
+                KompotActionHandler { forwarded = it }.withPerform(
+                    this,
+                ) { _, _ -> PerformTestResultAction("/board") }
 
             handler.handle(action)
 
-                // Only the original has arrived: an analytics wrapper further along the chain sees the
-                // press itself, not just its outcome.
+            // Only the original has arrived: an analytics wrapper further along the chain sees the
+            // press itself, not just its outcome.
             assertEquals(action, forwarded)
         }
 
@@ -77,7 +84,12 @@ class PerformTest {
     fun `an action with no payload still reaches the transport`() =
         runTest {
             var called = false
-            val handler = KompotActionHandler {}.withPerform(this) { _, payload -> called = true; assertEquals(emptyMap<String, FieldValue>(), payload); PerformTestResultAction("/x") }
+            val handler =
+                KompotActionHandler {}.withPerform(this) { _, payload ->
+                    called = true
+                    assertEquals(emptyMap<String, FieldValue>(), payload)
+                    PerformTestResultAction("/x")
+                }
 
             handler.handle(PerformAction(url = "/session/refresh"))
             advanceUntilIdle()
@@ -92,7 +104,10 @@ class PerformTest {
             var forwarded: KompotAction? = null
             val handler =
                 KompotActionHandler { forwarded = it }
-                    .withPerform(this) { _, _ -> sendCalled = true; PerformTestResultAction("/x") }
+                    .withPerform(this) { _, _ ->
+                        sendCalled = true
+                        PerformTestResultAction("/x")
+                    }
 
             handler.handle(NavigateAction(deeplink = "/home"))
             advanceUntilIdle()

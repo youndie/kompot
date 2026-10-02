@@ -1,7 +1,7 @@
 package io.github.youndie.kompot.dsl
 
-import io.github.youndie.kompot.KompotModifierNode
 import io.github.youndie.kompot.ColorToken
+import io.github.youndie.kompot.KompotModifierNode
 import io.github.youndie.kompot.SizeType
 
 @KompotDsl
@@ -44,7 +44,10 @@ public class KompotModifierBuilder {
         updateOrAddSizeNode { it.copy(heightDp = dp) }
     }
 
-    public fun size(width: Int, height: Int) {
+    public fun size(
+        width: Int,
+        height: Int,
+    ) {
         updateOrAddSizeNode { it.copy(widthDp = width, heightDp = height) }
     }
 

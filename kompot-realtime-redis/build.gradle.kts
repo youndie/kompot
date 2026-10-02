@@ -1,10 +1,10 @@
 plugins {
     kotlin("jvm")
     id("io.github.youndie.sborka.jvm")
+    id("io.github.youndie.sborka.lint")
     alias(libs.plugins.dokka)
     id("io.github.youndie.sborka.publish")
 }
-
 
 // A plain kotlin("jvm") rather than multiplatform + jvm(): Lettuce is a JVM library, and there is
 // nothing to gain from wrapping a single JVM target in multiplatform scaffolding.

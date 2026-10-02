@@ -30,10 +30,10 @@ private val json =
         classDiscriminator = "type"
         serializersModule =
             kompotCoreSerializersModule +
-                SerializersModule {
-                    polymorphic(KompotComponent::class) { subclass(ProbeText::class) }
-                    polymorphic(KompotAction::class) { subclass(ProbeOpen::class) }
-                }
+            SerializersModule {
+                polymorphic(KompotComponent::class) { subclass(ProbeText::class) }
+                polymorphic(KompotAction::class) { subclass(ProbeOpen::class) }
+            }
     }
 
 // This test earns its place by WHERE it runs rather than by what it asserts. The same round trip

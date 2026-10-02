@@ -23,7 +23,8 @@ private data class PayloadFakeEqualsCondition(
     val fieldId: String,
     val expectedValue: FieldValue,
 ) : FormCondition {
-    override fun evaluate(getFieldValue: (fieldId: String) -> FieldValue?): Boolean = getFieldValue(fieldId) == expectedValue
+    override fun evaluate(getFieldValue: (fieldId: String) -> FieldValue?): Boolean =
+        getFieldValue(fieldId) == expectedValue
 }
 
 private data class PayloadFakeFieldDefinition(

@@ -5,10 +5,10 @@ import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.FormPatch
 import io.github.youndie.kompot.form.FormSchema
 import io.github.youndie.kompot.form.standard.formStandardSerializersModule
-import kotlinx.serialization.PolymorphicSerializer
-import kotlinx.serialization.json.Json
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.serialization.PolymorphicSerializer
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
@@ -34,7 +34,14 @@ class FormControllerAdapter : KompotFormClient {
                         buildJsonObject {
                             put("kind", JsonPrimitive("patch"))
                             put("fieldId", JsonPrimitive(fieldId))
-                            put("values", JsonObject(values.mapValues { (_, value) -> json.encodeToJsonElement(fieldValue, value) }))
+                            put(
+                                "values",
+                                JsonObject(
+                                    values.mapValues { (_, value) ->
+                                        json.encodeToJsonElement(fieldValue, value)
+                                    },
+                                ),
+                            )
                         }
                     FormPatch()
                 },
@@ -62,15 +69,20 @@ class FormControllerAdapter : KompotFormClient {
         return sent.toList()
     }
 
-    override fun applyPatch(patch: JsonObject) = controller.applyPatch(json.decodeFromJsonElement(FormPatch.serializer(), patch))
+    override fun applyPatch(patch: JsonObject) =
+        controller.applyPatch(json.decodeFromJsonElement(FormPatch.serializer(), patch))
 
     // What a submit does before it sends: force every field to be validated, untouched ones included.
     override fun submit() = controller.markAllAsChanged()
 
-    override fun visibleFields(): List<String> = controller.fieldsState.value.keys.filter { controller.isFieldVisible(it) }
+    override fun visibleFields(): List<String> =
+        controller.fieldsState.value.keys
+            .filter { controller.isFieldVisible(it) }
 
     override fun errors(): Map<String, String> =
-        controller.fieldsState.value.mapNotNull { (fieldId, state) -> state.error?.let { fieldId to it } }.toMap()
+        controller.fieldsState.value
+            .mapNotNull { (fieldId, state) -> state.error?.let { fieldId to it } }
+            .toMap()
 
     override fun payload(): JsonObject? =
         controller.getPayload()?.let { payload ->

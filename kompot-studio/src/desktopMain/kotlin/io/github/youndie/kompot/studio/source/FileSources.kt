@@ -86,8 +86,7 @@ internal class DirectorySourceSession(
                             id = path.toAbsolutePath().toString(),
                             title = path.name.removeSuffix(source.extension),
                         )
-                    }
-                    .toList()
+                    }.toList()
             }
         }.getOrDefault(emptyList()).sortedBy { it.title }
 }
@@ -104,6 +103,11 @@ private suspend fun pollFile(
 ) {
     while (true) {
         val previous = state.value
+
+        @Suppress(
+            "ktlint:kapkan:cancellation-swallowed",
+            "Files.readString does not suspend, so nothing inside this block can be cancelled",
+        )
         val read = runCatching { Files.readString(path) }
 
         state.value =

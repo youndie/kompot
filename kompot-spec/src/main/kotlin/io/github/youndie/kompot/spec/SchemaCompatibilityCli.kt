@@ -142,7 +142,9 @@ private fun options(args: Array<String>): Options {
     )
 }
 
-private class Git(private val directory: File) {
+private class Git(
+    private val directory: File,
+) {
     fun resolve(revision: String): String? = run("rev-parse", "--verify", "--quiet", "$revision^{commit}")
 
     // The names in <revision>:<path>, bare. `--full-tree` because this runs from the module's

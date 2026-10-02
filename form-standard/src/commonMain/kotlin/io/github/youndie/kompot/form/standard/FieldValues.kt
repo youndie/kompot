@@ -1,8 +1,8 @@
 package io.github.youndie.kompot.form.standard
 
+import io.github.youndie.kompot.form.FieldValue
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import io.github.youndie.kompot.form.FieldValue
 
 @Serializable
 @SerialName("text_value")

@@ -1,12 +1,12 @@
 package io.github.youndie.kompot.form.standard
 
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-import kotlinx.serialization.modules.subclass
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormCondition
 import io.github.youndie.kompot.form.FormFieldDefinition
 import io.github.youndie.kompot.form.ValidationRule
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 
 // The serialisation "plug-in" for the standard field set. An application merges this module into its
 // own SerializersModule so that kotlinx.serialization can (de)serialise the open interfaces of

@@ -13,9 +13,9 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import io.github.youndie.kompot.standard.ColumnComponent
 import io.github.youndie.kompot.standard.KompotPageLoader
 import io.github.youndie.kompot.standard.KompotPageResponse
-import io.github.youndie.kompot.standard.ColumnComponent
 import io.github.youndie.kompot.standard.LoadPageAction
 import io.github.youndie.kompot.standard.PaginatedListComponent
 import io.github.youndie.kompot.standard.TextComponent
@@ -108,8 +108,14 @@ class KompotLazyScreenTest {
                                         listOf(
                                             PaginatedListComponent(
                                                 id = "list",
-                                                initialItems = listOf(TextComponent(id = "item_1", text = "Order for Ada")),
-                                                loadMoreAction = LoadPageAction(url = "/v1/api/transactions?page=2"),
+                                                initialItems =
+                                                    listOf(
+                                                        TextComponent(id = "item_1", text = "Order for Ada"),
+                                                    ),
+                                                loadMoreAction =
+                                                    LoadPageAction(
+                                                        url = "/v1/api/transactions?page=2",
+                                                    ),
                                             ),
                                         ),
                                 ),
@@ -129,14 +135,14 @@ class KompotLazyScreenTest {
             assertEquals(listOf("/v1/api/transactions?page=2"), loader.requestedUrls)
         }
 
-        // A regression guard for a real bug: "the list did not refresh by itself, only after tapping
-        // in and out of the search field". It reproduces the REAL path of a list screen.
+    // A regression guard for a real bug: "the list did not refresh by itself, only after tapping
+    // in and out of the search field". It reproduces the REAL path of a list screen.
     // (FormScreen: var state by remember{null}; LaunchedEffect(Unit){ state = loader() }) —
-        // The culprit was not KompotLazyScreen, which redraws correctly on a new root component, but
-        // the pattern "the screen leaves the composition and comes back". This confirms that a
-        // paginated list with a fresh id on every fetch — what the DSL produces when no explicit id is
-        // given — correctly resets remember(component.id) on a genuine remount, so new data shows
-        // without touching the filters.
+    // The culprit was not KompotLazyScreen, which redraws correctly on a new root component, but
+    // the pattern "the screen leaves the composition and comes back". This confirms that a
+    // paginated list with a fresh id on every fetch — what the DSL produces when no explicit id is
+    // given — correctly resets remember(component.id) on a genuine remount, so new data shows
+    // without touching the filters.
     @Test
     fun `remounting the screen (leave and re-enter) shows freshly fetched data without touching any filter field`() =
         runDesktopComposeUiTest {
@@ -147,11 +153,14 @@ class KompotLazyScreenTest {
                     id = "root",
                     children =
                         listOf(
-                                // Every fetch gets a new random id, exactly as a paginated list
-                                // without an explicit id does — not one id reused.
+                            // Every fetch gets a new random id, exactly as a paginated list
+                            // without an explicit id does — not one id reused.
                             PaginatedListComponent(
                                 id = "list_fetch_$fetchCount",
-                                initialItems = listOf(TextComponent(id = "item_$fetchCount", text = "Fetch #$fetchCount")),
+                                initialItems =
+                                    listOf(
+                                        TextComponent(id = "item_$fetchCount", text = "Fetch #$fetchCount"),
+                                    ),
                             ),
                         ),
                 )
@@ -184,11 +193,11 @@ class KompotLazyScreenTest {
             waitForIdle()
             onNodeWithText("Fetch #1").assertIsDisplayed()
 
-                // "leaving the screen" — the application switches to another one
+            // "leaving the screen" — the application switches to another one
             mounted = false
             waitForIdle()
 
-                // "coming back" — a fresh LaunchedEffect(Unit) must call the loader again
+            // "coming back" — a fresh LaunchedEffect(Unit) must call the loader again
             mounted = true
             waitForIdle()
 
@@ -197,9 +206,9 @@ class KompotLazyScreenTest {
             assertEquals(2, fetchCount)
         }
 
-        // A live update of the list without a remount: unlike the test above, the id of the paginated
-        // list does NOT change here, so remember(component.id) will not see the new initialItems by
-        // itself — the list state has to pick them up from the live updates explicitly.
+    // A live update of the list without a remount: unlike the test above, the id of the paginated
+    // list does NOT change here, so remember(component.id) will not see the new initialItems by
+    // itself — the list state has to pick them up from the live updates explicitly.
     @Test
     fun `a realtime update for the same paginated list id replaces its items without remounting`() =
         runDesktopComposeUiTest {
@@ -220,7 +229,10 @@ class KompotLazyScreenTest {
                                         listOf(
                                             PaginatedListComponent(
                                                 id = "transactions_list",
-                                                initialItems = listOf(TextComponent(id = "item_1", text = "Order for Ada")),
+                                                initialItems =
+                                                    listOf(
+                                                        TextComponent(id = "item_1", text = "Order for Ada"),
+                                                    ),
                                             ),
                                         ),
                                 ),
@@ -234,8 +246,8 @@ class KompotLazyScreenTest {
 
             onNodeWithText("Order for Ada").assertIsDisplayed()
 
-                // "an update arrives from elsewhere" — the server sends a fresh list under THE SAME
-                // id, the screen stays mounted, and nobody touches the search field.
+            // "an update arrives from elsewhere" — the server sends a fresh list under THE SAME
+            // id, the screen stays mounted, and nobody touches the search field.
             updates =
                 mapOf(
                     "transactions_list" to

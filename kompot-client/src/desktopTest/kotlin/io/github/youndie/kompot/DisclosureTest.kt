@@ -46,7 +46,12 @@ class DisclosureTest {
         )
 
     private fun section(expanded: Boolean = false) =
-        ExpandableComponent(id = "faq", header = text("What is kompot?"), content = text("the answer"), expanded = expanded)
+        ExpandableComponent(
+            id = "faq",
+            header = text("What is kompot?"),
+            content = text("the answer"),
+            expanded = expanded,
+        )
 
     // The tree is state here so that a test can send the SAME node again — a new instance, equal or not —
     // which is how a navigate to the same screen and a refresh arrive.
@@ -71,7 +76,10 @@ class DisclosureTest {
 
     private fun DesktopComposeUiTest.shows(pane: String) {
         onNodeWithText(pane).assertExists()
-        listOf("profile pane", "security pane", "billing pane").filter { it != pane }.forEach { onNodeWithText(it).assertDoesNotExist() }
+        listOf("profile pane", "security pane", "billing pane")
+            .filter {
+                it != pane
+            }.forEach { onNodeWithText(it).assertDoesNotExist() }
     }
 
     @Test
@@ -106,7 +114,10 @@ class DisclosureTest {
             var frames by mutableStateOf(emptyMap<String, KompotComponent>())
             setContent {
                 TestKompotTheme {
-                    CompositionLocalProvider(LocalKompotRegistry provides registry, LocalKompotRealtimeUpdates provides frames) {
+                    CompositionLocalProvider(
+                        LocalKompotRegistry provides registry,
+                        LocalKompotRealtimeUpdates provides frames,
+                    ) {
                         registry.RenderNode(tabs(selected = 0), recordingActionHandler(), testFormController())
                     }
                 }
@@ -130,7 +141,9 @@ class DisclosureTest {
     fun `a tab is announced as a selected tab`() =
         runDesktopComposeUiTest {
             screen(tabs(selected = 1))
-            onNodeWithText("Security").assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Tab)).assertIsSelected()
+            onNodeWithText(
+                "Security",
+            ).assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Tab)).assertIsSelected()
         }
 
     @Test

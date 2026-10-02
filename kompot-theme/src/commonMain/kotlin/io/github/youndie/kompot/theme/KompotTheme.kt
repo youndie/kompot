@@ -1,8 +1,8 @@
 package io.github.youndie.kompot.theme
 
-import kotlinx.serialization.Serializable
 import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.TypographyToken
+import kotlinx.serialization.Serializable
 
 // A server-driven theme: the values a client resolves design-system string tokens into. The tokens
 // were open strings already — a backend could send ColorToken("promo_gold") with no client release —

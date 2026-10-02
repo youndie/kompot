@@ -11,7 +11,10 @@ private data class TestValue(
 private data class TestRequiredRule(
     override val errorMessage: String,
 ) : ValidationRule {
-    override fun validate(value: FieldValue?, getFieldValue: (fieldId: String) -> FieldValue?): Boolean = value is TestValue && value.value.isNotBlank()
+    override fun validate(
+        value: FieldValue?,
+        getFieldValue: (fieldId: String) -> FieldValue?,
+    ): Boolean = value is TestValue && value.value.isNotBlank()
 }
 
 private data class TestFieldDefinition(

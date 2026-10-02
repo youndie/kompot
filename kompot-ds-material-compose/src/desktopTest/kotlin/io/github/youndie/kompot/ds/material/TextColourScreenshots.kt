@@ -35,10 +35,24 @@ private class ColouredTypographyDesignSystem : KompotDesignSystem {
     @Composable
     override fun resolveTypography(token: TypographyToken): TextStyle =
         when (token.key) {
-            "error" -> MaterialTheme.typography.bodyLarge.copy(color = Color(0xFFB3261E))
-            "meta" -> MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium, color = Color(0xFF6750A4))
-            "body" -> MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1D1B20))
-            else -> MaterialTheme.typography.bodyLarge
+            "error" -> {
+                MaterialTheme.typography.bodyLarge.copy(color = Color(0xFFB3261E))
+            }
+
+            "meta" -> {
+                MaterialTheme.typography.bodyMedium.copy(
+                    fontWeight = FontWeight.Medium,
+                    color = Color(0xFF6750A4),
+                )
+            }
+
+            "body" -> {
+                MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF1D1B20))
+            }
+
+            else -> {
+                MaterialTheme.typography.bodyLarge
+            }
         }
 }
 

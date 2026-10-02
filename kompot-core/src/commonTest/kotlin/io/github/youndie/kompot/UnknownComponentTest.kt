@@ -37,7 +37,10 @@ class UnknownComponentTest {
     @Test
     fun `known type decodes normally`() {
         val component =
-            testJson.decodeFromString(PolymorphicSerializer(KompotComponent::class), """{"type":"text","id":"1","text":"hi"}""")
+            testJson.decodeFromString(
+                PolymorphicSerializer(KompotComponent::class),
+                """{"type":"text","id":"1","text":"hi"}""",
+            )
         assertIs<TestTextComponent>(component)
         assertEquals("hi", component.text)
     }

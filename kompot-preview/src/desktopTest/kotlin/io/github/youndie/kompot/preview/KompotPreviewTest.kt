@@ -27,10 +27,10 @@ import io.github.youndie.kompot.kompotCoreRenderers
 import io.github.youndie.kompot.kompotJson
 import io.github.youndie.kompot.kompotStandardRenderers
 import io.github.youndie.kompot.standard.ButtonComponent
+import io.github.youndie.kompot.standard.CloseAction
 import io.github.youndie.kompot.standard.ColumnComponent
 import io.github.youndie.kompot.standard.TextComponent
 import io.github.youndie.kompot.standard.text
-import io.github.youndie.kompot.standard.CloseAction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -204,10 +204,11 @@ class KompotPreviewTest {
 
             var failure: Throwable? = null
             runDesktopComposeUiTest {
-                failure = assertFailsWith<Exception> {
-                    setContent { Preview(body) }
-                    waitForIdle()
-                }
+                failure =
+                    assertFailsWith<Exception> {
+                        setContent { Preview(body) }
+                        waitForIdle()
+                    }
             }
             // Asserted on the message, not merely on "something threw": a negative test that accepts
             // any exception also passes when the harness breaks for a reason of its own.
@@ -235,22 +236,24 @@ class KompotPreviewTest {
 
             var failure: Throwable? = null
             runDesktopComposeUiTest {
-                failure = assertFailsWith<Exception> {
-                    setContent {
-                        MaterialTheme {
-                            KompotPreview(
-                                body = checkoutBody(),
-                                registry = emptyRegistry,
-                                designSystem = designSystem,
-                                json = json,
-                            )
+                failure =
+                    assertFailsWith<Exception> {
+                        setContent {
+                            MaterialTheme {
+                                KompotPreview(
+                                    body = checkoutBody(),
+                                    registry = emptyRegistry,
+                                    designSystem = designSystem,
+                                    json = json,
+                                )
+                            }
                         }
+                        waitForIdle()
                     }
-                    waitForIdle()
-                }
             }
             assertTrue(
-                "UNRENDERABLE_COMPONENT" in (failure?.message ?: "") || "UNRENDERABLE_COMPONENT" in (failure?.cause?.message ?: ""),
+                "UNRENDERABLE_COMPONENT" in (failure?.message ?: "") ||
+                    "UNRENDERABLE_COMPONENT" in (failure?.cause?.message ?: ""),
                 "expected the preview to name what it could not draw, got: ${failure?.message}",
             )
         }

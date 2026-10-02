@@ -15,7 +15,8 @@ public object ExperimentHeaderCodec {
     // client reads it — so a typo cannot make the two sides disagree.
     public const val HEADER_NAME: String = "X-Kompot-Experiments"
 
-    public fun encode(assignments: Map<String, String>): String = assignments.entries.joinToString(",") { (id, variant) -> "$id=$variant" }
+    public fun encode(assignments: Map<String, String>): String =
+        assignments.entries.joinToString(",") { (id, variant) -> "$id=$variant" }
 
     public fun decode(header: String?): Map<String, String> =
         header

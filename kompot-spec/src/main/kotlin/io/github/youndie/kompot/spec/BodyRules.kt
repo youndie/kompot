@@ -33,8 +33,7 @@ public object BodyRules {
         body: JsonElement,
         componentTypes: Set<String>,
         crossReferenceKeys: Map<String, String> = emptyMap(),
-    ): List<BodyFinding> =
-        componentIds(body, componentTypes) + textSpans(body) + formFields(body, crossReferenceKeys)
+    ): List<BodyFinding> = componentIds(body, componentTypes) + textSpans(body) + formFields(body, crossReferenceKeys)
 
     // A node's id addresses point updates (SPEC.md §4.2): an empty or duplicated id makes the address
     // ambiguous, and a frame of the update channel lands on the wrong node.
@@ -140,8 +139,9 @@ public object BodyRules {
                         (node.value[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content
                             ?: return@mapNotNull null
                     val key = crossReferenceKeys[type] ?: return@mapNotNull null
-                    val target = (node.value[key] as? JsonPrimitive)?.takeIf { it.isString }?.content
-                        ?: return@mapNotNull null
+                    val target =
+                        (node.value[key] as? JsonPrimitive)?.takeIf { it.isString }?.content
+                            ?: return@mapNotNull null
                     target to (JsonPath.ROOT + "schema").append(node.path)
                 }.toList()
 

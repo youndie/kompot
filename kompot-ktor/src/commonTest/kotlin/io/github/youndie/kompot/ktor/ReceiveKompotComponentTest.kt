@@ -1,5 +1,8 @@
 package io.github.youndie.kompot.ktor
 
+import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.KompotModifierNode
+import io.github.youndie.kompot.kompotCoreSerializersModule
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
@@ -17,9 +20,6 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import io.github.youndie.kompot.KompotComponent
-import io.github.youndie.kompot.KompotModifierNode
-import io.github.youndie.kompot.kompotCoreSerializersModule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -62,7 +62,12 @@ class ReceiveKompotComponentTest {
             val response =
                 client.post("/component") {
                     contentType(ContentType.Application.Json)
-                    setBody(json.encodeToString(PolymorphicSerializer(KompotComponent::class), ReceiveTestComponent(id = "root", label = "hello")))
+                    setBody(
+                        json.encodeToString(
+                            PolymorphicSerializer(KompotComponent::class),
+                            ReceiveTestComponent(id = "root", label = "hello"),
+                        ),
+                    )
                 }
 
             assertEquals(HttpStatusCode.OK, response.status)

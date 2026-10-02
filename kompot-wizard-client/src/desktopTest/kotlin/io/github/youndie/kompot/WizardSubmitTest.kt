@@ -2,17 +2,17 @@
 
 package io.github.youndie.kompot
 
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runTest
-import io.github.youndie.kompot.wizard.FinishWizardAction
-import io.github.youndie.kompot.wizard.NextStepAction
-import io.github.youndie.kompot.wizard.PrevStepAction
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.FormSchema
 import io.github.youndie.kompot.form.standard.RequiredRule
 import io.github.youndie.kompot.form.standard.TextFieldDefinition
 import io.github.youndie.kompot.form.standard.TextValue
+import io.github.youndie.kompot.wizard.FinishWizardAction
+import io.github.youndie.kompot.wizard.NextStepAction
+import io.github.youndie.kompot.wizard.PrevStepAction
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

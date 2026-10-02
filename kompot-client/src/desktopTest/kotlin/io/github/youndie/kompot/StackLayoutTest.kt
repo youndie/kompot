@@ -28,7 +28,11 @@ class StackLayoutTest {
     private val renderers = KompotRegistry(kompotCoreRenderers + kompotStandardRenderers)
 
     private fun cell(label: String) =
-        TextComponent(id = label, text = label, modifiers = listOf(KompotModifierNode.Size(widthDp = 50, heightDp = 20)))
+        TextComponent(
+            id = label,
+            text = label,
+            modifiers = listOf(KompotModifierNode.Size(widthDp = 50, heightDp = 20)),
+        )
 
     private fun row(
         arrangement: String? = null,
@@ -39,7 +43,14 @@ class StackLayoutTest {
     ) = RowComponent(
         id = "row",
         modifiers = listOf(KompotModifierNode.Size(widthDp = 300, heightDp = 100)),
-        children = labels.map { TextComponent(id = it, text = it, modifiers = listOf(KompotModifierNode.Size(widthDp = cellWidth, heightDp = 20))) },
+        children =
+            labels.map {
+                TextComponent(
+                    id = it,
+                    text = it,
+                    modifiers = listOf(KompotModifierNode.Size(widthDp = cellWidth, heightDp = 20)),
+                )
+            },
         spacing = spacing,
         arrangement = arrangement,
         alignment = alignment,
@@ -52,7 +63,10 @@ class StackLayoutTest {
     ) = runDesktopComposeUiTest(width = 400, height = 400) {
         setContent {
             TestKompotTheme {
-                CompositionLocalProvider(LocalKompotRegistry provides renderers, LocalLayoutDirection provides direction) {
+                CompositionLocalProvider(
+                    LocalKompotRegistry provides renderers,
+                    LocalLayoutDirection provides direction,
+                ) {
                     Box(Modifier.size(400.dp, 400.dp)) {
                         renderers.RenderNode(node, recordingActionHandler(), testFormController())
                     }

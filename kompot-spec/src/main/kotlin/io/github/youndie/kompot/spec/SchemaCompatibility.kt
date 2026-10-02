@@ -184,7 +184,7 @@ public object SchemaCompatibility {
         when {
             // §2.3: the set of nodes is fixed by the protocol and no degradation is provided for one
             // of them — parsing the component that carries it fails outright.
-            !facts.open ->
+            !facts.open -> {
                 SchemaChange(
                     SchemaCompatibilityRules.CLOSED_HIERARCHY_EXTENDED,
                     Compatibility.BREAKING,
@@ -192,8 +192,9 @@ public object SchemaCompatibility {
                     "a new member of a CLOSED hierarchy — §15: adding a node to the closed hierarchy. A reader " +
                         "released before it cannot parse the node that carries it",
                 )
+            }
 
-            facts.degrades == true ->
+            facts.degrades == true -> {
                 SchemaChange(
                     SchemaCompatibilityRules.TYPE_ADDED_DEGRADING,
                     Compatibility.COMPATIBLE,
@@ -201,10 +202,11 @@ public object SchemaCompatibility {
                     "a new type in a hierarchy WITH degradation — §15: compatible. A reader that does not know it " +
                         "draws a placeholder (§2.1)",
                 )
+            }
 
             // §2.2, and the most expensive line of the protocol: the form hierarchies are open and
             // have no fallback, so an unfamiliar type costs the whole response.
-            else ->
+            else -> {
                 SchemaChange(
                     SchemaCompatibilityRules.TYPE_ADDED_NO_DEGRADATION,
                     Compatibility.BREAKING,
@@ -213,6 +215,7 @@ public object SchemaCompatibility {
                         "it are rolled out. For an older one this is not a new variant but a parse error of the " +
                         "whole response (§2.2)",
                 )
+            }
         }
 
     // ---- the definitions: their fields, the types of those fields, and what is required ----
@@ -234,7 +237,7 @@ public object SchemaCompatibility {
             if ((now == null || old == null) && name in spoken) return@forEach
 
             when {
-                now == null ->
+                now == null -> {
                     changes +=
                         SchemaChange(
                             SchemaCompatibilityRules.TYPE_REMOVED,
@@ -242,8 +245,9 @@ public object SchemaCompatibility {
                             name,
                             "the definition is gone — §15: removal or rename of a type",
                         )
+                }
 
-                old == null ->
+                old == null -> {
                     changes +=
                         SchemaChange(
                             SchemaCompatibilityRules.DEFINITION_ADDED,
@@ -252,8 +256,11 @@ public object SchemaCompatibility {
                             "a definition nothing could reference before; what it costs is decided where a field " +
                                 "starts naming it, and that shows up as a change of that field",
                         )
+                }
 
-                else -> changes += changesIn(name, old, now)
+                else -> {
+                    changes += changesIn(name, old, now)
+                }
             }
         }
 
@@ -538,8 +545,7 @@ private data class Model(
     // One file minus its $defs, as text: the tripwire for a root keyword nobody here has met yet.
     val envelopes: Map<String, String>,
 ) {
-    fun definitionOf(wireType: String): String? =
-        definitions.entries.firstOrNull { it.value.wireType == wireType }?.key
+    fun definitionOf(wireType: String): String? = definitions.entries.firstOrNull { it.value.wireType == wireType }?.key
 }
 
 // DEFINITIONS ARE KEYED BY NAME ACROSS THE WHOLE SET rather than by file#name. Which file a
@@ -622,7 +628,15 @@ private fun definitionOf(
 // A base that one side does not have: every field it declares on the other side is an addition or a
 // removal, judged by the same rules.
 private val NO_BASE =
-    Definition(kind = null, wireType = null, properties = emptyMap(), required = emptySet(), enumValues = null, additionalProperties = null, residual = "")
+    Definition(
+        kind = null,
+        wireType = null,
+        properties = emptyMap(),
+        required = emptySet(),
+        enumValues = null,
+        additionalProperties = null,
+        residual = "",
+    )
 
 private fun merge(
     existing: Hierarchy?,
@@ -652,17 +666,22 @@ private fun merge(
 // every reference to it without changing what any of them point at.
 private fun canonical(element: JsonElement): String =
     when (element) {
-        is JsonObject ->
+        is JsonObject -> {
             element.entries
                 .filterNot { it.key in IGNORED }
                 .sortedBy { it.key }
                 .joinToString(",", "{", "}") { (key, value) ->
                     "$key:" + if (key == "\$ref") canonicalReference(value.primitive()) else canonical(value)
                 }
+        }
 
-        is JsonArray -> element.map { canonical(it) }.sorted().joinToString(",", "[", "]")
+        is JsonArray -> {
+            element.map { canonical(it) }.sorted().joinToString(",", "[", "]")
+        }
 
-        is JsonPrimitive -> if (element.isString) "\"${element.content}\"" else element.content
+        is JsonPrimitive -> {
+            if (element.isString) "\"${element.content}\"" else element.content
+        }
     }
 
 private fun canonicalReference(reference: String) = "\"${reference.substringAfter("#")}\""

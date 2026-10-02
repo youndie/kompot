@@ -4,7 +4,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-private data class TestText(val text: String) : FieldValue {
+private data class TestText(
+    val text: String,
+) : FieldValue {
     override val plainValue: String get() = text
 }
 
@@ -22,7 +24,12 @@ class InitialValueTest {
     fun `a field starts on the value its definition carries`() {
         val controller = FormController(FormSchema("f", listOf(SeededField("title", initialValue = TestText("Draft")))))
 
-        assertEquals(TestText("Draft"), controller.fieldsState.value.getValue("title").value)
+        assertEquals(
+            TestText("Draft"),
+            controller.fieldsState.value
+                .getValue("title")
+                .value,
+        )
     }
 
     // What the caller passes is a draft being resumed; what the schema carries is a suggestion for an
@@ -35,13 +42,22 @@ class InitialValueTest {
                 initialValues = mapOf("title" to TestText("What I typed")),
             )
 
-        assertEquals(TestText("What I typed"), controller.fieldsState.value.getValue("title").value)
+        assertEquals(
+            TestText("What I typed"),
+            controller.fieldsState.value
+                .getValue("title")
+                .value,
+        )
     }
 
     @Test
     fun `a field without one still starts empty`() {
         val controller = FormController(FormSchema("f", listOf(SeededField("title"))))
 
-        assertNull(controller.fieldsState.value.getValue("title").value)
+        assertNull(
+            controller.fieldsState.value
+                .getValue("title")
+                .value,
+        )
     }
 }

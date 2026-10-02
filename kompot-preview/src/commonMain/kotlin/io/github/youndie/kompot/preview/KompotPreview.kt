@@ -205,11 +205,12 @@ public fun Json.decodeKompotBody(body: String): KompotDecodedBody {
         // PolymorphicSerializer rather than KompotComponent.serializer(): the hierarchy is OPEN, so the
         // interface has no generated serializer of its own — the same asymmetry that makes a plain
         // call.respond drop the discriminator on a root, met here from the reading side.
-        KompotBodyShape.COMPONENT ->
+        KompotBodyShape.COMPONENT -> {
             KompotDecodedBody(
                 decodeFromString(PolymorphicSerializer(KompotComponent::class), body),
                 NO_FIELDS,
                 realtimeTopic = null,
             )
+        }
     }
 }

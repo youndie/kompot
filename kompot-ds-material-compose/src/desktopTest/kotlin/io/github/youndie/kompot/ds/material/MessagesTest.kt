@@ -43,7 +43,13 @@ class MessagesTest {
         val handler =
             remember {
                 lateinit var top: KompotActionHandler
-                top = app.withSnackbarMessages(host, scope) { top.handle(it) }.withPerform(scope) { url, _ -> perform(url) }
+                top =
+                    app
+                        .withSnackbarMessages(
+                            host,
+                            scope,
+                        ) { top.handle(it) }
+                        .withPerform(scope) { url, _ -> perform(url) }
                 top
             }
         MaterialTheme {
@@ -90,7 +96,11 @@ class MessagesTest {
     @Test
     fun `a perform that answers with a message shows it`() =
         runDesktopComposeUiTest {
-            setContent(screen(PerformAction(url = "/cards/7/archive", payload = emptyMap()), perform = { ShowMessageAction(text = "Archived") }))
+            setContent(
+                screen(PerformAction(url = "/cards/7/archive", payload = emptyMap()), perform = {
+                    ShowMessageAction(text = "Archived")
+                }),
+            )
             onNodeWithText("raise").performClick()
             waitForIdle()
             onNodeWithText("Archived").assertIsDisplayed()
@@ -124,7 +134,12 @@ class MessagesTest {
                 """{"type":"show_message","text":"Saved","level":"error","actionLabel":"Retry","action":{"type":"navigate","deeplink":"app://retry"}}""",
             )
         assertEquals(
-            ShowMessageAction(text = "Saved", level = "error", actionLabel = "Retry", action = NavigateAction(deeplink = "app://retry")),
+            ShowMessageAction(
+                text = "Saved",
+                level = "error",
+                actionLabel = "Retry",
+                action = NavigateAction(deeplink = "app://retry"),
+            ),
             decoded,
         )
     }

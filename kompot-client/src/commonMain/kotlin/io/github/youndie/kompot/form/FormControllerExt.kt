@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 /**
-     * Subscribes to a field's changes and picks up its initial state automatically.
+ * Subscribes to a field's changes and picks up its initial state automatically.
  */
 @Composable
 public inline fun <reified T : FieldValue> FormController.collectFieldState(fieldId: String): State<FieldState<T>> =
@@ -18,7 +18,7 @@ public inline fun <reified T : FieldValue> FormController.collectFieldState(fiel
     )
 
 /**
-     * Subscribes to a field's visibility and picks up its initial state automatically.
+ * Subscribes to a field's visibility and picks up its initial state automatically.
  */
 @Composable
 public fun FormController.collectVisibility(fieldId: String): State<Boolean> =

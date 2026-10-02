@@ -57,7 +57,12 @@ class TappableContainerTest {
             setContent {
                 WithStandardRenderers {
                     ColumnRenderer().Render(
-                        component = ColumnComponent(id = "card", children = listOf(TextComponent(id = "t", text = "Card")), action = open),
+                        component =
+                            ColumnComponent(
+                                id = "card",
+                                children = listOf(TextComponent(id = "t", text = "Card")),
+                                action = open,
+                            ),
                         actionHandler = recordingActionHandler { raised += it },
                         formController = testFormController(),
                     )
@@ -79,7 +84,11 @@ class TappableContainerTest {
             setContent {
                 WithStandardRenderers {
                     RowRenderer().Render(
-                        component = RowComponent(id = "plain", children = listOf(TextComponent(id = "t", text = "Just text"))),
+                        component =
+                            RowComponent(
+                                id = "plain",
+                                children = listOf(TextComponent(id = "t", text = "Just text")),
+                            ),
                         actionHandler = recordingActionHandler { raised += it },
                         formController = testFormController(),
                     )

@@ -6,11 +6,11 @@ import io.github.youndie.kompot.KompotRegistry
 import io.github.youndie.kompot.kompotJson
 import io.github.youndie.kompot.spec.KompotSpecResources
 import io.github.youndie.kompot.standard.KompotPageLoader
-import io.github.youndie.kompot.theme.KompotTheme
-import java.nio.file.Path
 import io.github.youndie.kompot.studio.source.ScreenSource
+import io.github.youndie.kompot.theme.KompotTheme
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
+import java.nio.file.Path
 
 // WHAT A CONSUMER HANDS THE STUDIO. Everything here belongs to the deployment being previewed; the
 // studio itself knows none of it in advance, and that is the whole design rather than politeness.
@@ -109,7 +109,8 @@ public fun defaultGoldenName(
     screen: String,
 ): String {
     fun camel(text: String) =
-        text.split('-', '_', ' ', '/', '.')
+        text
+            .split('-', '_', ' ', '/', '.')
             .filter { it.isNotEmpty() }
             .joinToString("") { part -> part.replaceFirstChar { it.uppercaseChar() } }
 

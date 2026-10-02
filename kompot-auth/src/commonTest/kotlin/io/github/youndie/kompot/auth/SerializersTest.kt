@@ -1,8 +1,8 @@
 package io.github.youndie.kompot.auth
 
+import io.github.youndie.kompot.KompotAction
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
-import io.github.youndie.kompot.KompotAction
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

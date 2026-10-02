@@ -55,7 +55,12 @@ class RealtimeFailureTest {
             val source =
                 KompotRealtimeSource {
                     flow {
-                        emit(UpdateComponentMessage("greeting", TextComponent(id = "greeting", text = "Updated before the failure")))
+                        emit(
+                            UpdateComponentMessage(
+                                "greeting",
+                                TextComponent(id = "greeting", text = "Updated before the failure"),
+                            ),
+                        )
                         throw IllegalStateException("channel closed: 401")
                     }
                 }

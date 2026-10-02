@@ -30,8 +30,8 @@ private class FakePageLoader(
     }
 }
 
-    // A registry holding only what these tests actually use: the text items of the list are drawn by
-    // the ordinary text renderer.
+// A registry holding only what these tests actually use: the text items of the list are drawn by
+// the ordinary text renderer.
 private val testRegistry = KompotRegistry(kompotCoreRenderers + kompotStandardRenderers)
 
 @OptIn(ExperimentalTestApi::class)

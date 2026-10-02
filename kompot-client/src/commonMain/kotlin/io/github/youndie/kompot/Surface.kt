@@ -37,7 +37,14 @@ public object KompotSurfaceRoles {
     // A button's emphasis is content, not theme: which one is primary is decided by whoever wrote the
     // screen. The renderer composes the role from the variant the server sent, so a design system
     // answers "button.quiet" the way it answers "button".
-    public fun button(variant: String?): SurfaceRole = if (variant == null) Button else SurfaceRole("${Button.key}.$variant")
+    public fun button(variant: String?): SurfaceRole =
+        if (variant ==
+            null
+        ) {
+            Button
+        } else {
+            SurfaceRole("${Button.key}.$variant")
+        }
 
     // The same composition for a boolean's affordance: a design system answers "checkbox_input.switch"
     // the way it answers "checkbox_input", and neither string is the protocol's business.

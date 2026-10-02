@@ -1,5 +1,7 @@
 package io.github.youndie.kompot.realtime.redis
 
+import io.github.youndie.kompot.realtime.server.KompotBusMessage
+import io.github.youndie.kompot.realtime.server.KompotUpdateBus
 import io.lettuce.core.RedisClient
 import io.lettuce.core.pubsub.RedisPubSubAdapter
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection
@@ -8,8 +10,6 @@ import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.future.await
-import io.github.youndie.kompot.realtime.server.KompotBusMessage
-import io.github.youndie.kompot.realtime.server.KompotUpdateBus
 
 // The update bus over Redis pub/sub — what makes more than one server instance possible.
 //

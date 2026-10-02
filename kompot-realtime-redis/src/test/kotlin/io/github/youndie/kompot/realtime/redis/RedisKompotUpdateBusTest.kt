@@ -1,5 +1,7 @@
 package io.github.youndie.kompot.realtime.redis
 
+import io.github.youndie.kompot.realtime.server.KompotBusMessage
+import io.github.youndie.kompot.realtime.server.KompotUpdateBroadcaster
 import io.lettuce.core.RedisClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,8 +13,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.jupiter.api.Assumptions.assumeTrue
-import io.github.youndie.kompot.realtime.server.KompotBusMessage
-import io.github.youndie.kompot.realtime.server.KompotUpdateBroadcaster
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

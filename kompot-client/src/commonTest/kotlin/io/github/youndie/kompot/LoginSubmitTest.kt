@@ -1,13 +1,13 @@
 package io.github.youndie.kompot
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runTest
-import io.github.youndie.kompot.forms.SubmitFormAction
-import io.github.youndie.kompot.standard.NavigateAction
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.FormSchema
+import io.github.youndie.kompot.forms.SubmitFormAction
+import io.github.youndie.kompot.standard.NavigateAction
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -52,7 +52,10 @@ class LoginSubmitTest {
             var submitCalled = false
             val handler =
                 KompotActionHandler {}
-                    .withLoginSubmit(this, controller, formId = "login") { submitCalled = true; LoginSubmitTestResultAction("x") }
+                    .withLoginSubmit(this, controller, formId = "login") {
+                        submitCalled = true
+                        LoginSubmitTestResultAction("x")
+                    }
 
             handler.handle(SubmitFormAction(formId = "login"))
             advanceUntilIdle()
@@ -72,8 +75,8 @@ class LoginSubmitTest {
 
             handler.handle(SubmitFormAction(formId = "login"))
 
-                // Only the original submit action has arrived before advanceUntilIdle(): the
-                // asynchronous submit has not run yet.
+            // Only the original submit action has arrived before advanceUntilIdle(): the
+            // asynchronous submit has not run yet.
             assertEquals(SubmitFormAction(formId = "login"), forwarded)
         }
 
@@ -86,7 +89,10 @@ class LoginSubmitTest {
             var forwarded: KompotAction? = null
             val handler =
                 KompotActionHandler { forwarded = it }
-                    .withLoginSubmit(this, controller, formId = "login") { submitCalled = true; LoginSubmitTestResultAction("x") }
+                    .withLoginSubmit(this, controller, formId = "login") {
+                        submitCalled = true
+                        LoginSubmitTestResultAction("x")
+                    }
 
             handler.handle(SubmitFormAction(formId = "other_form"))
             advanceUntilIdle()
@@ -112,8 +118,8 @@ class LoginSubmitTest {
     @Test
     fun `sanity - getPayload is null once required fields are validated and still empty`() {
         val controller = FormController(loginSubmitTestSchema())
-            // getPayload() looks only at state.error, which is set on blur or by markAllAsChanged; on
-            // an untouched controller it is null, which does not mean "valid" — hence forcing first.
+        // getPayload() looks only at state.error, which is set on blur or by markAllAsChanged; on
+        // an untouched controller it is null, which does not mean "valid" — hence forcing first.
         controller.markAllAsChanged()
         assertNull(controller.getPayload())
     }

@@ -26,7 +26,11 @@ class SamplesTest {
         val config =
             KompotStudioConfig(
                 registry = toolkitRegistry,
-                samples = listOf(TextComponent(id = "a", text = "hello"), ColumnComponent(id = "b", children = emptyList())),
+                samples =
+                    listOf(
+                        TextComponent(id = "a", text = "hello"),
+                        ColumnComponent(id = "b", children = emptyList()),
+                    ),
             )
 
         // Not "the map has two entries": the keys are the assertion, and they are the strings a
@@ -39,7 +43,11 @@ class SamplesTest {
         val config =
             KompotStudioConfig(
                 registry = toolkitRegistry,
-                samples = listOf(ColumnComponent(id = "b", children = emptyList()), TextComponent(id = "a", text = "hello")),
+                samples =
+                    listOf(
+                        ColumnComponent(id = "b", children = emptyList()),
+                        TextComponent(id = "a", text = "hello"),
+                    ),
             )
 
         assertEquals(listOf("column", "text"), samplesByWireType(config).keys.toList())

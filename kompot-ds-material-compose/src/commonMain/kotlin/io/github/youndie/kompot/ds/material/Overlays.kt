@@ -58,11 +58,15 @@ public class KompotOverlays {
                 asking = null
                 true
             }
+
             presented != null -> {
                 presented = null
                 true
             }
-            else -> false
+
+            else -> {
+                false
+            }
         }
 
     /** Closes the question without running its action: the person said no. */
@@ -105,17 +109,25 @@ public fun KompotActionHandler.withOverlays(overlays: KompotOverlays): KompotAct
                 overlays.asking = action
                 handle(action)
             }
+
             is PresentAction -> {
                 // One layer: a tree presented over a presented tree replaces it.
                 overlays.presented = action
                 handle(action)
             }
-            is CloseAction -> if (!overlays.dismiss()) handle(action)
+
+            is CloseAction -> {
+                if (!overlays.dismiss()) handle(action)
+            }
+
             is NavigateAction -> {
                 overlays.closeAll()
                 handle(action)
             }
-            else -> handle(action)
+
+            else -> {
+                handle(action)
+            }
         }
     }
 
@@ -156,11 +168,13 @@ public fun KompotOverlayHost(
     overlays.presented?.let { presented ->
         val dismiss: () -> Unit = { overlays.dismiss() }
         when (presented.kind) {
-            PresentKind.SHEET ->
+            PresentKind.SHEET -> {
                 ModalBottomSheet(onDismissRequest = dismiss) {
                     registry.RenderNode(presented.content, actionHandler, formController)
                 }
-            else ->
+            }
+
+            else -> {
                 Dialog(onDismissRequest = dismiss) {
                     Surface(shape = MaterialTheme.shapes.extraLarge, tonalElevation = 6.dp) {
                         androidx.compose.foundation.layout.Box(Modifier.padding(24.dp)) {
@@ -168,6 +182,7 @@ public fun KompotOverlayHost(
                         }
                     }
                 }
+            }
         }
     }
 }

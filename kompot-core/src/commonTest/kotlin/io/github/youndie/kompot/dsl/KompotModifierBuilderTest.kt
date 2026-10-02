@@ -1,7 +1,7 @@
 package io.github.youndie.kompot.dsl
 
-import io.github.youndie.kompot.KompotModifierNode
 import io.github.youndie.kompot.ColorToken
+import io.github.youndie.kompot.KompotModifierNode
 import io.github.youndie.kompot.SizeType
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -41,7 +41,12 @@ class KompotModifierBuilderTest {
     fun `fillMaxWidth and fillMaxHeight switch size to Fill independently`() {
         val widthOnly = KompotModifierBuilder().apply { fillMaxWidth() }.build()
         val heightOnly = KompotModifierBuilder().apply { fillMaxHeight() }.build()
-        val both = KompotModifierBuilder().apply { fillMaxWidth(); fillMaxHeight() }.build()
+        val both =
+            KompotModifierBuilder()
+                .apply {
+                    fillMaxWidth()
+                    fillMaxHeight()
+                }.build()
 
         assertEquals(listOf(KompotModifierNode.Size(width = SizeType.Fill, height = SizeType.Wrap)), widthOnly)
         assertEquals(listOf(KompotModifierNode.Size(width = SizeType.Wrap, height = SizeType.Fill)), heightOnly)
@@ -52,7 +57,12 @@ class KompotModifierBuilderTest {
     fun `width and height in dp land on the same node as the symbolic dimensions`() {
         val widthOnly = KompotModifierBuilder().apply { width(120) }.build()
         val both = KompotModifierBuilder().apply { size(width = 120, height = 1) }.build()
-        val mixed = KompotModifierBuilder().apply { fillMaxWidth(); height(1) }.build()
+        val mixed =
+            KompotModifierBuilder()
+                .apply {
+                    fillMaxWidth()
+                    height(1)
+                }.build()
 
         assertEquals(
             listOf(KompotModifierNode.Size(width = SizeType.Wrap, height = SizeType.Wrap, widthDp = 120)),

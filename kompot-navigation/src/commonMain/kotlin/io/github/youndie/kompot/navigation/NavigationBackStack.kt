@@ -20,7 +20,14 @@ public data class NavigationBackStack(
 
     // Pushing the deeplink already on top is a no-op: consecutive duplicates would make Back return
     // to the very screen it was invoked from.
-    public fun push(deeplink: String): NavigationBackStack = if (deeplink == current) this else NavigationBackStack(entries + deeplink)
+    public fun push(deeplink: String): NavigationBackStack =
+        if (deeplink ==
+            current
+        ) {
+            this
+        } else {
+            NavigationBackStack(entries + deeplink)
+        }
 
     // On a single-entry stack pop is a no-op — there is nowhere to return to. What to do instead is
     // the caller's decision; an application usually leaves graph-driven navigation altogether.

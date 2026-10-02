@@ -1,6 +1,12 @@
 package io.github.youndie.kompot.ds.material
 
 import androidx.compose.runtime.Composable
+import io.github.youndie.kompot.form.standard.AmountValue
+import io.github.youndie.kompot.form.standard.EntityValue
+import io.github.youndie.kompot.form.standard.KeyboardType
+import io.github.youndie.kompot.form.standard.TextValue
+import io.github.youndie.kompot.form.standard.formStandardSerializersModule
+import io.github.youndie.kompot.form.standard.required
 import io.github.youndie.kompot.forms.KompotFormResponse
 import io.github.youndie.kompot.forms.SelectOption
 import io.github.youndie.kompot.forms.SubmitFormAction
@@ -12,18 +18,13 @@ import io.github.youndie.kompot.forms.standard.boundSelectInput
 import io.github.youndie.kompot.forms.standard.boundTextInput
 import io.github.youndie.kompot.forms.standard.buildFormScreen
 import io.github.youndie.kompot.forms.standard.row
-import io.github.youndie.kompot.material3.*
-import io.github.youndie.kompot.standard.button
-import io.github.youndie.kompot.standard.text
-import io.github.youndie.kompot.form.standard.AmountValue
-import io.github.youndie.kompot.form.standard.EntityValue
-import io.github.youndie.kompot.form.standard.KeyboardType
-import io.github.youndie.kompot.form.standard.TextValue
-import io.github.youndie.kompot.form.standard.formStandardSerializersModule
-import io.github.youndie.kompot.form.standard.required
 import io.github.youndie.kompot.kompotJson
+import io.github.youndie.kompot.material3.M3Colors
+import io.github.youndie.kompot.material3.M3Typography
 import io.github.youndie.kompot.preview.KompotPreview
 import io.github.youndie.kompot.preview.KompotPreviewState
+import io.github.youndie.kompot.standard.button
+import io.github.youndie.kompot.standard.text
 import io.github.youndie.viddik.annotations.ViddikScreenshot
 
 // Unlike RendererScreenshots.kt, which photographs one renderer at a time, these shots assemble a
@@ -46,7 +47,8 @@ import io.github.youndie.viddik.annotations.ViddikScreenshot
 // a schema the application's own client refuses.
 private val previewJson = kompotJson(formStandardSerializersModule)
 
-private fun body(response: KompotFormResponse): String = previewJson.encodeToString(KompotFormResponse.serializer(), response)
+private fun body(response: KompotFormResponse): String =
+    previewJson.encodeToString(KompotFormResponse.serializer(), response)
 
 @ViddikScreenshot(name = "Checkout form - filled, ready to submit", group = "ComplexForm", width = 400, height = 480)
 @Composable
@@ -74,7 +76,11 @@ fun P2pTransferFormFilledScreenshot() {
             ) {
                 required("Enter the confirmation code")
             }
-            button(text = "Place order", action = SubmitFormAction(formId = "checkout"), modifierBlock = { fillMaxWidth() })
+            button(
+                text = "Place order",
+                action = SubmitFormAction(formId = "checkout"),
+                modifierBlock = { fillMaxWidth() },
+            )
         }
 
     RendererScreenshotTheme {
@@ -125,7 +131,11 @@ fun P2pTransferFormErrorsScreenshot() {
             ) {
                 required("Enter the confirmation code")
             }
-            button(text = "Place order", action = SubmitFormAction(formId = "checkout"), modifierBlock = { fillMaxWidth() })
+            button(
+                text = "Place order",
+                action = SubmitFormAction(formId = "checkout"),
+                modifierBlock = { fillMaxWidth() },
+            )
         }
 
     RendererScreenshotTheme {
@@ -178,7 +188,16 @@ fun TemplateFormFilledScreenshot() {
                         SelectOption(id = "monthly", label = "Monthly"),
                     ),
             )
-            button(text = "Save as a template", action = SubmitFormAction(formId = "payment_template"), modifierBlock = { fillMaxWidth() })
+            button(
+                text = "Save as a template",
+                action =
+                    SubmitFormAction(
+                        formId = "payment_template",
+                    ),
+                modifierBlock = {
+                    fillMaxWidth()
+                },
+            )
         }
 
     RendererScreenshotTheme {

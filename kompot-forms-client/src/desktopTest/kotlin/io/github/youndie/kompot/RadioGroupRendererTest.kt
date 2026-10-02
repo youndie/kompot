@@ -6,8 +6,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import io.github.youndie.kompot.forms.RadioGroupComponent
-import io.github.youndie.kompot.forms.SelectOption
 import io.github.youndie.kompot.form.FormController
 import io.github.youndie.kompot.form.FormSchema
 import io.github.youndie.kompot.form.standard.BooleanValue
@@ -15,6 +13,8 @@ import io.github.youndie.kompot.form.standard.CheckboxFieldDefinition
 import io.github.youndie.kompot.form.standard.EntityValue
 import io.github.youndie.kompot.form.standard.EqualsCondition
 import io.github.youndie.kompot.form.standard.SelectionFieldDefinition
+import io.github.youndie.kompot.forms.RadioGroupComponent
+import io.github.youndie.kompot.forms.SelectOption
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -35,7 +35,13 @@ class RadioGroupRendererTest {
             setContent {
                 TestKompotTheme {
                     RadioGroupRenderer().Render(
-                        component = RadioGroupComponent(id = "c", fieldId = "payer_type", label = "Customer type", options = options),
+                        component =
+                            RadioGroupComponent(
+                                id = "c",
+                                fieldId = "payer_type",
+                                label = "Customer type",
+                                options = options,
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )
@@ -48,14 +54,20 @@ class RadioGroupRendererTest {
         }
 
     @Test
-    fun `clicking an option stores it as EntityValue with its rawMetadata and immediately marks the field as blurred`() =
+    fun `clicking an option stores an EntityValue with its rawMetadata and marks the field blurred at once`() =
         runFormsComposeUiTest {
             val controller = FormController(FormSchema("form", fields = listOf(SelectionFieldDefinition("payer_type"))))
 
             setContent {
                 TestKompotTheme {
                     RadioGroupRenderer().Render(
-                        component = RadioGroupComponent(id = "c", fieldId = "payer_type", label = "Customer type", options = options),
+                        component =
+                            RadioGroupComponent(
+                                id = "c",
+                                fieldId = "payer_type",
+                                label = "Customer type",
+                                options = options,
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )
@@ -84,7 +96,13 @@ class RadioGroupRendererTest {
             setContent {
                 TestKompotTheme {
                     RadioGroupRenderer().Render(
-                        component = RadioGroupComponent(id = "c", fieldId = "payer_type", label = "Customer type", options = options),
+                        component =
+                            RadioGroupComponent(
+                                id = "c",
+                                fieldId = "payer_type",
+                                label = "Customer type",
+                                options = options,
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )
@@ -107,7 +125,10 @@ class RadioGroupRendererTest {
                         fields =
                             listOf(
                                 CheckboxFieldDefinition("gate"),
-                                SelectionFieldDefinition("payer_type", visibleIf = EqualsCondition("gate", BooleanValue(true))),
+                                SelectionFieldDefinition(
+                                    "payer_type",
+                                    visibleIf = EqualsCondition("gate", BooleanValue(true)),
+                                ),
                             ),
                     ),
                 )
@@ -115,7 +136,13 @@ class RadioGroupRendererTest {
             setContent {
                 TestKompotTheme {
                     RadioGroupRenderer().Render(
-                        component = RadioGroupComponent(id = "c", fieldId = "payer_type", label = "Customer type", options = options),
+                        component =
+                            RadioGroupComponent(
+                                id = "c",
+                                fieldId = "payer_type",
+                                label = "Customer type",
+                                options = options,
+                            ),
                         actionHandler = recordingActionHandler(),
                         formController = controller,
                     )

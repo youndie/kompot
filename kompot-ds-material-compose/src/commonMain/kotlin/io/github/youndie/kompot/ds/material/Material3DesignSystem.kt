@@ -4,8 +4,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import io.github.youndie.kompot.KompotDesignSystem
 import io.github.youndie.kompot.ColorToken
+import io.github.youndie.kompot.KompotDesignSystem
 import io.github.youndie.kompot.TypographyToken
 import io.github.youndie.kompot.material3.M3Colors
 import io.github.youndie.kompot.material3.M3Typography

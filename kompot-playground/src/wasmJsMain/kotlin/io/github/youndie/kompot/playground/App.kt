@@ -10,12 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -105,14 +105,24 @@ public fun PlaygroundApp() {
                 selectedId = null
                 val nextWord = next.body.chooseWord(word) ?: ""
                 word = nextWord
-                offer(next.body.withServerFallback(mode.serverNamesFallback, nextWord), PlaygroundClient(mode, nextWord))
+                offer(
+                    next.body.withServerFallback(mode.serverNamesFallback, nextWord),
+                    PlaygroundClient(mode, nextWord),
+                )
             }
 
             Row(Modifier.fillMaxSize()) {
-                Column(Modifier.weight(BODY_WEIGHT).fillMaxHeight().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(
+                    Modifier.weight(BODY_WEIGHT).fillMaxHeight().padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
                     ExamplePicker(current = example, onPick = ::show, modifier = Modifier.fillMaxWidth())
 
-                    Text("The tree the body describes", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.outline)
+                    Text(
+                        "The tree the body describes",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.outline,
+                    )
 
                     // The tree walks the body that was DRAWN rather than the text being typed: a tree
                     // rebuilt from half-written JSON would flicker through shapes nobody sent.
@@ -163,9 +173,19 @@ private fun ClientPane(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        ClientSwitch(client = client, words = words, onModeChange = onModeChange, onWordChange = onWordChange, modifier = Modifier.fillMaxWidth())
+        ClientSwitch(
+            client = client,
+            words = words,
+            onModeChange = onModeChange,
+            onWordChange = onWordChange,
+            modifier = Modifier.fillMaxWidth(),
+        )
 
-        Text("The screen this client draws", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.outline)
+        Text(
+            "The screen this client draws",
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.outline,
+        )
 
         // Cleared HERE rather than in an effect, and the ordering is the whole reason: this runs before
         // the render pane below composes, while a LaunchedEffect would run after it — wiping the very
@@ -191,7 +211,13 @@ private fun ClientPane(
                 // The message's own button goes back to the top of the chain, as it must in an app;
                 // so does everything raised inside a presented tree (KompotOverlayHost below).
                 lateinit var top: KompotActionHandler
-                top = KompotActionHandler {}.withSnackbarMessages(messages, scope) { top.handle(it) }.withOverlays(overlays)
+                top =
+                    KompotActionHandler {}
+                        .withSnackbarMessages(
+                            messages,
+                            scope,
+                        ) { top.handle(it) }
+                        .withOverlays(overlays)
                 top
             }
 

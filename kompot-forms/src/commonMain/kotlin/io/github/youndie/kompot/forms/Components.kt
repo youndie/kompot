@@ -1,11 +1,11 @@
 package io.github.youndie.kompot.forms
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import io.github.youndie.kompot.KompotAction
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.KompotModifierNode
 import io.github.youndie.kompot.registry.KompotComponentMarker
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("text_input")

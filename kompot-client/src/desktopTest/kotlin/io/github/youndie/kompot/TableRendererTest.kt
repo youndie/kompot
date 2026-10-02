@@ -23,7 +23,10 @@ class TableRendererTest {
                                 id = "table",
                                 rows =
                                     listOf(
-                                        TableRow(listOf("Order type", "Standard discount", "Promo discount"), header = true),
+                                        TableRow(
+                                            listOf("Order type", "Standard discount", "Promo discount"),
+                                            header = true,
+                                        ),
                                         TableRow(listOf("From a template", "1%", "10%")),
                                         TableRow(listOf("Custom", "1%", "3%")),
                                     ),

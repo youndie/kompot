@@ -93,8 +93,11 @@ class DslExportTest {
     fun `an action with nothing but its type comes out without parentheses`() {
         // `CloseAction` is a data object. `CloseAction()` does not compile, and a draft that does not
         // compile is the one thing this whole file exists to prevent.
-        val drafted = export("""{ "type": "column", "id": "root", "children": [
-            { "type": "button", "id": "b", "text": "Close", "action": { "type": "close" } }] }""")
+        val drafted =
+            export(
+                """{ "type": "column", "id": "root", "children": [
+            { "type": "button", "id": "b", "text": "Close", "action": { "type": "close" } }] }""",
+            )
 
         assertTrue(drafted.contains("button(\"Close\", CloseAction, id = \"b\")"), drafted)
         assertFalse(drafted.contains("CloseAction("), drafted)
@@ -102,8 +105,11 @@ class DslExportTest {
 
     @Test
     fun `an action outside the profile becomes a TODO rather than a wrong constructor`() {
-        val drafted = export("""{ "type": "column", "id": "root", "children": [
-            { "type": "button", "id": "b", "text": "Go", "action": { "type": "open_vault" } }] }""")
+        val drafted =
+            export(
+                """{ "type": "column", "id": "root", "children": [
+            { "type": "button", "id": "b", "text": "Go", "action": { "type": "open_vault" } }] }""",
+            )
 
         // Nothing here knows what class that is, and inventing `OpenVaultAction` would compile on some
         // deployments and not others. `TODO()` returns Nothing, so it compiles everywhere and stops.
@@ -160,7 +166,12 @@ class DslExportTest {
         assertEquals("esimActivateScreen", identifier("esim-activate-screen"))
         assertEquals("screen2fa", identifier("2fa"))
         assertEquals("screen", identifier("---"))
-        assertTrue(export("""{ "type": "column", "id": "root", "children": [] }""", "home-screen").contains("fun homeScreen()"))
+        assertTrue(
+            export(
+                """{ "type": "column", "id": "root", "children": [] }""",
+                "home-screen",
+            ).contains("fun homeScreen()"),
+        )
     }
 
     @Test

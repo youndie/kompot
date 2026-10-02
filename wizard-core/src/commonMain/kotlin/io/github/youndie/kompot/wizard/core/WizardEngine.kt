@@ -22,7 +22,8 @@ public class WizardEngine<T>(
     private val initialStepId: String,
     private val stepResolver: WizardStepResolver<T>,
 ) {
-    public fun start(initialDraft: T): WizardSession<T> = WizardSession(currentStepId = initialStepId, draft = initialDraft)
+    public fun start(initialDraft: T): WizardSession<T> =
+        WizardSession(currentStepId = initialStepId, draft = initialDraft)
 
     // updatedDraft is the draft that ALREADY carries the values entered on currentStepId — merging them
     // is the caller's responsibility. The engine merges nothing and knows nothing about what is inside T.
@@ -72,7 +73,9 @@ public class WizardEngine<T>(
                 )
             }
 
-            WizardTransition.Finish -> session.copy(draft = updatedDraft, isFinished = true)
+            WizardTransition.Finish -> {
+                session.copy(draft = updatedDraft, isFinished = true)
+            }
         }
     }
 }

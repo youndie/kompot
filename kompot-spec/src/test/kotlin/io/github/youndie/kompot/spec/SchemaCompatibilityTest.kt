@@ -61,7 +61,15 @@ class SchemaCompatibilityTest {
         val before = SchemaFiles.loadAll()
         val after =
             before.edit("kompot-core.schema.json", "KompotComponent") { definition ->
-                definition.with("required", JsonArray(definition.getValue("required").jsonArray.filter { (it as JsonPrimitive).content != "id" }))
+                definition.with(
+                    "required",
+                    JsonArray(
+                        definition.getValue("required").jsonArray.filter {
+                            (it as JsonPrimitive).content !=
+                                "id"
+                        },
+                    ),
+                )
             }
 
         val change = SchemaCompatibility.compare(before, after).only()
@@ -90,7 +98,10 @@ class SchemaCompatibilityTest {
         val after =
             before.edit("kompot-core.schema.json", "KompotComponent") { definition ->
                 val properties = definition.getValue("properties").jsonObject
-                definition.with("properties", JsonObject(properties + ("tag" to JsonObject(mapOf("type" to JsonPrimitive("string"))))))
+                definition.with(
+                    "properties",
+                    JsonObject(properties + ("tag" to JsonObject(mapOf("type" to JsonPrimitive("string"))))),
+                )
             }
 
         val change = SchemaCompatibility.compare(before, after).only()

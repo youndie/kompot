@@ -1,10 +1,10 @@
 package io.github.youndie.kompot.interop
 
-import kotlinx.coroutines.suspendCancellableCoroutine
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormPatch
 import io.github.youndie.kompot.form.PatchFetcher
 import io.github.youndie.kompot.form.RemoteDataSourceResolver
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 // RemoteDataSourceResolver.search and PatchFetcher are suspend contracts, and Swift cannot implement
 // a Kotlin suspend interface or a suspend lambda through the ObjC export — unlike ordinary,
@@ -45,7 +45,9 @@ public fun swiftRemoteDataSourceResolver(
                         dataSourceId,
                         query,
                         { results -> continuation.resumeWith(Result.success(Result.success(results))) },
-                        { message -> continuation.resumeWith(Result.success(Result.failure(RuntimeException(message)))) },
+                        { message ->
+                            continuation.resumeWith(Result.success(Result.failure(RuntimeException(message))))
+                        },
                     )
                 }
             // A failed search must not take the screen down — the same quiet fallback as when no

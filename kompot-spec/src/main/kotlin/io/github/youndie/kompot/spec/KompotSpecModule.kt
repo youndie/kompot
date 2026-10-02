@@ -136,7 +136,13 @@ public object KompotSpec {
                             "oneOf",
                             JsonArray(
                                 members.values.map { target -> buildJsonObject { put("\$ref", target) } } +
-                                    if (declared.isEmpty()) emptyList() else listOf(buildJsonObject { put("\$ref", extensionRef) }),
+                                    if (declared.isEmpty()) {
+                                        emptyList()
+                                    } else {
+                                        listOf(
+                                            buildJsonObject { put("\$ref", extensionRef) },
+                                        )
+                                    },
                             ),
                         )
                         putJsonObject("discriminator") {
@@ -176,19 +182,23 @@ public object KompotSpec {
 
         return common +
             when (degrades) {
-                true ->
-                    "Omitting the shape is safe here because this hierarchy degrades (x-kompot-degrades: true above): " +
+                true -> {
+                    "Omitting the shape is safe here because this hierarchy degrades (x-kompot-degrades: true " +
+                        "above): " +
                         "an implementation that knows nothing of the type draws a placeholder and keeps the screen"
+                }
 
-                false ->
+                false -> {
                     "This hierarchy does NOT degrade (x-kompot-degrades: false above): an implementation that meets " +
                         "the type without knowing it loses the WHOLE response, not one node. Roll out the readers " +
                         "before the writer starts sending it — the same rule SPEC.md §15 states for a type without " +
                         "degradation"
+                }
 
-                null ->
+                null -> {
                     "The owning module declares no x-kompot-degrades for this hierarchy, so what an unfamiliar type " +
                         "costs here is unstated — treat it as not degrading until it says otherwise"
+                }
             }
     }
 
@@ -216,7 +226,8 @@ public object KompotSpec {
             pattern = null,
             description =
                 "Arbitrary metadata available to the client locally. Two keys are reserved by the protocol: " +
-                    "\"${KompotProtocol.METADATA_KEY_CURRENCY}\" is the currency amount_input.currencyFromField picks up, " +
+                    "\"${KompotProtocol.METADATA_KEY_CURRENCY}\" is the currency amount_input.currencyFromField " +
+                    "picks up, " +
                     "\"${KompotProtocol.METADATA_KEY_BALANCE}\" is the remaining amount max_amount_from_field reads. " +
                     "Every other key is a convention of the particular form",
         )

@@ -1,5 +1,8 @@
 package io.github.youndie.kompot.ktor
 
+import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.KompotModifierNode
+import io.github.youndie.kompot.kompotCoreSerializersModule
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
@@ -13,9 +16,6 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import io.github.youndie.kompot.KompotComponent
-import io.github.youndie.kompot.KompotModifierNode
-import io.github.youndie.kompot.kompotCoreSerializersModule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -58,7 +58,10 @@ class RespondKompotComponentTest {
             val body = response.bodyAsText()
 
             assertEquals(HttpStatusCode.OK, response.status)
-            assertTrue(body.contains("\"type\":\"test_component\""), "expected a type discriminator at the root, got: $body")
+            assertTrue(
+                body.contains("\"type\":\"test_component\""),
+                "expected a type discriminator at the root, got: $body",
+            )
             assertTrue(body.contains("\"id\":\"root\""))
             assertTrue(body.contains("\"label\":\"hello\""))
         }

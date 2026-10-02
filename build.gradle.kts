@@ -16,6 +16,7 @@ plugins {
     // for a versioned copy of something already there fails with a message about the classpath.
     alias(libs.plugins.sborkaJvm) apply false
     alias(libs.plugins.sborkaKmp) apply false
+    alias(libs.plugins.sborkaLint) apply false
     alias(libs.plugins.sborkaPublish) apply false
 }
 
