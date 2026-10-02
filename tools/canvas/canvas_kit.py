@@ -17,7 +17,7 @@ kit that makes such a canvas possible:
   * `README.md` — the markup contract, in the designer's language;
   * `examples/*.html` — copied from `--examples`, artboards written in the vocabulary.
 
-    canvas_kit.py design/tokens.json --prefix boulab --title "БОУЛ ЛАБ" --examples design/kit --out build/kit
+    canvas_kit.py design/tokens.json --prefix acme --title "ACME" --examples design/kit --out build/kit
 
 The markup contract (what `canvas_tree.py` reads):
 
