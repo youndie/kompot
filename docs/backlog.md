@@ -99,7 +99,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 |---|---|---|---|---|---|
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
 
-## Сделано (69)
+## Сделано (70)
 
 **Швы в toolkit'е**
 
@@ -196,6 +196,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 - [B-38](backlog/B-38-wire-name-is-not-obtainable.md) — Проводное имя компонента получить нечем, а студия его требует
 - [B-39](backlog/B-39-nothing-guards-the-published-kotlin-api.md) — Молчаливую поломку Kotlin-API не ловит ничто
 - [B-65](backlog/B-65-redis-test-never-starts-the-publisher.md) — Тест Redis-шины «с одного инстанса на другой» не запускает бродкастер отправителя
+- [B-71](backlog/B-71-kompot-layout-as-a-plugin.md) — Скилл kompot-layout ставится плагином, а не симлинком с одной машины
 
 <!-- END INDEX -->
 

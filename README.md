@@ -198,6 +198,22 @@ and `kompot-forms-standard` (a DSL that builds a form on the server).
 from a design canvas to the wire, written as a Claude Code skill; [`tools/canvas`](tools/canvas/README.md)
 are its measuring instruments.
 
+The repository is a Claude Code plugin, `kompot`, listed in the
+[kotlin-skills](https://github.com/youndie/kotlin-skills) marketplace:
+
+```bash
+claude plugin marketplace add youndie/kotlin-skills
+```
+
+```bash
+claude plugin install kompot@kotlin-skills
+```
+
+The skill then appears as `/kompot:kompot-layout` and triggers on its own when a task matches, and
+the canvas tools come with it. The plugin's version is in
+[`.claude-plugin/plugin.json`](.claude-plugin/plugin.json), and `claude plugin update` sees nothing
+else: a change to `skills/` or `tools/canvas/` raises it, and CI refuses a pull request that does not.
+
 ### 🛠️ Building
 
 ```bash
