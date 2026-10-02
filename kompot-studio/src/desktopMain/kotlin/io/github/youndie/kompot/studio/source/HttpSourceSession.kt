@@ -16,6 +16,7 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.time.Duration
+import kotlin.coroutines.cancellation.CancellationException
 
 // A running server as a source: the screen list is the deployment's own NavigationGraph, and each
 // screen is polled conditionally.
@@ -51,7 +52,7 @@ internal class HttpSourceSession(
         source.graphPath?.let { path ->
             scope.launch {
                 val loaded =
-                    runCatching {
+                    attempt {
                         val response = get(path, ifNoneMatch = null)
                         json.decodeFromString(NavigationGraph.serializer(), response.body())
                     }
@@ -89,7 +90,7 @@ internal class HttpSourceSession(
         while (true) {
             val previous = state.value
 
-            runCatching { get(ref.id, ifNoneMatch = etag) }
+            attempt { get(ref.id, ifNoneMatch = etag) }
                 .onSuccess { response ->
                     state.value =
                         when (response.statusCode()) {
@@ -157,6 +158,18 @@ internal class HttpSourceSession(
         // the honest shape of it.
         return withContext(Dispatchers.IO) { client.send(request, HttpResponse.BodyHandlers.ofString()) }
     }
+
+    // runCatching, except that a cancellation is not a failure. Closing the session cancels its polls
+    // inside `get`, and runCatching handed that cancellation to onFailure, which wrote it into the
+    // window as an error of the screen being polled (kapkan:cancellation-swallowed).
+    private suspend fun <T> attempt(block: suspend () -> T): Result<T> =
+        try {
+            Result.success(block())
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            Result.failure(e)
+        }
 
     private companion object {
         const val OK = 200

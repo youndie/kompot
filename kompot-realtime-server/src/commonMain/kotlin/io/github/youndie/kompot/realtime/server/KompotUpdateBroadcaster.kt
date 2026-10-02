@@ -81,6 +81,10 @@ public class KompotUpdateBroadcaster(
     // unsubscribing really happens instead of piling up.
     public suspend fun localSubscriberCount(topic: String): Int = mutex.withLock { subscribers[topic]?.size ?: 0 }
 
+    @Suppress(
+        "ktlint:kapkan:swallowed-failure",
+        "the only failure is a subscriber gone between snapshot and send; dropping its update is the design",
+    )
     private suspend fun deliverLocally(
         topic: String,
         payload: String,

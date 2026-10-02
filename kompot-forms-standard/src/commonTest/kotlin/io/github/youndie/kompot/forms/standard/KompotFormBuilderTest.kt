@@ -18,7 +18,7 @@ private data class FakeField(
 
 class KompotFormBuilderTest {
     @Test
-    fun `the screen root is a column named after the formId, and free UI still works via KompotContainerContext`() {
+    fun `the screen root is a column named after the formId - and free UI still works via KompotContainerContext`() {
         val response =
             buildFormScreen("catalogue_filters") {
                 text("Filters")
@@ -74,7 +74,7 @@ class KompotFormBuilderTest {
     }
 
     @Test
-    fun `fields propagate through arbitrarily deep nesting (column inside row inside column)`() {
+    fun `fields propagate through arbitrarily deep nesting - column inside row inside column`() {
         val response =
             buildFormScreen("form_1") {
                 column {

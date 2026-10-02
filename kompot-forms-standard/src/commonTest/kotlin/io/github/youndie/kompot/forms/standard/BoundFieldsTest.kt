@@ -45,7 +45,7 @@ class BoundFieldsTest {
     }
 
     @Test
-    fun `boundAmountInput puts the currency on the UI component, where a renderer actually reads it`() {
+    fun `boundAmountInput puts the currency on the UI component - where a renderer actually reads it`() {
         val response =
             buildFormScreen("form") {
                 boundAmountInput(

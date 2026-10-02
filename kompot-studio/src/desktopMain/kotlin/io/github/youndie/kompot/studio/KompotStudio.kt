@@ -905,7 +905,7 @@ private fun StudioWindowContent(
                                                         actionHandler =
                                                             KompotActionHandler { action ->
                                                                 actions +=
-                                                                    LoggedAction(LocalTime.now().format(CLOCK), action)
+                                                                    LoggedAction(clockTime(), action)
                                                             },
                                                     ) { kind, type ->
                                                         val finding = degradationFinding(kind, type)
@@ -1063,6 +1063,10 @@ private const val RENDER_DEBOUNCE_MS = 150L
 // Wall-clock and not a monotonic counter: two taps a second apart and two taps in the same frame look
 // different in a log, and which of the two happened is the question somebody is asking.
 private val CLOCK: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+
+// The time a person reads beside a logged action, on the machine they are sitting at.
+@Suppress("ktlint:kapkan:wall-clock", "a label for the person at this screen; nothing compares it with another clock")
+private fun clockTime(): String = LocalTime.now().format(CLOCK)
 
 // Where a save goes, and it is the source that decides. A file and a directory are edited in place —
 // the loop this exists for is "a test rewrote the fixture, fix it, save it back". An HTTP body has no
@@ -2140,7 +2144,12 @@ private fun InstallPinch(
         val installed = installMagnification(window.rootPane, onMagnify)
         println(
             "kompot studio: trackpad pinch " +
-                if (installed) "on" else "off — launch with --add-exports java.desktop/com.apple.eawt.event=ALL-UNNAMED on a JetBrains Runtime",
+                if (installed) {
+                    "on"
+                } else {
+                    "off — launch with --add-exports java.desktop/com.apple.eawt.event=ALL-UNNAMED " +
+                        "on a JetBrains Runtime"
+                },
         )
     }
 }

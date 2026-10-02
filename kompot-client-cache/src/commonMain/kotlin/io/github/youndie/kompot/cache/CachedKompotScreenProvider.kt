@@ -66,5 +66,9 @@ public class CachedKompotScreenProvider(
 
     private fun encode(component: KompotComponent): String = json.encodeKompotComponent(component)
 
+    @Suppress(
+        "ktlint:kapkan:wall-clock",
+        "fetchedAt is this device's record of when it stored the entry; no other machine's clock reads it",
+    )
     private fun now(): Long = Clock.System.now().toEpochMilliseconds()
 }
