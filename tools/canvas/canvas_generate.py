@@ -18,9 +18,9 @@ keeps, under the name both ends use. From it this writes:
 Every file starts with the sha256 of the tokens file it came from, so a test can refuse a build
 whose generated code is older than its source. Run it again after every edit of tokens.json:
 
-    canvas_generate.py design/tokens.json --prefix Boulab \\
-        --shared-package dev.boulab.components --shared-out components/src/main/kotlin/dev/boulab/components \\
-        --client-package dev.boulab.client.theme --client-out client/src/main/kotlin/dev/boulab/client/theme
+    canvas_generate.py design/tokens.json --prefix Acme \\
+        --shared-package com.example.components --shared-out components/src/main/kotlin/com/example/components \\
+        --client-package com.example.client.theme --client-out client/src/main/kotlin/com/example/client/theme
 
 tokens.json:
 
@@ -269,7 +269,7 @@ def write(path: str, content: str) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("tokens")
-    parser.add_argument("--prefix", required=True, help="the product's name in identifiers: Boulab → BoulabPalette")
+    parser.add_argument("--prefix", required=True, help="the product's name in identifiers: Acme → AcmePalette")
     parser.add_argument("--shared-package")
     parser.add_argument("--shared-out")
     parser.add_argument("--client-package")

@@ -210,7 +210,7 @@ ignore it — say what they draw); a new type or a new word the design system mu
   screen changes, re-record the fixtures that draw it and the goldens; a golden of the old screen
   with every check green is the failure mode. The cheapest guard is a server test that *compares*
   its live answers with the recordings and rewrites them only under a flag
-  (`-Pboulab.record=true` or its equivalent): a screen that changed fails the server's own suite
+  (`-P<product>.record=true` or its equivalent): a screen that changed fails the server's own suite
   until the recording, and then the golden, is redone.
 - **Record every theme the product ships, and no other.** A dark frame of a single-theme kiosk is
   noise nobody reads; a light-only golden set of a two-theme app hides half the product.
