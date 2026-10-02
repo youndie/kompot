@@ -236,3 +236,12 @@ tasks.withType<Test>().configureEach {
     inputs.file(draft).withPathSensitivity(PathSensitivity.RELATIVE)
     systemProperty("draft.checkedIn", draft.asFile.absolutePath)
 }
+
+// The draft above is the exporter's output, checked in byte for byte: ktlint formatting it would turn
+// the test into a comparison of the exporter with ktlint, and the exporter does not format its output
+// (B-23). Left out of the lint rather than out of the comparison.
+ktlint {
+    filter {
+        exclude { it.file.path.endsWith("/studio/export/SampleScreenDraft.kt") }
+    }
+}

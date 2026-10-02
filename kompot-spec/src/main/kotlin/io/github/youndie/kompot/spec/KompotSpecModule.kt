@@ -183,7 +183,8 @@ public object KompotSpec {
         return common +
             when (degrades) {
                 true -> {
-                    "Omitting the shape is safe here because this hierarchy degrades (x-kompot-degrades: true above): " +
+                    "Omitting the shape is safe here because this hierarchy degrades (x-kompot-degrades: true " +
+                        "above): " +
                         "an implementation that knows nothing of the type draws a placeholder and keeps the screen"
                 }
 
@@ -225,7 +226,8 @@ public object KompotSpec {
             pattern = null,
             description =
                 "Arbitrary metadata available to the client locally. Two keys are reserved by the protocol: " +
-                    "\"${KompotProtocol.METADATA_KEY_CURRENCY}\" is the currency amount_input.currencyFromField picks up, " +
+                    "\"${KompotProtocol.METADATA_KEY_CURRENCY}\" is the currency amount_input.currencyFromField " +
+                    "picks up, " +
                     "\"${KompotProtocol.METADATA_KEY_BALANCE}\" is the remaining amount max_amount_from_field reads. " +
                     "Every other key is a convention of the particular form",
         )

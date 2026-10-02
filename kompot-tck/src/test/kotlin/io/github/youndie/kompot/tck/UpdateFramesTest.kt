@@ -72,7 +72,9 @@ class UpdateFramesTest {
     // break inside it ends the line and the rest is no longer a data field.
     @Test
     fun `a payload broken across raw lines is reported rather than quietly repaired`() {
-        val broken = "data: {\"componentId\":\"total\",\n\"component\":{\"type\":\"text\",\"id\":\"t\",\"text\":\"42\"}}"
+        val broken =
+            "data: {\"componentId\":\"total\",\n" +
+                "\"component\":{\"type\":\"text\",\"id\":\"t\",\"text\":\"42\"}}"
 
         val reported = findings(broken)
 

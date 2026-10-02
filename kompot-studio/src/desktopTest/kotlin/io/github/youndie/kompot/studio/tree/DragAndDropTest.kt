@@ -128,7 +128,9 @@ class DragAndDropTest {
 
     @Test
     fun `a slot with room for one is written rather than turned into a list`() {
-        val single = """{ "type": "paginated_list", "id": "list", "initialItems": [], "emptyState": { "type": "text", "id": "old" } }"""
+        val single =
+            """{ "type": "paginated_list", "id": "list", "initialItems": [], "emptyState": """ +
+                """{ "type": "text", "id": "old" } }"""
 
         val replaced =
             assertNotNull(

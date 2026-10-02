@@ -1,12 +1,34 @@
 package io.github.youndie.kompot
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -156,12 +178,16 @@ public class TextInputRenderer : KompotComponentRenderer<TextInputComponent> {
             shape = fieldSurface.shape ?: OutlinedTextFieldDefaults.shape,
             colors = outlinedColorsFor(fieldSurface),
             modifier =
-                component.modifiers.toComposeModifier().fillMaxWidth().minHeightOf(fieldSurface).onFocusChanged { focusState ->
-                    if (wasFocused && !focusState.isFocused) {
-                        formController.onFieldBlurred(component.fieldId)
-                    }
-                    wasFocused = focusState.isFocused
-                },
+                component.modifiers
+                    .toComposeModifier()
+                    .fillMaxWidth()
+                    .minHeightOf(fieldSurface)
+                    .onFocusChanged { focusState ->
+                        if (wasFocused && !focusState.isFocused) {
+                            formController.onFieldBlurred(component.fieldId)
+                        }
+                        wasFocused = focusState.isFocused
+                    },
         )
     }
 }

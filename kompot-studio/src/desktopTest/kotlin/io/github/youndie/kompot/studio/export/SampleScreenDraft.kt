@@ -16,17 +16,7 @@ public fun sampleScreenDraft(): KompotComponent =
         modifier {
             padding(top = 16, bottom = 16, start = 16, end = 16)
         }
-        text(
-            "The body is the source of truth",
-            style = TypographyToken("headline_small"),
-            color = ColorToken("on_surface"),
-            id = "title",
-        )
-        text(
-            "Edit the JSON on the left. The frame on the right is drawn by the same renderers a client ships.",
-            style = TypographyToken("body_medium"),
-            color = ColorToken("on_surface_variant"),
-            id = "subtitle",
-        )
+        text("The body is the source of truth", style = TypographyToken("headline_small"), color = ColorToken("on_surface"), id = "title")
+        text("Edit the JSON on the left. The frame on the right is drawn by the same renderers a client ships.", style = TypographyToken("body_medium"), color = ColorToken("on_surface_variant"), id = "subtitle")
         button("A Material button", CloseAction, id = "cta")
     }

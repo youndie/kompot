@@ -8,7 +8,8 @@ import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.compose.ui.text.TextStyle
 import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.TypographyToken
-import io.github.youndie.kompot.material3.*
+import io.github.youndie.kompot.material3.M3Colors
+import io.github.youndie.kompot.material3.M3Typography
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

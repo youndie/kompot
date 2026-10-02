@@ -1,3 +1,8 @@
+@file:Suppress(
+    "ktlint:standard:no-consecutive-comments",
+    "a // note for maintainers stays apart from a field's KDoc, and a parameter list keeps no blank line",
+)
+
 package io.github.youndie.kompot.standard
 
 import io.github.youndie.kompot.ColorToken
@@ -110,17 +115,18 @@ public data class TabsItem(
     val content: @Polymorphic KompotComponent,
 )
 
+// A type with state of its own rather than a flag and an action on the containers, and the reason is
+// the older client. A type it does not know degrades through the fallback the server names (§2.1) —
+// all panes one under another, say. A field it does not know is ignored, which for tabs means every
+// pane at once under a strip that does nothing, and the server would have no way to say otherwise
+// (docs/research/research-local-state.md).
+
 /**
  * Tabs: a strip of titles and the content of the one selected, switched by the client without asking
  * the server (SPEC.md §4.12). [selected] is where the screen opens; the client applies it again only
  * when a later version of the node carries a different value, so a reload does not undo the reader's
  * choice.
  */
-// A type with state of its own rather than a flag and an action on the containers, and the reason is
-// the older client. A type it does not know degrades through the fallback the server names (§2.1) —
-// all panes one under another, say. A field it does not know is ignored, which for tabs means every
-// pane at once under a strip that does nothing, and the server would have no way to say otherwise
-// (docs/research/research-local-state.md).
 @Serializable
 @SerialName("tabs")
 @KompotComponentMarker

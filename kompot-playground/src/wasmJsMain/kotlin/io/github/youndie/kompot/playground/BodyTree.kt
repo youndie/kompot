@@ -107,7 +107,11 @@ internal fun BodyTree(
                     Modifier
                         .fillMaxWidth()
                         .background(
-                            if (selected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface,
+                            if (selected) {
+                                MaterialTheme.colorScheme.secondaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.surface
+                            },
                         )
                         // A second click on the selected node clears the selection: the outline in the
                         // render is a tool, and a tool you cannot put down is a mode.

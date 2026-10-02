@@ -7,13 +7,39 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,7 +57,19 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import io.github.youndie.kompot.form.FieldValue
 import io.github.youndie.kompot.form.FormController
-import io.github.youndie.kompot.standard.*
+import io.github.youndie.kompot.standard.BoxComponent
+import io.github.youndie.kompot.standard.ButtonComponent
+import io.github.youndie.kompot.standard.ColumnComponent
+import io.github.youndie.kompot.standard.DividerComponent
+import io.github.youndie.kompot.standard.ExpandableComponent
+import io.github.youndie.kompot.standard.KompotPageLoader
+import io.github.youndie.kompot.standard.LoadPageAction
+import io.github.youndie.kompot.standard.PaginatedListComponent
+import io.github.youndie.kompot.standard.RowComponent
+import io.github.youndie.kompot.standard.SpacerComponent
+import io.github.youndie.kompot.standard.TableComponent
+import io.github.youndie.kompot.standard.TabsComponent
+import io.github.youndie.kompot.standard.TextComponent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.drop
@@ -329,7 +367,12 @@ public class TableRenderer : KompotComponentRenderer<TableComponent> {
                     row.cells.forEach { cell ->
                         Text(
                             text = cell,
-                            style = if (row.header) MaterialTheme.typography.labelLarge else MaterialTheme.typography.bodyMedium,
+                            style =
+                                if (row.header) {
+                                    MaterialTheme.typography.labelLarge
+                                } else {
+                                    MaterialTheme.typography.bodyMedium
+                                },
                             modifier = Modifier.weight(1f).padding(8.dp),
                         )
                     }

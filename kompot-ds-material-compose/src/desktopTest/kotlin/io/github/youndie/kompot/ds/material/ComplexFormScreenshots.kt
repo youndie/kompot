@@ -19,7 +19,8 @@ import io.github.youndie.kompot.forms.standard.boundTextInput
 import io.github.youndie.kompot.forms.standard.buildFormScreen
 import io.github.youndie.kompot.forms.standard.row
 import io.github.youndie.kompot.kompotJson
-import io.github.youndie.kompot.material3.*
+import io.github.youndie.kompot.material3.M3Colors
+import io.github.youndie.kompot.material3.M3Typography
 import io.github.youndie.kompot.preview.KompotPreview
 import io.github.youndie.kompot.preview.KompotPreviewState
 import io.github.youndie.kompot.standard.button

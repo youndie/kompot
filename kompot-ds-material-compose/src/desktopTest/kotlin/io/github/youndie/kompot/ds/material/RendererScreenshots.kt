@@ -47,7 +47,7 @@ import io.github.youndie.kompot.forms.TextInputComponent
 import io.github.youndie.kompot.generated.generatedFormsClientRenderers
 import io.github.youndie.kompot.kompotCoreRenderers
 import io.github.youndie.kompot.kompotStandardRenderers
-import io.github.youndie.kompot.material3.*
+import io.github.youndie.kompot.material3.M3Typography
 import io.github.youndie.kompot.standard.ButtonComponent
 import io.github.youndie.kompot.standard.CloseAction
 import io.github.youndie.kompot.standard.ColumnComponent

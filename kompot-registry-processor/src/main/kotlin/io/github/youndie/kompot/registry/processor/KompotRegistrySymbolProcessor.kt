@@ -102,7 +102,8 @@ internal class KompotRegistrySymbolProcessor(
             when {
                 implementsComponent && rendererSuperType != null -> {
                     logger.error(
-                        "@KompotComponentMarker class must implement exactly one of KompotComponent/KompotComponentRenderer<T>, " +
+                        "@KompotComponentMarker class must implement exactly one of " +
+                            "KompotComponent/KompotComponentRenderer<T>, " +
                             "not both: ${symbol.qualifiedName?.asString()}",
                         symbol,
                     )
@@ -131,10 +132,14 @@ internal class KompotRegistrySymbolProcessor(
                     if (componentClassName == null) {
                         logger.error(
                             "Could not resolve the component type of KompotComponentRenderer<T> on " +
-                                "${symbol.qualifiedName?.asString()}. A renderer MAY be declared in a different module " +
-                                "from its component, and for a server-driven toolkit that is the point: the component is " +
-                                "a wire contract a headless server has to be able to build, the renderer is a platform. " +
-                                "What is required is that the module declaring the component is on THIS module's compile " +
+                                "${symbol.qualifiedName?.asString()}. A renderer MAY be declared in a different " +
+                                "module " +
+                                "from its component, and for a server-driven toolkit that is the point: the " +
+                                "component is " +
+                                "a wire contract a headless server has to be able to build, the renderer is a " +
+                                "platform. " +
+                                "What is required is that the module declaring the component is on THIS module's " +
+                                "compile " +
                                 "classpath, and that it runs the processor itself for its own registration.",
                             symbol,
                         )

@@ -64,7 +64,7 @@ class BackgroundRoleTest {
     // checks the middle of the card too, and the check is the same in all four.
     private fun centre(image: ImageBitmap): Color = image.toPixelMap()[60, 60]
 
-    private fun ComposeScene(
+    private fun sceneOf(
         role: String?,
         cardShape: Shape?,
     ): @Composable () -> Unit =
@@ -84,7 +84,7 @@ class BackgroundRoleTest {
     @Test
     fun `a background naming a role takes that surface's corner`() =
         runDesktopComposeUiTest(width = 200, height = 200) {
-            setContent(ComposeScene(role = "container", cardShape = RoundedCornerShape(24.dp)))
+            setContent(sceneOf(role = "container", cardShape = RoundedCornerShape(24.dp)))
 
             val image = onRoot().captureToImage()
             assertEquals(fill, centre(image), "nothing was painted, so the corner says nothing")
@@ -96,7 +96,7 @@ class BackgroundRoleTest {
     @Test
     fun `without a role the fill is the rectangle it always was`() =
         runDesktopComposeUiTest(width = 200, height = 200) {
-            setContent(ComposeScene(role = null, cardShape = RoundedCornerShape(24.dp)))
+            setContent(sceneOf(role = null, cardShape = RoundedCornerShape(24.dp)))
 
             val image = onRoot().captureToImage()
             assertEquals(fill, centre(image))
@@ -108,7 +108,7 @@ class BackgroundRoleTest {
     @Test
     fun `a role the design system does not know keeps the rectangle`() =
         runDesktopComposeUiTest(width = 200, height = 200) {
-            setContent(ComposeScene(role = "promo_card", cardShape = RoundedCornerShape(24.dp)))
+            setContent(sceneOf(role = "promo_card", cardShape = RoundedCornerShape(24.dp)))
 
             val image = onRoot().captureToImage()
             assertEquals(fill, centre(image))
@@ -118,7 +118,7 @@ class BackgroundRoleTest {
     @Test
     fun `a design system with no shape for the role keeps the rectangle`() =
         runDesktopComposeUiTest(width = 200, height = 200) {
-            setContent(ComposeScene(role = "container", cardShape = null))
+            setContent(sceneOf(role = "container", cardShape = null))
 
             val image = onRoot().captureToImage()
             assertEquals(fill, centre(image))

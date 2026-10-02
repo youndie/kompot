@@ -142,7 +142,9 @@ internal enum class StudioIcon(
     ),
 }
 
-private const val RECT_11 = "M4 2.5h8a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5H4A1.5 1.5 0 0 1 2.5 12V4A1.5 1.5 0 0 1 4 2.5z"
+private const val RECT_11 =
+    "M4 2.5h8a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5H4A1.5 1.5 0 0 1 2.5 12V4A1.5 1.5 " +
+        "0 0 1 4 2.5z"
 
 private fun circle(
     cx: Float,

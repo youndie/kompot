@@ -54,7 +54,7 @@ class RadioGroupRendererTest {
         }
 
     @Test
-    fun `clicking an option stores it as EntityValue with its rawMetadata and immediately marks the field as blurred`() =
+    fun `clicking an option stores an EntityValue with its rawMetadata and marks the field blurred at once`() =
         runFormsComposeUiTest {
             val controller = FormController(FormSchema("form", fields = listOf(SelectionFieldDefinition("payer_type"))))
 

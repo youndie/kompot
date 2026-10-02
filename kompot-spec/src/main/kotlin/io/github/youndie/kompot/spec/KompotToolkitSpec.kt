@@ -113,7 +113,8 @@ public object KompotToolkitSpec {
                                         put("\$ref", "#/\$defs/KompotComponent")
                                         put(
                                             "description",
-                                            "The equivalent for a reader that does not know this type (SPEC.md §2.1). " +
+                                            "The equivalent for a reader that does not know this type (SPEC.md " +
+                                                "§2.1). " +
                                                 "A reader that knows the type ignores it",
                                         )
                                     }
@@ -135,7 +136,9 @@ public object KompotToolkitSpec {
     public fun formCore(): KompotSpecModule =
         KompotSpecModule(
             name = "form-core",
-            description = "The form contracts: schema, field definitions, validation rules, values, visibility conditions",
+            description =
+                "The form contracts: schema, field definitions, validation rules, values, visibility " +
+                    "conditions",
             roots = listOf(FormSchema.serializer().descriptor, FormPatch.serializer().descriptor),
             handWritten =
                 mapOf(
@@ -242,8 +245,10 @@ public object KompotToolkitSpec {
                             "url" to
                                 KompotSpec.constrained(
                                     KompotProtocol.EXTERNAL_URL_PATTERN,
-                                    "An address OUTSIDE the application. navigate cannot carry one and must not (§12.2); this " +
-                                        "action exists so that leaving is explicit, and a client may put a confirmation or an " +
+                                    "An address OUTSIDE the application. navigate cannot carry one and must not " +
+                                        "(§12.2); this " +
+                                        "action exists so that leaving is explicit, and a client may put a " +
+                                        "confirmation or an " +
                                         "allowlist in front of it",
                                 ),
                         ),
@@ -287,7 +292,8 @@ public object KompotToolkitSpec {
                             "realtimeTopic" to
                                 KompotSpec.constrained(
                                     KompotProtocol.REALTIME_TOPIC_PATTERN,
-                                    "The live-update topic of this screen. The string is opaque to the client; a server " +
+                                    "The live-update topic of this screen. The string is opaque to the client; a " +
+                                        "server " +
                                         "must make it per-subject wherever the data is personal (see SPEC.md §10.4)",
                                 ),
                         ),
@@ -318,7 +324,8 @@ public object KompotToolkitSpec {
                                 KompotSpec.constrained(
                                     pattern = null,
                                     description =
-                                        "The key in the chosen entity_value's rawMetadata the remaining amount is read " +
+                                        "The key in the chosen entity_value's rawMetadata the remaining amount is " +
+                                            "read " +
                                             "from. Defaults to \"${KompotProtocol.METADATA_KEY_BALANCE}\"",
                                 ),
                         ),
@@ -344,7 +351,9 @@ public object KompotToolkitSpec {
     public fun realtime(): KompotSpecModule =
         KompotSpecModule(
             name = "kompot-realtime",
-            description = "The live-update channel: the screen envelope that names a topic, and one frame of the channel itself",
+            description =
+                "The live-update channel: the screen envelope that names a topic, and one frame of the " +
+                    "channel itself",
             roots =
                 listOf(
                     UpdateComponentMessage.serializer().descriptor,
@@ -361,7 +370,8 @@ public object KompotToolkitSpec {
                             "realtimeTopic" to
                                 KompotSpec.constrained(
                                     KompotProtocol.REALTIME_TOPIC_PATTERN,
-                                    "The live-update topic of this screen. The string is opaque to the client; a server " +
+                                    "The live-update topic of this screen. The string is opaque to the client; a " +
+                                        "server " +
                                         "must make it per-subject wherever the data is personal (see SPEC.md §10.4)",
                                 ),
                         ),
@@ -400,19 +410,26 @@ public object KompotToolkitSpec {
                                 KompotSpec.constrained(
                                     pattern = null,
                                     description =
-                                        "What stands behind the endpoint, in the vocabulary of x-kompot-endpoint-kind: " +
-                                            "\"screen\" yields a KompotComponent, \"form\" a KompotFormResponse. Absent means " +
-                                            "\"screen\". An open string rather than an enum on purpose: a client MUST ignore a " +
-                                            "route whose kind it does not recognise, and an unknown enum constant would fail the " +
+                                        "What stands behind the endpoint, in the vocabulary of " +
+                                            "x-kompot-endpoint-kind: " +
+                                            "\"screen\" yields a KompotComponent, \"form\" a KompotFormResponse. " +
+                                            "Absent means " +
+                                            "\"screen\". An open string rather than an enum on purpose: a client " +
+                                            "MUST ignore a " +
+                                            "route whose kind it does not recognise, and an unknown enum constant " +
+                                            "would fail the " +
                                             "parse of the whole graph before one route could be skipped",
                                 ),
                             "presentation" to
                                 KompotSpec.constrained(
                                     pattern = null,
                                     description =
-                                        "How the route's screen is shown: \"screen\" (pushed, the default), \"sheet\" or " +
-                                            "\"dialog\" (laid over the screen it was opened from). An open string: a client " +
-                                            "MUST show a route whose presentation it does not recognise or cannot draw as a " +
+                                        "How the route's screen is shown: \"screen\" (pushed, the default), " +
+                                            "\"sheet\" or " +
+                                            "\"dialog\" (laid over the screen it was opened from). An open string: a " +
+                                            "client " +
+                                            "MUST show a route whose presentation it does not recognise or cannot " +
+                                            "draw as a " +
                                             "screen, never hide it",
                                 ),
                         ),
@@ -441,7 +458,8 @@ public object KompotToolkitSpec {
                             "url" to
                                 KompotSpec.constrained(
                                     KompotProtocol.ENDPOINT_PATTERN,
-                                    "The relative address of an endpoint of kind `submit`: it answers a KompotAction, " +
+                                    "The relative address of an endpoint of kind `submit`: it answers a " +
+                                        "KompotAction, " +
                                         "which the client runs through the same handler chain as any other intent. " +
                                         "Being state-changing, it requires an Idempotency-Key (§16.5)",
                                 ),
@@ -478,7 +496,8 @@ public object KompotToolkitSpec {
                                     pattern = null,
                                     description =
                                         "ColorToken key -> colour. The value is a hex string (#RGB, #RRGGBB or " +
-                                            "#AARRGGBB, with or without the hash); alpha defaults to opaque. A malformed " +
+                                            "#AARRGGBB, with or without the hash); alpha defaults to opaque. A " +
+                                            "malformed " +
                                             "value is treated as an absent one — the client keeps its built-in colour",
                                 ),
                         ),
@@ -488,14 +507,16 @@ public object KompotToolkitSpec {
                                 KompotSpec.constrained(
                                     pattern = null,
                                     description =
-                                        "Absent means the brand described no dark theme. A client MUST then stay entirely " +
+                                        "Absent means the brand described no dark theme. A client MUST then stay " +
+                                            "entirely " +
                                             "on its built-in dark palette rather than substituting the light one",
                                 ),
                             "typography" to
                                 KompotSpec.constrained(
                                     pattern = null,
                                     description =
-                                        "TypographyToken key -> style. One set for both themes. Every property of a style " +
+                                        "TypographyToken key -> style. One set for both themes. Every property of a " +
+                                            "style " +
                                             "is optional: what is absent keeps the client's built-in value",
                                 ),
                         ),

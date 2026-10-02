@@ -1,3 +1,8 @@
+@file:Suppress(
+    "ktlint:standard:filename",
+    "the file name is the JVM facade TokenUsesKt that tokenUses() is published under; renaming it breaks callers",
+)
+
 package io.github.youndie.kompot.spec
 
 import kotlinx.serialization.json.JsonArray

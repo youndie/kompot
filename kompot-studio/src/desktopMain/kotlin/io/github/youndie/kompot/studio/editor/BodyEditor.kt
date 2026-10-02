@@ -61,9 +61,9 @@ internal fun BodyEditor(
 
     BasicTextField(
         state = state,
+        // Clipped, because the band is as tall as the node and a node can run past the bottom
+        // of the field: unclipped, it painted over the inspector under the text.
         modifier =
-            // Clipped, because the band is as tall as the node and a node can run past the bottom
-            // of the field: unclipped, it painted over the inspector under the text.
             modifier.clipToBounds().drawBehind {
                 val layout = layoutResult ?: return@drawBehind
                 val range = selectedRange ?: return@drawBehind
