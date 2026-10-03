@@ -58,3 +58,12 @@ stage: release-0.38
   у каждой полной сборки в этой сессии (B-54, B-49, B-56 — все с повтором).
 - Рядом с `kotlin.daemon.jvmargs` в `gradle.properties` записано, откуда достаточно 3 ГБ; в CI перед
   сборкой — шаг `free -m`, чтобы память раннера была в логе, а не в предположении.
+
+## 2026-10-03 — механизм переехал в sborka
+
+Очередь линковок теперь не своя: sborka#132 (youndie/sborka#135, `d64605d`, первая сборка с ним —
+`0.5.0.123`) ставит в `sborka.base` все `KotlinJsIrLink` модулей с `kotlin.multiplatform` в одну
+очередь с одним слотом — тот же `BuildService` по типу задачи, что был здесь. `WasmLinkSlots` из
+корневого `build.gradle.kts` удалён вместе с бампом sborka; все модули kompot с wasm применяют
+`sborka.kmp`, а с ним `sborka.base`, так что покрыты все. Выключатель — `sborka.serializeWebLinks=false`;
+с ним число в `gradle.properties` надо мерить заново. Замер выше остаётся обоснованием и для sborka.
