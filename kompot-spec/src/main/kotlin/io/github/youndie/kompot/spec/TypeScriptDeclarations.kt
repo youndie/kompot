@@ -18,7 +18,9 @@ import kotlinx.serialization.json.jsonPrimitive
  * lists every variant the build has; an OPEN hierarchy (`KompotComponent`, `KompotAction`) is the union
  * of those variants PLUS an unknown branch with `type: string`, because the protocol promises a client
  * types it has never seen (§2.1). Declaring the union closed would promise what the wire does not —
- * and a `switch` on `type` that looks exhaustive would be wrong at the first newer server.
+ * and a `switch` on `type` that looks exhaustive would be wrong at the first newer server. The unknown
+ * branch carries what the hierarchy's base declares — a node of a type nobody here knows still has the
+ * base's `id`, and it is the one node a reader takes `fallback` from — and admits anything else.
  *
  * Patterns (`pattern`, `not`) have no TypeScript form and stay `string`; the schema still checks them.
  *
@@ -54,15 +56,15 @@ public object TypeScriptDeclarations {
         // own schema lists only what its Kotlin class declares, and TypeScript refuses a property an
         // object literal's type does not name — so without this a writer could not put on a node the
         // one key the protocol asks it to write for every new type.
-        val baseProperties =
+        val bases =
             modules.values
                 .flatMap { (it["\$defs"]?.jsonObject ?: JsonObject(emptyMap())).entries }
                 .filter { (_, def) -> def.jsonObject.kind() == "hierarchy" && def.jsonObject["properties"] != null }
-                .associate { (name, def) -> name to def.jsonObject["properties"]!!.jsonObject }
+                .associate { (name, def) -> name to def.jsonObject }
         val inherited =
             profile.entries
                 .flatMap { (hierarchy, def) ->
-                    val base = baseProperties[hierarchy] ?: return@flatMap emptyList()
+                    val base = bases[hierarchy]?.get("properties")?.jsonObject ?: return@flatMap emptyList()
                     (def.jsonObject["oneOf"]?.jsonArray ?: JsonArray(emptyList())).map { typeOf(it) to base }
                 }.toMap()
 
@@ -92,7 +94,7 @@ public object TypeScriptDeclarations {
                     if (def.kind() ==
                         "hierarchy"
                     ) {
-                        hierarchy(name, def, open = name in openHierarchies)
+                        hierarchy(name, def, open = name in openHierarchies, base = bases[name])
                     } else {
                         declaration(name, def, inherited[name])
                     },
@@ -104,7 +106,7 @@ public object TypeScriptDeclarations {
         out.appendLine("// Hierarchies — every variant the build's profile lists")
         out.appendLine()
         profile.forEach { (name, element) ->
-            out.append(hierarchy(name, element.jsonObject, open = name in openHierarchies))
+            out.append(hierarchy(name, element.jsonObject, open = name in openHierarchies, base = bases[name]))
             out.appendLine()
         }
         return out.toString().trimEnd() + "\n"
@@ -114,6 +116,7 @@ public object TypeScriptDeclarations {
         name: String,
         def: JsonObject,
         open: Boolean,
+        base: JsonObject?,
     ): String {
         val out = StringBuilder()
         val variants = (def["oneOf"]?.jsonArray ?: JsonArray(emptyList())).map { typeOf(it) }
@@ -126,7 +129,18 @@ public object TypeScriptDeclarations {
                 "/** A $name this build does not know — the protocol promises it may arrive (SPEC.md §2.1). */",
             )
             out.appendLine("export interface $unknown {")
-            out.appendLine("  type: string;")
+            // The discriminator is any string here — the closed list its description points at is the
+            // one this node is outside of. The rest of the base is what every node of the hierarchy
+            // carries whatever its type, so an unknown one carries it too: for a component, `id`,
+            // `modifiers` and the `fallback` §2.1 reads on exactly this path. The index signature stays
+            // for whatever else the unknown type declares.
+            out.appendLine("  ${KompotProtocol.DISCRIMINATOR}: string;")
+            val required = base.required()
+            base
+                ?.get("properties")
+                ?.jsonObject
+                ?.filterKeys { it != KompotProtocol.DISCRIMINATOR }
+                ?.forEach { (property, schema) -> property(out, property, schema, required) }
             out.appendLine("  [property: string]: unknown;")
             out.appendLine("}")
         } else {
@@ -147,7 +161,7 @@ public object TypeScriptDeclarations {
             out.appendLine("export type $name = ${typeOf(def)};")
             return out.toString()
         }
-        val required = def["required"]?.jsonArray?.map { it.jsonPrimitive.content }?.toSet() ?: emptySet()
+        val required = def.required()
         // The discriminator is the variant's own; everything else the base declares and the variant does
         // not is added after the variant's properties, always optional.
         val fromBase =
@@ -156,14 +170,28 @@ public object TypeScriptDeclarations {
                     it != KompotProtocol.DISCRIMINATOR
             }
         out.appendLine("export interface $name {")
-        (properties + fromBase).forEach { (property, schema) ->
-            schema.jsonObject.description()?.let { out.appendLine("  /** ${it.replace("*/", "* /")} */") }
-            val optional = if (property in required) "" else "?"
-            out.appendLine("  ${key(property)}$optional: ${typeOf(schema)};")
-        }
+        (properties + fromBase).forEach { (property, schema) -> property(out, property, schema, required) }
         out.appendLine("}")
         return out.toString()
     }
+
+    private fun property(
+        out: StringBuilder,
+        name: String,
+        schema: JsonElement,
+        required: Set<String>,
+    ) {
+        schema.jsonObject.description()?.let { out.appendLine("  /** ${it.replace("*/", "* /")} */") }
+        val optional = if (name in required) "" else "?"
+        out.appendLine("  ${key(name)}$optional: ${typeOf(schema)};")
+    }
+
+    private fun JsonObject?.required(): Set<String> =
+        this
+            ?.get("required")
+            ?.jsonArray
+            ?.map { it.jsonPrimitive.content }
+            ?.toSet() ?: emptySet()
 
     private fun typeOf(element: JsonElement): String {
         val schema = element as? JsonObject ?: return "unknown"

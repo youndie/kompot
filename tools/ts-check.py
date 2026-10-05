@@ -16,6 +16,9 @@ typed against the OPEN file instead.
 
 Then a control, every run: one nested value in a body is broken, and tsc must reject it. A check that
 also accepts the broken body checks nothing, and fails here rather than staying green.
+
+Last, the reading side: SPEC.md §2.1 reads `fallback` only on a node of a type the reader does not know,
+so the open file's unknown branch must hand it over typed — and a misspelled key must not compile (#207).
 """
 import copy
 import glob
@@ -87,13 +90,8 @@ def compile_bodies(bodies, known):
             lines.append(f"export const body{i}: {side}.{wire_type(body)} = {json.dumps(body, ensure_ascii=False)};")
         check = os.path.join(work, "check.ts")
         open(check, "w", encoding="utf-8").write("\n".join(lines) + "\n")
-        done = subprocess.run(
-            ["npx", "-y", "-p", TYPESCRIPT, "tsc", "--noEmit", "--strict", "--target", "es2020", "--moduleResolution", "node", STRICT, OPEN, check],
-            capture_output=True,
-            text=True,
-        )
-        out = done.stdout + done.stderr
-        if done.returncode == 0:
+        ok, out = tsc([STRICT, OPEN, check])
+        if ok:
             return [], out
         # Each body takes two lines — its name, then its constant — from line 4 on.
         rejected = sorted({(int(n) - 4) // 2 for n in re.findall(r"check\.ts\((\d+),", out)})
@@ -111,6 +109,28 @@ def break_one(bodies):
                 child["spacing"] = "wide"
                 return broken, name
     sys.exit("control: no nested row or column to break — the control would pass without checking")
+
+
+def tsc(files):
+    done = subprocess.run(
+        ["npx", "-y", "-p", TYPESCRIPT, "tsc", "--noEmit", "--strict", "--target", "es2020", "--moduleResolution", "node", *files],
+        capture_output=True,
+        text=True,
+    )
+    return done.returncode == 0, done.stdout + done.stderr
+
+
+def reader_compiles(key):
+    """Whether a reader taking the server's equivalent off an unknown node by `key` compiles."""
+    with tempfile.TemporaryDirectory() as work:
+        check = os.path.join(work, "reader.ts")
+        open(check, "w", encoding="utf-8").write(
+            f'import type * as Open from "{OPEN[:-5]}";\n'
+            "export function equivalentOf(node: Open.UnknownKompotComponent): Open.KompotComponent | undefined {\n"
+            f"  return node.{key};\n"
+            "}\n"
+        )
+        return tsc([OPEN, check])
 
 
 def main():
@@ -132,6 +152,14 @@ def main():
         sys.exit(f"control: a nested `spacing: \"wide\"` in {where} was accepted — the check checks nothing")
 
     print(f"tsc: {len(bodies)} bodies accepted; the control (a broken nested value in {where}) rejected")
+
+    ok, out = reader_compiles("fallback")
+    if not ok:
+        print(out)
+        sys.exit("a reader cannot take `fallback` off UnknownKompotComponent as a KompotComponent (SPEC.md §2.1)")
+    if reader_compiles("fallbak")[0]:
+        sys.exit("control: a misspelled `fallbak` compiled — the unknown branch types nothing")
+    print("tsc: the unknown component branch hands a reader `fallback` typed; the control (a misspelled key) rejected")
 
 
 if __name__ == "__main__":

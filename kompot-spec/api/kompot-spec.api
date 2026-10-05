@@ -148,6 +148,8 @@ public final class io/github/youndie/kompot/spec/KompotProtocol {
 	public static final field REALTIME_TOPIC_PATTERN Ljava/lang/String;
 	public static final field SCHEMA_DIALECT Ljava/lang/String;
 	public static final field SPEC_FILE_NAME Ljava/lang/String;
+	public static final field TYPESCRIPT_FILE_NAME Ljava/lang/String;
+	public static final field TYPESCRIPT_STRICT_FILE_NAME Ljava/lang/String;
 	public final fun fileNameFor (Ljava/lang/String;)Ljava/lang/String;
 }
 
@@ -210,6 +212,8 @@ public final class io/github/youndie/kompot/spec/KompotSpecResources {
 	public final fun rules ()Ljava/util/Map;
 	public final fun schemas ()Ljava/util/Map;
 	public final fun specification ()Ljava/lang/String;
+	public final fun typeScriptDeclarations (Z)Ljava/lang/String;
+	public static synthetic fun typeScriptDeclarations$default (Lio/github/youndie/kompot/spec/KompotSpecResources;ZILjava/lang/Object;)Ljava/lang/String;
 }
 
 public final class io/github/youndie/kompot/spec/KompotToolkitSpec {

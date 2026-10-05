@@ -710,6 +710,13 @@ export type FormFieldDefinition = FormFieldDefinitionAmountField | FormFieldDefi
 /** A FormFieldDefinition this build does not know — the protocol promises it may arrive (SPEC.md §2.1). */
 export interface UnknownFormFieldDefinition {
   type: string;
+  /** Unique within a FormSchema; ties the definition to the UI component that refers to it */
+  fieldId: string;
+  rules?: ValidationRule[];
+  /** Evaluated by the client locally, with no round trip to the server */
+  visibleIf?: FormCondition | null;
+  /** Changing the value requires asking the server for a patch */
+  triggersPatch?: boolean;
   [property: string]: unknown;
 }
 
@@ -726,6 +733,12 @@ export type KompotComponent = KompotComponentAmountInput | KompotComponentAutoco
 /** A KompotComponent this build does not know — the protocol promises it may arrive (SPEC.md §2.1). */
 export interface UnknownKompotComponent {
   type: string;
+  /** Unique within one screen tree: point updates are addressed by it (see UpdateComponentMessage in :kompot-realtime) */
+  id: string;
+  /** The order of nodes matters — they are applied left to right */
+  modifiers?: KompotModifierNode[];
+  /** The equivalent for a reader that does not know this type (SPEC.md §2.1). A reader that knows the type ignores it */
+  fallback?: KompotComponent;
   [property: string]: unknown;
 }
 
@@ -734,5 +747,7 @@ export type ValidationRule = ValidationRuleMaxAmountFromField | ValidationRuleRe
 /** A ValidationRule this build does not know — the protocol promises it may arrive (SPEC.md §2.1). */
 export interface UnknownValidationRule {
   type: string;
+  /** Ready localised error text, not a translation key */
+  errorMessage: string;
   [property: string]: unknown;
 }
