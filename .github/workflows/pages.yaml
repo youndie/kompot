@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@v5
       # The same action the build uses, at the same version, for the same reason: the JDK Gradle runs
       # on belongs to the portfolio rather than to this workflow.
-      - uses: youndie/sborka/.github/actions/setup-kotlin@main
+      - uses: youndie/sborka/.github/actions/setup-kotlin@v0.5.0.130
       - run: ./gradlew :kompot-playground:wasmJsBrowserDistribution --no-daemon
       - uses: actions/upload-pages-artifact@v3
         with:

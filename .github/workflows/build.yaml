@@ -25,7 +25,7 @@ jobs:
       # Java and Gradle in one step and at one version for the portfolio. The JDK here is what
       # GRADLE runs on; the modules compile on sborka's default toolchain (25), fetched by the
       # toolchain resolver if missing, and compile TO `sborka.jvmFloor=17`.
-      - uses: youndie/sborka/.github/actions/setup-kotlin@main
+      - uses: youndie/sborka/.github/actions/setup-kotlin@v0.5.0.130
       # What the runner has, in the run itself: the build's memory limits (B-64) are set against a
       # measurement, and the runner is the machine nobody here can log into.
       - name: The runner's memory
