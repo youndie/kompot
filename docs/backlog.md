@@ -202,6 +202,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 - [B-39](backlog/B-39-nothing-guards-the-published-kotlin-api.md) — Молчаливую поломку Kotlin-API не ловит ничто
 - [B-65](backlog/B-65-redis-test-never-starts-the-publisher.md) — Тест Redis-шины «с одного инстанса на другой» не запускает бродкастер отправителя
 - [B-71](backlog/B-71-kompot-layout-as-a-plugin.md) — Скилл kompot-layout ставится плагином, а не симлинком с одной машины
+- [B-76](backlog/B-76-typescript-unknown-branch-types-fallback.md) — kompot.d.ts: ветка незнакомого компонента типизирует fallback и поля базы (#207)
 
 <!-- END INDEX -->
 

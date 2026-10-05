@@ -55,16 +55,50 @@ class TypeScriptGoldenTest {
     // key has to be on every component variant, and on nothing else: actions have no equivalent.
     @Test
     fun `every component variant accepts a fallback and no action does`() {
-        val strict = TypeScriptDeclarations.render(documents(), strict = true)
-        val interfaces =
-            Regex("""export interface (\w+) \{(.*?)\n\}""", RegexOption.DOT_MATCHES_ALL).findAll(strict).associate {
-                it.groupValues[1] to
-                    it.groupValues[2]
-            }
+        val interfaces = interfaces(TypeScriptDeclarations.render(documents(), strict = true))
         val components = interfaces.filterKeys { it.startsWith("KompotComponent") }
         val actions = interfaces.filterKeys { it.startsWith("KompotAction") }
         assertTrue(components.size >= 20, "found ${components.keys}")
         components.forEach { (name, body) -> assertTrue("fallback?: KompotComponent" in body, "$name has no fallback") }
         actions.forEach { (name, body) -> assertTrue("fallback" !in body, "$name has a fallback") }
     }
+
+    // The reading side's half of the same key: SPEC.md §2.1 reads `fallback` ONLY on the path of a type
+    // the reader does not know, and that path is the unknown branch of the open file. Typed there, a
+    // reader takes the equivalent without a cast, and a misspelled key stops compiling (#207). The
+    // branch also carries what the hierarchy's base guarantees every node, whatever its type.
+    @Test
+    fun `the unknown component branch names fallback and the base properties`() {
+        val unknown = members(interfaces(TypeScriptDeclarations.render(documents())).getValue("UnknownKompotComponent"))
+        assertEquals(
+            listOf(
+                "type: string;",
+                "id: string;",
+                "modifiers?: KompotModifierNode[];",
+                "fallback?: KompotComponent;",
+                "[property: string]: unknown;",
+            ),
+            unknown,
+        )
+    }
+
+    // An action has no equivalent (SPEC.md §2.1: an unknown intent is ignored), and its base carries
+    // nothing but the discriminator — so its unknown branch gains nothing.
+    @Test
+    fun `the unknown action branch carries no fallback`() {
+        val unknown = members(interfaces(TypeScriptDeclarations.render(documents())).getValue("UnknownKompotAction"))
+        assertEquals(listOf("type: string;", "[property: string]: unknown;"), unknown)
+    }
+
+    private fun interfaces(printed: String): Map<String, String> =
+        Regex("""export interface (\w+) \{(.*?)\n\}""", RegexOption.DOT_MATCHES_ALL).findAll(printed).associate {
+            it.groupValues[1] to it.groupValues[2]
+        }
+
+    // An interface's members without their doc comments.
+    private fun members(body: String): List<String> =
+        body.lines().map { it.trim() }.filter {
+            it.isNotEmpty() &&
+                !it.startsWith("/**")
+        }
 }
