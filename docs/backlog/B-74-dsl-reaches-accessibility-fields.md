@@ -55,7 +55,8 @@ size: S
 **Экспорт DSL в студии** печатал `modifierBlock` у `text` и `button` позиционно после именованных
 аргументов — с новыми параметрами такой черновик перестал бы компилироваться. Теперь печатает по
 имени (тест `DslExportTest`, красный на старом экспортёре). Что экспорт до сих пор теряет поля
-`heading`, `accessibilityLabel`, `action` и т. п., — отдельная задача, здесь не тронута.
+`heading`, `accessibilityLabel`, `action` и т. п., — отдельная задача
+([B-78](B-78-dsl-export-keeps-every-wire-field.md)), здесь не тронута.
 
 **Что снимает shashki:** заголовки чека и промо — `text(…, heading = true)` вместо
 `addComponent(TextComponent(…, heading = true))` с придуманным `id`.

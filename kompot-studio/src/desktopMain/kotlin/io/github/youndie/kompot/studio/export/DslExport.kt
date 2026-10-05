@@ -8,6 +8,7 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.jsonObject
 
 // A DRAFT OF THE SERVER SIDE, printed from a body the studio has in front of it.
@@ -18,9 +19,10 @@ import kotlinx.serialization.json.jsonObject
 // schema does not carry class names. So this prints a draft: everything the toolkit ships comes out
 // exact and compiles, and everything else comes out as a named guess with the guess marked.
 //
-// It is deliberately NOT a round trip. A body exported and re-imported would agree, but that is not
-// what this is for — a generator whose output nobody edits is a serializer, and the point here is
-// Kotlin somebody takes over.
+// It is deliberately NOT a serializer — a generator whose output nobody edits is one, and the point
+// here is Kotlin somebody takes over. But the Kotlin has to SAY what the body said: a field left out
+// compiles, defaults, and is gone without a word, so the round trip is held by a test
+// (DslExportRoundTripTest) even though nobody is meant to make it.
 internal fun exportDsl(
     config: KompotStudioConfig,
     body: JsonElement,
@@ -71,8 +73,17 @@ private class DslWriter(
         if (wireType(node) != "column") return constructor(node)
 
         used += "io.github.youndie.kompot.KompotComponent"
-        used += "io.github.youndie.kompot.standard.kompotScreen"
-        return "kompotScreen {\n" + containerBody(node, ROOT).prependIndent("    ") + "\n}"
+        val id = stringOf(node["id"]) ?: ROOT
+        val body = containerBody(node, id).prependIndent("    ")
+        if (id == ROOT) {
+            used += "io.github.youndie.kompot.standard.kompotScreen"
+            return "kompotScreen {\n$body\n}"
+        }
+        // `kompotScreen` always names its column `root`. A body whose screen is called something else
+        // keeps its name through the builder `kompotScreen` wraps, which numbers the children under it
+        // the same way.
+        used += "io.github.youndie.kompot.standard.ColumnBuilder"
+        return "ColumnBuilder(id = ${quote(id)}).apply {\n$body\n}.build()"
     }
 
     private fun component(
@@ -91,7 +102,9 @@ private class DslWriter(
             "column", "row" -> {
                 used += "io.github.youndie.kompot.standard.$type"
                 val head = if (id == null) "$type {" else "$type($id) {"
-                "$head\n" + containerBody(node, path).prependIndent("    ") + "\n}"
+                // A container's children are numbered under its own id — which is the path when it has
+                // no name of its own, and its name when it has one.
+                "$head\n" + containerBody(node, stringOf(node["id"]) ?: path).prependIndent("    ") + "\n}"
             }
 
             "text" -> {
@@ -103,6 +116,10 @@ private class DslWriter(
                         token(node, "style"),
                         token(node, "color"),
                         id,
+                        flag(node, "heading", default = false),
+                        int(node["maxLines"])?.let { "maxLines = $it" },
+                        flag(node, "ellipsis", default = true),
+                        spans(node["spans"]),
                         // Named: a lambda placed by position after named arguments lands on whatever
                         // parameter sits there, and the DSL keeps gaining parameters before this one.
                         modifierBlock(modifiers)?.let { "modifierBlock = $it" },
@@ -118,6 +135,8 @@ private class DslWriter(
                         string(node["text"]),
                         action(node["action"]),
                         id,
+                        stringOf(node["variant"])?.let { "variant = ${quote(it)}" },
+                        stringOf(node["accessibilityLabel"])?.let { "accessibilityLabel = ${quote(it)}" },
                         modifierBlock(modifiers)?.let { "modifierBlock = $it" },
                     ),
                 )
@@ -169,10 +188,38 @@ private class DslWriter(
             ?.takeIf { it != 0 }
             ?.let { lines += "spacing($it)" }
         modifierBlock(node["modifiers"] as? JsonArray)?.let { lines += "modifier $it" }
+        // Open strings on the wire, printed as the words they are: a constant would name the same
+        // word, and a word this toolkit has no constant for is still a word the DSL takes.
+        stringOf(node["alignment"])?.let { lines += "alignment(${quote(it)})" }
+        stringOf(node["arrangement"])?.let { lines += "arrangement(${quote(it)})" }
+        if ((node["scrollable"] as? JsonPrimitive)?.booleanOrNull == true) lines += "scrollable()"
+        action(node["action"])?.let { lines += "action($it)" }
+        stringOf(node["accessibilityLabel"])?.let { lines += "accessibilityLabel(${quote(it)})" }
         (node["children"] as? JsonArray).orEmpty().forEachIndexed { index, child ->
             (child as? JsonObject)?.let { lines += inBlock(it, "$path/$index") }
         }
         return lines.joinToString("\n")
+    }
+
+    // A boolean printed only where it differs from the DSL's default, the way an id the DSL would
+    // produce is left out.
+    private fun flag(
+        node: JsonObject,
+        key: String,
+        default: Boolean,
+    ): String? = (node[key] as? JsonPrimitive)?.booleanOrNull?.takeIf { it != default }?.let { "$key = $it" }
+
+    // Spans are plain objects with no discriminator, so the generic constructor path would print them
+    // as a TODO; their class is known, and every field is named off the body like any constructor.
+    private fun spans(element: JsonElement?): String? {
+        val spans = (element as? JsonArray).orEmpty().mapNotNull { it as? JsonObject }
+        if (spans.isEmpty()) return null
+        used += "io.github.youndie.kompot.standard.TextSpan"
+        val printed =
+            spans.map { span ->
+                call("TextSpan", span.entries.map { (key, held) -> "$key = ${value(key, held)}" })
+            }
+        return "spans = listOf(" + printed.joinToString(", ") + ")"
     }
 
     private fun rows(node: JsonObject): String =
@@ -366,7 +413,7 @@ private class DslWriter(
         node: JsonObject,
         path: String,
     ): String? {
-        val id = (node["id"] as? JsonPrimitive)?.takeIf { it.isString }?.content ?: return null
+        val id = stringOf(node["id"]) ?: return null
         // An id the DSL would have produced by itself is left out: printing `id = "root/2"` beside
         // every call is noise, and it is noise that goes stale the moment somebody adds a node above.
         return if (id == path) null else "id = ${quote(id)}"
@@ -435,8 +482,9 @@ private class DslWriter(
         suffix: String,
     ): String = camel(wireType).removeSuffix(suffix) + suffix
 
-    private fun string(element: JsonElement?): String? =
-        (element as? JsonPrimitive)?.takeIf { it.isString }?.let { quote(it.content) }
+    private fun string(element: JsonElement?): String? = stringOf(element)?.let { quote(it) }
+
+    private fun stringOf(element: JsonElement?): String? = (element as? JsonPrimitive)?.takeIf { it.isString }?.content
 
     private fun int(element: JsonElement?): Int? = (element as? JsonPrimitive)?.content?.toIntOrNull()
 
@@ -451,9 +499,12 @@ private class DslWriter(
     private companion object {
         const val ROOT = "root"
         const val MARKER = "/* TODO: check this name */"
-        val DSL_CALLS = setOf("column", "row", "text", "button", "table")
     }
 }
+
+// The wire types printed as DSL calls rather than constructors — the ones whose fields the export has
+// to carry by hand, and so the ones DslExportRoundTripTest holds it to.
+internal val DSL_CALLS = setOf("column", "row", "text", "button", "table")
 
 // A file is called `home-screen`; a function cannot be. Hyphens and anything else Kotlin refuses
 // become camel-case joins, and a name that starts with a digit gets a letter in front — the draft is

@@ -13,16 +13,26 @@ import kotlin.test.Test
 // regenerated it before checking it would be marking its own homework.
 //
 //   ./gradlew :kompot-studio:desktopTest --tests "*DraftRegenerator*" -Pdraft.out=<path>
+//   ./gradlew :kompot-studio:desktopTest --tests "*DraftRegenerator*" -Pdraft.witness.out=<path>
 class DraftRegenerator {
     @Test
     fun write() {
-        val out = System.getProperty("draft.out") ?: return
+        write("draft.out", SAMPLE_BODY, "sampleScreenDraft")
+        write("draft.witness.out", WITNESS_BODY, "witnessScreenDraft")
+    }
+
+    private fun write(
+        property: String,
+        body: String,
+        function: String,
+    ) {
+        val out = System.getProperty(property) ?: return
         Path.of(out).writeText(
             exportDsl(
                 KompotStudioConfig(registry = toolkitRegistry),
-                Json.parseToJsonElement(SAMPLE_BODY),
+                Json.parseToJsonElement(body),
                 "io.github.youndie.kompot.studio.export",
-                "sampleScreenDraft",
+                function,
             ),
         )
     }

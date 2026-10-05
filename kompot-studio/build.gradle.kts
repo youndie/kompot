@@ -224,17 +224,25 @@ tasks.withType<Test>().configureEach {
     // Where the checked-in DSL draft is regenerated to. Opt-in by property and absent otherwise, so
     // the ordinary suite never writes into the source tree — the draft is a source file the compiler
     // checks, and a test that rewrote it on every run would be marking its own homework.
-    (project.findProperty("draft.out") as? String)?.let { systemProperty("draft.out", it) }
+    listOf("draft.out", "draft.witness.out").forEach { key ->
+        (project.findProperty(key) as? String)?.let { systemProperty(key, it) }
+    }
 
     // The same file, handed to the suite so it can check the exporter still produces it. DECLARED as
     // an input rather than just read: a test that reads a file Gradle does not know about goes on
     // passing from cache after that file changes, which is the one failure a drift guard must not have.
-    val draft =
-        layout.projectDirectory.file(
-            "src/desktopTest/kotlin/io/github/youndie/kompot/studio/export/SampleScreenDraft.kt",
+    // The witness draft (DslExportRoundTripTest) is held the same way.
+    val drafts =
+        mapOf(
+            "draft.checkedIn" to "SampleScreenDraft.kt",
+            "draft.witness" to "WitnessScreenDraft.kt",
         )
-    inputs.file(draft).withPathSensitivity(PathSensitivity.RELATIVE)
-    systemProperty("draft.checkedIn", draft.asFile.absolutePath)
+    drafts.forEach { (key, name) ->
+        val draft =
+            layout.projectDirectory.file("src/desktopTest/kotlin/io/github/youndie/kompot/studio/export/$name")
+        inputs.file(draft).withPathSensitivity(PathSensitivity.RELATIVE)
+        systemProperty(key, draft.asFile.absolutePath)
+    }
 }
 
 // The draft above is the exporter's output, checked in byte for byte: ktlint formatting it would turn
@@ -243,5 +251,6 @@ tasks.withType<Test>().configureEach {
 ktlint {
     filter {
         exclude { it.file.path.endsWith("/studio/export/SampleScreenDraft.kt") }
+        exclude { it.file.path.endsWith("/studio/export/WitnessScreenDraft.kt") }
     }
 }
