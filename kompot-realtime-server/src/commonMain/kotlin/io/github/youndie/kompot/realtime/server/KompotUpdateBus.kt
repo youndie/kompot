@@ -32,6 +32,9 @@ public interface KompotUpdateBus {
 
     // Messages from every instance, this one included: a subscriber must not have to tell its own
     // events from someone else's — delivery has to work the same either way.
+    //
+    // A subscription the backend refuses fails the flow; it must not leave it open and silent, or an
+    // instance that receives nothing looks exactly like one nobody wrote to.
     public fun messages(): Flow<KompotBusMessage>
 }
 
