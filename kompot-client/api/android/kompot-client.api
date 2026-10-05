@@ -234,8 +234,10 @@ public final class io/github/youndie/kompot/KompotSurfaceRoles {
 	public final fun getButton-k9-6N9U ()Ljava/lang/String;
 	public final fun getCheckboxInput-k9-6N9U ()Ljava/lang/String;
 	public final fun getContainer-k9-6N9U ()Ljava/lang/String;
+	public final fun getDivider-k9-6N9U ()Ljava/lang/String;
 	public final fun getField-k9-6N9U ()Ljava/lang/String;
 	public final fun getReadOnlyField-k9-6N9U ()Ljava/lang/String;
+	public final fun getTableHeader-k9-6N9U ()Ljava/lang/String;
 }
 
 public final class io/github/youndie/kompot/LoginSubmitKt {

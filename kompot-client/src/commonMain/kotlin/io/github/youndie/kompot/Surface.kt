@@ -2,6 +2,8 @@ package io.github.youndie.kompot
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -52,6 +54,26 @@ public object KompotSurfaceRoles {
 
     public fun checkboxInput(variant: String?): SurfaceRole =
         if (variant == null) CheckboxInput else SurfaceRole("${CheckboxInput.key}.$variant")
+
+    // The line nobody named: a divider without a colour token, and the table's border and row rules.
+    // One role for both, so a divider and a table rule keep reading as one line (SPEC.md §4.10). Its
+    // `outline` is the line. Until this role existed the colour was Material's outlineVariant whatever
+    // the design system was, and a palette without that colour could be reached only by a server
+    // naming a token on every divider it sent.
+    public val Divider: SurfaceRole = SurfaceRole("divider")
+
+    // The table's header row: `container` is its fill and `content` the colour of its words — both,
+    // for the reason KompotSurface gives for carrying `content` at all.
+    public val TableHeader: SurfaceRole = SurfaceRole("table_header")
+}
+
+// The colour of a rule the server did not colour. Unspecified on the divider role keeps Material's
+// outlineVariant, which is what every rule was drawn in before the role existed, so a design system
+// that does not answer draws exactly what it drew.
+@Composable
+internal fun ruleColor(): Color {
+    val outline = LocalKompotDesignSystem.current.resolveSurface(KompotSurfaceRoles.Divider).outline
+    return if (outline == Color.Unspecified) MaterialTheme.colorScheme.outlineVariant else outline
 }
 
 // Four slots, each with an explicit "not set". Unspecified means the toolkit's own default for that

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProvidableCompositionLocal
@@ -114,11 +113,9 @@ public class DividerRenderer : KompotComponentRenderer<DividerComponent> {
         actionHandler: KompotActionHandler,
         formController: FormController,
     ) {
-        // The table's rule when the server names nothing, so a divider and a table row line read as the
-        // same line; a named token is resolved like any other.
-        val color =
-            component.color?.let { LocalKompotDesignSystem.current.resolveColor(it) }
-                ?: MaterialTheme.colorScheme.outlineVariant
+        // The table's rule when the server names nothing — the design system's divider role — so a
+        // divider and a table row line read as the same line; a named token is resolved like any other.
+        val color = component.color?.let { LocalKompotDesignSystem.current.resolveColor(it) } ?: ruleColor()
         val modifier = component.modifiers.toComposeModifier()
         when (LocalKompotStackAxis.current) {
             KompotStackAxis.Vertical -> HorizontalDivider(modifier = modifier, color = color)
