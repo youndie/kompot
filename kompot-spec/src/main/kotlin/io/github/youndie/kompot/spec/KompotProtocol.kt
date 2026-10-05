@@ -24,6 +24,12 @@ public object KompotProtocol {
 
     public const val PROFILE_FILE_NAME: String = "kompot.profile.schema.json"
 
+    // The TypeScript declarations printed from the schemas (TypeScriptDeclarations): the open file for
+    // the side that reads bodies, the strict one for the side that writes them. Both ship in the
+    // artefact under types/, beside schema/.
+    public const val TYPESCRIPT_FILE_NAME: String = "kompot.d.ts"
+    public const val TYPESCRIPT_STRICT_FILE_NAME: String = "kompot.strict.d.ts"
+
     // The hierarchy a screen tree is made of, by the key the generator gives it. Named here rather
     // than spelled at each call site: it is the same string in the profile, in the validator's entry
     // ref and in childSlots, and a fourth copy is how one of them starts meaning something else.

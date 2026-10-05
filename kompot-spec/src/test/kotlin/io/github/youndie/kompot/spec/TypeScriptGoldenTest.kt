@@ -10,7 +10,11 @@ import kotlin.test.assertTrue
 // committed beside them — so a schema change that forgets its types goes red here, in `check`, rather
 // than in somebody's React client a release later.
 class TypeScriptGoldenTest {
-    private val files = mapOf(false to File("types/kompot.d.ts"), true to File("types/kompot.strict.d.ts"))
+    private val files =
+        mapOf(
+            false to File("types/${KompotProtocol.TYPESCRIPT_FILE_NAME}"),
+            true to File("types/${KompotProtocol.TYPESCRIPT_STRICT_FILE_NAME}"),
+        )
 
     private fun documents(): Map<String, JsonObject> {
         val schemas = KompotSpec.generateAll(KompotToolkitSpec.modules)

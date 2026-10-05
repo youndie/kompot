@@ -31,6 +31,14 @@ val rules = KompotSpecResources(root = "kompot-spec").rules()
 rules["9.4.3"] // "Ошибка, поднятая до того, как поле скрылось, перестаёт действовать вместе с полем."
 ```
 
+Там же — TypeScript-типы, напечатанные из этих схем (`types/`): `kompot-spec/types/kompot.d.ts` для
+читающей стороны и `kompot-spec/types/kompot.strict.d.ts` для пишущей. Клиенту на Node JVM для них не
+нужен — jar это zip:
+
+```sh
+unzip -p kompot-spec-<версия>.jar kompot-spec/types/kompot.d.ts > src/kompot.d.ts
+```
+
 ## Совместимость изменений
 
 Какие изменения схемы другая сторона переживает, решают правила §15: новый компонент деградирует до

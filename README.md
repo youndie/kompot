@@ -160,6 +160,10 @@ The protocol is written for somebody implementing a server — or a client — i
   survives (§15);
 - [`kompot-spec/schema`](kompot-spec/schema) — a JSON Schema per protocol module, generated from the
   same descriptors that encode a response;
+- [`kompot-spec/types`](kompot-spec/types) — TypeScript declarations printed from those schemas: an
+  open file for the side that reads bodies, a strict one for the side that writes them. The published
+  `kompot-spec` jar carries both beside the schemas and SPEC.md, under `kompot-spec/types/` — a reader
+  without a JVM takes them out with `unzip`;
 - [`kompot-tck`](kompot-tck/README.md) and [`kompot-client-tck`](kompot-client-tck/README.md) — the
   conformance kits for a server and for a client.
 

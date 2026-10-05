@@ -53,6 +53,10 @@ tasks.processResources {
     // id §9 carries, and until now that id pointed at a document living only in this repository. A
     // reader on another language got the reference and no way to resolve it.
     from("SPEC.md") { into("kompot-spec") }
+    // And the TypeScript declarations printed from these schemas: a reader on Node takes them out of
+    // the coordinate it already fetches, with unzip. Without them in the jar the only versioned way to
+    // get the file was to run the generator — a JVM in a Node job.
+    from("types") { into("kompot-spec/types") }
 }
 
 tasks.test {

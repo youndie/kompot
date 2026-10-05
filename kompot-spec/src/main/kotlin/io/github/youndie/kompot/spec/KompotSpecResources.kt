@@ -22,6 +22,7 @@ public class KompotSpecResources(
 ) {
     private val schemaPath = "$root/schema"
     private val examplesPath = "$root/examples"
+    private val typesPath = "$root/types"
 
     private val json = Json { ignoreUnknownKeys = true }
 
@@ -64,6 +65,14 @@ public class KompotSpecResources(
     }
 
     public fun rule(id: String): String? = rules()[id]
+
+    // The TypeScript declarations as they ship beside the schemas: the open file for a reading side,
+    // [strict] for a writing one (see TypeScriptDeclarations). A Kotlin build rarely wants them; the
+    // accessor is here so that the path a reader on another stack unzips is held by a test.
+    public fun typeScriptDeclarations(strict: Boolean = false): String =
+        read(
+            "$typesPath/${if (strict) KompotProtocol.TYPESCRIPT_STRICT_FILE_NAME else KompotProtocol.TYPESCRIPT_FILE_NAME}",
+        )
 
     public fun examplesIndex(): JsonObject = readObject("$examplesPath/${KompotProtocol.EXAMPLES_INDEX_FILE_NAME}")
 
