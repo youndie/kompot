@@ -102,7 +102,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 |---|---|---|---|---|---|
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
 
-## Сделано (75)
+## Сделано (76)
 
 **Швы в toolkit'е**
 
@@ -203,6 +203,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 - [B-65](backlog/B-65-redis-test-never-starts-the-publisher.md) — Тест Redis-шины «с одного инстанса на другой» не запускает бродкастер отправителя
 - [B-71](backlog/B-71-kompot-layout-as-a-plugin.md) — Скилл kompot-layout ставится плагином, а не симлинком с одной машины
 - [B-73](backlog/B-73-divider-colour-from-design-system.md) — Разделитель без цвета рисуется outlineVariant Material, и дизайн-система его не меняет (#204)
+- [B-74](backlog/B-74-dsl-reaches-accessibility-fields.md) — DSL не достаёт до полей провода: heading, accessibilityLabel и action недоступны из kompotScreen (#205)
 - [B-76](backlog/B-76-typescript-unknown-branch-types-fallback.md) — kompot.d.ts: ветка незнакомого компонента типизирует fallback и поля базы (#207)
 - [B-77](backlog/B-77-typescript-types-in-the-spec-jar.md) — kompot.d.ts и kompot.strict.d.ts едут в jar kompot-spec рядом со схемами (#208)
 

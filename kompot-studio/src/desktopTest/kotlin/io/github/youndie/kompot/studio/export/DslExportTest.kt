@@ -103,6 +103,23 @@ class DslExportTest {
         assertFalse(drafted.contains("CloseAction("), drafted)
     }
 
+    // A lambda written by position after named arguments lands on whatever parameter sits at that
+    // position, and text and button gained parameters before modifierBlock (#205): printed bare, the
+    // padding of a button with an id would be handed to `variant` and the draft would not compile.
+    @Test
+    fun `a modifier block on text and button is passed by name`() {
+        val drafted =
+            export(
+                """{ "type": "column", "id": "root", "children": [
+            { "type": "text", "id": "t", "text": "Hi", "modifiers": [ { "type": "padding", "all": 4 } ] },
+            { "type": "button", "id": "b", "text": "Go", "action": { "type": "close" },
+              "modifiers": [ { "type": "padding", "all": 4 } ] }] }""",
+            )
+
+        assertTrue(drafted.contains("text(\"Hi\", id = \"t\", modifierBlock = {"), drafted)
+        assertTrue(drafted.contains("button(\"Go\", CloseAction, id = \"b\", modifierBlock = {"), drafted)
+    }
+
     @Test
     fun `an action outside the profile becomes a TODO rather than a wrong constructor`() {
         val drafted =

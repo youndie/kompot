@@ -22,6 +22,43 @@ breaks a consumer without saying so is not caught by anything here, and
 
 ---
 
+## 0.39.1 — `text`, `button`, `divider` and `expandable` in the DSL take more parameters (binary only)
+
+**Was** — a heading could be marked only by leaving the DSL and inventing the id it would have given:
+
+```kotlin
+addComponent(TextComponent(id = "receipt/title", text = "Receipt", heading = true))
+```
+
+**Now** — the same calls as before compile and mean the same thing; the wire fields they could not
+reach are parameters and setters:
+
+```kotlin
+text("Receipt", heading = true)
+button("Pay", action, accessibilityLabel = "Pay 10 euros", variant = "primary")
+row {
+    action(NavigateAction("app://order/42"))
+    accessibilityLabel("Open the order")
+    text("Order 42")
+}
+```
+
+**What to change.** Nothing in source for a call that passes `modifierBlock` by name or as a trailing
+lambda. Recompile against 0.39.1: `text` gains `heading`, `maxLines`, `ellipsis` and `spans`,
+`button` gains `variant` and `accessibilityLabel` — all before `modifierBlock`, so a trailing lambda
+still lands on it — `divider` gains `modifierBlock` last, and `expandable` gains `modifierBlock`
+before `header`. A library compiled against 0.39.0 that calls these functions fails at run time with
+`NoSuchMethodError` until it is rebuilt. Two source edges: a `modifierBlock` passed by position
+after named arguments now lands on a new parameter (name it), and an `expandable` whose `header` is
+passed by position needs `header =`. `RowBuilder` and `ColumnBuilder` gain `action(…)` and
+`accessibilityLabel(…)`, which is additive.
+
+**Why it was worth breaking.** The 0.38 accessibility fields reached the data classes and the
+renderers and not the DSL, so a server written the way the readme writes one could not mark a
+heading — and nothing said so (#205). Overloads would have kept the old signatures alive beside the
+new ones; the repository has never carried hidden overloads, and a binary break of a 0.x DSL is what
+this file exists to record.
+
 ## 0.39.0 — `ScreenRoute` gains `presentation` (binary only)
 
 **Was**

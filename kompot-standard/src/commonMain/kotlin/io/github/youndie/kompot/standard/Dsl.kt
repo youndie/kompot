@@ -21,6 +21,8 @@ public class ColumnBuilder(
     private var spacing: Int = 0
     private var alignment: String? = null
     private var arrangement: String? = null
+    private var action: KompotAction? = null
+    private var accessibilityLabel: String? = null
 
     public fun modifier(block: KompotModifierBuilder.() -> Unit) {
         modifiers = KompotModifierBuilder().apply(block).build()
@@ -40,6 +42,16 @@ public class ColumnBuilder(
         arrangement = word
     }
 
+    /** What tapping the whole column does (SPEC.md §4.6). */
+    public fun action(action: KompotAction) {
+        this.action = action
+    }
+
+    /** What a screen reader announces for the column instead of its children; only with an [action] (SPEC.md §4.11). */
+    public fun accessibilityLabel(label: String) {
+        accessibilityLabel = label
+    }
+
     override fun addComponent(component: KompotComponent) {
         children.add(component)
     }
@@ -54,6 +66,8 @@ public class ColumnBuilder(
             children = children,
             alignment = alignment,
             arrangement = arrangement,
+            action = action,
+            accessibilityLabel = accessibilityLabel,
         )
 }
 
@@ -77,6 +91,8 @@ public class RowBuilder(
     private var alignment: String? = null
     private var arrangement: String? = null
     private var scrollable: Boolean = false
+    private var action: KompotAction? = null
+    private var accessibilityLabel: String? = null
 
     public fun modifier(block: KompotModifierBuilder.() -> Unit) {
         modifiers = KompotModifierBuilder().apply(block).build()
@@ -101,6 +117,16 @@ public class RowBuilder(
         scrollable = true
     }
 
+    /** What tapping the whole row does (SPEC.md §4.6). */
+    public fun action(action: KompotAction) {
+        this.action = action
+    }
+
+    /** What a screen reader announces for the row instead of its children; only with an [action] (SPEC.md §4.11). */
+    public fun accessibilityLabel(label: String) {
+        accessibilityLabel = label
+    }
+
     override fun addComponent(component: KompotComponent) {
         children.add(component)
     }
@@ -116,6 +142,8 @@ public class RowBuilder(
             alignment = alignment,
             arrangement = arrangement,
             scrollable = scrollable,
+            action = action,
+            accessibilityLabel = accessibilityLabel,
         )
 }
 
@@ -206,6 +234,8 @@ public fun KompotContainerContext.tabs(
 public fun KompotContainerContext.expandable(
     id: String? = null,
     expanded: Boolean = false,
+    // Before the two blocks, so a call ending in a trailing `content` lambda still means what it did.
+    modifierBlock: (KompotModifierBuilder.() -> Unit)? = null,
     header: ColumnBuilder.() -> Unit,
     content: ColumnBuilder.() -> Unit,
 ) {
@@ -213,6 +243,7 @@ public fun KompotContainerContext.expandable(
     addComponent(
         ExpandableComponent(
             id = path,
+            modifiers = modifierBlock?.let { KompotModifierBuilder().apply(it).build() } ?: emptyList(),
             header = ColumnBuilder(null, "$path/header").apply(header).build(),
             content = ColumnBuilder(null, "$path/content").apply(content).build(),
             expanded = expanded,
@@ -224,8 +255,10 @@ public fun KompotContainerContext.expandable(
 public fun KompotContainerContext.divider(
     color: ColorToken? = null,
     id: String? = null,
+    modifierBlock: (KompotModifierBuilder.() -> Unit)? = null,
 ) {
-    addComponent(DividerComponent(id = id ?: nextChildPath(), color = color))
+    val mods = modifierBlock?.let { KompotModifierBuilder().apply(it).build() } ?: emptyList()
+    addComponent(DividerComponent(id = id ?: nextChildPath(), modifiers = mods, color = color))
 }
 
 /** Room along the parent's axis: [size] dp, or a share of what is left with [weight]. */
@@ -243,25 +276,62 @@ public fun KompotContainerContext.spacer(
     )
 }
 
+/**
+ * Words on the screen. [heading] marks a heading for assistive technology to move between
+ * (SPEC.md §4.11); [maxLines] and [ellipsis] say what becomes of text that does not fit; [spans] cut
+ * it into runs, and their words MUST add up to [text] (SPEC.md §14).
+ */
 public fun KompotContainerContext.text(
     text: String,
     style: TypographyToken? = null,
     color: ColorToken? = null,
     id: String? = null,
+    // Before modifierBlock, so a call ending in a trailing lambda still means what it did.
+    heading: Boolean = false,
+    maxLines: Int? = null,
+    ellipsis: Boolean = true,
+    spans: List<TextSpan> = emptyList(),
     modifierBlock: (KompotModifierBuilder.() -> Unit)? = null,
 ) {
     val mods = modifierBlock?.let { KompotModifierBuilder().apply(it).build() } ?: emptyList()
-    addComponent(TextComponent(id ?: nextChildPath(), mods, text, style, color))
+    addComponent(
+        TextComponent(
+            id = id ?: nextChildPath(),
+            modifiers = mods,
+            text = text,
+            style = style,
+            color = color,
+            spans = spans,
+            maxLines = maxLines,
+            ellipsis = ellipsis,
+            heading = heading,
+        ),
+    )
 }
 
+/**
+ * A control that raises [action]. [variant] picks one of the client's button styles; an
+ * [accessibilityLabel] is what a screen reader says when the words alone do not say what it does.
+ */
 public fun KompotContainerContext.button(
     text: String,
     action: KompotAction,
     id: String? = null,
+    variant: String? = null,
+    accessibilityLabel: String? = null,
     modifierBlock: (KompotModifierBuilder.() -> Unit)? = null,
 ) {
     val mods = modifierBlock?.let { KompotModifierBuilder().apply(it).build() } ?: emptyList()
-    addComponent(ButtonComponent(id ?: nextChildPath(), mods, text, action))
+    addComponent(
+        ButtonComponent(
+            id = id ?: nextChildPath(),
+            modifiers = mods,
+            text = text,
+            action = action,
+            variant = variant,
+            accessibilityLabel = accessibilityLabel,
+        ),
+    )
 }
 
 @KompotDsl

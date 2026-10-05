@@ -197,4 +197,42 @@ class DslTest {
         assertNull(list.reloadUrl)
         assertNull(list.emptyState)
     }
+
+    // #205: a server written in the DSL could not mark a heading or label a tappable row.
+    @Test
+    fun `the accessibility fields and a container's action reach the built nodes`() {
+        val screen =
+            kompotScreen {
+                row {
+                    action(CloseAction)
+                    accessibilityLabel("Open the order")
+                    text("Order", heading = true)
+                }
+                column {
+                    action(RefreshAction)
+                    accessibilityLabel("Reload")
+                }
+                button("Pay", CloseAction, variant = "primary", accessibilityLabel = "Pay 10 euros")
+            }
+
+        val row = screen.children[0] as RowComponent
+        assertEquals(CloseAction, row.action)
+        assertEquals("Open the order", row.accessibilityLabel)
+        assertTrue((row.children.single() as TextComponent).heading)
+
+        val column = screen.children[1] as ColumnComponent
+        assertEquals(RefreshAction, column.action)
+        assertEquals("Reload", column.accessibilityLabel)
+
+        val button = screen.children[2] as ButtonComponent
+        assertEquals("primary", button.variant)
+        assertEquals("Pay 10 euros", button.accessibilityLabel)
+    }
+
+    @Test
+    fun `a text with no new arguments is the text it always was`() {
+        val text = kompotScreen { text("plain") }.children.single() as TextComponent
+
+        assertEquals(TextComponent(id = "root/0", text = "plain"), text)
+    }
 }
