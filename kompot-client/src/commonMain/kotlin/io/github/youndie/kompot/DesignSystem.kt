@@ -23,8 +23,14 @@ public interface KompotDesignSystem {
     // The third hook, and the one that closes what a renderer draws for itself. Defaulted so that a
     // design system written before it keeps compiling and keeps looking exactly as it did: an empty
     // surface means "the toolkit's own default for this role".
+    //
+    // The set of roles is OPEN: a release of the toolkit adds roles (0.40 added `divider` and
+    // `table_header`), and the new role is asked of every design system already written. So a branch
+    // that answers "every role I do not name" answers roles that do not exist yet — and whatever it
+    // returns is what the next role draws. Return KompotSurface.Unspecified for a role that is not
+    // yours; answer with values only the roles you name (#217).
     @Composable
-    public fun resolveSurface(role: SurfaceRole): KompotSurface = KompotSurface()
+    public fun resolveSurface(role: SurfaceRole): KompotSurface = KompotSurface.Unspecified
 }
 
 public val LocalKompotDesignSystem: ProvidableCompositionLocal<KompotDesignSystem> =

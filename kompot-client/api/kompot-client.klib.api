@@ -172,6 +172,11 @@ final class io.github.youndie.kompot/KompotSurface { // io.github.youndie.kompot
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.kompot/KompotSurface.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.youndie.kompot/KompotSurface.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.youndie.kompot/KompotSurface.toString|toString(){}[0]
+
+    final object Companion { // io.github.youndie.kompot/KompotSurface.Companion|null[0]
+        final val Unspecified // io.github.youndie.kompot/KompotSurface.Companion.Unspecified|{}Unspecified[0]
+            final fun <get-Unspecified>(): io.github.youndie.kompot/KompotSurface // io.github.youndie.kompot/KompotSurface.Companion.Unspecified.<get-Unspecified>|<get-Unspecified>(){}[0]
+    }
 }
 
 final class io.github.youndie.kompot/MaskVisualTransformation : androidx.compose.ui.text.input/VisualTransformation { // io.github.youndie.kompot/MaskVisualTransformation|null[0]

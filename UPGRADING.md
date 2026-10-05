@@ -22,6 +22,35 @@ breaks a consumer without saying so is not caught by anything here, and
 
 ---
 
+## 0.40.0 — `resolveSurface` is asked two new roles (behaviour)
+
+**Was** — a `divider` without a colour token, and a table's border, row rules and header row, were
+drawn in Material's `outlineVariant` and `surfaceVariant` whatever the design system was.
+
+**Now** — they ask the design system: `KompotSurfaceRoles.Divider` (its `outline` is the line) and
+`KompotSurfaceRoles.TableHeader` (`container` is the header's fill, `content` its words). A design
+system that does not answer draws exactly what it drew.
+
+**What to change.** Nothing, unless `resolveSurface` ends in a branch that answers every role it
+does not name with a value. That branch now answers `divider` and `table_header` too: a transparent
+`outline` there erases every toolkit divider and table rule, and a `container` there becomes the
+table header's fill. Nothing fails to compile and no screenshot without a table shows it. Return
+`KompotSurface.Unspecified` from that branch — "not mine", the toolkit's default — and answer with
+values only the roles you name:
+
+```kotlin
+override fun resolveSurface(role: SurfaceRole): KompotSurface =
+    when (role) {
+        KompotSurfaceRoles.Button -> KompotSurface(shape = RectangleShape, container = Ink, content = Paper)
+        KompotSurfaceRoles.Divider -> KompotSurface(outline = Hairline)
+        else -> KompotSurface.Unspecified
+    }
+```
+
+**Why it was worth changing.** A palette without Material's lavender grey could reach the line only
+by having the server name a token on every divider it sent (#204). The role set is open and will keep
+growing; SPEC.md §6 now says what not answering is, so the next role does not repeat this (#217).
+
 ## 0.40.0 — `text`, `button`, `divider` and `expandable` in the DSL take more parameters (binary only)
 
 **Was** — a heading could be marked only by leaving the DSL and inventing the id it would have given:
@@ -44,7 +73,7 @@ row {
 ```
 
 **What to change.** Nothing in source for a call that passes `modifierBlock` by name or as a trailing
-lambda. Recompile against 0.39.1: `text` gains `heading`, `maxLines`, `ellipsis` and `spans`,
+lambda. Recompile against 0.40.0: `text` gains `heading`, `maxLines`, `ellipsis` and `spans`,
 `button` gains `variant` and `accessibilityLabel` — all before `modifierBlock`, so a trailing lambda
 still lands on it — `divider` gains `modifierBlock` last, and `expandable` gains `modifierBlock`
 before `header`. A library compiled against 0.39.0 that calls these functions fails at run time with
