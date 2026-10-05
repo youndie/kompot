@@ -112,7 +112,15 @@ public data class KompotSurface(
     // for its padding is not silently half-obeyed.
     val minHeight: Dp = Dp.Unspecified,
     val contentPadding: PaddingValues? = null,
-)
+) {
+    public companion object {
+        // "Not mine": every slot unset, so the toolkit draws its own default for the role. The same
+        // value as KompotSurface(), named so that the catch-all of a design system says what it means
+        // instead of relying on its author remembering that an empty constructor is the answer. A
+        // catch-all that returns anything else answers every role a later release adds (#217).
+        public val Unspecified: KompotSurface = KompotSurface()
+    }
+}
 
 // The floor a surface names, applied to a control's modifier. Here rather than inline in each
 // renderer because a deployment writing a renderer of its own is exactly who needs a control to obey

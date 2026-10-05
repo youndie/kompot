@@ -50,7 +50,7 @@ class RuleColourTest {
         override fun resolveTypography(token: TypographyToken): TextStyle = TextStyle.Default
 
         @Composable
-        override fun resolveSurface(role: SurfaceRole): KompotSurface = surfaces[role] ?: KompotSurface()
+        override fun resolveSurface(role: SurfaceRole): KompotSurface = surfaces[role] ?: KompotSurface.Unspecified
     }
 
     private val answering =
@@ -170,5 +170,42 @@ class RuleColourTest {
             assertEquals(material.outlineVariant, borderPixel(), "the table's border")
             assertEquals(material.outlineVariant, rowRulePixel(), "the rule between the table's rows")
             assertEquals(material.surfaceVariant, headerFillPixel(), "the header row's fill")
+        }
+
+    // The shape a real design system has (#217): it names the roles it styles and answers the rest
+    // from one branch. Written with the named "not mine", the branch reaches the roles a later release
+    // adds without changing what they draw.
+    private class CatchAllDesignSystem(
+        private val catchAll: KompotSurface,
+    ) : KompotDesignSystem {
+        @Composable
+        override fun resolveColor(token: ColorToken): Color = Color.Black
+
+        @Composable
+        override fun resolveTypography(token: TypographyToken): TextStyle = TextStyle.Default
+
+        @Composable
+        override fun resolveSurface(role: SurfaceRole): KompotSurface =
+            when (role) {
+                KompotSurfaceRoles.Button -> KompotSurface(container = Color.Black, content = Color.White)
+                else -> catchAll
+            }
+    }
+
+    @Test
+    fun `a catch-all that answers not mine keeps Material's rules`() =
+        drawn(CatchAllDesignSystem(KompotSurface.Unspecified)) {
+            assertEquals(material.outlineVariant, dividerPixel(), "the divider")
+            assertEquals(material.outlineVariant, borderPixel(), "the table's border")
+            assertEquals(material.surfaceVariant, headerFillPixel(), "the header row's fill")
+        }
+
+    // What #217 met, kept as a statement of the contract rather than a defect: a catch-all that
+    // answers with a value answers the new roles too, and a transparent outline erases the line.
+    @Test
+    fun `a catch-all that answers with a transparent outline erases the rules`() =
+        drawn(CatchAllDesignSystem(KompotSurface(outline = Color.Transparent))) {
+            assertEquals(false, dividerPixel() == material.outlineVariant, "the divider kept Material's line")
+            assertEquals(false, borderPixel() == material.outlineVariant, "the border kept Material's line")
         }
 }

@@ -111,7 +111,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 |---|---|---|---|---|---|
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
 
-## Сделано (76)
+## Сделано (77)
 
 **Швы в toolkit'е**
 
@@ -199,6 +199,10 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 - [B-70](backlog/B-70-presentation-header.md) — Шторка — состояние ответа, а не адреса: заголовок X-Kompot-Presentation
 - [B-72](backlog/B-72-release-0-39-0.md) — Выпуск 0.39.0: Central, голова версии — 0.39.1
 - [B-75](backlog/B-75-redis-bus-swallows-refused-subscribe.md) — Redis-шина проглатывает отказ в PSUBSCRIBE (#206)
+
+**Стабилизация 0.40**
+
+- [B-79](backlog/B-79-unanswered-surface-role.md) — «Не ответить» на роль поверхности — тоже ответ: KompotSurface.Unspecified, §6 и UPGRADING 0.40 (#217, #218)
 
 **Без этапа**
 

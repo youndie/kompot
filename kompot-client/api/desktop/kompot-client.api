@@ -202,6 +202,7 @@ public final class io/github/youndie/kompot/KompotStackAxis : java/lang/Enum {
 
 public final class io/github/youndie/kompot/KompotSurface {
 	public static final field $stable I
+	public static final field Companion Lio/github/youndie/kompot/KompotSurface$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (Landroidx/compose/ui/graphics/Shape;JJJLandroidx/compose/ui/text/TextStyle;FLandroidx/compose/foundation/layout/PaddingValues;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun <init> (Landroidx/compose/ui/graphics/Shape;JJJLandroidx/compose/ui/text/TextStyle;FLandroidx/compose/foundation/layout/PaddingValues;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -224,6 +225,10 @@ public final class io/github/youndie/kompot/KompotSurface {
 	public final fun getTextStyle ()Landroidx/compose/ui/text/TextStyle;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/KompotSurface$Companion {
+	public final fun getUnspecified ()Lio/github/youndie/kompot/KompotSurface;
 }
 
 public final class io/github/youndie/kompot/KompotSurfaceRoles {
