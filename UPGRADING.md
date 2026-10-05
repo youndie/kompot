@@ -22,7 +22,7 @@ breaks a consumer without saying so is not caught by anything here, and
 
 ---
 
-## 0.39.1 — `text`, `button`, `divider` and `expandable` in the DSL take more parameters (binary only)
+## 0.40.0 — `text`, `button`, `divider` and `expandable` in the DSL take more parameters (binary only)
 
 **Was** — a heading could be marked only by leaving the DSL and inventing the id it would have given:
 
