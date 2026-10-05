@@ -103,7 +103,9 @@ private class DslWriter(
                         token(node, "style"),
                         token(node, "color"),
                         id,
-                        modifierBlock(modifiers),
+                        // Named: a lambda placed by position after named arguments lands on whatever
+                        // parameter sits there, and the DSL keeps gaining parameters before this one.
+                        modifierBlock(modifiers)?.let { "modifierBlock = $it" },
                     ),
                 )
             }
@@ -112,7 +114,12 @@ private class DslWriter(
                 used += "io.github.youndie.kompot.standard.button"
                 call(
                     "button",
-                    listOfNotNull(string(node["text"]), action(node["action"]), id, modifierBlock(modifiers)),
+                    listOfNotNull(
+                        string(node["text"]),
+                        action(node["action"]),
+                        id,
+                        modifierBlock(modifiers)?.let { "modifierBlock = $it" },
+                    ),
                 )
             }
 

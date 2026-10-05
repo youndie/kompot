@@ -109,6 +109,8 @@ public final class io/github/youndie/kompot/standard/CloseAction : io/github/you
 public final class io/github/youndie/kompot/standard/ColumnBuilder : io/github/youndie/kompot/dsl/KompotContainerContext {
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun accessibilityLabel (Ljava/lang/String;)V
+	public final fun action (Lio/github/youndie/kompot/KompotAction;)V
 	public fun addComponent (Lio/github/youndie/kompot/KompotComponent;)V
 	public final fun alignment (Ljava/lang/String;)V
 	public final fun arrangement (Ljava/lang/String;)V
@@ -259,14 +261,14 @@ public final class io/github/youndie/kompot/standard/DslKt {
 	public static final field ROOT_PATH Ljava/lang/String;
 	public static final fun box (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun box$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public static final fun button (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
-	public static synthetic fun button$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun button (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun button$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lio/github/youndie/kompot/KompotAction;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static final fun column (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun column$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public static final fun divider-pxkI4q8 (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;)V
-	public static synthetic fun divider-pxkI4q8$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
-	public static final fun expandable (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
-	public static synthetic fun expandable$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun divider-d6lSgUk (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun divider-d6lSgUk$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun expandable (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun expandable$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static final fun kompotScreen (Lkotlin/jvm/functions/Function1;)Lio/github/youndie/kompot/standard/ColumnComponent;
 	public static final fun paginatedList (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/util/List;Lio/github/youndie/kompot/standard/LoadPageAction;Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun paginatedList$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/util/List;Lio/github/youndie/kompot/standard/LoadPageAction;Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
@@ -278,8 +280,8 @@ public final class io/github/youndie/kompot/standard/DslKt {
 	public static synthetic fun table$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static final fun tabs (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;ILkotlin/jvm/functions/Function1;)V
 	public static synthetic fun tabs$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;ILkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public static final fun text-9Ve2xZ8 (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
-	public static synthetic fun text-9Ve2xZ8$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun text-64-k34I (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/Integer;ZLjava/util/List;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun text-64-k34I$default (Lio/github/youndie/kompot/dsl/KompotContainerContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/Integer;ZLjava/util/List;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 }
 
 public final class io/github/youndie/kompot/standard/ExpandableComponent : io/github/youndie/kompot/KompotComponent {
@@ -529,6 +531,8 @@ public final class io/github/youndie/kompot/standard/RefreshAction : io/github/y
 public final class io/github/youndie/kompot/standard/RowBuilder : io/github/youndie/kompot/dsl/KompotContainerContext {
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun accessibilityLabel (Ljava/lang/String;)V
+	public final fun action (Lio/github/youndie/kompot/KompotAction;)V
 	public fun addComponent (Lio/github/youndie/kompot/KompotComponent;)V
 	public final fun alignment (Ljava/lang/String;)V
 	public final fun arrangement (Ljava/lang/String;)V
