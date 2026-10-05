@@ -35,6 +35,14 @@ public class KompotUpdateBroadcaster(
     // The bus subscription lives as long as the scope passed in — an application's own background
     // scope. A separate method rather than the constructor: a constructor is no place to launch
     // coroutines, and a test is better off driving delivery by hand.
+    //
+    // A bus that fails — RedisKompotUpdateBus whose PSUBSCRIBE the server refused — is not caught here:
+    // the failure ends the collector, fails the returned Job and goes to the scope the way any failed
+    // launch does — to its CoroutineExceptionHandler, or to the platform's uncaught-exception handler,
+    // under a SupervisorJob; with a plain Job it cancels the whole scope. Nothing retries: a refusal
+    // (no password, no ACL right) does not cure itself, and a retry loop would only hide it. After that
+    // broadcast() still publishes, so other instances still deliver; this instance's subscribers get
+    // nothing until the application restarts the broadcaster — which is why the failure must be loud.
     public fun start(scope: CoroutineScope): Job {
         // UNDISPATCHED: the subscription must be in place BEFORE start() returns, or there is a window
         // between "started" and "actually subscribed" in which a published update is lost — the bus has

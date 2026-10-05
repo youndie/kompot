@@ -102,7 +102,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 |---|---|---|---|---|---|
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
 
-## Сделано (71)
+## Сделано (72)
 
 **Швы в toolkit'е**
 
@@ -189,6 +189,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 - [B-69](backlog/B-69-route-presentation-hint.md) — Маршрут говорит «покажи шторкой», а старый клиент открывает его экраном
 - [B-70](backlog/B-70-presentation-header.md) — Шторка — состояние ответа, а не адреса: заголовок X-Kompot-Presentation
 - [B-72](backlog/B-72-release-0-39-0.md) — Выпуск 0.39.0: Central, голова версии — 0.39.1
+- [B-75](backlog/B-75-redis-bus-swallows-refused-subscribe.md) — Redis-шина проглатывает отказ в PSUBSCRIBE (#206)
 
 **Без этапа**
 

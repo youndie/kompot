@@ -57,9 +57,16 @@ public class RedisKompotUpdateBus(
                     }
                 }
             connection.addListener(listener)
-            connection.async().psubscribe("$channelPrefix:*")
-
-            awaitClose {
+            try {
+                // The reply is awaited, not dropped: a server may refuse the subscription — NOAUTH, an
+                // ACL user without the right to subscribe, a proxy that does not pass pub/sub — and a
+                // dropped future leaves the flow open, silent and never failing. Awaited, the server's
+                // error fails the flow and reaches the collector (issue #206).
+                connection.async().psubscribe("$channelPrefix:*").await()
+                awaitClose()
+            } finally {
+                // In finally rather than in awaitClose's block: a refused subscription never reaches
+                // awaitClose, and its connection must not outlive the failure.
                 connection.removeListener(listener)
                 connection.close()
             }
