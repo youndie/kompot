@@ -348,12 +348,17 @@ public class TableRenderer : KompotComponentRenderer<TableComponent> {
         actionHandler: KompotActionHandler,
         formController: FormController,
     ) {
+        // The border and the row rules are the divider's line (SPEC.md §4.10), and the header row is a
+        // role of its own; each falls back to the Material colour it was drawn in before.
+        val rule = ruleColor()
+        val header = LocalKompotDesignSystem.current.resolveSurface(KompotSurfaceRoles.TableHeader)
+        val headerFill = header.container.takeIf { it != Color.Unspecified } ?: MaterialTheme.colorScheme.surfaceVariant
         ComposeColumn(
             modifier =
                 component.modifiers
                     .toComposeModifier()
                     .fillMaxWidth()
-                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                    .border(1.dp, rule),
         ) {
             component.rows.forEachIndexed { index, row ->
                 Row(
@@ -361,12 +366,14 @@ public class TableRenderer : KompotComponentRenderer<TableComponent> {
                         Modifier
                             .fillMaxWidth()
                             .let { mod ->
-                                if (row.header) mod.background(MaterialTheme.colorScheme.surfaceVariant) else mod
+                                if (row.header) mod.background(headerFill) else mod
                             },
                 ) {
                     row.cells.forEach { cell ->
                         Text(
                             text = cell,
+                            // Unspecified, the header's words take the ambient colour, as they always did.
+                            color = if (row.header) header.content else Color.Unspecified,
                             style =
                                 if (row.header) {
                                     MaterialTheme.typography.labelLarge
@@ -378,7 +385,7 @@ public class TableRenderer : KompotComponentRenderer<TableComponent> {
                     }
                 }
                 if (index < component.rows.lastIndex) {
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                    HorizontalDivider(color = rule)
                 }
             }
         }
