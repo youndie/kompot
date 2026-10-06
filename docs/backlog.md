@@ -111,7 +111,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 |---|---|---|---|---|---|
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
 
-## Сделано (77)
+## Сделано (78)
 
 **Швы в toolkit'е**
 
@@ -219,6 +219,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 - [B-74](backlog/B-74-dsl-reaches-accessibility-fields.md) — DSL не достаёт до полей провода: heading, accessibilityLabel и action недоступны из kompotScreen (#205)
 - [B-76](backlog/B-76-typescript-unknown-branch-types-fallback.md) — kompot.d.ts: ветка незнакомого компонента типизирует fallback и поля базы (#207)
 - [B-77](backlog/B-77-typescript-types-in-the-spec-jar.md) — kompot.d.ts и kompot.strict.d.ts едут в jar kompot-spec рядом со схемами (#208)
+- [B-78](backlog/B-78-dsl-export-keeps-every-wire-field.md) — Экспорт DSL в студии теряет поля text, button, row и column
 
 <!-- END INDEX -->
 
