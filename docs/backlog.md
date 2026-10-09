@@ -122,14 +122,13 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (2)
+## Открыто (1)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
-| [B-82](backlog/B-82-update-and-load-actions.md) `[ ]` | update и load: ответ, подменяющий узлы, и GET, отвечающий действием | partial-updates | P1 | L | B-81 |
 
-## Сделано (80)
+## Сделано (81)
 
 **Швы в toolkit'е**
 
@@ -226,6 +225,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 
 - [B-80](backlog/B-80-partial-updates-research.md) — Частичные обновления: что добавить, чтобы часть экрана менялась без перезагрузки
 - [B-81](backlog/B-81-screen-keeps-its-tree.md) — Экран держит своё дерево: загрузчик без сброса, одно хранилище подмен, key(id)
+- [B-82](backlog/B-82-update-and-load-actions.md) — update и load: ответ, подменяющий узлы, и GET, отвечающий действием
 
 **Без этапа**
 
