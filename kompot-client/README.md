@@ -99,7 +99,7 @@ CompositionLocalProvider(
 
 Незнакомое действие, которое поднял узел экрана, сток видит сам: `RenderNode` оборачивает обработчик.
 Ответ сервера — на `perform`, на сабмит — входит в цепочку мимо этой обёртки, поэтому о незнакомом
-действии в нём (и о незнакомой части `sequence`) сообщают `withPerform` и `withLoginSubmit` — тому
+действии в нём (и о незнакомой части `sequence`) сообщают `withPerform`, `withLoad` и `withLoginSubmit` — тому
 стоку, который им передали. Передавайте тот же, что стоит в `LocalKompotDegradationSink`:
 
 ```kotlin
@@ -148,6 +148,8 @@ object : KompotDegradationSink {
 |---|---|---|
 | `sequence` | `withSequences(followUp)` | `kompot-client` |
 | `refresh` | `withRefresh(scope) { … }` — перезапросить экран | `kompot-client` |
+| `update` | `withUpdates(overrides) { deeplink, history -> … }` — подменить узлы, адрес отдать приложению | `kompot-client` |
+| `load` | `withLoad(scope, state) { url -> … }` — `GET`, ответ в цепочку | `kompot-client` |
 | `show_message` | `withSnackbarMessages(host, scope, followUp)` | `kompot-ds-material-compose` |
 | `present`, `confirm`, `close` поверх слоя | `withOverlays(overlays)` и `KompotOverlayHost` | `kompot-ds-material-compose` |
 
@@ -162,6 +164,31 @@ top =
         .withSequences { top.handle(it) }
         .withSnackbarMessages(mySnackbarHost, scope) { top.handle(it) }
         .withOverlays(overlays)
+```
+
+**Подмена узлов ответом и загрузка без перехода** (§16.4). `update` пишет свои кадры в хранилище
+подмен экрана — то же, в которое пишет канал обновлений, — поэтому `withUpdates` получает то хранилище,
+которое стоит над экраном в `LocalKompotNodeOverrides`. Перехода он не делает: если сервер назвал новый
+адрес экрана, его получает колбэк вместе с `UpdateHistory.PUSH` или `REPLACE` (незнакомое слово уже
+прочитано как `push`), а в историю его кладёт приложение. `withLoad` делает `GET` и отдаёт ответ вниз
+по цепочке, как `withPerform`, поэтому оба ставятся **над** `withUpdates`. Из двух `load` одного экрана
+побеждает последнее нажатие: ответ на прежнее отбрасывается, даже если пришёл позже. Экран — это
+`KompotLoadState`, и он же говорит приложению, едет ли загрузка, — для своего индикатора:
+
+```kotlin
+val overrides = remember { KompotNodeOverrides() }
+val loading = rememberKompotLoadState()
+val handler =
+    remember(overrides) {
+        myHandler
+            .withUpdates(overrides) { deeplink, history -> myHistory.record(deeplink, replace = history == UpdateHistory.REPLACE) }
+            .withLoad(scope, loading, sink) { url -> myGet(url) }
+            .withPerform(scope, sink) { url, payload -> performOnServer(url, payload) }
+    }
+CompositionLocalProvider(LocalKompotNodeOverrides provides overrides) {
+    if (loading.isLoading) MyProgressBar()
+    KompotLazyScreen(screen, registry, formController, handler)
+}
 ```
 
 `KompotOverlayHost(overlays, top)` ставится над экраном — он рисует слой и вопрос тем же реестром.

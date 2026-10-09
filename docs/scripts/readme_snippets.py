@@ -82,6 +82,8 @@ PLACEHOLDERS = {
     "MySheet", "MyQuestion",
     # граф, стек и загрузка экрана приложения в примере маршрута, показанного слоем
     "myGraph", "myLoadScreen", "myShowScreen", "address",
+    # история адресов, GET и индикатор приложения в примере update и load
+    "myHistory", "myGet", "MyProgressBar",
     # прочие подстановки в примерах студии и TCK
     "showcaseComponents", "recordingsDir", "homeSubmitBody",
     # значения читателя в примере сборки экрана

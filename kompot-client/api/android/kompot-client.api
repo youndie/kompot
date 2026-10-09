@@ -180,6 +180,12 @@ public final class io/github/youndie/kompot/KompotDesignSystem$DefaultImpls {
 	public static fun resolveSurface-U35sUF4 (Lio/github/youndie/kompot/KompotDesignSystem;Ljava/lang/String;Landroidx/compose/runtime/Composer;I)Lio/github/youndie/kompot/KompotSurface;
 }
 
+public final class io/github/youndie/kompot/KompotLoadState {
+	public static final field $stable I
+	public fun <init> ()V
+	public final fun isLoading ()Z
+}
+
 public final class io/github/youndie/kompot/KompotNodeOverrides {
 	public static final field $stable I
 	public fun <init> ()V
@@ -258,6 +264,12 @@ public final class io/github/youndie/kompot/KompotSurfaceRoles {
 	public final fun getField-k9-6N9U ()Ljava/lang/String;
 	public final fun getReadOnlyField-k9-6N9U ()Ljava/lang/String;
 	public final fun getTableHeader-k9-6N9U ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/kompot/LoadKt {
+	public static final fun rememberKompotLoadState (Landroidx/compose/runtime/Composer;I)Lio/github/youndie/kompot/KompotLoadState;
+	public static final fun withLoad (Lio/github/youndie/kompot/KompotActionHandler;Lkotlinx/coroutines/CoroutineScope;Lio/github/youndie/kompot/KompotLoadState;Lio/github/youndie/kompot/KompotDegradationSink;Lkotlin/jvm/functions/Function2;)Lio/github/youndie/kompot/KompotActionHandler;
+	public static synthetic fun withLoad$default (Lio/github/youndie/kompot/KompotActionHandler;Lkotlinx/coroutines/CoroutineScope;Lio/github/youndie/kompot/KompotLoadState;Lio/github/youndie/kompot/KompotDegradationSink;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lio/github/youndie/kompot/KompotActionHandler;
 }
 
 public final class io/github/youndie/kompot/LoginSubmitKt {
@@ -373,6 +385,11 @@ public final class io/github/youndie/kompot/UnknownComponentRenderer : io/github
 	public synthetic fun <init> (ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun Render (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
 	public fun Render (Lio/github/youndie/kompot/UnknownComponent;Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/form/FormController;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/youndie/kompot/UpdateKt {
+	public static final fun withUpdates (Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/KompotNodeOverrides;Lkotlin/jvm/functions/Function2;)Lio/github/youndie/kompot/KompotActionHandler;
+	public static synthetic fun withUpdates$default (Lio/github/youndie/kompot/KompotActionHandler;Lio/github/youndie/kompot/KompotNodeOverrides;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lio/github/youndie/kompot/KompotActionHandler;
 }
 
 public final class io/github/youndie/kompot/form/FormControllerExtKt {
