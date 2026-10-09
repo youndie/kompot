@@ -36,7 +36,7 @@ public data class ClientReport(
         }
 }
 
-// Drives a client through the corpus. It knows nothing about how a client is built — only the seven
+// Drives a client through the corpus. It knows nothing about how a client is built — only the
 // operations of KompotFormClient — and nothing about a domain: every case is written in the toolkit's
 // own vocabulary, so this ships with the protocol rather than with an application.
 public class ClientCorpusRunner(
@@ -69,14 +69,32 @@ public class ClientCorpusRunner(
         // from the outside, so the runner refuses to call a case passed when it checked nothing.
         var checks = 0
 
+        // A screen this adapter cannot draw leaves the whole case unrun — not passed, not failed — for
+        // the same reason requests() can: the question was never asked.
+        val drawn = runCatching { case.screen?.let { client.show(it) } ?: true }
+        if (drawn.getOrNull() == false) {
+            return CaseOutcome(
+                emptyList(),
+                listOf(
+                    ClientFinding(
+                        case.id,
+                        case.clause,
+                        "this adapter draws no screens, so the case was not run — see KompotFormClient.show",
+                    ),
+                ),
+            )
+        }
+
         runCatching {
-            client.load(case.form)
+            drawn.getOrThrow()
+            case.form?.let { client.load(it) }
             case.steps.forEach { step ->
                 when (step) {
                     is ClientStep.Set -> client.set(step.fieldId, step.value)
                     is ClientStep.Blur -> client.blur(step.fieldId)
                     is ClientStep.Patch -> client.applyPatch(step.patch)
                     ClientStep.Submit -> client.submit()
+                    is ClientStep.Answer -> client.answer(step.action)
                 }
             }
         }.onFailure { failure ->
@@ -179,6 +197,64 @@ public class ClientCorpusRunner(
                                 case.id,
                                 case.clause,
                                 "the client sent $actual, expected $expected — ${case.why}",
+                            )
+                    }
+                }
+            }
+        }
+
+        // At least the keys the case names, with the values it names: see ClientExpectation.nodes.
+        case.expect.nodes?.forEach { (id, expected) ->
+            checks++
+            val actual = client.node(id)
+            when {
+                actual == null -> {
+                    findings +=
+                        ClientFinding(
+                            case.id,
+                            case.clause,
+                            "nothing is drawn under \"$id\", expected $expected — ${case.why}",
+                        )
+                }
+
+                expected.any { (key, value) -> actual[key] != value } -> {
+                    findings +=
+                        ClientFinding(
+                            case.id,
+                            case.clause,
+                            "\"$id\" is drawn as $actual, expected at least $expected — ${case.why}",
+                        )
+                }
+            }
+        }
+
+        case.expect.absent?.forEach { id ->
+            checks++
+            client.node(id)?.let { actual ->
+                findings +=
+                    ClientFinding(case.id, case.clause, "\"$id\" is drawn as $actual and should not be — ${case.why}")
+            }
+        }
+
+        case.expect.addresses?.let { expected ->
+            when (val actual = client.addresses()) {
+                null -> {
+                    unchecked +=
+                        ClientFinding(
+                            case.id,
+                            case.clause,
+                            "this adapter does not record the addresses the client hands over, so the case was not run — see KompotFormClient.addresses",
+                        )
+                }
+
+                else -> {
+                    checks++
+                    if (actual != expected) {
+                        findings +=
+                            ClientFinding(
+                                case.id,
+                                case.clause,
+                                "the client handed over $actual, expected $expected — ${case.why}",
                             )
                     }
                 }

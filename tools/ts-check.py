@@ -6,8 +6,8 @@ Compiles real wire bodies against the generated TypeScript declarations (kompot-
 
 The declarations are generated and held by a golden test, which proves they match the schema — not
 that they are usable. This does the second half: every playground example body (the page's own
-screens, covering most of the vocabulary) and every form in the client case corpus is typed as what
-it is on the wire and handed to `tsc --strict`.
+screens, covering most of the vocabulary) and every form, screen and server answer in the client case
+corpus is typed as what it is on the wire and handed to `tsc --strict`.
 
 Against the STRICT file (kompot.strict.d.ts), because these bodies are written by a server: the open
 file's unknown branch accepts any mistake as a type it does not know. A body that deliberately carries
@@ -46,12 +46,24 @@ def playground_bodies():
 def corpus_bodies():
     for path in sorted(glob.glob(os.path.join(ROOT, "kompot-client-tck", "corpus", "*.json"))):
         case = json.load(open(path, encoding="utf-8"))
-        if isinstance(case, dict) and "form" in case:
-            yield f"corpus {os.path.basename(path)}", case["form"]
+        if not isinstance(case, dict):
+            continue
+        name = os.path.basename(path)
+        if "form" in case:
+            yield f"corpus {name}", case["form"]
+        if "screen" in case:
+            yield f"corpus {name} screen", case["screen"]
+        # What the server answers in a case is an action on the wire (SPEC.md §16.4), and typing it is
+        # what puts `update` through tsc at all: no playground body carries one.
+        for i, step in enumerate(case.get("steps", [])):
+            if step.get("step") == "answer":
+                yield f"corpus {name} answer {i}", step["action"]
 
 
 # What a body is on the wire, by its shape.
 def wire_type(body):
+    if body.get("type") in ACTIONS:
+        return "KompotAction"
     if "formId" in body and "fields" in body:
         return "FormSchema"
     if "schema" in body and "screen" in body:
@@ -59,6 +71,10 @@ def wire_type(body):
     if "screen" in body:
         return "KompotScreenResponse"
     return "KompotComponent"
+
+
+# The actions a corpus answer may be: an answer is told from a tree by its type alone.
+ACTIONS = {"update", "load", "perform", "navigate", "refresh", "sequence", "show_message"}
 
 
 def known_types():

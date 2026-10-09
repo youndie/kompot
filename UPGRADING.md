@@ -22,6 +22,36 @@ breaks a consumer without saying so is not caught by anything here, and
 
 ---
 
+## 0.40.0 — a client corpus case may be about a screen; `ClientCase.form` is nullable (source and binary)
+
+**Was** — every case of `kompot-client-tck` carried a form: `ClientCase.form: JsonObject`, and
+`KompotFormClient` had operations for a form only.
+
+**Now** — a case carries a form, a screen, or both: `form: JsonObject?` and a new `screen: JsonObject?`.
+The cases about a screen (SPEC.md §16.4: what an `update` answer does to the nodes and to the
+address) bring a step `answer` and three expectations, `nodes`, `absent` and `addresses`.
+`KompotFormClient` gains four operations, all defaulted — `show`, `answer`, `node`, `addresses` — so
+an adapter written for forms compiles as before and reports the screen cases as **unchecked**, the
+same way it reports `requests` when it does not record them. `ClientCase`, `ClientExpectation` and
+their constructors change shape, which breaks code compiled against them.
+
+**What to change.**
+
+- Code that **reads** `case.form` gets a nullable value: `case.form?.let(client::load)`, or filter
+  the screen cases out — `cases.filter { it.screen == null }` — if your client draws no screens.
+- A client that does draw screens answers them by overriding the four operations: draw the tree,
+  run the answer through the client's own chain, and report what is drawn under an id and the
+  addresses it handed to the application. `kompot-client` does it in `ScreenCorpusTest`.
+
+**Also in this version, not a break.** `kompotEngineSerializersModule` (and so `kompotJson()`) now
+registers `perform`, `load` and `update`. Before, `kompotJson()` decoded a `perform` as
+`UnknownAction` unless the application added `kompotCommandsSerializersModule` itself; adding it
+still works.
+
+**Why it was worth changing.** `update` and `load` are client rules — order of frames, an id the screen
+does not have, an unfamiliar history word — and the corpus is where a second client implementation
+learns the rules it has to keep. A corpus whose every case needed a form had no place for them.
+
 ## 0.40.0 — live frames go into the screen's override store; `LocalKompotRealtimeUpdates` is deprecated (behaviour)
 
 **Was** — `KompotRealtimeProvider` kept the frames in a map of its own under `remember(topic)` and

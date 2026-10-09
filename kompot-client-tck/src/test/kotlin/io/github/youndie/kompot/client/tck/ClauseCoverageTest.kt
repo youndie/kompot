@@ -25,7 +25,9 @@ class ClauseCoverageTest {
     // package them.
     private val rules: Map<String, String> by lazy { KompotSpecResources(root = "kompot-spec").rules() }
 
-    private val ruleIds: List<String> by lazy { rules.keys.filter { it.startsWith("9.") } }
+    // §9 — what a client decides about a form — and the rules of §16.4 about a screen whose nodes an
+    // answer replaces. Every rule of the specification is numbered in one of the two.
+    private val ruleIds: List<String> by lazy { rules.keys.filter { it.startsWith("9.") || it.startsWith("16.4.") } }
 
     private fun cases() = ClientCorpusResources.cases()
 
@@ -56,23 +58,27 @@ class ClauseCoverageTest {
             "9.7.9" to "отрисовка: снимки, а не корпус",
             "9.8.1" to "структура схемы, не решение клиента",
             "9.8.2" to "адаптер не умеет источники данных",
+            "16.4.5" to "сервер: что отдаёт адрес после `update`",
+            "16.4.6" to "запрос, а не решение: `kompot-tck`, проверка `load`; тест `LoadTest` клиента",
+            "16.4.7" to "порядок ответов сети: тесты `LoadTest` и `UpdateAndLoadTest` клиента, адаптер синхронен",
+            "16.4.8" to "сервер: профиль клиента",
         )
 
     @Test
     fun `every rule a case names is a rule the specification has`() {
-        assertTrue(ruleIds.isNotEmpty(), "no rule ids were found in §9 — this test proved nothing")
+        assertTrue(ruleIds.isNotEmpty(), "no rule ids were found in §9 or §16.4 — this test proved nothing")
 
         val dangling =
             cases()
                 .flatMap { case -> case.holds.map { case.id to it } }
                 .filterNot { (_, rule) -> rule in ruleIds }
 
-        assertEquals(emptyList(), dangling, "these cases name a rule §9 does not have")
+        assertEquals(emptyList(), dangling, "these cases name a rule §9 and §16.4 do not have")
     }
 
     @Test
     fun `the map of rules held elsewhere names rules the specification has`() {
-        assertEquals(emptyList(), heldElsewhere.keys.filterNot { it in ruleIds }, "these are not rules of §9")
+        assertEquals(emptyList(), heldElsewhere.keys.filterNot { it in ruleIds }, "these are not rules of §9 or §16.4")
     }
 
     @Test
@@ -80,9 +86,9 @@ class ClauseCoverageTest {
         val byRule = ruleIds.associateWith { rule -> cases().filter { rule in it.holds }.map { it.id } }
         val document =
             buildString {
-                appendLine("# Покрытие §9")
+                appendLine("# Покрытие §9 и §16.4")
                 appendLine()
-                appendLine("Сгенерировано `ClauseCoverageTest` по правилам §9 спеки и по случаям корпуса.")
+                appendLine("Сгенерировано `ClauseCoverageTest` по правилам §9 и §16.4 спеки и по случаям корпуса.")
                 appendLine("Правило без случая — не дефект: корпус неполон и говорит об этом здесь, а не молчит.")
                 appendLine()
                 appendLine("| Правило | Случаи | Если не корпус — то кто |")

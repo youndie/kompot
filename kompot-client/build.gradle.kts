@@ -102,6 +102,9 @@ kotlin {
                 // Готовые Material3-ключи (ColorToken.PRIMARY и т.п.) для тестовых фикстур —
                 // сам kompot-client их не использует, только тесты рендереров.
                 implementation(projects.kompotDsMaterial)
+                // The client corpus: its cases about a screen (SPEC.md §16.4) need a client that draws,
+                // so they run here against this one (ScreenCorpusTest) rather than in kompot-client-tck.
+                implementation(projects.kompotClientTck)
             }
         }
     }
