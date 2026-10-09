@@ -134,11 +134,16 @@ public class ColumnRenderer : KompotComponentRenderer<ColumnComponent> {
                     // Invisible while the data is long: text that wraps stretches itself to the
                     // constraint, so a screen of long titles looks right and the same tree with short
                     // ones does not.
-                    Box(
-                        modifier = if (weight != null) Modifier.weight(weight) else Modifier,
-                        propagateMinConstraints = weight != null,
-                    ) {
-                        registry.RenderNode(child, actionHandler, formController)
+                    // Keyed by id: the state of a node (an open section, a chosen tab, a list's pages)
+                    // belongs to the node, not to its place (SPEC.md §4.4). By position, a node the
+                    // server inserted above took the state of the one that used to be there.
+                    key(child.id) {
+                        Box(
+                            modifier = if (weight != null) Modifier.weight(weight) else Modifier,
+                            propagateMinConstraints = weight != null,
+                        ) {
+                            registry.RenderNode(child, actionHandler, formController)
+                        }
                     }
                 }
             }
@@ -206,11 +211,16 @@ public class RowRenderer : KompotComponentRenderer<RowComponent> {
                     // Invisible while the data is long: text that wraps stretches itself to the
                     // constraint, so a screen of long titles looks right and the same tree with short
                     // ones does not.
-                    Box(
-                        modifier = if (weight != null) Modifier.weight(weight) else Modifier,
-                        propagateMinConstraints = weight != null,
-                    ) {
-                        registry.RenderNode(child, actionHandler, formController)
+                    // Keyed by id: the state of a node (an open section, a chosen tab, a list's pages)
+                    // belongs to the node, not to its place (SPEC.md §4.4). By position, a node the
+                    // server inserted above took the state of the one that used to be there.
+                    key(child.id) {
+                        Box(
+                            modifier = if (weight != null) Modifier.weight(weight) else Modifier,
+                            propagateMinConstraints = weight != null,
+                        ) {
+                            registry.RenderNode(child, actionHandler, formController)
+                        }
                     }
                 }
             }
@@ -408,6 +418,9 @@ private class PaginatedListState(
     val nextLoadAction: MutableState<LoadPageAction?>,
     val isReloading: MutableState<Boolean>,
     val isLoadingMore: MutableState<Boolean>,
+    // What drew the list — the tree or an override of it — for its items, which the lazy screen draws
+    // outside the RenderNode that would otherwise provide it.
+    val overrideFloor: Long,
 )
 
 // Keeps the list state — current items plus the cursor of the next page — in a remember keyed on the
@@ -446,7 +459,12 @@ private fun rememberPaginatedListState(
 
     // The second is a live update for this node alone. It stays LAST so that a targeted patch is
     // not undone by a tree that merely arrived again unchanged.
-    val realtimeUpdate = LocalKompotRealtimeUpdates.current[component.id] as? PaginatedListComponent
+    // Through RenderNode the override is already the component and this finds nothing newer; the
+    // lazy screen lifts the list out of RenderNode, and this is where it sees one.
+    @Suppress("DEPRECATION")
+    val realtimeUpdate =
+        (currentOverride(component.id)?.component ?: LocalKompotRealtimeUpdates.current[component.id])
+            as? PaginatedListComponent
     LaunchedEffect(realtimeUpdate) {
         if (realtimeUpdate != null) {
             items.value = realtimeUpdate.initialItems
@@ -476,7 +494,8 @@ private fun rememberPaginatedListState(
         }
     }
 
-    return PaginatedListState(items, nextLoadAction, isReloading, isLoadingMore)
+    val overrideFloor = currentOverride(component.id)?.order ?: LocalKompotOverrideFloor.current
+    return PaginatedListState(items, nextLoadAction, isReloading, isLoadingMore, overrideFloor)
 }
 
 @Composable
@@ -597,14 +616,18 @@ private fun LazyListScope.paginatedListItems(
         state.items.value.isEmpty() -> {
             component.emptyState?.let { empty ->
                 item(key = "${component.id}_empty") {
-                    registry.RenderNode(empty, actionHandler, formController)
+                    CompositionLocalProvider(LocalKompotOverrideFloor provides state.overrideFloor) {
+                        registry.RenderNode(empty, actionHandler, formController)
+                    }
                 }
             }
         }
 
         else -> {
             items(state.items.value, key = { it.id }) { item ->
-                registry.RenderNode(item, actionHandler, formController)
+                CompositionLocalProvider(LocalKompotOverrideFloor provides state.overrideFloor) {
+                    registry.RenderNode(item, actionHandler, formController)
+                }
             }
 
             val next = state.nextLoadAction.value
@@ -733,12 +756,14 @@ public fun KompotScreen(
     actionHandler: KompotActionHandler,
 ) {
     CompositionLocalProvider(LocalKompotRegistry provides registry) {
-        KompotNode(
-            component = rootComponent,
-            registry = registry,
-            formController = formController,
-            actionHandler = actionHandler,
-        )
+        ProvideScreenOverrides(rootComponent) {
+            KompotNode(
+                component = rootComponent,
+                registry = registry,
+                formController = formController,
+                actionHandler = actionHandler,
+            )
+        }
     }
 }
 
@@ -761,48 +786,62 @@ public fun KompotLazyScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     CompositionLocalProvider(LocalKompotRegistry provides registry) {
-        val rootColumn = rootComponent as? ColumnComponent
-        if (rootColumn == null) {
-            // The root is not a column. This should not happen for either screen builder, but a
-            // future DSL variant degrades to the ordinary, non-lazy render rather than breaking.
-            Box(modifier = modifier.fillMaxSize().padding(contentPadding)) {
-                KompotNode(registry, formController, rootComponent, actionHandler)
-            }
-        } else {
-            val pageLoader = LocalKompotPageLoader.current
-            // The pagination state for EVERY paginated list among the root's direct children is
-            // computed here, in an ordinary composable body where remember and LaunchedEffect
-            // work, rather than inside the LazyColumn builder below, where they cannot be.
-            val paginatedStates =
-                rootColumn.children.filterIsInstance<PaginatedListComponent>().associateWith { child ->
-                    key(child.id) {
-                        rememberPaginatedListState(child, pageLoader, formController)
-                    }
-                }
+        ProvideScreenOverrides(rootComponent) {
+            LazyScreenContent(rootComponent, registry, formController, actionHandler, modifier, contentPadding)
+        }
+    }
+}
 
-            LazyColumn(
-                modifier = modifier.then(rootColumn.modifiers.toComposeModifier()),
-                contentPadding = contentPadding,
-                // The same two words the non-lazy column reads, so a screen does not lay out
-                // differently for having become lazy. Along a list that scrolls there is free space to
-                // share only while the content is shorter than the window.
-                verticalArrangement = StackArrangement(rootColumn.arrangement, rootColumn.spacing.dp),
-                horizontalAlignment = columnAlignment(rootColumn.alignment),
-            ) {
-                rootColumn.children.forEach { child ->
-                    if (child is PaginatedListComponent) {
-                        paginatedListItems(
-                            component = child,
-                            state = paginatedStates.getValue(child),
-                            registry = registry,
-                            actionHandler = actionHandler,
-                            formController = formController,
-                            pageLoader = pageLoader,
-                        )
-                    } else {
-                        item(key = child.id) {
-                            registry.RenderNode(child, actionHandler, formController)
-                        }
+@Composable
+private fun LazyScreenContent(
+    rootComponent: KompotComponent,
+    registry: KompotRegistry,
+    formController: FormController,
+    actionHandler: KompotActionHandler,
+    modifier: Modifier,
+    contentPadding: PaddingValues,
+) {
+    val rootColumn = rootComponent as? ColumnComponent
+    if (rootColumn == null) {
+        // The root is not a column. This should not happen for either screen builder, but a
+        // future DSL variant degrades to the ordinary, non-lazy render rather than breaking.
+        Box(modifier = modifier.fillMaxSize().padding(contentPadding)) {
+            KompotNode(registry, formController, rootComponent, actionHandler)
+        }
+    } else {
+        val pageLoader = LocalKompotPageLoader.current
+        // The pagination state for EVERY paginated list among the root's direct children is
+        // computed here, in an ordinary composable body where remember and LaunchedEffect
+        // work, rather than inside the LazyColumn builder below, where they cannot be.
+        val paginatedStates =
+            rootColumn.children.filterIsInstance<PaginatedListComponent>().associateWith { child ->
+                key(child.id) {
+                    rememberPaginatedListState(child, pageLoader, formController)
+                }
+            }
+
+        LazyColumn(
+            modifier = modifier.then(rootColumn.modifiers.toComposeModifier()),
+            contentPadding = contentPadding,
+            // The same two words the non-lazy column reads, so a screen does not lay out
+            // differently for having become lazy. Along a list that scrolls there is free space to
+            // share only while the content is shorter than the window.
+            verticalArrangement = StackArrangement(rootColumn.arrangement, rootColumn.spacing.dp),
+            horizontalAlignment = columnAlignment(rootColumn.alignment),
+        ) {
+            rootColumn.children.forEach { child ->
+                if (child is PaginatedListComponent) {
+                    paginatedListItems(
+                        component = child,
+                        state = paginatedStates.getValue(child),
+                        registry = registry,
+                        actionHandler = actionHandler,
+                        formController = formController,
+                        pageLoader = pageLoader,
+                    )
+                } else {
+                    item(key = child.id) {
+                        registry.RenderNode(child, actionHandler, formController)
                     }
                 }
             }
@@ -879,12 +918,16 @@ public class KompotRegistry(
         actionHandler: KompotActionHandler,
         formController: FormController,
     ) {
-        // A live update substitutes a node by id before dispatch — the single place this has to
-        // be accounted for, and no component renderer knows the update channel exists. An update
-        // may in principle change the type of a component, so the renderer lookup goes by
-        // actual::class rather than by the static T.
-        val realtimeUpdates = LocalKompotRealtimeUpdates.current
-        val actual: KompotComponent = realtimeUpdates[component.id] ?: component
+        // An override substitutes a node by id before dispatch — the single place this has to be
+        // accounted for, and no component renderer knows the store exists. An override may in
+        // principle change the type of a component, so the renderer lookup goes by actual::class
+        // rather than by the static T.
+        val floor = LocalKompotOverrideFloor.current
+        val override = currentOverride(component.id)
+
+        @Suppress("DEPRECATION")
+        val actual: KompotComponent =
+            override?.component ?: LocalKompotRealtimeUpdates.current[component.id] ?: component
 
         // The registry keys renderers by the component's class, so it is the key that guarantees
         // the types line up, not the type system: a compiler cannot check this.
@@ -899,15 +942,21 @@ public class KompotRegistry(
         val reporting =
             if (actionHandler is ReportingActionHandler) actionHandler else ReportingActionHandler(actionHandler, sink)
 
-        if (renderer != null) {
-            renderer.Render(actual, reporting, formController)
-        } else {
-            sink.onUnknown(
-                KompotDegradationKind.UNRENDERABLE_COMPONENT,
-                actual.wireType(),
-                KompotDegradationOutcome.PLACEHOLDER,
-            )
-            UnknownComponentPlaceholder()
+        // Below an override, only what was written after it applies: the overridden node came whole,
+        // with its own children (KompotNodeOverrides). Provided on every node, not only an overridden
+        // one — a provider that comes and goes with the override would remount the subtree and lose
+        // its state the moment a frame arrived.
+        CompositionLocalProvider(LocalKompotOverrideFloor provides (override?.order ?: floor)) {
+            if (renderer != null) {
+                renderer.Render(actual, reporting, formController)
+            } else {
+                sink.onUnknown(
+                    KompotDegradationKind.UNRENDERABLE_COMPONENT,
+                    actual.wireType(),
+                    KompotDegradationOutcome.PLACEHOLDER,
+                )
+                UnknownComponentPlaceholder()
+            }
         }
     }
 }

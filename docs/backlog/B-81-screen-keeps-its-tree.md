@@ -1,7 +1,7 @@
 ---
 id: B-81
 title: "Экран держит своё дерево: загрузчик без сброса, одно хранилище подмен, key(id)"
-status: open
+status: done
 priority: P1
 size: M
 stage: partial-updates
@@ -41,3 +41,86 @@ blocked_by: [B-80]
 - Якоря: `kompot-client/src/commonMain/kotlin/io/github/youndie/kompot/ScreenLoader.kt`,
   `Realtime.kt`, `Components.kt` (`RenderNode`, рендереры `column`/`row`), `kompot-spec/SPEC.md`
   §4.4, §12.6, `UPGRADING.md`.
+
+## Находки
+
+### Итерация 1 — 2026-10-09
+
+- **Дефект подтверждён до правки.** На неизменённом коде (база `5adab8b`) тест
+  `NodeOverridesTest` «a refresh after a live frame shows the node from the new tree» красный на
+  `onNodeWithText("card v2").assertExists()`, а контроль перед ним («card from the frame» виден) —
+  зелёный: кадр лёг, а `refresh` его не снял. Там же красные остальные два теста AC: загрузчик на
+  новом ключе показывает экран загрузки (та версия теста шла без `screenKey`, которого на `main` нет) (`ScreenLoaderTest`, `the app's loading` существует), и
+  после вставки узла над раскрытым `expandable` ответ свёрнут — и в `column`, и в `row`
+  (`DisclosureTest`). Лог прогона — `/tmp/b81-before-fix.log` на WSL.
+- **Хранилище — `KompotNodeOverrides`** (`kompot-client/.../NodeOverrides.kt`): публичные только
+  конструктор и `override(id, component)` — точка записи для `update` из B-82; читает один
+  `RenderNode`. Достаётся через `LocalKompotNodeOverrides`; `KompotScreen`, `KompotLazyScreen` и
+  `KompotRealtimeProvider` заводят своё, только если выше ничего нет, поэтому провайдер над экраном и
+  экран под ним делят одно хранилище.
+- **Правила жизни держатся порядком, а не обходом дерева.** Каждая запись и каждое новое дерево
+  берут следующий номер; подмена применяется под узлом, только если она новее того, что нарисовало
+  этот узел, — дерева или подмены предка (`LocalKompotOverrideFloor`, отдаётся `RenderNode` вниз).
+  Обход потребовал бы знать детей у каждого типа компонента, включая типы плагинов, которых клиент
+  назвать не может. Порядок даёт все три правила сразу, «незнакомый `id`» тоже: такой узел может
+  появиться только с более новым деревом или более новой подменой предка, и старая запись под ним
+  уже не действует. Расхождение с буквой §4.1 ресёрча одно и в пользу порядка: если сервер
+  переносит узел `Y` в другой узел `Z` новой подменой `Z`, прежняя подмена `Y` тоже не действует,
+  хотя `Y` не был «внутри прежнего `Z`» — новое содержимое `Z` пришло позже неё.
+- **Равное дерево новым не считается** (`remember(overrides, root)` по значению) — так же, как
+  `LaunchedEffect(component)` у списка не трогает догруженные страницы. Записано в §4.4 и в тесте
+  «a new tree drops the overrides and an equal one keeps them».
+- **Номер дерева берётся в композиции**, а не в эффекте: иначе первый кадр нового дерева рисовался
+  бы под подменами, которые оно отменяет. Счётчик — не snapshot-состояние, обратной записи нет;
+  чистка устаревших записей — в `LaunchedEffect`, чисто хозяйственная.
+- **Нижняя граница отдаётся на каждом узле, а не только на подменённом.** Провайдер, который
+  появляется вместе с подменой, переставлял бы группу композиции и сбрасывал состояние поддерева в
+  момент прихода кадра (мутация ниже это показала на `tabs`).
+- **Список на ленивом экране** получает подмену мимо `RenderNode`, поэтому `PaginatedListState`
+  несёт нижнюю границу для своих элементов.
+- **`LocalKompotRealtimeUpdates` объявлен устаревшим** (WARNING): карта, переданная через него,
+  живёт вне экрана и правил не знает. Он читается после хранилища, поэтому старый код рисует как
+  раньше; `KompotRealtimeProvider` его больше не отдаёт. В репозитории `-Werror` для тестов, поэтому
+  `RealtimeUpdatesTest`, `DisclosureTest` и `KompotLazyScreenTest` переведены на хранилище, а один
+  тест старого пути оставлен с `@Suppress("DEPRECATION")`.
+- **Загрузчик:** новые параметры `screenKey: Any? = key` и
+  `state: KompotScreenLoaderState = rememberKompotScreenLoaderState()` перед `content`, состояние
+  отдаёт `screen`, `isLoading`, `failure`. **Держать дерево — по просьбе приложения:** по умолчанию
+  `screenKey` равен ключу, каждый новый ключ — другой экран, и поведение прежнее. Первый вариант
+  (умолчание «один загрузчик — один экран») отвергнут при ревью: у потребителя с одним загрузчиком на
+  все адреса он молча оставлял на виду прежний экран, нажимаемый, пока едет следующий. Приложение,
+  которому нужно дерево поверх фильтров, передаёт `screenKey` грубее ключа (haul — путь без query).
+  Слот ошибки при живом дереве рисуется после `content` в том же родителе, без своей обёртки: `Box`
+  навязал бы раскладку приложению, у которого `content` кладёт несколько узлов в его `Column`. При
+  умолчании ошибка над деревом не случается вовсе: неудача нового ключа — это неудача другого экрана.
+  Прежняя сигнатура оставлена скрытой перегрузкой — бинарная совместимость сохранена, в дампе она
+  видна как `synthetic`.
+- **Что осталось ломающим и почему коммит с `!`.** Загрузчик по умолчанию не меняется; меняется
+  канал: `KompotRealtimeProvider` больше не отдаёт `LocalKompotRealtimeUpdates`, и код, читавший его,
+  молча перестаёт видеть кадры, а код, отдающий карту, получает предупреждение об устаревании (сборка
+  с `-Werror` остановится). Плюс `key(id)` у детей `column`/`row` — состояние теперь едет за узлом.
+  Запись в `UPGRADING.md` — 0.40.0, behaviour.
+- **ABI:** `updateKotlinAbi` снят на WSL; mutagen откатил `api/` на реплике, поэтому дампы забраны
+  из `kompot-client/build/kotlin/abi/` через `wsl-run cat`. В klib-дампе ушли
+  `KompotScreenState_*$stableprop` — синтетика компилятора у прежнего приватного класса, снаружи
+  недостижимая.
+- **Мутации (все убиты, исходники восстановлены, `git status` — только задуманные файлы):**
+  1. загрузчик сбрасывает дерево на каждом ключе (`state.screen = null` без условия) — красные три
+     теста `ScreenLoaderTest`, включая AC (а);
+  1а. умолчание `screenKey` — константа вместо `key` (прежний вариант) — красный «by default a new
+     key is another screen and draws the loading frame again»;
+  2. номер дерева без ключа `root` — красные «a refresh after a live frame…» (AC (б)) и «a new tree
+     drops the overrides…»;
+  3. `key(child.id)` снят у `column` — красный «…in a column leaves the same section open» (AC (в));
+  4. то же у `row` — красный «…in a row…»;
+  5. под подменённым узлом отдаётся прежняя граница — красные «an override of a node drops…» и
+     «an id the tree does not have is ignored…»;
+  6. граница отдаётся только на подменённом узле — красный «a live frame written to the store keeps
+     the reader's tab».
+- **Где что гонялось.** WSL (`wsl-run`, scope `MemoryMax=6G`): `:kompot-client:desktopTest`
+  (все наборы зелёные), `:kompot-client:checkKotlinAbi`, `:kompot-client:ktlintCheck`,
+  `:kompot-client-tck:check` (зелёный, корпус не менялся), `desktopTest` зависимых модулей
+  (`kompot-ds-material-compose`, `kompot-wizard-client`, `kompot-forms-client`, `kompot-preview`,
+  `kompot-theme-client`, `kompot-studio`) — зелёные. Мак: `ktlintFormat`, скрипты `docs/scripts/*`.
+  wasmJs-браузерные тесты не гонялись: правка — общий код без платформенных веток, Chrome на WSL нет.
+
