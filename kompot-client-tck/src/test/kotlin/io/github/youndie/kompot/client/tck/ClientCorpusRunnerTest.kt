@@ -134,4 +134,107 @@ class ClientCorpusRunnerTest {
             ClientCorpusRunner.casesFrom(index = """{"cases":["c.json"]}""", read = { text })
         }
     }
+
+    // ---- screens --------------------------------------------------------------------------------
+
+    // A client that draws exactly what it is told and never runs an answer: the runner must catch it on
+    // every screen expectation, and pass it where the expectation is about the tree it was shown.
+    private class StillScreen(
+        private val recordsAddresses: Boolean = true,
+    ) : KompotFormClient by SilentClient() {
+        private val drawn = mutableMapOf<String, kotlinx.serialization.json.JsonObject>()
+
+        override fun show(screen: kotlinx.serialization.json.JsonObject): Boolean {
+            (screen["children"] as kotlinx.serialization.json.JsonArray).forEach {
+                val node = it as kotlinx.serialization.json.JsonObject
+                drawn[(node["id"] as kotlinx.serialization.json.JsonPrimitive).content] = node
+            }
+            return true
+        }
+
+        override fun answer(action: kotlinx.serialization.json.JsonObject) = Unit
+
+        override fun node(id: String) = drawn[id]
+
+        override fun addresses(): List<kotlinx.serialization.json.JsonObject>? =
+            if (recordsAddresses) emptyList() else null
+    }
+
+    private val screen =
+        kotlinx.serialization.json.Json.parseToJsonElement(
+            """{"type":"column","id":"root","children":[{"type":"text","id":"title","text":"v1"}]}""",
+        ) as kotlinx.serialization.json.JsonObject
+
+    private fun screenCase(expect: ClientExpectation) =
+        ClientCase(
+            id = "screen",
+            clause = "§16.4",
+            title = "a screen",
+            why = "so a failure names a rule",
+            screen = screen,
+            expect = expect,
+        )
+
+    private fun text(words: String) = buildJsonObject { put("text", words) }
+
+    @Test
+    fun `a node is held to at least the keys the case names`() {
+        val passes =
+            ClientCorpusRunner(listOf(screenCase(ClientExpectation(nodes = mapOf("title" to text("v1")))))) {
+                StillScreen()
+            }.run()
+        val fails =
+            ClientCorpusRunner(listOf(screenCase(ClientExpectation(nodes = mapOf("title" to text("v2")))))) {
+                StillScreen()
+            }.run()
+
+        assertTrue(passes.isClean, passes.toString())
+        assertContains(fails.findings.single().message, "expected at least")
+    }
+
+    @Test
+    fun `an absent id that is drawn and an expected node that is not are both findings`() {
+        val report =
+            ClientCorpusRunner(
+                listOf(screenCase(ClientExpectation(absent = listOf("title"), nodes = mapOf("ghost" to text("x"))))),
+            ) { StillScreen() }.run()
+
+        assertEquals(2, report.findings.size, report.toString())
+    }
+
+    @Test
+    fun `addresses are compared whole and unrecorded addresses leave the case unchecked`() {
+        val expected =
+            listOf(
+                buildJsonObject {
+                    put("deeplink", "app://a")
+                    put("history", "push")
+                },
+            )
+
+        val wrong =
+            ClientCorpusRunner(
+                listOf(screenCase(ClientExpectation(addresses = expected))),
+            ) { StillScreen() }.run()
+        val silent =
+            ClientCorpusRunner(listOf(screenCase(ClientExpectation(addresses = expected)))) {
+                StillScreen(recordsAddresses = false)
+            }.run()
+
+        assertContains(wrong.findings.single().message, "handed over")
+        assertTrue(silent.isClean, silent.toString())
+        assertEquals(1, silent.unchecked.size, silent.toString())
+    }
+
+    // A form adapter meets a screen case: it was never asked, so the case is neither passed nor failed.
+    @Test
+    fun `a screen case is unchecked by an adapter that draws no screens`() {
+        val report =
+            ClientCorpusRunner(listOf(screenCase(ClientExpectation(absent = listOf("ghost"))))) {
+                SilentClient()
+            }.run()
+
+        assertTrue(report.isClean, report.toString())
+        assertContains(report.unchecked.single().message, "draws no screens")
+    }
 }

@@ -42,6 +42,13 @@ public object KompotProtocol {
     // carries.
     public const val ACTION_PERFORM: String = "perform"
 
+    // The wire name of `load`, for the same reason: the kit checks that its url names an endpoint of
+    // kind `load` (SPEC.md §16.1), working on JSON.
+    public const val ACTION_LOAD: String = "load"
+
+    // The endpoint kind a `load` reads: GET, answered with a KompotAction (SPEC.md §16.1).
+    public const val ENDPOINT_KIND_LOAD: String = "load"
+
     // The definition holding a hierarchy's deployment extensions is named after the hierarchy:
     // KompotComponent -> KompotComponentExtension. One suffix, so a reader of a profile can find the
     // pair without a lookup table.

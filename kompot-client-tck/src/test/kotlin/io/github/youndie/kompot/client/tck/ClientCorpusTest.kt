@@ -13,7 +13,10 @@ import kotlin.test.assertTrue
 class ClientCorpusTest {
     @Test
     fun `form-core answers the corpus`() {
-        val cases = ClientCorpusResources.cases()
+        // The cases about a form. The cases about a screen (§16.4) need a client that draws one, and
+        // form-core draws nothing: kompot-client runs those against the Compose client
+        // (ScreenCorpusTest there), where the same rule — nothing unchecked — holds them.
+        val cases = ClientCorpusResources.cases().filter { it.screen == null }
 
         val report = ClientCorpusRunner(cases) { FormControllerAdapter() }.run()
 

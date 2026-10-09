@@ -139,12 +139,28 @@ export interface KompotActionUpdateSession {
 
 // kompot-commands
 
+export interface KompotActionLoad {
+  type: "load";
+  /** The relative address of an endpoint of kind `load`: a GET answered with a KompotAction, which the client runs through the same handler chain as any other intent. It changes nothing, so it carries no Idempotency-Key. Of two loads pressed on one screen, the answer to the earlier is dropped (§16.4) */
+  url: string;
+}
+
 export interface KompotActionPerform {
   type: "perform";
   /** The relative address of an endpoint of kind `submit`: it answers a KompotAction, which the client runs through the same handler chain as any other intent. Being state-changing, it requires an Idempotency-Key (§16.5) */
   url: string;
   /** What the operation acts on and with: the identity of the item, plus any parameters. The keys are the application's, the values are the same FieldValue vocabulary a form submit sends. Two buttons on two items of one list differ in this and nothing else */
   payload?: Record<string, FieldValue>;
+}
+
+export interface KompotActionUpdate {
+  type: "update";
+  /** Frames of §10, applied in order: of two frames for one id the later wins, and a frame for an id the screen does not have is ignored. A node's state under its id survives the replacement (§4.4) */
+  updates: UpdateComponentMessage[];
+  /** The address of the screen after the update, by the rules of navigate.deeplink (§12.2). The client hands it to the application, which keeps the history; the toolkit does not navigate. Absent leaves the address as it was */
+  deeplink?: string | null;
+  /** How the deeplink enters the application's history: "push" (the default) or "replace". An open string: an unfamiliar word means "push" */
+  history?: string | null;
 }
 
 // kompot-core
@@ -695,7 +711,7 @@ export type FormCondition = FormConditionEquals | FormConditionNotEquals;
 
 export type FormFieldDefinition = FormFieldDefinitionAmountField | FormFieldDefinitionAutocompleteField | FormFieldDefinitionCheckboxField | FormFieldDefinitionSelectionField | FormFieldDefinitionTextField;
 
-export type KompotAction = KompotActionClose | KompotActionConfirm | KompotActionCopyText | KompotActionLoadPage | KompotActionNavigate | KompotActionOpenUrl | KompotActionPerform | KompotActionPresent | KompotActionRefresh | KompotActionSequence | KompotActionShowMessage | KompotActionSubmitForm | KompotActionUpdateSession | KompotActionWizardBack | KompotActionWizardFinish | KompotActionWizardNext | KompotActionWizardStepResult;
+export type KompotAction = KompotActionClose | KompotActionConfirm | KompotActionCopyText | KompotActionLoad | KompotActionLoadPage | KompotActionNavigate | KompotActionOpenUrl | KompotActionPerform | KompotActionPresent | KompotActionRefresh | KompotActionSequence | KompotActionShowMessage | KompotActionSubmitForm | KompotActionUpdate | KompotActionUpdateSession | KompotActionWizardBack | KompotActionWizardFinish | KompotActionWizardNext | KompotActionWizardStepResult;
 
 export type KompotComponent = KompotComponentAmountInput | KompotComponentAutocompleteInput | KompotComponentBox | KompotComponentButton | KompotComponentCheckboxInput | KompotComponentColumn | KompotComponentDivider | KompotComponentExpandable | KompotComponentImage | KompotComponentPaginatedList | KompotComponentRadioGroup | KompotComponentReadOnlyField | KompotComponentRow | KompotComponentSelectInput | KompotComponentSpacer | KompotComponentTable | KompotComponentTabs | KompotComponentText | KompotComponentTextInput | KompotComponentWizardScreen;
 

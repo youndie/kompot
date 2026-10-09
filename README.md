@@ -122,13 +122,13 @@ a build's recorded bodies in an editor with the checks a body has to pass.
 | `kompot-forms` | form components over `form-core` | core, form-core |
 | `kompot-theme` | server-driven theming, no UI toolkit | core |
 | `kompot-ds-material` | the reference Material3 token set: constants a server and a client share | core |
-| `kompot-ktor` | Ktor helpers for polymorphic roots, ETags, experiment headers | core, experiments-core |
+| `kompot-ktor` | Ktor helpers for polymorphic roots, ETags, experiment headers, an `update` answer | core, experiments-core, kompot-commands |
 | `kompot-realtime` | the live-update frame contract | core |
 | `kompot-realtime-server` | delivery to one instance's subscribers, with an in-memory bus between instances | kompot-realtime |
 | `kompot-realtime-redis` | a Redis pub/sub bus for more than one instance — no delivery guarantee, the next screen request catches up | kompot-realtime-server |
 | `kompot-images` | an image by URL, as a component plug-in | core |
 | `kompot-auth` | the one action that hands the client a new session | core |
-| `kompot-commands` | the one action that acts on a single item of a list, with no form around it | core, form-core |
+| `kompot-commands` | the actions that call the server and run its answer: `perform` on one item of a list, `load` (a read answered with an action), and `update`, the answer that replaces nodes by id | core, form-core, kompot-realtime |
 | `kompot-navigation` | the navigation graph of plain, code-free screens | — |
 | `wizard-core` | the step machine of a multi-step flow, as a pure function | — |
 | `kompot-wizard` | the wire side of that flow: step screen, transitions, resume request | core, form-core, wizard-core |

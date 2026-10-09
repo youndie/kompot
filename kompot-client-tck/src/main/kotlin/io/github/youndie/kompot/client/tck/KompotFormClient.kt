@@ -47,4 +47,27 @@ public interface KompotFormClient {
     // Defaulted so that an adapter written before this operation still compiles — the same
     // compatibility rule the wire keeps for a new field.
     public fun requests(): List<JsonObject>? = null
+
+    // ---- screens (§16.4) ----------------------------------------------------------------------
+    //
+    // A screen and the answers that replace its nodes. Defaulted like requests(), and for the same
+    // reason: an adapter written for forms still compiles, and a case about a screen is then reported
+    // UNCHECKED rather than passed or failed.
+
+    // Draws this tree (a KompotComponent) as a fresh screen. false, the default, means this adapter
+    // draws no screens.
+    public fun show(screen: JsonObject): Boolean = false
+
+    // The server answered with this action: run it through the client's whole handler chain, the way
+    // the answer to a perform or a load is run. Called only after show() said true.
+    public fun answer(action: JsonObject): Unit = throw UnsupportedOperationException("this adapter draws no screens")
+
+    // What the screen draws under this id now, as JSON, or null when nothing is drawn under it. Read
+    // from what the client DRAWS, not from what it was sent: a frame for an id the screen does not have
+    // was sent and must not be drawn.
+    public fun node(id: String): JsonObject? = null
+
+    // The addresses the client handed to the application, in order, as {"deeplink", "history"} with
+    // the history word it acts on. null means this adapter does not record them.
+    public fun addresses(): List<JsonObject>? = null
 }

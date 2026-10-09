@@ -130,11 +130,13 @@ public final class io/github/youndie/kompot/spec/JsonWalkKt {
 }
 
 public final class io/github/youndie/kompot/spec/KompotProtocol {
+	public static final field ACTION_LOAD Ljava/lang/String;
 	public static final field ACTION_PERFORM Ljava/lang/String;
 	public static final field COMPONENT_HIERARCHY Ljava/lang/String;
 	public static final field DEEPLINK_FORBIDDEN_PATTERN Ljava/lang/String;
 	public static final field DEEPLINK_PATTERN Ljava/lang/String;
 	public static final field DISCRIMINATOR Ljava/lang/String;
+	public static final field ENDPOINT_KIND_LOAD Ljava/lang/String;
 	public static final field ENDPOINT_PATTERN Ljava/lang/String;
 	public static final field EXAMPLES_INDEX_FILE_NAME Ljava/lang/String;
 	public static final field EXTENSION_SUFFIX Ljava/lang/String;

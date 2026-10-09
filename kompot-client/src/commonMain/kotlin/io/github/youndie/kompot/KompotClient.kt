@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
+import io.github.youndie.kompot.commands.kompotCommandsSerializersModule
 import io.github.youndie.kompot.forms.kompotFormsSerializersModule
 import io.github.youndie.kompot.generated.generatedFormsSerializersModule
 import io.github.youndie.kompot.generated.generatedImagesSerializersModule
@@ -39,7 +40,10 @@ public val kompotEngineSerializersModule: SerializersModule =
         generatedFormsSerializersModule +
         generatedImagesSerializersModule +
         generatedWizardSerializersModule +
-        kompotWizardSerializersModule
+        kompotWizardSerializersModule +
+        // perform, load and update: the engine runs all three (withPerform, withLoad, withUpdates), and
+        // an answer it could not decode would reach them as UnknownAction.
+        kompotCommandsSerializersModule
 
 // The engine's Json plus an application's types: its own components, field types and feature actions.
 //

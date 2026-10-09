@@ -1,5 +1,6 @@
 package io.github.youndie.kompot.spec
 
+import io.github.youndie.kompot.commands.LoadAction
 import io.github.youndie.kompot.commands.PerformAction
 import kotlinx.serialization.json.JsonObject
 import kotlin.test.Test
@@ -48,6 +49,11 @@ class ToolkitSchemaGoldenTest {
     @Test
     fun `the perform wire name in KompotProtocol is the one the type really carries`() {
         assertEquals(PerformAction.serializer().descriptor.serialName, KompotProtocol.ACTION_PERFORM)
+    }
+
+    @Test
+    fun `the load wire name in KompotProtocol is the one the type really carries`() {
+        assertEquals(LoadAction.serializer().descriptor.serialName, KompotProtocol.ACTION_LOAD)
     }
 
     @Test

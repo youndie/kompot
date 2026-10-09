@@ -36,6 +36,11 @@ kotlin {
                 // envelope. form-core depends on nothing of kompot's, so taking it does not drag a
                 // form's UI, its schema or its patch protocol along.
                 api(projects.formCore)
+                // For UpdateComponentMessage: an `update` carries the frames of the update channel
+                // (SPEC.md §10), delivered by an answer rather than by the channel. Not the other way
+                // round — the channel module stays free of actions, so nobody assembling a Json has a
+                // second module to remember for `update` to decode (see UpdateAction).
+                api(projects.kompotRealtime)
                 api(libs.kotlinx.serialization.json)
             }
         }
@@ -43,6 +48,8 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(projects.formStandard)
+                // Only to write updates the way a server does, with the screen DSL.
+                implementation(projects.kompotStandard)
             }
         }
     }
