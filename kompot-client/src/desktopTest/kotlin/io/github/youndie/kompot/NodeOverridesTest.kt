@@ -169,9 +169,9 @@ class NodeOverridesTest {
         }
 
     /**
-     * A whole tree drops the overrides written before it — and an EQUAL tree is not a new one: the
-     * same rule a paginated list follows, so a recomposition that hands the screen the same tree again
-     * does not undo a frame.
+     * A whole tree drops the overrides written before it — and an equal tree handed over with no
+     * arrival is not a new one, so a recomposition that hands the screen the same tree again does not
+     * undo a frame. An equal tree that does arrive is TreeArrivalTest's.
      */
     @Test
     fun `a new tree drops the overrides and an equal one keeps them`() =

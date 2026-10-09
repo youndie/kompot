@@ -122,14 +122,13 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (2)
+## Открыто (1)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
-| [B-84](backlog/B-84-equal-tree-is-still-an-arrival.md) `[~]` | Пришедшее заново равное дерево тоже сбрасывает подмены | partial-updates | P1 | S | B-82 |
 
-## Сделано (82)
+## Сделано (83)
 
 **Швы в toolkit'е**
 
@@ -228,6 +227,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 - [B-81](backlog/B-81-screen-keeps-its-tree.md) — Экран держит своё дерево: загрузчик без сброса, одно хранилище подмен, key(id)
 - [B-82](backlog/B-82-update-and-load-actions.md) — update и load: ответ, подменяющий узлы, и GET, отвечающий действием
 - [B-83](backlog/B-83-dsl-export-imports-actions-from-their-module.md) — Экспорт DSL импортирует каждое действие из его модуля: perform, load, update
+- [B-84](backlog/B-84-equal-tree-is-still-an-arrival.md) — Пришедшее заново равное дерево тоже сбрасывает подмены
 
 **Без этапа**
 

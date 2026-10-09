@@ -62,7 +62,10 @@ brought. The children of a non-lazy `column` and `row` were composed by position
 **Now** —
 
 - frames go into the screen's override store, `KompotNodeOverrides` (`LocalKompotNodeOverrides`),
-  which `KompotScreen` and `KompotLazyScreen` reset when a different tree arrives (SPEC.md §4.4).
+  which `KompotScreen` and `KompotLazyScreen` reset when a tree arrives, an equal one included
+  (SPEC.md §4.4): every load of `KompotScreenLoader` that completes, or a new `arrival` the
+  application passes to a screen drawn without the loader. A recomposition with an equal tree keeps
+  them.
   `KompotRealtimeProvider` no longer provides `LocalKompotRealtimeUpdates`, and that local is
   deprecated; a map provided through it still draws;
 - the children of `column` and `row` are keyed by `id`: an opened section or a chosen tab stays with

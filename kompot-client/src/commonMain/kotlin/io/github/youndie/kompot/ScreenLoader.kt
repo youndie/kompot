@@ -1,11 +1,13 @@
 package io.github.youndie.kompot
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,6 +37,10 @@ public class KompotScreenLoaderState {
     // not draw the previous screen's tree or the previous request's error.
     internal var screenOf: Any? by mutableStateOf(NothingLoaded)
     internal var failureOf: Any? by mutableStateOf(NothingLoaded)
+
+    // How many loads have completed: each one is a delivery, so the screen drawn under the loader drops
+    // its overrides even when the tree that came is equal to the one it draws (SPEC.md §4.4).
+    internal var arrivals: Long by mutableLongStateOf(0L)
 
     internal object NothingLoaded
 }
@@ -77,6 +83,12 @@ private data class Request(
  *
  * [failed]'s retry loads the same key again. Cancellation is not a failure: leaving the screen while
  * it loads draws nothing.
+ *
+ * **Every load that completes is an arrival** (SPEC.md §4.4): the [KompotScreen] or [KompotLazyScreen]
+ * that [content] draws drops the overrides written before it — a live frame, an `update` — even when
+ * the tree that came is equal to the one drawn. That is "back" after an `update`, and a `refresh` the
+ * application runs as a new [key] (a counter in it) under the same [screenKey]. A load still on its
+ * way drops nothing, and state under ids stays: only the overrides go.
  */
 @Composable
 public fun KompotScreenLoader(
@@ -100,6 +112,7 @@ public fun KompotScreenLoader(
             val next = load()
             state.screen = next
             state.screenOf = screenKey
+            state.arrivals++
         } catch (cancelled: CancellationException) {
             throw cancelled
         } catch (error: Throwable) {
@@ -118,7 +131,8 @@ public fun KompotScreenLoader(
     // The content's place does not depend on the failure: a failure arriving over the tree must not
     // take the tree's state down with it.
     if (tree != null) {
-        content(tree)
+        // The load's number goes down with its tree: the screen below takes it as the tree's arrival.
+        CompositionLocalProvider(LocalKompotTreeArrival provides state.arrivals) { content(tree) }
     } else if (failure == null) {
         loading()
     }
