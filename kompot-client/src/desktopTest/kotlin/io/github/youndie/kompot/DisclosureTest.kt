@@ -17,6 +17,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.github.youndie.kompot.standard.ColumnComponent
 import io.github.youndie.kompot.standard.ExpandableComponent
+import io.github.youndie.kompot.standard.RowComponent
 import io.github.youndie.kompot.standard.TabsComponent
 import io.github.youndie.kompot.standard.TabsItem
 import io.github.youndie.kompot.standard.TextComponent
@@ -108,24 +109,27 @@ class DisclosureTest {
             shows("security pane")
         }
 
+    // A live frame repeating the value keeps the reader's tab. Through the screen's override store: the
+    // floor RenderNode provides under every node must not come and go with the override, or the frame
+    // would remount the tabs and lose the reader's choice.
     @Test
-    fun `a live frame repeating the value keeps the reader's tab`() =
+    fun `a live frame written to the store keeps the reader's tab`() =
         runDesktopComposeUiTest {
-            var frames by mutableStateOf(emptyMap<String, KompotComponent>())
+            val overrides = KompotNodeOverrides()
             setContent {
                 TestKompotTheme {
                     CompositionLocalProvider(
                         LocalKompotRegistry provides registry,
-                        LocalKompotRealtimeUpdates provides frames,
+                        LocalKompotNodeOverrides provides overrides,
                     ) {
-                        registry.RenderNode(tabs(selected = 0), recordingActionHandler(), testFormController())
+                        KompotScreen(tabs(selected = 0), registry, testFormController(), recordingActionHandler())
                     }
                 }
             }
             onNodeWithText("Security").performClick()
             waitForIdle()
 
-            runOnIdle { frames = mapOf("settings" to tabs(selected = 0)) }
+            runOnIdle { overrides.override("settings", tabs(selected = 0)) }
             waitForIdle()
             shows("security pane")
         }
@@ -175,6 +179,39 @@ class DisclosureTest {
             arrives(section(expanded = true))
             arrives(section(expanded = false))
             onNodeWithText("the answer").assertDoesNotExist()
+        }
+
+    /**
+     * A node the server inserts above an opened section does not take the section's state.
+     *
+     * The children of a column were composed by position: the opened state of `faq` belonged to slot 0,
+     * the new banner took slot 0 and dropped it, and `faq` started again closed in slot 1 — the reader's
+     * choice lost on the first refresh that added anything above it (§4.4 says state lives under `id`).
+     */
+    @Test
+    fun `a node inserted above an opened section in a column leaves the same section open`() =
+        runDesktopComposeUiTest {
+            screen(ColumnComponent(id = "root", children = listOf(section(), text("footer"))))
+            onNodeWithText("What is kompot?").performClick()
+            waitForIdle()
+            onNodeWithText("the answer").assertExists()
+
+            arrives(ColumnComponent(id = "root", children = listOf(text("new banner"), section(), text("footer"))))
+            onNodeWithText("new banner").assertExists()
+            onNodeWithText("the answer").assertExists()
+        }
+
+    // The same for a row: its children are a stack along the other axis, composed the same way.
+    @Test
+    fun `a node inserted before an opened section in a row leaves the same section open`() =
+        runDesktopComposeUiTest {
+            screen(RowComponent(id = "root", children = listOf(section(), text("tail"))))
+            onNodeWithText("What is kompot?").performClick()
+            waitForIdle()
+
+            arrives(RowComponent(id = "root", children = listOf(text("new chip"), section(), text("tail"))))
+            onNodeWithText("new chip").assertExists()
+            onNodeWithText("the answer").assertExists()
         }
 
     // The header is a button that says whether it will expand or collapse — the platform's words for a

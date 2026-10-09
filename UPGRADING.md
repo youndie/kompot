@@ -22,6 +22,66 @@ breaks a consumer without saying so is not caught by anything here, and
 
 ---
 
+## 0.40.0 — live frames go into the screen's override store; `LocalKompotRealtimeUpdates` is deprecated (behaviour)
+
+**Was** — `KompotRealtimeProvider` kept the frames in a map of its own under `remember(topic)` and
+provided it as `LocalKompotRealtimeUpdates`. A refresh of the same screen on the same topic left the
+map as it was, so a frame that arrived before the refresh went on covering the node the refresh
+brought. The children of a non-lazy `column` and `row` were composed by position.
+
+**Now** —
+
+- frames go into the screen's override store, `KompotNodeOverrides` (`LocalKompotNodeOverrides`),
+  which `KompotScreen` and `KompotLazyScreen` reset when a different tree arrives (SPEC.md §4.4).
+  `KompotRealtimeProvider` no longer provides `LocalKompotRealtimeUpdates`, and that local is
+  deprecated; a map provided through it still draws;
+- the children of `column` and `row` are keyed by `id`: an opened section or a chosen tab stays with
+  its node when the server inserts another one above it;
+- `KompotScreenLoader` takes two new parameters, and nothing changes until they are passed.
+  `screenKey` (default: `key`) says which keys are one screen: a new `key` under the same
+  `screenKey` keeps the drawn tree while it loads, and a failed load keeps it too, with
+  `failed(cause, retry)` drawn after `content`. `state: KompotScreenLoaderState` says whether a load
+  is in flight (`isLoading`), what is drawn (`screen`) and why the last load failed (`failure`).
+
+**What to change.**
+
+- Code that **reads** `LocalKompotRealtimeUpdates` to see frames sees nothing under
+  `KompotRealtimeProvider` any more. Nothing fails to compile. `RenderNode` already substitutes the
+  node before a renderer is called, so a renderer gets the current version as its `component`.
+- Code that **provides** a map there gets a deprecation warning, which stops a build with
+  warnings as errors. Write through the store instead:
+
+  ```kotlin
+  val overrides = remember { KompotNodeOverrides() }
+  CompositionLocalProvider(LocalKompotNodeOverrides provides overrides) { KompotScreen(...) }
+  // later, from a frame or an action
+  overrides.override(componentId, component)
+  ```
+
+- To keep the tree across filters, pass a `screenKey` coarser than the key, and hoist the state if
+  the `failed` slot has to tell a notice over a kept tree from a screen of its own:
+
+  ```kotlin
+  val loader = rememberKompotScreenLoaderState()
+  KompotScreenLoader(
+      key = address,                 // what to load: path and query
+      screenKey = address.path,      // which screen it is: a new path draws `loading` again
+      state = loader,
+      load = { myLoadScreen(address) },
+      failed = { cause, retry -> if (loader.screen != null) MyNotice(cause, retry) else MyError(cause, retry) },
+  ) { screen -> KompotLazyScreen(screen, registry, formController, actionHandler) }
+  ```
+
+Binary compatibility is kept: the previous `KompotScreenLoader` signature stays in the artifact as a
+hidden overload.
+
+**Why it was worth changing.** The reload was drawn by the client, not by the protocol: every filter
+looked like a jump to another screen, the tree came down and the scroll with it, and a refresh could
+not replace a node a frame had touched. With the tree kept, sending a whole screen again redraws
+only what changed (`docs/research/research-partial-updates.md` §2, B-81). The loader's part is
+opt-in because keeping a stale, tappable screen is the wrong default for a loader that serves
+different screens.
+
 ## 0.40.0 — `resolveSurface` is asked two new roles (behaviour)
 
 **Was** — a `divider` without a colour token, and a table's border, row rules and header row, were

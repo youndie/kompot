@@ -60,6 +60,7 @@ public final class io/github/youndie/kompot/ComposableSingletons$ComponentsKt {
 public final class io/github/youndie/kompot/ComposableSingletons$ScreenLoaderKt {
 	public static final field INSTANCE Lio/github/youndie/kompot/ComposableSingletons$ScreenLoaderKt;
 	public fun <init> ()V
+	public final fun getLambda$1551946930$io_github_youndie_kompot_kompot_client ()Lkotlin/jvm/functions/Function2;
 	public final fun getLambda$800978476$io_github_youndie_kompot_kompot_client ()Lkotlin/jvm/functions/Function2;
 }
 
@@ -179,6 +180,12 @@ public final class io/github/youndie/kompot/KompotDesignSystem$DefaultImpls {
 	public static fun resolveSurface-U35sUF4 (Lio/github/youndie/kompot/KompotDesignSystem;Ljava/lang/String;Landroidx/compose/runtime/Composer;I)Lio/github/youndie/kompot/KompotSurface;
 }
 
+public final class io/github/youndie/kompot/KompotNodeOverrides {
+	public static final field $stable I
+	public fun <init> ()V
+	public final fun override (Ljava/lang/String;Lio/github/youndie/kompot/KompotComponent;)V
+}
+
 public final class io/github/youndie/kompot/KompotRegistry {
 	public static final field $stable I
 	public static final field Companion Lio/github/youndie/kompot/KompotRegistry$Companion;
@@ -190,6 +197,14 @@ public final class io/github/youndie/kompot/KompotRegistry {
 public final class io/github/youndie/kompot/KompotRegistry$Companion {
 	public final fun invoke ([Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lio/github/youndie/kompot/KompotRegistry;
 	public static synthetic fun invoke$default (Lio/github/youndie/kompot/KompotRegistry$Companion;[Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/youndie/kompot/KompotRegistry;
+}
+
+public final class io/github/youndie/kompot/KompotScreenLoaderState {
+	public static final field $stable I
+	public fun <init> ()V
+	public final fun getFailure ()Ljava/lang/Throwable;
+	public final fun getScreen ()Lio/github/youndie/kompot/KompotComponent;
+	public final fun isLoading ()Z
 }
 
 public final class io/github/youndie/kompot/KompotStackAxis : java/lang/Enum {
@@ -258,6 +273,10 @@ public final class io/github/youndie/kompot/MaskVisualTransformation : androidx/
 	public final fun getRawLength ()I
 }
 
+public final class io/github/youndie/kompot/NodeOverridesKt {
+	public static final fun getLocalKompotNodeOverrides ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
 public final class io/github/youndie/kompot/PaginatedListRenderer : io/github/youndie/kompot/KompotComponentRenderer {
 	public static final field $stable I
 	public fun <init> ()V
@@ -287,7 +306,9 @@ public final class io/github/youndie/kompot/RowRenderer : io/github/youndie/komp
 }
 
 public final class io/github/youndie/kompot/ScreenLoaderKt {
-	public static final fun KompotScreenLoader (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun KompotScreenLoader (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function2;Ljava/lang/Object;Lio/github/youndie/kompot/KompotScreenLoaderState;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final synthetic fun KompotScreenLoader (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun rememberKompotScreenLoaderState (Landroidx/compose/runtime/Composer;I)Lio/github/youndie/kompot/KompotScreenLoaderState;
 }
 
 public final class io/github/youndie/kompot/SequenceKt {

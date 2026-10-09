@@ -36,13 +36,14 @@ class RealtimeUpdatesTest {
     fun `a realtime update matching the component id renders the updated payload instead`() =
         runDesktopComposeUiTest {
             val registry = KompotRegistry(mapOf(TextComponent::class to TextRenderer()))
-            val updates = mapOf("greeting" to TextComponent(id = "greeting", text = "Updated from the server"))
+            val updates = KompotNodeOverrides()
+            updates.override("greeting", TextComponent(id = "greeting", text = "Updated from the server"))
 
             setContent {
                 TestKompotTheme {
                     CompositionLocalProvider(
                         LocalKompotRegistry provides registry,
-                        LocalKompotRealtimeUpdates provides updates,
+                        LocalKompotNodeOverrides provides updates,
                     ) {
                         registry.RenderNode(
                             component = TextComponent(id = "greeting", text = "Hello"),
@@ -61,13 +62,14 @@ class RealtimeUpdatesTest {
     fun `an update for a different component id does not affect this node`() =
         runDesktopComposeUiTest {
             val registry = KompotRegistry(mapOf(TextComponent::class to TextRenderer()))
-            val updates = mapOf("some_other_id" to TextComponent(id = "some_other_id", text = "Not from here"))
+            val updates = KompotNodeOverrides()
+            updates.override("some_other_id", TextComponent(id = "some_other_id", text = "Not from here"))
 
             setContent {
                 TestKompotTheme {
                     CompositionLocalProvider(
                         LocalKompotRegistry provides registry,
-                        LocalKompotRealtimeUpdates provides updates,
+                        LocalKompotNodeOverrides provides updates,
                     ) {
                         registry.RenderNode(
                             component = TextComponent(id = "greeting", text = "Hello"),
@@ -93,15 +95,42 @@ class RealtimeUpdatesTest {
                         ButtonComponent::class to ButtonRenderer(),
                     ),
                 )
-            val updates =
-                mapOf(
-                    "greeting" to
-                        ButtonComponent(
-                            id = "greeting",
-                            text = "Now it is a button",
-                            action = NavigateAction(deeplink = "/x"),
-                        ),
-                )
+            val updates = KompotNodeOverrides()
+            updates.override(
+                "greeting",
+                ButtonComponent(
+                    id = "greeting",
+                    text = "Now it is a button",
+                    action = NavigateAction(deeplink = "/x"),
+                ),
+            )
+
+            setContent {
+                TestKompotTheme {
+                    CompositionLocalProvider(
+                        LocalKompotRegistry provides registry,
+                        LocalKompotNodeOverrides provides updates,
+                    ) {
+                        registry.RenderNode(
+                            component = TextComponent(id = "greeting", text = "Hello"),
+                            actionHandler = recordingActionHandler(),
+                            formController = testFormController(),
+                        )
+                    }
+                }
+            }
+
+            onNodeWithText("Now it is a button").assertIsDisplayed()
+        }
+
+    // The deprecated map still draws: it is read after the store, so code that provides one keeps
+    // working while it moves to KompotNodeOverrides.
+    @Suppress("DEPRECATION")
+    @Test
+    fun `a map provided through the deprecated local still substitutes the node`() =
+        runDesktopComposeUiTest {
+            val registry = KompotRegistry(mapOf(TextComponent::class to TextRenderer()))
+            val updates = mapOf("greeting" to TextComponent(id = "greeting", text = "Updated through the old map"))
 
             setContent {
                 TestKompotTheme {
@@ -118,6 +147,6 @@ class RealtimeUpdatesTest {
                 }
             }
 
-            onNodeWithText("Now it is a button").assertIsDisplayed()
+            onNodeWithText("Updated through the old map").assertIsDisplayed()
         }
 }

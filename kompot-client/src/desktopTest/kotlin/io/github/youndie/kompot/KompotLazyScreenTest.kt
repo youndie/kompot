@@ -212,14 +212,14 @@ class KompotLazyScreenTest {
     @Test
     fun `a realtime update for the same paginated list id replaces its items without remounting`() =
         runDesktopComposeUiTest {
-            var updates by mutableStateOf<Map<String, KompotComponent>>(emptyMap())
+            val updates = KompotNodeOverrides()
 
             setContent {
                 TestKompotTheme {
                     CompositionLocalProvider(
                         LocalKompotRegistry provides lazyScreenTestRegistry,
                         LocalKompotPageLoader provides LazyScreenFakePageLoader(emptyMap()),
-                        LocalKompotRealtimeUpdates provides updates,
+                        LocalKompotNodeOverrides provides updates,
                     ) {
                         KompotLazyScreen(
                             rootComponent =
@@ -248,18 +248,17 @@ class KompotLazyScreenTest {
 
             // "an update arrives from elsewhere" — the server sends a fresh list under THE SAME
             // id, the screen stays mounted, and nobody touches the search field.
-            updates =
-                mapOf(
-                    "transactions_list" to
-                        PaginatedListComponent(
-                            id = "transactions_list",
-                            initialItems =
-                                listOf(
-                                    TextComponent(id = "item_new", text = "Order from user2"),
-                                    TextComponent(id = "item_1", text = "Order for Ada"),
-                                ),
+            updates.override(
+                "transactions_list",
+                PaginatedListComponent(
+                    id = "transactions_list",
+                    initialItems =
+                        listOf(
+                            TextComponent(id = "item_new", text = "Order from user2"),
+                            TextComponent(id = "item_1", text = "Order for Ada"),
                         ),
-                )
+                ),
+            )
             waitForIdle()
 
             onNodeWithText("Order from user2").assertIsDisplayed()
