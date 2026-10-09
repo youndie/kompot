@@ -3,6 +3,10 @@ package io.github.youndie.kompot.studio.export
 import io.github.youndie.kompot.ColorToken
 import io.github.youndie.kompot.KompotComponent
 import io.github.youndie.kompot.TypographyToken
+import io.github.youndie.kompot.commands.LoadAction
+import io.github.youndie.kompot.commands.PerformAction
+import io.github.youndie.kompot.commands.kompotUpdate
+import io.github.youndie.kompot.form.standard.TextValue
 import io.github.youndie.kompot.standard.CloseAction
 import io.github.youndie.kompot.standard.ColumnBuilder
 import io.github.youndie.kompot.standard.NavigateAction
@@ -61,4 +65,12 @@ public fun witnessScreenDraft(): KompotComponent =
             row("Name", "Value", header = true)
             row("a", "b")
         }
+        button("Approve", PerformAction(url = "/tasks/7/approve", payload = mapOf("note" to TextValue(text = "Looks good"))), id = "approve")
+        button("Only mine", LoadAction(url = "/tasks?mine=true"), id = "mine")
+        button("Show", kompotUpdate(deeplink = "app://tasks?mine=true", history = "replace") {
+            text("3", id = "badge")
+            column(id = "results") {
+                text("One")
+            }
+        }, id = "show")
     }.build()

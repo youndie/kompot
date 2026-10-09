@@ -87,6 +87,10 @@ kotlin {
                 // A real click on a real button: the action log's whole claim is that a tap reaches
                 // the handler, and nothing short of pressing one proves it.
                 implementation(libs.ui.test)
+                // The witness draft calls into kompot-commands — PerformAction, LoadAction,
+                // kompotUpdate — and compiling it is what proves the export imports them from there.
+                // The studio itself only prints those names.
+                implementation(projects.kompotCommands)
             }
         }
     }

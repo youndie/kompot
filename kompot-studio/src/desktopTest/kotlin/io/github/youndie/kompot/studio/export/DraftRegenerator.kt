@@ -17,19 +17,20 @@ import kotlin.test.Test
 class DraftRegenerator {
     @Test
     fun write() {
-        write("draft.out", SAMPLE_BODY, "sampleScreenDraft")
-        write("draft.witness.out", WITNESS_BODY, "witnessScreenDraft")
+        write("draft.out", SAMPLE_BODY, "sampleScreenDraft", KompotStudioConfig(registry = toolkitRegistry))
+        write("draft.witness.out", WITNESS_BODY, "witnessScreenDraft", witnessConfig)
     }
 
     private fun write(
         property: String,
         body: String,
         function: String,
+        config: KompotStudioConfig,
     ) {
         val out = System.getProperty(property) ?: return
         Path.of(out).writeText(
             exportDsl(
-                KompotStudioConfig(registry = toolkitRegistry),
+                config,
                 Json.parseToJsonElement(body),
                 "io.github.youndie.kompot.studio.export",
                 function,

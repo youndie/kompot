@@ -73,7 +73,8 @@ blocked_by: [B-81]
 - **Не исправлено, только записано:** экспорт DSL в `kompot-studio` (`DslExport.action`) печатает
   импорт `io.github.youndie.kompot.standard.<Имя>Action` для любого действия, а `perform`, `load`,
   `update` живут в `io.github.youndie.kompot.commands` — экспорт экрана с таким действием не
-  скомпилируется. Дефект старше пункта (для `perform` он был и раньше).
+  скомпилируется. Дефект старше пункта (для `perform` он был и раньше). Исправлено в
+  [B-83](B-83-dsl-export-imports-actions-from-their-module.md).
 - **Корпус случаев научился экрану.** Формат знал только форму, поэтому: `ClientCase.form` стал
   необязательным, добавлены `screen`, шаг `answer` и ожидания `nodes` (узел несёт как минимум эти
   ключи), `absent`, `addresses`; у `KompotFormClient` четыре операции экрана с реализацией по
