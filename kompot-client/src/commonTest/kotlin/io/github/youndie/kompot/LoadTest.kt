@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -71,6 +72,33 @@ class LoadTest {
 
             assertEquals(listOf("app://second"), reached.filterIsInstance<NavigateAction>().map { it.deeplink })
             assertFalse(state.isLoading)
+        }
+
+    // The earlier request is let go, not merely ignored: a person tapping five filters does not leave
+    // four GETs running to answers nobody will draw.
+    @Test
+    fun `a second press cancels the load of the first`() =
+        runTest {
+            var firstCancelled = false
+            val handler =
+                KompotActionHandler {}.withLoad(this) { url ->
+                    if (url == "/first") {
+                        try {
+                            awaitCancellation()
+                        } finally {
+                            firstCancelled = true
+                        }
+                    } else {
+                        NavigateAction("app://second")
+                    }
+                }
+
+            handler.handle(LoadAction("/first"))
+            advanceUntilIdle()
+            handler.handle(LoadAction("/second"))
+            advanceUntilIdle()
+
+            assertTrue(firstCancelled)
         }
 
     @Test
