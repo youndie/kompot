@@ -748,15 +748,28 @@ public fun KompotNode(
     registry.RenderNode(component, actionHandler, formController)
 }
 
+/**
+ * Draws a screen's tree with the screen's override store (SPEC.md §4.4): the frames and `update`s
+ * written into [LocalKompotNodeOverrides] cover the nodes they name until a tree **arrives**.
+ *
+ * [arrival] says when one did. A tree equal to the one drawn can arrive too — "back" after an `update`
+ * loads exactly the tree the overrides were written over, a `refresh` may bring the same tree again —
+ * and a recomposition cannot tell that apart from nothing having happened. So the application that
+ * hands the screen a tree it fetched passes a value that changes with every delivery, a counter it
+ * bumps together with the tree: each change drops the overrides written before it, whatever the tree.
+ * Left at `null`, only a tree that differs from the drawn one is new. Under [KompotScreenLoader] the
+ * loader says it already: each load that completed is an arrival. State under ids stays either way.
+ */
 @Composable
 public fun KompotScreen(
     rootComponent: KompotComponent,
     registry: KompotRegistry,
     formController: FormController,
     actionHandler: KompotActionHandler,
+    arrival: Any? = null,
 ) {
     CompositionLocalProvider(LocalKompotRegistry provides registry) {
-        ProvideScreenOverrides(rootComponent) {
+        ProvideScreenOverrides(rootComponent, arrival) {
             KompotNode(
                 component = rootComponent,
                 registry = registry,
@@ -765,6 +778,18 @@ public fun KompotScreen(
             )
         }
     }
+}
+
+// The signature before arrival, kept for code compiled against it.
+@Deprecated("Kept for binary compatibility", level = DeprecationLevel.HIDDEN)
+@Composable
+public fun KompotScreen(
+    rootComponent: KompotComponent,
+    registry: KompotRegistry,
+    formController: FormController,
+    actionHandler: KompotActionHandler,
+) {
+    KompotScreen(rootComponent, registry, formController, actionHandler, arrival = null)
 }
 
 // A whole screen as a LazyColumn instead of a Column in a vertical scroll.
@@ -776,6 +801,28 @@ public fun KompotScreen(
 // So the root of the screen — always a column, which is what both screen builders produce — becomes
 // the LazyColumn itself, and the top-level children become its items. A paginated list among them is
 // the special case: its items become items of THAT SAME LazyColumn rather than a nested list.
+//
+// [arrival] is KompotScreen's: a value that changes with every tree the application fetched, so that
+// an equal tree arriving drops the overrides too.
+@Composable
+public fun KompotLazyScreen(
+    rootComponent: KompotComponent,
+    registry: KompotRegistry,
+    formController: FormController,
+    actionHandler: KompotActionHandler,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    arrival: Any? = null,
+) {
+    CompositionLocalProvider(LocalKompotRegistry provides registry) {
+        ProvideScreenOverrides(rootComponent, arrival) {
+            LazyScreenContent(rootComponent, registry, formController, actionHandler, modifier, contentPadding)
+        }
+    }
+}
+
+// The signature before arrival, kept for code compiled against it.
+@Deprecated("Kept for binary compatibility", level = DeprecationLevel.HIDDEN)
 @Composable
 public fun KompotLazyScreen(
     rootComponent: KompotComponent,
@@ -785,11 +832,7 @@ public fun KompotLazyScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-    CompositionLocalProvider(LocalKompotRegistry provides registry) {
-        ProvideScreenOverrides(rootComponent) {
-            LazyScreenContent(rootComponent, registry, formController, actionHandler, modifier, contentPadding)
-        }
-    }
+    KompotLazyScreen(rootComponent, registry, formController, actionHandler, modifier, contentPadding, arrival = null)
 }
 
 @Composable

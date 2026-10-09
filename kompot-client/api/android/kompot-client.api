@@ -40,9 +40,11 @@ public final class io/github/youndie/kompot/ColumnRenderer : io/github/youndie/k
 }
 
 public final class io/github/youndie/kompot/ComponentsKt {
-	public static final fun KompotLazyScreen (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotRegistry;Lio/github/youndie/kompot/form/FormController;Lio/github/youndie/kompot/KompotActionHandler;Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/runtime/Composer;II)V
+	public static final synthetic fun KompotLazyScreen (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotRegistry;Lio/github/youndie/kompot/form/FormController;Lio/github/youndie/kompot/KompotActionHandler;Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/runtime/Composer;II)V
+	public static final fun KompotLazyScreen (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotRegistry;Lio/github/youndie/kompot/form/FormController;Lio/github/youndie/kompot/KompotActionHandler;Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/layout/PaddingValues;Ljava/lang/Object;Landroidx/compose/runtime/Composer;II)V
 	public static final fun KompotNode (Lio/github/youndie/kompot/KompotRegistry;Lio/github/youndie/kompot/form/FormController;Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotActionHandler;Landroidx/compose/runtime/Composer;I)V
-	public static final fun KompotScreen (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotRegistry;Lio/github/youndie/kompot/form/FormController;Lio/github/youndie/kompot/KompotActionHandler;Landroidx/compose/runtime/Composer;I)V
+	public static final synthetic fun KompotScreen (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotRegistry;Lio/github/youndie/kompot/form/FormController;Lio/github/youndie/kompot/KompotActionHandler;Landroidx/compose/runtime/Composer;I)V
+	public static final fun KompotScreen (Lio/github/youndie/kompot/KompotComponent;Lio/github/youndie/kompot/KompotRegistry;Lio/github/youndie/kompot/form/FormController;Lio/github/youndie/kompot/KompotActionHandler;Ljava/lang/Object;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getKompotCoreRenderers ()Ljava/util/Map;
 	public static final fun getKompotStandardRenderers ()Ljava/util/Map;
 	public static final fun getKompotVisiblePlaceholderRenderers ()Ljava/util/Map;

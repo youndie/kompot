@@ -21,8 +21,12 @@ import androidx.compose.runtime.staticCompositionLocalOf
  * An override lives by three rules, and they are what makes it safe to keep the tree on screen while
  * the next one loads:
  * - **a whole tree that arrives drops every override** written before it: the tree is the truth.
- *   "Arrives" means a tree not equal to the one on screen — an equal tree is not news, the same way it
- *   leaves a paginated list's loaded pages alone;
+ *   "Arrives" is a delivery, not a difference: a load of [KompotScreenLoader] that completed, or a
+ *   new `arrival` the application hands [KompotScreen] / [KompotLazyScreen] with the tree — and a tree
+ *   equal to the one on screen arrives as much as any other (after an `update`, "back" loads exactly
+ *   the tree the overrides were written over). Equality matters only where nothing was delivered: a
+ *   recomposition that hands the screen an equal tree again keeps the overrides. State under ids — a
+ *   chosen tab, an opened section, a list's loaded pages — is not an override and stays;
  * - **an override of `X` drops the overrides of the nodes inside the previous `X`**: the new `X`
  *   came whole, with its own children;
  * - **an `id` the tree does not have is ignored** (§10.2): it never applies to a node that turns up
@@ -94,18 +98,26 @@ internal val LocalKompotOverrideFloor: ProvidableCompositionLocal<Long> = compos
 internal fun currentOverride(id: String): KompotNodeOverrides.Entry? =
     LocalKompotNodeOverrides.current?.lookup(id, LocalKompotOverrideFloor.current)
 
-// A screen's tree enters here: the store is found or made, and a tree that is not the one on screen
-// takes the next number, which drops every override written before it.
+// Which delivery the tree a KompotScreenLoader draws came with: the number of the load that brought it.
+// Read by the nearest screen below, which takes it as that tree's arrival; null where no loader is.
+internal val LocalKompotTreeArrival: ProvidableCompositionLocal<Any?> = compositionLocalOf { null }
+
+// A screen's tree enters here: the store is found or made, and a tree that arrives takes the next
+// number, which drops every override written before it.
 @Composable
 internal fun ProvideScreenOverrides(
     root: KompotComponent,
+    arrival: Any?,
     content: @Composable () -> Unit,
 ) {
     val overrides = LocalKompotNodeOverrides.current ?: remember { KompotNodeOverrides() }
-    // Keyed by value: an equal tree is not news (see KompotNodeOverrides). Taking the number here, in
+    val delivered = LocalKompotTreeArrival.current
+    // A delivery is an arrival whatever the tree is: the application's own `arrival`, or the loader's
+    // number of the load. Where neither changed, the tree's value decides, so a recomposition that hands
+    // over an equal tree keeps the overrides (see KompotNodeOverrides). Taking the number here, in
     // composition, rather than in an effect is what keeps the first frame of a new tree from being
     // drawn under the overrides it replaces; the counter is not state, so nothing is written back.
-    val floor = remember(overrides, root) { overrides.nextTree() }
+    val floor = remember(overrides, root, arrival, delivered) { overrides.nextTree() }
     LaunchedEffect(overrides, floor) { overrides.forgetBefore(floor) }
     CompositionLocalProvider(
         LocalKompotNodeOverrides provides overrides,
