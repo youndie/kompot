@@ -122,11 +122,12 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 
 <!-- BEGIN INDEX (генерируется docs/scripts/backlog_index.py — руками не править) -->
 
-## Открыто (1)
+## Открыто (2)
 
 | Задача | | Этап | Приоритет | Размер | Ждёт |
 |---|---|---|---|---|---|
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
+| [B-84](backlog/B-84-equal-tree-is-still-an-arrival.md) `[~]` | Пришедшее заново равное дерево тоже сбрасывает подмены | partial-updates | P1 | S | B-82 |
 
 ## Сделано (82)
 
