@@ -65,6 +65,20 @@ class DeeplinkFormatTest {
         )
     }
 
+    // A third carrier: the address an update gives the screen is a deeplink by the same rule (§16.4),
+    // and a web address there would lead the application's history out of the app.
+    @Test
+    fun `an update's address enforces exactly the same rule`() {
+        fun update(deeplink: String) =
+            Json.parseToJsonElement(
+                """{"type":"update","updates":[],"deeplink":${Json.encodeToString(String.serializer(), deeplink)}}""",
+            )
+
+        assertEquals(emptyList(), validator.validate(update("app://catalog?brand=acme"), UPDATE))
+        assertTrue(validator.validate(update("https://example.com"), UPDATE).isNotEmpty())
+        assertTrue(validator.validate(update("catalog"), UPDATE).isNotEmpty())
+    }
+
     // No pattern anywhere in the toolkit's schemas may use lookaround, lookbehind or a backreference:
     // an engine that cannot compile one of them validates NOTHING, not merely the field it guards.
     @Test
@@ -102,5 +116,6 @@ class DeeplinkFormatTest {
     private companion object {
         const val NAVIGATE = "kompot-standard.schema.json#/\$defs/KompotActionNavigate"
         const val ROUTE = "kompot-navigation.schema.json#/\$defs/ScreenRoute"
+        const val UPDATE = "kompot-commands.schema.json#/\$defs/KompotActionUpdate"
     }
 }

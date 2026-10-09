@@ -449,10 +449,51 @@ public object KompotToolkitSpec {
     public fun commands(): KompotSpecModule =
         KompotSpecModule(
             name = "kompot-commands",
-            description = "The action that performs an operation on one item of a list, with no form around it",
+            description =
+                "The actions that call the server and run its answer: perform, an operation on one item with no " +
+                    "form around it; load, a read answered with an action; and update, the answer that replaces " +
+                    "nodes by id",
             serializersModule = kompotCommandsSerializersModule,
             annotations =
                 mapOf(
+                    "KompotActionLoad" to
+                        mapOf(
+                            "url" to
+                                KompotSpec.constrained(
+                                    KompotProtocol.ENDPOINT_PATTERN,
+                                    "The relative address of an endpoint of kind `load`: a GET answered with a " +
+                                        "KompotAction, which the client runs through the same handler chain as any " +
+                                        "other intent. It changes nothing, so it carries no Idempotency-Key. Of two " +
+                                        "loads pressed on one screen, the answer to the earlier is dropped (§16.4)",
+                                ),
+                        ),
+                    "KompotActionUpdate" to
+                        mapOf(
+                            "updates" to
+                                KompotSpec.constrained(
+                                    pattern = null,
+                                    description =
+                                        "Frames of §10, applied in order: of two frames for one id the later wins, " +
+                                            "and a frame for an id the screen does not have is ignored. A node's " +
+                                            "state under its id survives the replacement (§4.4)",
+                                ),
+                            "deeplink" to
+                                KompotSpec.constrained(
+                                    KompotProtocol.DEEPLINK_PATTERN,
+                                    "The address of the screen after the update, by the rules of " +
+                                        "navigate.deeplink (§12.2). The client hands it to the application, which " +
+                                        "keeps the history; the toolkit does not navigate. Absent leaves the address " +
+                                        "as it was",
+                                    forbid = KompotProtocol.DEEPLINK_FORBIDDEN_PATTERN,
+                                ),
+                            "history" to
+                                KompotSpec.constrained(
+                                    pattern = null,
+                                    description =
+                                        "How the deeplink enters the application's history: \"push\" (the default) " +
+                                            "or \"replace\". An open string: an unfamiliar word means \"push\"",
+                                ),
+                        ),
                     "KompotActionPerform" to
                         mapOf(
                             "url" to

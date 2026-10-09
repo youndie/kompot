@@ -9,5 +9,7 @@ public val kompotCommandsSerializersModule: SerializersModule =
     SerializersModule {
         polymorphic(KompotAction::class) {
             subclass(PerformAction::class)
+            subclass(UpdateAction::class)
+            subclass(LoadAction::class)
         }
     }

@@ -235,6 +235,7 @@ public class TckRunner(
         findings += paginationTerminates()
         findings += navigationGraphResolves()
         findings += performTargetsAreSubmitEndpoints()
+        findings += loadTargetsAreLoadEndpoints()
         findings += patchesNameDeclaredFields()
         findings += recordedUpdateFramesAreValid()
         findings += updateChannelIsolation()
@@ -328,7 +329,14 @@ public class TckRunner(
     private suspend fun responsesMatchSchema(): List<TckFinding> =
         probeable().exercising("schema").flatMap { endpoint ->
             val response = get(endpoint)
-            val body = endpoint.successBody
+            // A load endpoint answers an action whatever the description says about its body (§16.1),
+            // so one that declares no schema is still held to the profile's KompotAction: it is the
+            // one kind of answer a blind walk can check without knowing the domain.
+            val body =
+                endpoint.successBody
+                    ?: LOAD_SCHEMA.takeIf { endpoint.kind == KompotProtocol.ENDPOINT_KIND_LOAD }?.let {
+                        TckResponseBody(it, isList = false)
+                    }
 
             when {
                 response.status != endpoint.successStatus -> {
@@ -527,34 +535,53 @@ public class TckRunner(
     // HTTP description knows what lives behind it. Static, so unlike the idempotency check it needs no
     // permission to change state.
     private suspend fun performTargetsAreSubmitEndpoints(): List<TckFinding> =
-        probeable().exercising("perform").flatMap { endpoint ->
+        actionTargets(check = "perform", actionType = KompotProtocol.ACTION_PERFORM, method = "POST", kind = "submit")
+
+    // The same for `load`: its url is an endpoint of kind `load`, a GET answered with an action
+    // (§16.1). A load aimed at a screen would hand the client a tree where it decodes an action, and a
+    // load aimed at a submit would GET an address that only answers POST — both look fine until pressed.
+    private suspend fun loadTargetsAreLoadEndpoints(): List<TckFinding> =
+        actionTargets(
+            check = "load",
+            actionType = KompotProtocol.ACTION_LOAD,
+            method = "GET",
+            kind = KompotProtocol.ENDPOINT_KIND_LOAD,
+        )
+
+    private suspend fun actionTargets(
+        check: String,
+        actionType: String,
+        method: String,
+        kind: String,
+    ): List<TckFinding> {
+        val verb = if (method == "GET") "reads" else "posts to"
+        return probeable().exercising(check).flatMap { endpoint ->
             val element = parse(get(endpoint).body) ?: return@flatMap emptyList()
 
             collectJsonObjects(element)
-                .filter {
-                    (it[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content == KompotProtocol.ACTION_PERFORM
-                }.mapNotNull { (it["url"] as? JsonPrimitive)?.takeIf { url -> url.isString }?.content }
+                .filter { (it[KompotProtocol.DISCRIMINATOR] as? JsonPrimitive)?.content == actionType }
+                .mapNotNull { (it["url"] as? JsonPrimitive)?.takeIf { url -> url.isString }?.content }
                 .distinct()
                 .mapNotNull { url ->
                     // A literal path first, so an exact declaration always wins over a template that
                     // would also match it.
                     val target =
-                        endpoints.firstOrNull { it.path == url && it.method == "POST" }
-                            ?: endpoints.firstOrNull { it.matches(url) && it.method == "POST" }
+                        endpoints.firstOrNull { it.path == url.substringBefore('?') && it.method == method }
+                            ?: endpoints.firstOrNull { it.matches(url) && it.method == method }
                     when {
                         target == null -> {
                             TckFinding(
-                                "perform",
+                                check,
                                 endpoint.path,
-                                "a perform action posts to \"$url\", which the HTTP description does not declare",
+                                "a $actionType action $verb \"$url\", which the HTTP description does not declare",
                             )
                         }
 
-                        target.kind != "submit" -> {
+                        target.kind != kind -> {
                             TckFinding(
-                                "perform",
+                                check,
                                 endpoint.path,
-                                "a perform action posts to \"$url\", declared as kind \"${target.kind}\" rather than \"submit\"",
+                                "a $actionType action $verb \"$url\", declared as kind \"${target.kind}\" rather than \"$kind\"",
                             )
                         }
 
@@ -564,6 +591,7 @@ public class TckRunner(
                     }
                 }
         }
+    }
 
     // Every frame of the update channel is an UpdateComponentMessage, and the component inside it is
     // held to the same closed profile as any screen (SPEC.md §16.6). The heartbeat is the one event
@@ -1220,5 +1248,6 @@ public class TckRunner(
         // against the wrong shape, which is what a single hardcoded schema did to a form route.
         const val SCREEN_SCHEMA = "${KompotProtocol.PROFILE_FILE_NAME}#/\$defs/KompotComponent"
         const val LIVE_SCREEN_SCHEMA = "kompot-realtime.schema.json#/\$defs/KompotScreenResponse"
+        const val LOAD_SCHEMA = "${KompotProtocol.PROFILE_FILE_NAME}#/\$defs/KompotAction"
     }
 }
