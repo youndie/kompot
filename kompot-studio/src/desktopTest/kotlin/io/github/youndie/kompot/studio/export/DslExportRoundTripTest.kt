@@ -1,6 +1,10 @@
 package io.github.youndie.kompot.studio.export
 
+import io.github.youndie.kompot.KompotAction
 import io.github.youndie.kompot.KompotComponent
+import io.github.youndie.kompot.form.standard.formStandardSerializersModule
+import io.github.youndie.kompot.kompotJson
+import io.github.youndie.kompot.realtime.UpdateComponentMessage
 import io.github.youndie.kompot.standard.TableRow
 import io.github.youndie.kompot.standard.TextSpan
 import io.github.youndie.kompot.studio.KompotStudioConfig
@@ -25,6 +29,10 @@ import kotlin.test.assertTrue
 // under its name rather than under the path above it. Paddings name all four sides because the
 // builder writes an unnamed side as 0 where the wire leaves it out — the same padding, spelled
 // differently, and pinned in DslExportTest rather than here.
+//
+// The last three buttons carry the actions of kompot-commands, which live outside kompot-standard: a
+// draft that imported them from there did not compile (B-83). Every field of theirs is set too,
+// `update` with two frames — one of them a container whose child is numbered under the frame's id.
 internal val WITNESS_BODY =
     """
     { "type": "column", "id": "witness", "spacing": 8,
@@ -60,9 +68,31 @@ internal val WITNESS_BODY =
           "children": [ { "type": "text", "id": "witness/3/0", "text": "In the card" } ] },
         { "type": "table", "id": "table",
           "modifiers": [ { "type": "padding", "top": 2, "bottom": 0, "start": 0, "end": 0 } ],
-          "rows": [ { "cells": [ "Name", "Value" ], "header": true }, { "cells": [ "a", "b" ] } ] }
+          "rows": [ { "cells": [ "Name", "Value" ], "header": true }, { "cells": [ "a", "b" ] } ] },
+        { "type": "button", "id": "approve", "text": "Approve",
+          "action": { "type": "perform", "url": "/tasks/7/approve",
+                      "payload": { "note": { "type": "text_value", "text": "Looks good" } } } },
+        { "type": "button", "id": "mine", "text": "Only mine",
+          "action": { "type": "load", "url": "/tasks?mine=true" } },
+        { "type": "button", "id": "show", "text": "Show",
+          "action": { "type": "update", "deeplink": "app://tasks?mine=true", "history": "replace",
+                      "updates": [
+                        { "componentId": "badge", "component": { "type": "text", "id": "badge", "text": "3" } },
+                        { "componentId": "results",
+                          "component": { "type": "column", "id": "results",
+                                         "children": [ { "type": "text", "id": "results/0", "text": "One" } ] } }
+                      ] } }
       ] }
     """.trimIndent()
+
+// The studio's Json plus the standard field values: a `perform` payload is made of them, and a
+// deployment that sends one registers them the same way.
+internal val witnessConfig =
+    KompotStudioConfig(registry = toolkitRegistry, json = kompotJson(formStandardSerializersModule))
+
+// The actions printed with their own module's class or builder rather than kompot-standard's, held
+// here field by field like the DSL calls.
+private val COMMAND_ACTIONS = setOf("perform", "load", "update")
 
 // JSON → exported DSL → JSON, the studio's half of DslReachesTheWireTest (kompot-standard).
 //
@@ -71,7 +101,7 @@ internal val WITNESS_BODY =
 // exporter is held to producing it byte for byte, and here the compiled draft is run and compared with
 // the body it was drafted from. A field the export drops comes out at its default and is named.
 class DslExportRoundTripTest {
-    private val config = KompotStudioConfig(registry = toolkitRegistry)
+    private val config = witnessConfig
 
     // Defaults left out, so a field reads as present exactly when it says something.
     private val wire = Json(config.json) { encodeDefaults = false }
@@ -125,14 +155,24 @@ class DslExportRoundTripTest {
                     "no serializer for $type"
                 }.descriptor.fieldNames() - "type"
             } +
+                COMMAND_ACTIONS.associateWith { type ->
+                    checkNotNull(wire.serializersModule.getPolymorphic(KompotAction::class, type)) {
+                        "no serializer for $type"
+                    }.descriptor.fieldNames() - "type"
+                } +
                 mapOf(
                     "table.rows" to TableRow.serializer().descriptor.fieldNames(),
                     "text.spans" to TextSpan.serializer().descriptor.fieldNames(),
+                    "update.updates" to UpdateComponentMessage.serializer().descriptor.fieldNames(),
                 )
 
         val missing = expected.flatMap { (owner, fields) -> (fields - seen[owner].orEmpty()).map { "$owner.$it" } }
         assertEquals(emptyList(), missing.sorted(), "fields the witness does not set")
         assertTrue(seen.keys.containsAll(DSL_CALLS), "types the witness has no node of: ${DSL_CALLS - seen.keys}")
+        assertTrue(
+            seen.keys.containsAll(COMMAND_ACTIONS),
+            "actions the witness has no node of: ${COMMAND_ACTIONS - seen.keys}",
+        )
     }
 
     private fun SerialDescriptor.fieldNames(): Set<String> = (0 until elementsCount).map { getElementName(it) }.toSet()

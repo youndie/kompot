@@ -133,6 +133,67 @@ class DslExportTest {
         assertTrue(drafted.contains("""TODO("open_vault")"""), drafted)
     }
 
+    // The class a wire type decodes into is read off the studio's Json, so an action from another
+    // module is imported from that module and called what it is called there — `wizard_next` is not
+    // `WizardNextAction`. Before B-83 every action was imported from kompot-standard.
+    @Test
+    fun `an action from another module is imported from that module, under its own name`() {
+        val drafted =
+            export(
+                """{ "type": "column", "id": "root", "children": [
+            { "type": "button", "id": "a", "text": "Send", "action": { "type": "submit_form", "formId": "f" } },
+            { "type": "button", "id": "b", "text": "Next", "action": { "type": "wizard_next", "formId": "w" } },
+            { "type": "button", "id": "c", "text": "Run", "action": { "type": "perform", "url": "/run" } }] }""",
+            )
+
+        assertTrue(drafted.contains("import io.github.youndie.kompot.forms.SubmitFormAction"), drafted)
+        assertTrue(drafted.contains("import io.github.youndie.kompot.wizard.NextStepAction"), drafted)
+        assertTrue(drafted.contains("import io.github.youndie.kompot.commands.PerformAction"), drafted)
+        assertTrue(drafted.contains("NextStepAction(formId = \"w\")"), drafted)
+        assertFalse(drafted.contains("import io.github.youndie.kompot.standard.SubmitFormAction"), drafted)
+    }
+
+    @Test
+    fun `an action inside a sequence is printed as an action`() {
+        val drafted =
+            export(
+                """{ "type": "column", "id": "root", "children": [
+            { "type": "button", "id": "b", "text": "Done", "action": { "type": "sequence", "actions": [
+              { "type": "close" }, { "type": "navigate", "deeplink": "app://home" } ] } }] }""",
+            )
+
+        // A step used to go through the component constructor: `CloseComponent()`, no import.
+        assertTrue(
+            drafted.contains(
+                "SequenceAction(actions = listOf(CloseAction, NavigateAction(deeplink = \"app://home\")))",
+            ),
+            drafted,
+        )
+    }
+
+    @Test
+    fun `an update whose frame names another node keeps the constructor`() {
+        val drafted =
+            export(
+                """{ "type": "column", "id": "root", "children": [
+            { "type": "button", "id": "b", "text": "Go", "action": { "type": "update", "updates": [
+              { "componentId": "badge", "component": { "type": "text", "id": "count", "text": "3" } } ] } }] }""",
+            )
+
+        // kompotUpdate addresses a frame by its node's id, so it cannot say this frame; the constructor
+        // can, and the draft keeps what the body said rather than quietly retargeting the frame.
+        assertFalse(drafted.contains("kompotUpdate"), drafted)
+        assertTrue(drafted.contains("import io.github.youndie.kompot.commands.UpdateAction"), drafted)
+        assertTrue(drafted.contains("import io.github.youndie.kompot.realtime.UpdateComponentMessage"), drafted)
+        assertTrue(
+            drafted.contains(
+                "UpdateAction(updates = listOf(UpdateComponentMessage(componentId = \"badge\", " +
+                    "component = TextComponent(id = \"count\", text = \"3\"))))",
+            ),
+            drafted,
+        )
+    }
+
     @Test
     fun `an id the DSL would have produced by itself is left out`() {
         val body =

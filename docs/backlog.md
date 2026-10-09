@@ -128,7 +128,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 |---|---|---|---|---|---|
 | [B-43](backlog/B-43-multiline-field-eats-the-wheel.md) `[—]` | Многострочное поле съедает колесо, когда прокручивать нечего (#51) | release-0.38 | P1 | S | — |
 
-## Сделано (81)
+## Сделано (82)
 
 **Швы в toolkit'е**
 
@@ -226,6 +226,7 @@ Compose 1.12, `KompotDegradationOutcome`) и сразу упёрся в слой
 - [B-80](backlog/B-80-partial-updates-research.md) — Частичные обновления: что добавить, чтобы часть экрана менялась без перезагрузки
 - [B-81](backlog/B-81-screen-keeps-its-tree.md) — Экран держит своё дерево: загрузчик без сброса, одно хранилище подмен, key(id)
 - [B-82](backlog/B-82-update-and-load-actions.md) — update и load: ответ, подменяющий узлы, и GET, отвечающий действием
+- [B-83](backlog/B-83-dsl-export-imports-actions-from-their-module.md) — Экспорт DSL импортирует каждое действие из его модуля: perform, load, update
 
 **Без этапа**
 

@@ -1,8 +1,13 @@
 package io.github.youndie.kompot.studio.export
 
+import io.github.youndie.kompot.KompotAction
 import io.github.youndie.kompot.spec.KompotProtocol
 import io.github.youndie.kompot.spec.KompotSpecResources
 import io.github.youndie.kompot.studio.KompotStudioConfig
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
@@ -10,6 +15,9 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.SerializersModuleCollector
+import kotlin.reflect.KClass
 
 // A DRAFT OF THE SERVER SIDE, printed from a body the studio has in front of it.
 //
@@ -64,6 +72,14 @@ private class DslWriter(
     // would put an unmarked wrong name in somebody's editor.
     private val toolkitFiles = KompotSpecResources("kompot-spec").schemas().keys
 
+    // What each wire type is called in Kotlin, read off the Json the studio decodes with rather than
+    // guessed from the wire name. The guess got the package wrong for every action outside
+    // kompot-standard — `perform` is `io.github.youndie.kompot.commands.PerformAction`, `submit_form`
+    // lives in kompot-forms — and the name wrong where the class is not the wire type in camel case
+    // (`wizard_next` is `NextStepAction`). The Json holds the class the client decodes into, so a
+    // draft that names it compiles wherever that client does.
+    private val classes = kotlinClasses(config.json.serializersModule)
+
     fun imports(): List<String> = used.toList()
 
     fun screen(node: JsonObject): String {
@@ -88,7 +104,7 @@ private class DslWriter(
 
     private fun component(
         node: JsonObject,
-        path: String,
+        path: String?,
     ): String {
         val type = wireType(node) ?: return constructor(node)
         val modifiers = node["modifiers"] as? JsonArray
@@ -104,7 +120,7 @@ private class DslWriter(
                 val head = if (id == null) "$type {" else "$type($id) {"
                 // A container's children are numbered under its own id — which is the path when it has
                 // no name of its own, and its name when it has one.
-                "$head\n" + containerBody(node, stringOf(node["id"]) ?: path).prependIndent("    ") + "\n}"
+                "$head\n" + containerBody(node, stringOf(node["id"]) ?: path.orEmpty()).prependIndent("    ") + "\n}"
             }
 
             "text" -> {
@@ -160,7 +176,7 @@ private class DslWriter(
     // would never be on the screen, which is the worst kind of wrong for a file called a draft.
     private fun inBlock(
         node: JsonObject,
-        path: String,
+        path: String?,
     ): String {
         val printed = component(node, path)
         if (isDslCall(printed)) return printed
@@ -235,24 +251,101 @@ private class DslWriter(
     // says the same thing the JSON did.
     private fun constructor(node: JsonObject): String {
         val type = wireType(node) ?: return "TODO(\"a node with no type\")"
-        val name = className(type, "Component")
-        val floats = floatProperties(type)
-        val arguments =
-            node.entries
-                .filter { it.key != KompotProtocol.DISCRIMINATOR }
-                .map { (key, held) -> "$key = ${value(key, held, floats)}" }
+        // A field value in a `perform` payload or an action in a `sequence` comes through here as well,
+        // so the class is looked up for whatever the node is; the guess is for a type the Json does not
+        // know, and then it is a guess at a component.
+        val name = imported(type) ?: className(type, "Component")
+        return call(name, arguments(type, node)) + if (known(type) || type in classes) "" else " $MARKER"
+    }
 
-        return call(name, arguments) + if (known(type)) "" else " $MARKER"
+    // The simple name of the class a wire type decodes into, with its import recorded; null when the
+    // Json has no class for it, or more than one.
+    private fun imported(wireType: String): String? {
+        val qualified = classes[wireType]?.name ?: return null
+        used += qualified
+        return qualified.substringAfterLast('.')
+    }
+
+    // Named arguments read off the body, every field but the discriminator.
+    private fun arguments(
+        type: String,
+        node: JsonObject,
+    ): List<String> {
+        val floats = floatProperties(type)
+        val maps = mapProperties(type)
+        return node.entries
+            .filter { it.key != KompotProtocol.DISCRIMINATOR }
+            .map { (key, held) -> "$key = ${value(key, held, floats, maps)}" }
+    }
+
+    // `update` through its own builder, `kompotUpdate { … }`, so the frames are written with the same
+    // calls as the screen they replace nodes of. The builder addresses a frame by the id of its node,
+    // so a frame whose `componentId` names another node — or a field the builder has no parameter
+    // for — keeps the constructor, which says all of it.
+    private fun update(node: JsonObject): String {
+        val frames = (node["updates"] as? JsonArray).orEmpty()
+        val built =
+            node.keys.all { it in UPDATE_KEYS } &&
+                listOf("deeplink", "history").all {
+                    node[it] == null || node[it] is JsonNull ||
+                        stringOf(node[it]) != null
+                } &&
+                frames.all { frame ->
+                    val id = stringOf(((frame as? JsonObject)?.get("component") as? JsonObject)?.get("id"))
+                    frame is JsonObject && frame.keys == FRAME_KEYS && id != null &&
+                        stringOf(frame["componentId"]) == id
+                }
+        if (!built) {
+            // The frame is a plain class rather than a polymorphic one, so the Json does not name it.
+            used += UPDATE_FRAME
+            val name = checkNotNull(imported(UPDATE))
+            val arguments =
+                node.entries.filter { it.key != KompotProtocol.DISCRIMINATOR }.map { (key, held) ->
+                    if (key != "updates") return@map "$key = ${value(key, held)}"
+                    "$key = listOf(" +
+                        frames.joinToString(", ") { frame ->
+                            if (frame !is JsonObject) return@joinToString "TODO(\"$key\")"
+                            call(
+                                UPDATE_FRAME.substringAfterLast('.'),
+                                frame.entries.map { (k, v) ->
+                                    "$k = ${value(k, v)}"
+                                },
+                            )
+                        } + ")"
+                }
+            return call(name, arguments)
+        }
+
+        used += UPDATE_BUILDER
+        val arguments =
+            listOf("deeplink", "history").mapNotNull { key ->
+                stringOf(node[key])?.let { "$key = ${quote(it)}" }
+            }
+        val head = if (arguments.isEmpty()) "kompotUpdate {" else "kompotUpdate(${arguments.joinToString(", ")}) {"
+        // No path: every node of an update carries its id, and an id left out as "the one the DSL
+        // would give" would be refused by the builder.
+        val body = frames.joinToString("\n") { inBlock(it.jsonObject.getValue("component").jsonObject, null) }
+        return if (body.isEmpty()) "$head\n}" else "$head\n" + body.prependIndent("    ") + "\n}"
     }
 
     private fun value(
         key: String,
         element: JsonElement,
         floats: Set<String> = emptySet(),
+        maps: Set<String> = emptySet(),
     ): String =
         when {
             element is JsonNull -> {
                 "null"
+            }
+
+            // A map on the wire is an object with no discriminator, and so is a nested class; only the
+            // schema tells them apart. The values are printed under the property's name, never the
+            // map's own keys — a payload key called `color` is not a colour token.
+            key in maps && element is JsonObject -> {
+                "mapOf(" +
+                    element.entries.joinToString(", ") { (entry, held) -> "${quote(entry)} to ${value(key, held)}" } +
+                    ")"
             }
 
             key in floats && element is JsonPrimitive && !element.isString -> {
@@ -284,7 +377,10 @@ private class DslWriter(
                 if (element[KompotProtocol.DISCRIMINATOR] !=
                     null
                 ) {
-                    constructor(element)
+                    // An action nested in another — the steps of a `sequence` — is printed the way an
+                    // action is, so a `data object` among them keeps its bare name.
+                    val nested = wireType(element)?.let { classes[it] }
+                    if (nested?.base == ACTION_BASE) action(element) ?: constructor(element) else constructor(element)
                 } else {
                     "TODO(\"$key\")"
                 }
@@ -330,15 +426,12 @@ private class DslWriter(
     private fun action(element: JsonElement?): String? {
         val node = element as? JsonObject ?: return null
         val type = wireType(node) ?: return null
-        if (!known(type)) return "TODO(\"$type\")"
+        if (classes[type]?.name == UPDATE_ACTION) return update(node)
+        // Nothing here knows what class that is, and a name invented for it would compile on some
+        // deployments and not others. `TODO()` returns Nothing, so it compiles everywhere and stops.
+        val name = imported(type) ?: return "TODO(\"$type\")"
 
-        val name = className(type, "Action")
-        used += "io.github.youndie.kompot.standard.$name"
-        val floats = floatProperties(type)
-        val arguments =
-            node.entries
-                .filter { it.key != KompotProtocol.DISCRIMINATOR }
-                .map { (key, held) -> "$key = ${value(key, held, floats)}" }
+        val arguments = arguments(type, node)
         // A type with nothing but its discriminator is a `data object` on this side, and an object
         // written with parentheses does not compile.
         return if (arguments.isEmpty()) name else call(name, arguments)
@@ -411,7 +504,7 @@ private class DslWriter(
 
     private fun idArgument(
         node: JsonObject,
-        path: String,
+        path: String?,
     ): String? {
         val id = stringOf(node["id"]) ?: return null
         // An id the DSL would have produced by itself is left out: printing `id = "root/2"` beside
@@ -449,6 +542,18 @@ private class DslWriter(
                     .orEmpty()
                     .entries
                     .filter { (_, schema) -> (schema.jsonObject["format"] as? JsonPrimitive)?.content == "float" }
+                    .map { it.key }
+            }.toSet()
+
+    // Which of a type's properties are maps: an object whose `additionalProperties` is a schema rather
+    // than a yes or no, which is how the generator writes a Map.
+    private fun mapProperties(wireType: String): Set<String> =
+        definitionsFor(wireType)
+            .flatMap { definition ->
+                (definition["properties"] as? JsonObject)
+                    .orEmpty()
+                    .entries
+                    .filter { (_, schema) -> schema.jsonObject["additionalProperties"] is JsonObject }
                     .map { it.key }
             }.toSet()
 
@@ -499,7 +604,60 @@ private class DslWriter(
     private companion object {
         const val ROOT = "root"
         const val MARKER = "/* TODO: check this name */"
+
+        // kompot-commands, named as text: the studio does not depend on the module, it only prints
+        // calls into it. The witness draft (DslExportRoundTripTest) compiles them.
+        const val UPDATE = "update"
+        const val UPDATE_ACTION = "io.github.youndie.kompot.commands.UpdateAction"
+        const val UPDATE_BUILDER = "io.github.youndie.kompot.commands.kompotUpdate"
+        const val UPDATE_FRAME = "io.github.youndie.kompot.realtime.UpdateComponentMessage"
+        val UPDATE_KEYS = setOf(KompotProtocol.DISCRIMINATOR, "updates", "deeplink", "history")
+        val FRAME_KEYS = setOf("componentId", "component")
+        val ACTION_BASE = KompotAction::class.qualifiedName
     }
+}
+
+// The class a wire type decodes into, and the open hierarchy it was registered under.
+private data class KotlinClass(
+    val name: String,
+    val base: String?,
+)
+
+// Wire type → class, for every polymorphic registration in [module]. A wire type registered as two
+// different classes (under two bases) is left out: the draft cannot know which one the body meant, and
+// a wrong name is worse than the guess.
+@OptIn(ExperimentalSerializationApi::class)
+private fun kotlinClasses(module: SerializersModule): Map<String, KotlinClass> {
+    val found = mutableMapOf<String, MutableSet<KotlinClass>>()
+    module.dumpTo(
+        object : SerializersModuleCollector {
+            override fun <T : Any> contextual(
+                kClass: KClass<T>,
+                provider: (typeArgumentsSerializers: List<KSerializer<*>>) -> KSerializer<*>,
+            ) = Unit
+
+            override fun <Base : Any, Sub : Base> polymorphic(
+                baseClass: KClass<Base>,
+                actualClass: KClass<Sub>,
+                actualSerializer: KSerializer<Sub>,
+            ) {
+                val name = actualClass.qualifiedName ?: return
+                found.getOrPut(actualSerializer.descriptor.serialName) { mutableSetOf() } +=
+                    KotlinClass(name, baseClass.qualifiedName)
+            }
+
+            override fun <Base : Any> polymorphicDefaultSerializer(
+                baseClass: KClass<Base>,
+                defaultSerializerProvider: (value: Base) -> SerializationStrategy<Base>?,
+            ) = Unit
+
+            override fun <Base : Any> polymorphicDefaultDeserializer(
+                baseClass: KClass<Base>,
+                defaultDeserializerProvider: (className: String?) -> DeserializationStrategy<Base>?,
+            ) = Unit
+        },
+    )
+    return found.filterValues { it.size == 1 }.mapValues { it.value.single() }
 }
 
 // The wire types printed as DSL calls rather than constructors — the ones whose fields the export has
