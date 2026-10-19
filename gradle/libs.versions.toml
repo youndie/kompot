@@ -16,7 +16,7 @@ lettuce = "7.6.0.RELEASE"
 # moves in one commit with material3, jewel and viddik (B-40), and taking it from the shared catalog
 # would let a sborka bump move it alone — a build that resolves, compiles, and throws on the first
 # frame. The number matches `wip` (1.12.1); keeping it equal is a review item, not an automatism.
-compose-multiplatform = "1.12.1"
+compose-multiplatform = "1.12.2"
 compose-material3 = "1.12.0-alpha03"
 coil3 = "3.6.3"
 # 0.6.1 on Central, the first release with youndie/viddik#44 fixed (the plugin no longer adds its
