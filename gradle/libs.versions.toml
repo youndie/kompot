@@ -2,7 +2,7 @@
 # The build conventions: where the group, the version, the toolchain, the jvm floor and the
 # publication come from. Bumping this changes how every module is built, so it is pinned like any
 # other dependency and moved deliberately.
-sborka = "0.5.0.123"
+sborka = "0.5.0.135"
 # The compiler is not here: kotlin, ksp and the Android Gradle plugin come from `wip`, the catalog the
 # sborka release above publishes, so moving the compiler is moving that one number. Compose is the
 # exception and stays below — see `jewel`.
@@ -16,7 +16,7 @@ lettuce = "7.6.0.RELEASE"
 # moves in one commit with material3, jewel and viddik (B-40), and taking it from the shared catalog
 # would let a sborka bump move it alone — a build that resolves, compiles, and throws on the first
 # frame. The number matches `wip` (1.12.1); keeping it equal is a review item, not an automatism.
-compose-multiplatform = "1.12.1"
+compose-multiplatform = "1.12.2"
 compose-material3 = "1.12.0-alpha03"
 coil3 = "3.6.3"
 # 0.6.1 on Central, the first release with youndie/viddik#44 fixed (the plugin no longer adds its
@@ -33,7 +33,7 @@ viddik = "0.6.1"
 jewel = "0.41.0-262.10968.63"
 # The IntelliJ platform build Jewel was cut against — the suffix of the line above — and the only
 # place the icon bundle comes from. The two move together or the chevrons come out magenta.
-ijPlatform = "262.10968.63"
+ijPlatform = "262.11879.120"
 # The JetBrains Runtime's own API, and the studio compiles against it for ONE call: the same
 # `JBR.isAvailable()` Jewel's DecoratedWindow tests before refusing to open. It arrives transitively
 # with Jewel anyway; naming it is what lets code ask the question rather than guess at it from
